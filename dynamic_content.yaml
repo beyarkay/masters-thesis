@@ -1,0 +1,6 @@
+best-f1-score: '0.8169'
+best-label-expansion: '10'
+best-nodes-per-layer: '256'
+best-num-hidden-layers: '2'
+best-scce: '0.3371'
+best-window-size: '25'
