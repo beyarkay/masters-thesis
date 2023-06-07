@@ -27,6 +27,15 @@ conc:
 post:
 	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 07_postmatter.md -o "post.pdf"
 
+watch:
+	echo '01_introduction.md' | entr -s 'make intro' &
+	echo '02_background.md' | entr -s 'make bg' &
+	echo '03_lit_review.md' | entr -s 'make lit' &
+	echo '04_methodology.md' | entr -s 'make method' &
+	echo '05_results.md' | entr -s 'make results' &
+	echo '06_conclusion.md' | entr -s 'make conc' &
+	echo '07_postmatter.md' | entr -s 'make post' &
+
 open:
 	open "26723077 TG7 Ergo Report.pdf"
 
