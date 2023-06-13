@@ -1,18 +1,22 @@
 ---
 header-includes: |
-    \usepackage{pdfpages}
-    \usepackage{bm}
-    \usepackage{booktabs}
-    \usepackage{graphicx}
-    \usepackage{algorithm}
-    \usepackage{algpseudocode}
-    \usepackage{xcolor}
+  \usepackage{algorithm}
+  \usepackage{algpseudocode}
+  \usepackage{bm}
+  \usepackage{booktabs}
+  \usepackage{graphicx}
+  \usepackage{pdfpages}
+  \usepackage{soul}
+  \usepackage{tikz}
+  \usepackage{xcolor}
 ---
 
 # Background
 
-This chapter describes various concepts which *Ergo* builds upon. The goal of
-*Ergo* is to take a 30-dimensional time series dataset with a sampling
+\marginpar{rewrite}
+
+This chapter describes various concepts which _Ergo_ builds upon. The goal of
+_Ergo_ is to take a 30-dimensional time series dataset with a sampling
 frequency of 40Hz, classify it in real-time into one of 51 gesture classes, and
 then map those gestures to keystrokes. After this mapping, the keystrokes
 must be forwarded onto the OS of the user's computer and autocorrect applied
@@ -28,7 +32,7 @@ of classification problems and are discussed in Section
 have many desirable properties which make them suited to this problem.
 
 Hidden Markov Models have historically been used for problems similar to that
-which *Ergo* seeks to solve, and thus they will be used to provide a comparison
+which _Ergo_ seeks to solve, and thus they will be used to provide a comparison
 between candidate models and the prior work. They are discussed in Section
 \ref{hidden-markov-models}.
 
@@ -45,76 +49,470 @@ problem.
 
 Autocorrect is a valuable aid to users operating a virtual keyboard where
 mistakes are common due to the nature of the interface, and so it is integrated
-into *Ergo*. Autocorrect methods are discussed in Section \ref{autocorrect}
+into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
 
 ## Artificial Neural Networks
 
-Artificial Neural Networks are a form of machine learning algorithm which have
-shown good performance on a wide variety of problems. The core design is very
-modular, presenting small building blocks which can be combined to create more
-complicated architectures.
+Artificial Neural Networks (ANNs, also known as multi-layer perceptrons or
+MLPs) are a form of machine learning which started with the development of the
+perceptron by @Rosenblatt1963PRINCIPLESON and was itself inspired by
+@McCulloch2021ALC.
 
-An ANN is best described as a directed acyclic graph with weights on every edge
-of the graph. Each node accepts the weighted sum of all the edges directed to
-it, adds a bias term, applies a non-linear \emph{activation function}, and then
-provides the result of this activation function to the next nodes in the graph.
-The weights and biases are learnt during training via a process called
-\emph{backpropogation}. The changing of these parameters is what allows the ANN
-to model a wide variety of different functions [@Hornik1989MultilayerFN].
+This section will first describe the perceptron in subsection
+\ref{perceptrons}. Then neural networks will be covered in subsection
+\ref{neural-networks}. Proof that one-layer ANNs can approximate any function
+is given in subsection \ref{universality-theorem}, and a mathematical
+description of how the weights and biases are tuned via gradient descent is given in subsection \ref{gradient-descent}.
 
-A non-linear activation function is required, because the linearly weighted sum
-of linearly weighted sums is just another linearly weighted sum. The activation
-function enables the entire ANN to model non-linear functions. It is usually
-chosen to be computationally efficient and differentiable. Common activation
-functions are the Rectified Linear Unit (ReLU):
+The method by which backpropogation allows for the efficient calculation of the
+gradients within a neural network is described in subsection
+\ref{backpropogation}, and some details about the loss function used for
+multi-class classification problems, cross entropy loss, is described in
+subsection \ref{cross-entropy-loss}.
 
-$$
-    \text{ReLU}(x) = \max(x, 0),
-$$
+### Perceptrons
 
-the sigmoid activation function:
+A perceptron takes in a finite dimensional vector of real-valued inputs,
+applies some function, and produces a single real-valued output. Rosenblatt
+proposed a weighting system which was used to compute the output, whereby each
+of the input values $x_0, x_1, \ldots, x_n$ is multiplied by a corresponding
+weight $w_0, w_1, \ldots, w_n$ and the results are summed together.
 
-$$
-    \sigma(x) = \frac{1}{1 + e^{-x}},
-$$
-
-and the hyperbolic tangent function:
+Rosenblatt originally required the inputs and the output to be binary, which
+implies that the output would be 1 if and only if the sum of the weighted
+inputs passed some threshold value:
 
 $$
-    \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}.
+    \text{output} = \begin{cases}
+        0 & \text{if}\ \sum_j w_j x_j \le \text{threshold} \\
+        1 & \text{if}\ \sum_j w_j x_j > \text{threshold} \\
+    \end{cases}
 $$
 
-Given an ANN, the weight from neuron $k$ in layer $l-1$ to neuron $j$ in layer
-$l$ can be labelled $w^l_{jk}$. The bias applied to neuron $j$ in layer $l$ can
-be notated as $b^l_j$, and the activation function as $\sigma$. We will define
-the output (also known as the _activation_) of a neuron $j$ in layer $l$ to be
-$a^l_j$.
-
-The output of a neuron can, therefore, be calculated recursively based on the
-output of the neurons before it:
+Modern implementations of a perceptron have changed many aspects of
+Rosenblatt's initial description. The threshold was replaced with the
+combination of a bias $b$ term and a comparison with zero:
 
 $$
-    a^l_j = \sigma \left(\sum_k w^l_{jk} a^{l-1}_{k} + b^l_j \right)
+    \text{output} = \begin{cases}
+        0 & \text{if}\ b + \sum_j w_j x_j \le 0 \\
+        1 & \text{if}\ b + \sum_j w_j x_j > 0 \\
+    \end{cases}
 $$
 
-As a base case to this recursive definition, we define the "output" of the
-first layer of the ANN to be equal to the input data:
+Instead of a comparison to zero and restricting the output to a binary 1 or 0,
+a scaling function $\sigma: \mathbb{R} \to (0, 1)$ is used which restricts the
+range of the output:
 
 $$
-    a^0_j = x_j
+    \text{output} = \sigma \left( \ b + \sum_j w_j x_j \right)
 $$
 
-After repeated performing the multiplication of the weights, the addition of
-the bias, and the application of the activation function, the output of the
-final layer's neurons are the predictions for the ANN.
+This function is called the activation function, and there have been several
+different functions proposed. The first was the sigmoid (or logistic)
+activation function (see Figure \ref{fig:02_sigmoid}).
 
-A loss function calculates a measure that approaches zero as a model's
-predictions get closer to the true outputs. During the training process of an
-ANN, the gradient of the loss function is used to tweak the weights and biases
-of the ANN in the direction of the steepest descent, thereby decreasing the loss
-and improving the model's performance.
+$$
+    \sigma(x) = \frac{1}{1 + e^{-x}}
+$$
 
-For multi-class classification problems such as *Ergo*, categorical
+The sigmoid activation function can easily be differentiated, a property which
+will become useful when discussing backpropogation in subsection
+\ref{backpropogation}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.3\textwidth]{imgs/02_sigmoid.png}
+\caption{The sigmoid activation function.}
+\label{fig:02_sigmoid}
+\end{figure}
+
+### Neural Networks
+
+Individual perceptrons can be combined to form a network of perceptrons where
+the outputs of some perceptrons become the inputs for other perceptrons (see
+Figure \ref{fig:02_nn}). These perceptrons (or "neurons", as they are often
+called in this context) are arranged in layers in a directed acyclic graph,
+where every output from the neurons in layer $i$ is passed as an input to every
+neuron in layer $i+1$. The first layer is called the input layer, and those
+neurons simply output the data being modelled. There is one neuron for each
+dimension of the input data.
+
+The last layer is called the output layer, and a different activation is
+sometimes applied to this layer (depending on the problem being solved). The
+intermediate layers between the input and the output are collectively called
+the hidden layers.
+
+<!-- prettier-ignore-start -->
+\begin{figure}
+    \centering
+    \label{fig:02_nn}
+    \begin{tikzpicture}
+        % Number of input neurons
+        \newcommand{\inputnum}{3}
+
+        % Number of neurons in the hidden layer
+        \newcommand{\hiddennum}{5}
+
+        % Number of output neurons
+        \newcommand{\outputnum}{2}
+
+        % Input Layer
+        \foreach \i in {1,...,\inputnum} {
+            \node[
+                circle,
+                minimum size = 6mm,
+                draw=black
+            ] (Input-\i) at (0,-\i) {};
+        }
+
+        % Hidden Layer
+        \foreach \i in {1,...,\hiddennum} {
+            \node[
+                circle,
+                minimum size = 6mm,
+                draw=black,
+                yshift=(\hiddennum-\inputnum)*5 mm
+            ] (Hidden-\i) at (2.5,-\i) {};
+        }
+
+        % Output Layer
+        \foreach \i in {1,...,\outputnum} {
+            \node[
+                circle,
+                minimum size = 6mm,
+                draw=black,
+                yshift=(\outputnum-\inputnum)*5 mm
+            ] (Output-\i) at (5,-\i) {};
+        }
+
+        % Connect neurons In-Hidden
+        \foreach \i in {1,...,\inputnum} {
+            \foreach \j in {1,...,\hiddennum} {
+                \draw[->, shorten >=1pt] (Input-\i) -- (Hidden-\j);
+            }
+        }
+
+        % Connect neurons Hidden-Out
+        \foreach \i in {1,...,\hiddennum} {
+            \foreach \j in {1,...,\outputnum} {
+                \draw[->, shorten >=1pt] (Hidden-\i) -- (Output-\j);
+            }
+        }
+
+        % Inputs
+        \foreach \i in {1,...,\inputnum} {
+            \draw[<-, shorten <=1pt] (Input-\i) -- ++(-1,0)
+            node[left]{$x_{\i}$};
+        }
+
+        % Outputs
+        \foreach \i in {1,...,\outputnum} {
+            \draw[->, shorten <=1pt] (Output-\i) -- ++(1,0)
+            node[right]{$y_{\i}$};
+        }
+    \end{tikzpicture}
+    \caption{A neural network with three input neurons, five hidden neurons,
+    and two output neurons}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Intuitively it would seem like this symphony of perceptrons would be more
+useful than just one perceptron, and this intuition does hold true, given some
+requirements which will be discussed in Section \ref{TODO:UniversalityTheorem}.
+
+### Universality Theorem
+
+TODO
+
+### Gradient descent
+
+Given a neural network with the correct number of input, hidden, and output
+neurons for your problem, how do we find the correct values for the many
+weights and biases such that the networks output $\hat{\bm{y}}$
+matches our expected output $\bm{y}$?
+
+Given a large number of observations and their expected output, gradient
+descent calculates how to change the weights and biases so as to decrease the
+difference between $\hat{\bm{y}}$ and $\bm{y}$.
+
+To achieve this, we define a cost function which gradient descent will
+minimise:
+
+$$
+    C(w, b) = \frac{1}{2n} \sum_x || \bm{y} - \hat{\bm{y}}(w, b, x) ||^2
+$$
+
+Where $w$ are the weights of the network, $b$ the biases, $x$ the input data,
+and $n$ the number of observations. This cost function is known as the mean
+squared error.
+
+Gradient descent can be intuitively understood as evaluating $C(w, b)$ at some
+initial $(w, b)$ and then calculating the derivative of $C(w,b)$ at that point.
+The derivative will provide information about how to apply a small nudge to
+$(w, b)$ so that $C(w, b)$ will decrease. Iteratively applying this approach
+will cause the cost function to decrease to either a local minimum. There are
+some theoretical and practical issues, but this intuition is helpful when
+describing the mathematics behind the process.
+
+To control the amount by which we nudge $(w, b)$, we define the _learning rate_
+to be a scalar hyperparameter $\eta$. Large learning rates will often converge
+on a minimum with fewer iterations than small values, but values too large will
+not converge at all.
+
+Let the weight from the $k$th neuron in the $(l-1)$th layer to the $j$th neuron
+in the $l$th layer be referred to as $w_{jk}^l$ and similarly let the bias on
+the $j$th neuron in the $l$th layer be $b_j^l$. In order to decrease the cost
+function, we will take some step proportional in magnitude to the learning rate
+$\eta$ in the direction of the negative gradient:
+
+$$
+    w_{jk}^l \gets w_{jk}^l - \eta \frac{\partial C}{\partial w_{jk}^l}
+$$
+
+$$
+    b_j^l \gets b_j^l - \eta \frac{\partial C}{\partial b_j^l}
+$$
+
+Note that '$\gets$' is being used to indicate an update to the weight $w_{jk}^l$
+or bias $b_j^l$. These equations define the change which would decrease the
+cost function, but they rely on knowing the gradient of the cost function with
+respect to any weight $w_{jk}^l$ or bias $b_j^l$. The calculation of this
+gradient is done by backpropogation, the subject of the next subsection.
+
+Gradient descent can be made more efficient via an adjusted algorithm called
+Stochastic Gradient Descent (SGD), which works by batching the data into
+subsets and only changing the weights and biases based on the average gradient
+over the observations in each batch.
+
+Optimisation algorithms other than SGD are more commonly used in practical
+machine learning, such as AdaGrad [@Duchi2011AdaptiveSM] which is performant on
+sparse gradients, RMSProp [@RMSProp] which works well in non-stationary
+settings, and Adam [@Kingma2014AdamAM] which provides good performance with
+little tuning.
+
+### Backpropogation
+
+Backpropogation is the process of efficiently calculating the gradient of the
+cost function $C(w, b)$ with respect to any weight or bias in the network. It
+derives from the method of reverse mode automatic differentiation for networks
+of differentiable functions introduced by @Leppo1970 and was popularised for
+deep learning applications in @Rumelhart1986LearningRB.
+
+For notation, we will use $w_{jk}^l$ to refer to the weight from the $k$th
+neuron in the $(l-1)$th layer to the $j$th neuron in the $l$th layer.
+Similarly, $b_j^l$ will refer to the bias on the $j$th neuron in the $l$th
+layer. $a_j^l$ will refer to the output of the $j$th neuron in the $l$th layer.
+Finally, let $L$ be the last layer of the network, such that $a^L$ is the
+output of the network.
+
+With this notation, the process of forward propagating values through the
+network can be seen as applying a function on the outputs of the previous
+layer's neuron like so:
+
+$$
+    a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right)
+$$
+
+By defining a matrix of weights $w^l$, a vector of biases $b^l$, and a vector
+of activations $a^l$, we can rewrite the above equation in matrix notation as
+
+$$
+    a^{l} = \sigma\left( w^{l} a^{l-1} + b^l \right).
+$$
+
+We will also define an intermediate quantity $z^l = w^{l} a^{l-1} + b^l$.
+
+Using the chain rule, the partial derivative of the cost function with respect
+to an arbitrary weight $w_{jk}^l$ is expanded to include $z_j^l$
+
+$$
+    \frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial w_{jk}^l}
+$$
+
+which can then be simplified to be in terms of the activation of the previous
+layer $a_k^{l-1}$:
+
+$$
+    \frac{\partial C}{\partial w_{jk}^l} =
+    \frac{\partial C}{\partial z_j^l}
+        \frac{\partial \left(
+                w_{jk}^l a_{j}^{l-1} + b_j^l
+        \right)}{\partial w_{jk}^l}
+    = \frac{\partial C}{\partial z_j^l} a_k^{l-1}
+$$
+
+The partial derivative of the cost function with respect to an arbitrary bias
+is expanded and calculated similarly:
+
+$$
+    \frac{\partial C}{\partial b_j^l} =
+    \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial b_j^l}
+    = \frac{\partial C}{\partial z_j^l}
+        \frac{\partial \left(
+                w_{jk}^l a_{j}^{l-1} + b_j^l
+        \right)}{\partial w_{jk}^l}
+    = \frac{\partial C}{\partial z_j^l}
+$$
+
+The chain rule can be applied in order to express the partial derivative
+$\frac{\partial C}{\partial z_j^L}$ in terms of the partial derivative of the
+activations of the last layer and the derivative of the activation function:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \frac{\partial C}{\partial z_j^L} &= \frac{\partial C}{\partial a_j^L}
+    \frac{\partial a_j^L}{\partial z^L_j} \\
+    &= \frac{\partial C}{\partial a_j^L}
+    \frac{\partial \left( \sigma(z_j^L) \right)}{\partial z^L_j} \\
+    &= \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)
+\end{align*}
+<!-- prettier-ignore-end -->
+
+Note that all terms in the expression $\frac{\partial C}{\partial a_j^L}
+\sigma'(z_j^L)$ are easily calculated. $\frac{\partial C}{\partial a_j^L}$ will
+depend on the cost function, but for the mean squared error cost function it is
+simply $a^L_j - y_j$:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \frac{\partial C}{\partial a_j^L} &= \frac{\partial }{\partial a_j^L}
+    \left[ \frac{1}{2} \sum_j ||y_j - a_j^L||^2 \right] \\
+        &= a^L_j - y_j\\
+\end{align*}
+<!-- prettier-ignore-end -->
+
+$\sigma'$ is also efficiently calculated as the activation function does not
+change. For the sigmoid activation function, the derivative is $\sigma(x) (1 -
+\sigma(x))$:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+\sigma'(x) &= \frac{d}{dx} \left( 1 + \mathrm{e}^{-x} \right)^{-1} \\
+    &= \frac{e^{-x}}{\left(1 + e^{-x}\right)^2} \\
+    &= \frac{1}{1 + e^{-x}\ } \cdot \frac{e^{-x}}{1 + e^{-x}}  \\
+    &= \sigma(x) \cdot \frac{(1 + e^{-x}) - 1}{1 + e^{-x}}  \\
+    &= \sigma(x) \cdot \left( \frac{1 + e^{-x}}{1 + e^{-x}} - \frac{1}{1 + e^{-x}} \right) \\
+    &= \sigma(x) \cdot \left( 1 - \frac{1}{1 + e^{-x}} \right) \\
+    &= \sigma(x) (1 - \sigma(x))
+\end{align*}
+<!-- prettier-ignore-end -->
+
+Which in turn means that $\sigma'(z_j^L)$ is easily calculated as $z_j^L$ can
+be stored during the forward pass.
+
+Given that we know $\frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)$, we can
+calculate the partial derivatives $\frac{\partial C}{\partial z_j^l}$ one at a
+time moving backwards through the layers of the network using the following
+result:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \frac{\partial C}{\partial z_j^l}
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \frac{\partial }{\partial z_j^l} \left[ z_i^{l+1} \right] \\
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \frac{\partial}{\partial z_j^l} \left[
+        \sum_k w_{ik}^{l+1} a_k^l + b_i^{l+1}
+        \right] \\
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \frac{\partial}{\partial z_j^l} \left[
+        \sum_k w_{ik}^{l+1} \sigma(z_k^l) + b_i^{l+1}
+        \right] \\
+\intertext{
+    Note that the partial derivative of the sum over $k$
+    ($\frac{\partial}{\partial z_j^l} \sum_k$) is all zeros except where $j=k$
+}
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \left[
+        0 + \ldots + w_{ij}^{l+1} \sigma'(z_j^l) + \ldots + 0
+        \right] \\
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} w_{ij}^{l+1} \sigma'(z_j^l)
+\end{align*}
+<!-- prettier-ignore-end -->
+
+This shows that the partial derivative of each layer $\frac{\partial
+C}{\partial z_j^l}$ is a function of the partial derivative of the next layer
+$\frac{\partial C}{\partial z_j^{l+1}}$
+
+Backpropogation then proceeds as follows
+
+1. During the forward pass, store the pre-activation $z_j^l$ and activations
+   $a_j^l$ for all layers.
+2. Calculate $\frac{\partial C}{\partial z_j^L}$:
+
+   $$
+       \frac{\partial C}{\partial z_j^L} = \frac{\partial C}{\partial a_j^L}
+       \sigma'(z_j^L)
+   $$
+
+3. Move backwards through the layers, using the value of $\frac{\partial
+   C}{\partial z_j^{l+1}}$ to calculate $\frac{\partial C}{\partial z_j^l}$ for
+   each $l \in [L-1, L-2, \ldots, 2, 1]$. This calculation is done through the
+   expression:
+
+   $$
+        \frac{\partial C}{\partial z_j^l} = \sum_i \frac{\partial C}{\partial z_i^{l+1}} w_{ij}^{l+1} \sigma'(z_j^l)
+   $$
+
+   Where the $\sigma'(z_j^l)$ is easily calculated as $z_j^l$ was stored during
+   the forward pass and $\sigma'$ can be calculated through a simple
+   expression.
+
+4. Using the values for $\frac{\partial C}{\partial z_j^l}$, calculate the
+   partial derivative of the cost function with respect to the weights
+   ($\frac{\partial C}{\partial w_{jk}^l}$) and biases ($\frac{\partial
+   C}{\partial b_j^l}$) in each layer:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \frac{\partial C}{\partial w_{jk}^l}
+        &= \frac{\partial C}{\partial z_j^l} a_k^{l-1}\\
+    \frac{\partial C}{\partial b_j^l}
+        &= \frac{\partial C}{\partial z_j^l} \\
+\end{align*}
+<!-- prettier-ignore-end -->
+
+5. With the partial derivative of the cost function with respect to the weights
+   ($\frac{\partial C}{\partial w_{jk}^l}$) and biases ($\frac{\partial
+   C}{\partial b_j^l}$) in each layer, update the respective weights and biases
+   according to the learning rate $\eta$:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    w_{jk}^l &\gets w_{jk}^l - \eta \frac{\partial C}{\partial w_{jk}^l} \\
+    b_j^l &\gets b_j^l - \eta \frac{\partial C}{\partial b_j^l} \\
+\end{align*}
+<!-- prettier-ignore-end -->
+
+This completes one iteration of the gradient descent algorithm. Multiple
+iterations over a large dataset of observations are required in practice for an
+ANN to accurately match some target function.
+
+#### Some observations
+
+\marginpar{TODO writeup about vanishing gradient}
+\marginpar{TODO writeup about saturation}
+
+The above equations provide some insight into how an ANN learns, and what might
+be detrimental to it's learning. Specifically, note that the rate of
+change of the cost function with respect to any given weight ($\frac{\partial
+C}{\partial w_{jk}^l}$) is dependant on the activation of the neuron in the
+previous layer:
+
+$$
+    \frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l}
+    a_k^{l-1}
+$$
+
+This means that if a neuron's activations are close to zero, then the gradient
+(and therefore the update applied to the weight) will also be close to zero,
+implying that the weights will be updated less and that the neural network will
+learn less. This phenomena is called the vanishing gradient problem. This
+problem will propagate forwards through a network, so it initially caused
+problems for "deep" neural networks with many layers.
+
+Similarly, the equation for \marginpar{TODO}.
+
+### Cross entropy loss
+
+For multi-class classification problems such as _Ergo_, categorical
 cross-entropy is commonly used as the loss function [@Neal2007PatternRA].
 Intuitively, categorical cross-entropy compares the expected discrete
 probability distribution $p$ to a predicted discrete probability distribution
@@ -144,6 +542,8 @@ $$
 
 ## Hidden Markov Models
 
+\marginpar{rewrite}
+
 Hidden Markov Models (HMMs) are statistical prediction models used for
 sequences of data. They describe a probabilistic finite state machine in which
 the model moves from one state to another with certain transition
@@ -159,6 +559,8 @@ score that observation and the class of the maximum scoring HMM is used as the
 predicted class.
 
 ## CuSum
+
+\marginpar{rewrite}
 
 CuSum [@page_continuous_1954] is a sequential method used for change detection.
 Given a time series and some baseline value, it can alert when the time series
@@ -188,7 +590,9 @@ so will be described in detail in the Methodology chapter.
 
 ## Hardware Used
 
-The hardware that allows *Ergo* to sense the user's hand movements is made up
+\marginpar{rewrite}
+
+The hardware that allows _Ergo_ to sense the user's hand movements is made up
 of ten accelerometers which measure linear acceleration (but not rotational
 acceleration) in three orthogonal axes: X, Y, and Z. These accelerometers are
 mounted on the user's fingertips, one per finger. For each axis, a 10-bit value
@@ -216,6 +620,8 @@ resulting in the 40Hz 30-dimensional time series.
 
 ## Gesture Classes
 
+\marginpar{rewrite}
+
 In this report, a gesture is defined as a motion of the hands and/or fingers
 that takes less than 500ms to complete.
 
@@ -237,8 +643,10 @@ Five rotations and ten fingers result in the required fifty non-null gestures.
 
 ## Autocorrect
 
+\marginpar{rewrite}
+
 Autocorrect is a tool used when the nature of the interface means that small
-user errors are common. This is ideal for *Ergo*, as new users may not be
+user errors are common. This is ideal for _Ergo_, as new users may not be
 familiar with the input method and autocorrect can make their experience much
 better. Autocorrect will generally change words as they are typed, replacing
 a misspelt word with its nearest match. The definition of "near" depends on
@@ -271,16 +679,16 @@ words in the corpus which are two "edits" away from the source word and
 assesses their prior. If an edited word has a higher prior probability than the
 source word, then it will replace the source word.
 
-This error correction method was implemented in *Ergo* so that the user is able
+This error correction method was implemented in _Ergo_ so that the user is able
 to type without correcting every mistake.
 
 This procedure is given in Algorithm \ref{alg:autocorrect}.
 
 \begin{algorithm}
-    \caption{Norvig Spelling Correction}
-    \label{alg:autocorrect}
-    \begin{algorithmic}[1]
-    \State $\text{wordsAndCounts} \gets \textsc{GetWordCounts}(\textsc{ReadFile}(\text{`all\_words.txt'}))$
+\caption{Norvig Spelling Correction}
+\label{alg:autocorrect}
+\begin{algorithmic}[1]
+\State $\text{wordsAndCounts} \gets \textsc{GetWordCounts}(\textsc{ReadFile}(\text{`all\_words.txt'}))$
 
     \State
     \Function{FilterUnknown}{words} \Comment{Filter out unknown words}
@@ -328,8 +736,7 @@ This procedure is given in Algorithm \ref{alg:autocorrect}.
     \EndFunction
 
     \end{algorithmic}
+
 \end{algorithm}
-
-
 
 # References
