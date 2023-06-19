@@ -9,6 +9,7 @@ header-includes: |
   \usepackage{soul}
   \usepackage{tikz}
   \usepackage{xcolor}
+  \usepackage{pgfplots}
   \newcommand{\pr}{\mathbb{P}}
   \newcommand{\indep}{\perp\!\!\!\!\perp}
   \DeclareMathOperator*{\argmax}{arg\,max}
@@ -115,12 +116,31 @@ The sigmoid activation function can easily be differentiated, a property that
 will become useful when discussing backpropogation in subsection
 \ref{backpropogation}.
 
+<!-- prettier-ignore-start -->
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.3\textwidth]{imgs/02_sigmoid.png}
+\begin{tikzpicture}
+    \begin{axis}[
+        title = {Sigmoid function $\sigma(x) = \frac{1}{1 + e^{-x}}$},
+        axis on top = true,
+        axis x line = bottom,
+        axis y line = left,
+        grid = major,
+        xlabel = $x$,
+        ylabel = $\sigma(x)$
+    ]
+        \addplot[
+            blue,
+            domain = -10:10,
+            samples = 100
+        ]
+            {1/(1+exp(-x))};
+    \end{axis}
+\end{tikzpicture}
 \caption{The sigmoid activation function.}
 \label{fig:02_sigmoid}
 \end{figure}
+<!-- prettier-ignore-end -->
 
 ### Neural Networks
 
@@ -935,23 +955,30 @@ procedure recursive and is given in Algorithm \ref{alg:alphai}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
-\caption{Computing $\alpha_i(t)$ efficiently}
+\caption{Computing $\alpha_i(t)$ efficiently with the forward procedure}
 \label{alg:alphai}
 \begin{algorithmic}[1]
-    \State \textbf{Base case:} \\
-        $\alpha_i(0) = A_{0i}, \quad i \in \{1, 2, \ldots, |S|\}$
-    \State \textbf{Recursive Case:} \\
-        $\alpha_j(t) = \sum_{i=1}^{|S|} \alpha_i(t - 1) A_{ij} B_{j x_t}, \quad j \in \{1, 2, \ldots, |S|\}, t \in \{1, 2, \ldots, T\}$
+    \State \textbf{Base case:} $\alpha_i(0) = A_{0i}$
+    \State \textbf{Recursive Case:} $\alpha_i(t) = B_{i,x_t} \sum_{j=1}^{|S|} \alpha_j(t - 1) A_{j,i}$
 \end{algorithmic}
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-The backwards procedure can be used to efficiently calculate the value of
+The backwards procedure can be used to efficiently calculate the probability of
+a sequence $x_{t+1}, \ldots, x_T$ given the initial state and a HMM:
+$\beta_i(t)$. This procedure is very similar to the forward procedure and is
+given in Algorithm \ref{alg:betai}.
 
-$$
-    \beta_i(t) = \pr(x_T \cap x_{T-1} \cap \ldots \cap x_{t+2} \cap x_{t+1}
-    \cap z_t = s_i | A \cap B)
-$$
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+\caption{Computing $\beta_i(t)$ efficiently with the backward procedure}
+\label{alg:betai}
+\begin{algorithmic}[1]
+    \State \textbf{Base case:} $\beta_i(T) = 1$
+    \State \textbf{Recursive Case:} $\beta_i(t) = \sum^{|S|}_{j=1} \beta_j(t+1) A_{i,j} B_{j,x_{t+1}}$
+\end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
 
 #### The Viterbi algorithm: What's the most likely series of states for some output?
 
@@ -1029,244 +1056,75 @@ is quite different.
 
 The Baum-Welch algorithm [@Baum1970AMT] is a special case of the
 Expectation-Maximisation (EM) algorithm applied to finding the unknown
-parameters of an HMM.
+parameters of an HMM. It consists of three steps which are repeated until a
+desired level of convergence is reached such that successive iterations do not
+lead to significant changes in the parameters. Note that this algorithm does
+not converge to a global maximum, and the performance of the converged
+parameters depends on the random initialisation of those parameters.
 
-Renaming:
+Recall the following variables:
 
-- $X_t$ (hidden state) a discrete random variable with $N$ possible values. $N$
-  total states
-  - $N \to |S|$
-- $A$ is still the transition probability matrix
-- Initial state is $\pi_i = \pr (X_1 = i)$
-  - $\pi_i \to s_0$
-- $Y_t$ are the observations which take on one of $K$ values
-- $B$ is still the probability of an observation given a state
-- HMM is $\theta = (A, B, \pi)$
+- $A_{i,j}$ is the transition probability matrix, giving the probability of
+  being transitioning from state $i$ to state $j$.
+- $B_{j,k}$ is the emission probability matrix, giving the probability of
+  emitting some output observation $k$ given that we are in state $j$.
+- $x_t$ is the hidden state of the model at time $t$
+- $S$ is the set of possible states our model can be in.
+- $|S|$ is the total number of possible states.
+- $\bm{z}$ is the sequence of states which is known to have occurred.
 
-Baum-Welch algorithm finds local maximum for $\theta^* = \argmax_{\theta} \pr(Y
-| \theta)$.
+The **forward procedure** recursively calculates the probability of being in state $i$ at time $t$, $\alpha_i(t)$, and was presented in Algorithm \ref{alg:alphai}.
 
-First setup $\theta$ to be random initially.
+The **backward procedure** recursively calculates the probability of the rest
+of the sequence $z_{t+1}, \ldots, z_T$ given that the HMM is in state $i$ at
+time $t$, $\beta_i(t)$, and was presented in Algorithm \ref{alg:betai}.
 
-Then do the **forward procedure**:
-
-let $\alpha_i(t) = \pr(Y_1 = y_1, \ldots X_t = i | \theta)$. $\alpha$ can be
-found recursively:
-
-1. $\alpha_i(1) = \pi_i b_i(y_1)$
-
-2. $\alpha_i(t+1) = b_i(y_{t+1}) \sum^N_{j=1} \alpha_j(t) A_{i,j}$
-
-This series will converge to zero, resulting in a numerical underflow when
-calculated on a computer. This can be avoided by slightly scaling $\alpha$ and
-$\beta$, as will be shown below.
-
-**Backward procedure**
-
-let $\beta_i(t) = \pr(Y_{t+1} = y_{t+1}, \ldots | X_t = i, \theta)$. We
-calculate $\beta_i(t)$ recursively as:
-
-1. $\beta_i(T) = 1$
-2. $\beta_i(t) = \sum^N_{j=1} \beta_j(t+1) A_{i,j} b_j(y_{t+1})$
-
-**Update part**
+The **update step** uses the calculated values for $\alpha_i$ and $\beta_i$ to
+update the HMM parameters $A$ and $B$.
 
 We will need to calculate some temporary variables:
 
 - $\gamma_i(t)$ is the probability of being in state $i$ at time $t$ given the
-  observed sequence $Y$ and the HMM $\theta$
+  observed sequence $\bm{z}$ and the HMM $(A, B)$
 
-- $\xi_{ij}(t)$ is the probability of being in state $i$ and$j$ at times $t$
-  and $t+1$ given the observed sequence $Y$ and the HMM $\theta$
+- $\xi_{ij}(t)$ is the probability of being in state $i$ and $j$ at times $t$
+  and $t+1$ given the observed sequence $\bm{z}$ and the HMM defined by $A, B$
 
 According to Bayes' theorem:
 
-$$
-    \gamma_i(t) = \pr(X_t = i | Y, \theta) = \ldots =
-    \frac{\alpha_i(t)\beta_i(t)}{ \sum^N_{j=1} \alpha_i(t)\beta_i(t)}
-$$
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \gamma_i(t) &= \pr(x_t = i | \bm{z}, A,B) \\
+    &= \frac{ \pr(x_t = i, \bm{z} | A, B)}{ \pr (\bm{z} | A, B)} \\
+    &= \frac{\alpha_i(t)\beta_i(t)}{ \sum^N_{j=1} \alpha_i(t)\beta_i(t)} \\
+\end{align*}
+<!-- prettier-ignore-end -->
 
 And
 
-$$
-    \xi_{ij}(t) = \pr(X_t = i, X_{t+1} = j | Y, \theta)
-    = \frac{\pr(X_t = i, X_{t+1} = j, Y | \theta)}{\pr(Y | \theta)}
-    = \frac{
-        \alpha_i(t) a_{ij} \beta_j(t+1) b_j(y_{t+1})
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \xi_{ij}(t) &= \pr(x_t = i, x_{t+1} = j | \bm{z}, A,B) \\
+    &= \frac{\pr(x_t = i, x_{t+1} = j, \bm{z} | A,B)}{\pr(\bm{z} | A,B)} \\
+    &= \frac{
+        \alpha_i(t) A_{ij} \beta_j(t+1) B_{j,z_{t+1}}
     }{
-        \sum_{k=1}^N \sum_{w=1}^N \alpha_k(t) a_{kw} \beta_w(t+1) b_w(y_{t+1})
-    }
-$$
+        \sum_{k=1}^{|S|}
+            \sum_{l=1}^{|S|}
+                \alpha_k(t) A_{k,l} \beta_l(t+1) B_{l,y_{t+1}}
+    } \\
+\end{align*}
+<!-- prettier-ignore-end -->
 
 We can now update the parameters of the HMM:
 
-- $\pi_i^* = \gamma_i(1)$ (the expected frequency spent in state $i$ at the
-  first time step)
+- $A_{0i}^* = \gamma_i(1)$
 - $A_{ij}^* = \frac{ \sum^{T-1}_{t=1}\xi_{ij}(t) }{ \sum^{T-1}_{t=1}\gamma_i(t) }$ (The expected number of transitions from $i$ to $j$)
-- $b_i^*(v_k) = \frac{ \sum^T_{t=1} [y_t = v_k] \gamma_i(t)}{ \sum^T_{t=1}
-  \gamma_i(t) }$
+- $B_{j,k}^* = \frac{ \sum^T_{t=1} [y_t = k] \gamma_j(t)}{ \sum^T_{t=1}
+  \gamma_j(t) }$
 
 The above steps can now be repeated until a convergence within some threshold
 is reached.
-
----
-
-Our objective is to find A, B such that the likelihood of some given data is
-maximised. Formally:
-
-$$
-    A, B = \argmax_{A, B} \sum_{\forall \bm{z}} \pr(\bm{z} | \bm{x} \cap A \cap B) \log \left( \frac{\pr(\bm{x} \cap \bm{z} | A \cap B)}{\pr(\bm{z} | \bm{x} \cap A \cap B)} \right)
-$$
-
-This can be simplified as follows:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    A, B &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \log \left(
-            \frac{\pr(\bm{x} \cap \bm{z} | A \cap B)}{\pr(\bm{z} | \bm{x} \cap A \cap B)}
-        \right) \\
-         &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \log \left( \pr(\bm{x} \cap \bm{z} | A \cap B) \right) \\
-         &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \log \left( \left(
-            \prod_{t=1}^T \pr(x_t | z_t \cap B)
-        \right) \cdot \left(
-            \prod_{t=1}^T \pr(z_t | z_{t-1} \cap A)
-        \right) \right) \\
-         &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{t=1}^T
-        \left( \log (B_{z_t, x_t}) + \log (A_{z_{t-1}, x_t}) \right) \\
-         &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{i=1}^{|S|}
-        \sum_{j=1}^{|S|}
-        \sum_{k=1}^{|V|}
-        \sum_{t=1}^{T}
-        [z_t = s_j \cap x_t = v_k] \log (B_{j,k})
-        +
-        [z_{t-1} = s_i \cap z_t = s_j] \log (A_{i, j}) \\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-We can now construct the Lagrangian:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \mathcal{L}(A, B, \delta, \epsilon)
-    &= \argmax_{A, B}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{i=1}^{|S|}
-        \sum_{j=1}^{|S|}
-        \sum_{k=1}^{|V|}
-        \sum_{t=1}^{T} \left[  \right.\\
-        & \qquad [z_t = s_j \cap x_t = v_k] \log (B_{j,k})
-        +
-        [z_{t-1} = s_i \cap z_t = s_j] \log (A_{i, j})  \\
-        &\left. \right] + \sum_{j=1}^{|S|} \epsilon_j(1 -
-        \sum_{k=1}^{|V|}B_{j,k})
-        + \sum_{i=1}^{|S|} \delta_i(1 -
-        \sum_{j=1}^{|V|}A_{i,j}) \\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-Taking the partial derivatives with respect to $A_{i,j}$ and setting them equal
-to zero:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial A_{i,j}}
-    &= \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \frac{1}{A_{ij}}
-        \sum_{t=1}^{T} [z_{t-1} = s_i \cap z_t = s_j] - \delta_i = 0\\
-     &\Rightarrow\\
-    A_{i,j} &= \frac{1}{\delta_i}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{t=1}^{T} [z_{t-1} = s_i \cap z_t = s_j]\\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-And again but with respect to $B_{jk}$:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial B_{j,k}}
-    &= \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \frac{1}{B_{j,k}}
-        \sum_{t=1}^{T} [z_t = s_j \cap x_t = v_k] - \epsilon_j = 0\\
-     &\Rightarrow\\
-    B_{j,k} &= \frac{1}{\epsilon_j}
-        \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{t=1}^{T} [z_{t-1} = s_i \cap z_t = s_j]\\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-Now we can take the partial derivative of the Lagrangian $\mathcal{L}(A, B,
-\delta, \epsilon)$ with respect to each of the Lagrange multipliers $\delta_i$
-and $\epsilon_j$ and substitute in the value calculated for $A_{i,j}$ and
-$b_{j,k}$:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial \delta_i}
-    &= 1 - \sum_{j=1}^{|S|} A_{i,j}\\
-     &= 1 -\sum_{j=1}^{|S|}
-        \frac{1}{\delta_i}
-        \sum_{\forall \bm{z}}
-            \pr(\bm{z} | \bm{x} \cap A \cap B)
-            \sum_{t=1}^{T} [z_{t-1} = s_i \cap z_t = s_j]
-     = 0\\
-     &\Rightarrow\\
-     \delta_i &= \sum_{j=1}^{|S|}
-        \sum_{\forall \bm{z}}
-            \pr(\bm{z} | \bm{x} \cap A \cap B)
-            \sum_{t=1}^{T} [z_{t-1} = s_i \cap z_t = s_j] \\
-     \delta_i &= \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{t=1}^{T} [z_{t-1} = s_i] \\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \frac{\partial \mathcal{L}(A, B, \delta, \epsilon)}{\partial \epsilon_j}
-    &= 1 - \sum_{k=1}^{|V|} B_{j,k}\\
-    &= 1 -\sum_{k=1}^{|V|}
-        \frac{1}{\epsilon_j}
-        \sum_{\forall \bm{z}}
-            \pr(\bm{z} | \bm{x} \cap A \cap B)
-            \sum_{t=1}^{T} [z_t = s_j \cap x_t = v_k]
-     = 0\\
-     &\Rightarrow\\
-     \epsilon_j &= \sum_{k=1}^{|V|}
-        \sum_{\forall \bm{z}}
-            \pr(\bm{z} | \bm{x} \cap A \cap B)
-            \sum_{t=1}^{T} [z_t = s_j \cap x_t = v_k] \\
-     \epsilon_j &= \sum_{\forall \bm{z}}
-        \pr(\bm{z} | \bm{x} \cap A \cap B)
-        \sum_{t=1}^{T} [z_t = s_j] \\
-\end{align*}
-<!-- prettier-ignore-end -->
-
-Recall that we derived expressions for $\hat{A}_{i,j}$ and for $\hat{B}_{j,k}$:
-
-\marginpar{TODO: Complete the proof write up}
-
----
 
 ## CuSum
 
