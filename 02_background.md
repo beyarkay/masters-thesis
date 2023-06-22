@@ -18,31 +18,22 @@ header-includes: |
 
 # Background
 
-This chapter describes various concepts which _Ergo_ builds upon. The goal of
-_Ergo_ is to take a 30-dimensional time series dataset with a sampling
-frequency of 40Hz, classify it in real-time into one of 51 gesture classes, and
-then map those gestures to keystrokes. After this mapping, the keystrokes are
-forwarded to the OS of the user's computer and an autocorrection algorithm is
-applied. This autocorrection algorithm which should correct any common typing
-mistakes.
-
-The relevant background information includes different machine learning
-methods, autocorrect techniques, a description of the gestures used, and a
-description of the hardware employed.
+This chapter describes various concepts which _Ergo_ utilizes. The relevant
+background information includes different machine learning methods and autocorrect
+techniques.
 
 Artificial Neural Networks (ANNs) have shown a lot of promise in a wide range
 of classification problems and are discussed in Section
-\ref{artificial-neural-networks}. Multiple ANNs will be investigated, as they
-have many desirable properties which make them suited to this problem.
+\ref{artificial-neural-networks}.
 
 Hidden Markov Models have historically been used for problems similar to those
 which _Ergo_ seeks to solve, and thus they will be used to provide a comparison
 between candidate models and the prior work. They are discussed in Section
 \ref{hidden-markov-models}.
 
-CuSUM is a very simple baseline model that will provide an upper bound for how
-quickly a non-trivial prediction can be made. It is discussed in Section
-\ref{cusum}.
+CuSum is a simple statistical technique used for online change detection in the
+distribution of a time series. It will be used as a baseline against which
+other models can be compared, and is discussed in Section \ref{cusum}.
 
 Autocorrect is a valuable aid to users operating a virtual keyboard where
 mistakes are common due to the nature of the interface, and so it is integrated
@@ -50,16 +41,14 @@ into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
 
 ## Artificial Neural Networks
 
-Artificial Neural Networks (ANNs, also known as multi-layer perceptrons or
-MLPs) are a form of machine learning that started with the development of the
-perceptron by @Rosenblatt1963PRINCIPLESON and was itself inspired by
-@McCulloch2021ALC.
+Artificial Neural Networks (ANNs) are a form of machine learning that started
+with the development of the perceptron [@Rosenblatt1963PRINCIPLESON], which
+itself was inspired by work done by @McCulloch2021ALC.
 
 This section will first describe the perceptron in subsection
 \ref{perceptrons}. Then neural networks will be covered in subsection
 \ref{neural-networks}. A mathematical description of how the weights and biases
 are tuned via gradient descent is given in subsection \ref{gradient-descent}.
-
 The method by which backpropogation allows for the efficient calculation of the
 gradients within a neural network is described in subsection
 \ref{backpropogation}, and some details about the loss function used for
@@ -74,25 +63,29 @@ proposed a weighting system that was used to compute the output, whereby each
 of the input values $x_0, x_1, \ldots, x_n$ is multiplied by a corresponding
 weight $w_0, w_1, \ldots, w_n$ and the results are summed together.
 
+$$
+    \text{output} = \sum_{i=1}^N x_i \times w_i
+$$
+
 Rosenblatt originally required the inputs and the output to be binary, which
 implies that the output would be 1 if and only if the sum of the weighted
 inputs passed some threshold value:
 
 $$
     \text{output} = \begin{cases}
-        0 & \text{if}\ \sum_j w_j x_j \le \text{threshold} \\
-        1 & \text{if}\ \sum_j w_j x_j > \text{threshold} \\
+        0 & \text{if}\ \sum_i w_i x_i \le \text{threshold} \\
+        1 & \text{if}\ \sum_i w_i x_i > \text{threshold} \\
     \end{cases}
 $$
 
 Modern implementations of a perceptron have changed many aspects of
 Rosenblatt's initial description. The threshold was replaced with the
-combination of a bias $b$ term and a comparison with zero:
+combination of a scalar bias $b$ term and a comparison with zero:
 
 $$
     \text{output} = \begin{cases}
-        0 & \text{if}\ b + \sum_j w_j x_j \le 0 \\
-        1 & \text{if}\ b + \sum_j w_j x_j > 0 \\
+        0 & \text{if}\ b + \sum_i w_i x_i \le 0 \\
+        1 & \text{if}\ b + \sum_i w_i x_i > 0 \\
     \end{cases}
 $$
 
@@ -101,20 +94,13 @@ a scaling function $\sigma: \mathbb{R} \to (0, 1)$ is used which restricts the
 range of the output:
 
 $$
-    \text{output} = \sigma \left( \ b + \sum_j w_j x_j \right)
+    \text{output} = \sigma \left( \ b + \sum_i w_i x_i \right)
 $$
 
 This function is called the activation function, and there have been several
-different functions proposed. The first was the sigmoid (or logistic)
-activation function (see Figure \ref{fig:02_sigmoid}).
-
-$$
-    \sigma(x) = \frac{1}{1 + e^{-x}}
-$$
-
-The sigmoid activation function can easily be differentiated, a property that
-will become useful when discussing backpropogation in subsection
-\ref{backpropogation}.
+different functions mapping to several different domains have been proposed.
+The first was the sigmoid (or logistic) activation function (see Figure
+\ref{fig:02_sigmoid}):
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!htb]
@@ -142,21 +128,19 @@ will become useful when discussing backpropogation in subsection
 \end{figure}
 <!-- prettier-ignore-end -->
 
+$$
+    \sigma(x) = \frac{1}{1 + e^{-x}}
+$$
+
+The sigmoid activation function can easily be differentiated, a property that
+will become useful when discussing backpropogation in subsection
+\ref{backpropogation}.
+
 ### Neural Networks
 
 Individual perceptrons can be combined to form a network of perceptrons where
 the outputs of some perceptrons become the inputs for other perceptrons (see
-Figure \ref{fig:02_nn}). These perceptrons (or "neurons", as they are often
-called in this context) are arranged in layers in a directed acyclic graph,
-where every output from the neurons in layer $i$ is passed as an input to every
-neuron in layer $i+1$. The first layer is called the input layer, and those
-neurons simply output the data being modelled. There is one neuron for each
-dimension of the input data.
-
-The last layer is called the output layer, and a different activation is
-sometimes applied to this layer (depending on the problem being solved). The
-intermediate layers between the input and the output are collectively called
-the hidden layers.
+Figure \ref{fig:02_nn}).
 
 <!-- prettier-ignore-start -->
 \begin{figure}
@@ -232,45 +216,56 @@ the hidden layers.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+These perceptrons (or "neurons", as they are often
+called in this context) are arranged in layers in a directed acyclic graph,
+where every output from the neurons in layer $i$ is passed as an input to every
+neuron in layer $i+1$. The first layer is called the input layer, and those
+neurons simply output the data being modelled. There is one neuron for each
+dimension of the input data.
+
+The last layer is called the output layer, and a different activation is
+sometimes applied to this layer (depending on the problem being solved). The
+intermediate layers between the input and the output are collectively called
+the hidden layers.
+
 ### Gradient descent
 
 Given a neural network with the correct number of input, hidden, and output
-neurons for your problem, how do we find the correct values for the many
-weights and biases such that the network's output $\hat{\bm{y}}$ matches our
-expected output $\bm{y}$?
-
-Given a large number of observations and their expected output, gradient
-descent calculates how to change the weights and biases so as to decrease the
+neurons for a problem, how does one find the correct values for the many
+weights and biases, such that the network's output $\hat{\bm{y}}$ matches the
+expected output $\bm{y}$? Gradient descent solves this question by efficiently
+calculating how to change the weights and biases so as to decrease the
 difference between $\hat{\bm{y}}$ and $\bm{y}$.
 
-To achieve this, we define a cost function that gradient descent will minimise:
+To achieve this, a cost function is defined that gradient descent will minimise:
 
 $$
     C(w, b) = \frac{1}{2n} \sum_x || \bm{y} - \hat{\bm{y}}(w, b, x) ||^2
 $$
 
 Where $w$ are the weights of the network, $b$ the biases, $x$ the input data,
-and $n$ the number of observations. This cost function is known as the mean
-squared error.
+and $n$ the number of observations. This particular cost function is known as
+the mean squared error, although other cost functions can be used.
 
 Gradient descent can be intuitively understood as evaluating $C(w, b)$ at some
 initial $(w, b)$ and then calculating the derivative of $C(w,b)$ at that point.
 The derivative will provide information about how to apply a small nudge to
 $(w, b)$ so that $C(w, b)$ will decrease. Iteratively applying this approach
-will cause the cost function to decrease to either a local minimum. There are
-some theoretical and practical issues, but this intuition is helpful when
-describing the mathematics behind the process.
+will cause the cost function to decrease to a local minimum. There is no
+guarantee that gradient descent will find a global minimum.
 
-To control the amount by which we nudge $(w, b)$, we define the _learning rate_
-to be a scalar hyperparameter $\eta$. Large learning rates will often converge
-on a minimum with fewer iterations than small values, but values too large will
-not converge at all.
+To control the amount by which we nudge the weights and biases, we define the
+_learning rate_ to be a scalar hyperparameter $\eta$. Larger learning rates
+will often take fewer iterations to convert (when compared to smaller learning
+rates) however a learning rate that is too large will not converge at all. The
+optimal learning rate is problem dependant.
 
 Let the weight from the $k$th neuron in the $(l-1)$th layer to the $j$th neuron
 in the $l$th layer be referred to as $w_{jk}^l$ and similarly let the bias on
 the $j$th neuron in the $l$th layer be $b_j^l$. In order to decrease the cost
-function, we will take some step proportional in magnitude to the learning rate
-$\eta$ in the direction of the negative gradient:
+function, we will take some step from our starting "location" $(w_{jk}^{l},
+b_j^l)$ in the direction of the negative gradient, with the step size
+proportional to the magnitude of the learning rate $\eta$
 
 $$
     w_{jk}^l \gets w_{jk}^l - \eta \frac{\partial C}{\partial w_{jk}^l}
@@ -286,10 +281,9 @@ cost function, but they rely on knowing the gradient of the cost function with
 respect to any weight $w_{jk}^l$ or bias $b_j^l$. The calculation of this
 gradient is done by backpropogation, the subject of the next subsection.
 
-Gradient descent can be made more efficient via an adjusted algorithm called
-Stochastic Gradient Descent (SGD), which works by batching the data into
-subsets and only changing the weights and biases based on the average gradient
-over the observations in each batch.
+Gradient descent can be made more efficient via Stochastic Gradient Descent
+(SGD), which batches the data into subsets and only changes the weights and
+biases based on the average gradient over the observations in each batch.
 
 Optimisation algorithms other than SGD are more commonly used in practical
 machine learning: AdaGrad [@Duchi2011AdaptiveSM] is performant on sparse
@@ -304,16 +298,11 @@ derives from the method of reverse mode automatic differentiation for networks
 of differentiable functions introduced by @Leppo1970 and was popularised for
 deep learning applications bby @Rumelhart1986LearningRB.
 
-For notation, we will use $w_{jk}^l$ to refer to the weight from the $k$th
-neuron in the $(l-1)$th layer to the $j$th neuron in the $l$th layer.
-Similarly, $b_j^l$ will refer to the bias on the $j$th neuron in the $l$th
-layer. $a_j^l$ will refer to the output of the $j$th neuron in the $l$th layer.
-Finally, let $L$ be the last layer of the network, such that $a^L$ is the
-output of the network.
-
-With this notation, the process of forward propagating values through the
-network can be seen as applying a function on the outputs of the previous
-layer's neuron like so:
+For notation, $a_j^l$ will refer to the output of the $j$th neuron in the $l$th
+layer, and $L$ be the last layer of the network, such that $a^L$ is the output
+of the network. The process of forward propagating values through the network
+can be seen as applying a function on the outputs of the previous layer's
+neuron like so:
 
 $$
     a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right)
@@ -517,15 +506,20 @@ quickly the ANN can learn since the weights are only being updated by some
 small amount. This effect is called the vanishing gradient problem, and was
 first identified by @Hochreiter2001GradientFI.
 
-There have been multiple proposed solutions to the vanishing gradient problem ,
+There have been multiple proposed solutions to the vanishing gradient problem,
 such as using a different activation function like ReLU
 [@Hahnloser2000DigitalSA] or re-centering and re-scaling each layer's inputs
-through a process called Batch Normalization [@Ioffe2015BatchNA]
+through a process called Batch Normalization [@Ioffe2015BatchNA].
 
 ### Cross entropy loss
 
 For multi-class classification problems such as _Ergo_, categorical
-cross-entropy is commonly used as the loss function [@Neal2007PatternRA].
+cross-entropy is commonly used as the loss function [@Neal2007PatternRA]:
+
+$$
+    H(p, q) = - \sum_i p_i \log q_i
+$$
+
 Intuitively, categorical cross-entropy compares the expected discrete
 probability distribution $p$ to a predicted discrete probability distribution
 $q$. The distributions are compared element-wise, and instances where the
@@ -533,10 +527,8 @@ elements are not identical are penalised with a higher loss. These elements are
 summed together to get the total loss.
 
 Calculating whether or not the elements are identical is done via the
-expression $- p_i \log q_i$. This expression encodes the idea that if the true
-class is 1, then the loss is the log of the predicted label for that class
-(which is negated because a log of a value between 0 and 1 is negative,
-and we want non-negative loss).
+expression $- p_i \log q_i$ which encodes the idea that if the true class is 1,
+then the loss is the log of the predicted label for that class.
 
 If the predicted label is close to 1, then the log of that predicted label
 will be close to 0 and thus the loss will be close to 0. However, if the
@@ -546,16 +538,10 @@ infinity.
 
 Note that if the true class is 0, the loss is zero.
 
-The full expression for categorical cross-entropy loss is given by:
-
-$$
-    H(p, q) = - \sum_i p_i \log q_i
-$$
-
 ## Hidden Markov Models
 
-Hidden Markov Models (HMMs) are a form of machine learning designed for
-modelling a series of observations over time. HMMs were initially proposed by
+Hidden Markov Models (HMMs) are a form of machine learning often used to model
+a series of observations over time. HMMs were initially proposed by
 @Baum1966HMMs in a series of statistical papers with other authors in the late
 1960s. In the late 1980s, they became commonplace for sequence analysis
 [@Bishop1986MaximumLA], specifically in the field of bioinformatics
@@ -579,14 +565,13 @@ Let us simplify further, and require that
 1. Time occurs in discrete timesteps $t \in \{1, 2, 3, \ldots\}$.
 2. The events are discrete and taken from a set of possible states $S = \{s_1,
    s_2, \ldots, s_{|S|}\}$.
-3. Only one event can happen at each timestep.
+3. Only one event (notated as $z_t$) can happen at each timestep.
 
 We then have a sequence of events $\{z_1, z_2, z_3, \ldots\}$ where each $z_t
 \in S$ describes what happened at timestep $t$. As it stands, the state at a
 point in time could be the result of any number of variables, including all
 prior states of the system $z_1, z_2, \ldots, z_{t-1}$. We will impose two
-assumptions (the eponymous Markov assumptions) which will allow us to reason
-mathematically about our model.
+assumptions which will allow us to reason mathematically about our model.
 
 1. The _Limited Horizon Assumption_ is that the state of the system at time $t$
    depends only on the state of the system at time $t-1$. Formally, the
@@ -729,13 +714,14 @@ $$
 $$
 
 Maximum likelihood estimation is then the process of discovering which
-parameters $A$ result in the maximal likelihood given some observations.
+parameters $A$ result in the maximal likelihood given some observations
+$\bm{z}$.
 
 Practically, it is often more useful to work with the log-likelihood (notated
 $l$), and because $\log(x)$ is monotonically increasing, a value which
 maximises the log-likelihood will also maximise the likelihood.
 
-We will define the log-likelihood of a $\mathbb{L}$ Markov model as:
+We will define the log-likelihood of a Markov model as:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
@@ -839,7 +825,7 @@ With the formalism of Markov models understood, we can motivate _hidden_ markov
 models and the additional power they provide.
 
 Regular Markov models have a shortcoming in that they assume we can observe the
-state of the world directly. In our undergraduate assembly example, it is
+state of the world directly. In our undergraduate x86 Assembly example, it is
 impossible for us to directly know the exact understanding of an undergraduate
 student. We might be able to ask them, or we might be able to have them take a
 test or program in assembly and derive some information from the results, but
@@ -860,9 +846,9 @@ Markov models cannot help us here, but Hidden Markov models give us the tools
 to express the test mark as coming from a different probability distribution
 for each state the student is in. If we knew (for example) that the average
 mark achieved by students in the Mastery state was 65% and the average mark
-achieved by students in the Competence state was 30%, and we observe a student
-with a mark of 70%, then we can be fairly certain they are in the Mastery
-state.
+achieved by students in the Competence state was 30%, and we then observed a
+student with a mark of 70%, then we can be fairly certain they are in the
+Mastery state.
 
 We will express this mathematically by defining an HMM as a Markov model for
 which there are a series of observed outputs $\bm{x} = \{x_1, x_2, \ldots,
@@ -1129,8 +1115,8 @@ is reached.
 ## CuSum
 
 CuSum [@page_continuous_1954] is a sequential method used for change detection.
-Given a time series and some baseline value, it can alert when the time series
-deviates from the baseline value over a series of steps.
+Given a time series from an initial distribution, it can alert when the time
+series deviates from the initial distribution by some threshold amount.
 
 The method works by keeping track of a cumulative sum and alerting if that
 cumulative sum passes above some threshold value. The threshold value is

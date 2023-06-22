@@ -28,6 +28,7 @@ post:
 	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 07_postmatter.md -o "post.pdf"
 
 watch:
+	# Install `entr` first: https://github.com/eradman/entr
 	echo '01_introduction.md' | entr -s 'make intro' &
 	echo '02_background.md' | entr -s 'make bg' &
 	echo '03_lit_review.md' | entr -s 'make lit' &
