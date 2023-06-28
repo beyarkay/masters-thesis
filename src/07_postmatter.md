@@ -8,19 +8,20 @@
 \appendix
 
 ## Hardware Components \label{app:hardware}
+
 This appendix details the different hardware components used.
 
 ### The ADXL335 Accelerometers
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.3\textwidth]{imgs/ADXL335.jpg}
-    \caption{One ADXL335 is used per finger in order to measure the linear
-    acceleration in the X, Y, and Z directions.}
-    \label{fig:adxl335}
+\centering
+\includegraphics[width=0.3\textwidth]{src/imgs/ADXL335.jpg}
+\caption{One ADXL335 is used per finger in order to measure the linear
+acceleration in the X, Y, and Z directions.}
+\label{fig:adxl335}
 \end{figure}
 
-*Ergo* has ten ADXL335 3-axis linear-accelerometers (built by @adxl335) which
+_Ergo_ has ten ADXL335 3-axis linear-accelerometers (built by @adxl335) which
 are mounted on the user's fingertips. Each of these accelerometers measure the
 amount of linear acceleration relative to the accelerometer along the X, Y, and
 Z axes. Each accelerometer therefore outputs three continuous signals,
@@ -29,19 +30,18 @@ resulting in 15 continuous signals per hand.
 The output signal is a value between 0 and 1024. The output signal has a small
 amount of noise. A value of 512 roughly corresponds to no acceleration, with
 values closer to zero corresponding to negative acceleration and values closer
-to 1024 corresponding to positive acceleration. The accelerometers *do* measure
+to 1024 corresponding to positive acceleration. The accelerometers _do_ measure
 the acceleration due to gravity, so the magnitude of the X, Y, and Z sensor
 readings of a sensor at rest will be constant in the direction of gravity.
 
 ### The Arduino Nano 33 BLE
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.3\textwidth]{imgs/nano.jpg}
-    \caption{One Arduino Nano 33 BLE is used on each hand.}
-    \label{fig:nano}
+\centering
+\includegraphics[width=0.3\textwidth]{src/imgs/nano.jpg}
+\caption{One Arduino Nano 33 BLE is used on each hand.}
+\label{fig:nano}
 \end{figure}
-
 
 The Arduino Nano 33 BLE [@arduinoNano] is a 3.3V microcontroller. It has a
 64MHz processor with 256 KB SRAM (for variable storage) and 1MB flash memory
@@ -52,11 +52,11 @@ Arduino Nano is used per hand.
 ### The CD74HC4067 16-to-1 Multiplexer
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.1\textwidth]{imgs/CD74HC4067.jpg}
-    \caption{One CD74HC4067 multiplexor is used per hand in order to multiplex
-    the fifteen signals into one.}
-    \label{fig:multiplexor}
+\centering
+\includegraphics[width=0.1\textwidth]{src/imgs/CD74HC4067.jpg}
+\caption{One CD74HC4067 multiplexor is used per hand in order to multiplex
+the fifteen signals into one.}
+\label{fig:multiplexor}
 \end{figure}
 
 15 analogue input signals are required per hand for the accelerometers, but the
@@ -66,18 +66,18 @@ accelerometers are therefore multiplexed via a 16-to-1 multiplexer
 
 ## Circuit Diagram of \emph{Ergo} \label{app:circuit-diagram}
 
-Figure \ref{fig:circuit_diagram} shows the circuit diagram of *Ergo*.
+Figure \ref{fig:circuit*diagram} shows the circuit diagram of \_Ergo*.
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/circuit_diagram.pdf}
-    \caption{Circuit diagram of one hand of \emph{Ergo}. The accelerometers and
-    multiplexer are in blue, and the Arduino Nano is in white.}
-    \label{fig:circuit_diagram}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/circuit_diagram.pdf}
+\caption{Circuit diagram of one hand of \emph{Ergo}. The accelerometers and
+multiplexer are in blue, and the Arduino Nano is in white.}
+\label{fig:circuit_diagram}
 \end{figure}
 
 Please see appendix \ref{app:hardware} for details about off-the-shelf hardware
-components. The two units that make up *Ergo* are identical in terms of
+components. The two units that make up _Ergo_ are identical in terms of
 circuitry, so what follows is the description of one unit.
 
 Each of the five accelerometers produce three analogue outputs and take a 3.3v
@@ -109,6 +109,7 @@ connects the `SIG` pin to ground. This ensures the output signal will be zero
 if the accelerometers are disconnected by mistake.
 
 ## Formulae
+
 This appendix defines several formulae which are used in the report.
 
 ### Softmax \label{app:softmax}
@@ -147,6 +148,7 @@ Model with low precision:
 y_true: .......11111.......
 y_pred: .....111111111.....
 ```
+
 One can see that all the `1`s get correctly classified, but many periods get
 incorrectly classified as being a `1`.
 
@@ -169,6 +171,7 @@ Model with low recall:
 y_true: .......11111.......
 y_pred: .........1.........
 ```
+
 One can see that all the periods get correctly classified, but many `1`s get
 incorrectly classified as being a period.
 
@@ -221,21 +224,21 @@ See Figure \ref{fig:vvim_confusion_matrix} for the confusion matrix of this
 model.
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/vvim_confusion_matrix.png}
-    \caption{The confusion matrix for the project done \emph{before} the author
-    started their Honours degree. Note the difficulty the model has with
-    distinguishing between characters \texttt{b} and \texttt{h}. This is
-    because the sensors measured flex in the fingers, and their position made
-    splaying motions difficult to detect.}
-    \label{fig:vvim_confusion_matrix}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/vvim_confusion_matrix.png}
+\caption{The confusion matrix for the project done \emph{before} the author
+started their Honours degree. Note the difficulty the model has with
+distinguishing between characters \texttt{b} and \texttt{h}. This is
+because the sensors measured flex in the fingers, and their position made
+splaying motions difficult to detect.}
+\label{fig:vvim_confusion_matrix}
 \end{figure}
 
 This report presents similar root ideas, but with a completely different
-implementation and end goal. The sensors used for *Ergo* measure acceleration
+implementation and end goal. The sensors used for _Ergo_ measure acceleration
 of the fingertips instead of the bend of the fingers as was used previously.
 The custom-designed circuity is completely different from that used prior to
-the author starting their Honours degree. The goal of *Ergo* is to allow the
+the author starting their Honours degree. The goal of _Ergo_ is to allow the
 user to make arbitrary freehand gestures and have those be converted to
 keystrokes. Whereas previous work interpreted the motions of the user's fingers
 as they type keystrokes.
@@ -246,62 +249,61 @@ The full list of keystroke replacements is given in Table
 \ref{tab:replacements}.
 
 \begin{table}
-    \centering
-    \caption{Correspondance between gesture labels and rotation of the hand.}
-    \begin{tabular}{ll}
-        \hline
-        \textbf{Typed Keys} & \textbf{Replacement}  \\
-        \hline
-        \texttt{Shift 1}    & \texttt{!}            \\
-        \hline
-        \texttt{Shift 2}    & \texttt{@}            \\
-        \hline
-        \texttt{Shift 3}    & \texttt{\#}            \\
-        \hline
-        \texttt{Shift 4}    & \texttt{\$}            \\
-        \hline
-        \texttt{Shift 5}    & \texttt{\%}            \\
-        \hline
-        \texttt{Shift 6}    & \texttt{\^}            \\
-        \hline
-        \texttt{Shift 7}    & \texttt{\&}            \\
-        \hline
-        \texttt{Shift 8}    & \texttt{*}            \\
-        \hline
-        \texttt{Shift 9}    & \texttt{(}            \\
-        \hline
-        \texttt{Shift 0}    & \texttt{)}            \\
-        \hline
-        \texttt{Shift -}    & \texttt{\_}            \\
-        \hline
-        \texttt{Shift =}    & \texttt{+}            \\
-        \hline
-        \texttt{Shift [}    & \texttt{\{}            \\
-        \hline
-        \texttt{Shift ]}    & \texttt{\}}            \\
-        \hline
-        \texttt{Shift |}   & \texttt{\textbackslash}            \\
-        \hline
-        \texttt{Shift :}    & \texttt{;}            \\
-        \hline
-        \texttt{Shift '}    & \texttt{"}            \\
-        \hline
-        \texttt{Shift ,}    & \texttt{<}            \\
-        \hline
-        \texttt{Shift .}    & \texttt{>}            \\
-        \hline
-        \texttt{Shift /}    & \texttt{?}            \\
-        \hline
-        \texttt{Shift \`}    & \texttt{\~}            \\
-        \hline
-        \texttt{Control [}    & \texttt{Escape}       \\
-        \hline
-        \texttt{Control h}    & \texttt{Backspace}       \\
-        \hline
-        \texttt{Control m}    & \texttt{Return}       \\
-        \texttt{Control j}    & \texttt{Return}       \\
-        \hline
-    \end{tabular}
-    \label{tab:replacements}
+\centering
+\caption{Correspondance between gesture labels and rotation of the hand.}
+\begin{tabular}{ll}
+\hline
+\textbf{Typed Keys} & \textbf{Replacement} \\
+\hline
+\texttt{Shift 1} & \texttt{!} \\
+\hline
+\texttt{Shift 2} & \texttt{@} \\
+\hline
+\texttt{Shift 3} & \texttt{\#} \\
+\hline
+\texttt{Shift 4} & \texttt{\$} \\
+\hline
+\texttt{Shift 5} & \texttt{\%} \\
+\hline
+\texttt{Shift 6} & \texttt{\^} \\
+\hline
+\texttt{Shift 7} & \texttt{\&} \\
+\hline
+\texttt{Shift 8} & \texttt{\*} \\
+\hline
+\texttt{Shift 9} & \texttt{(} \\
+\hline
+\texttt{Shift 0} & \texttt{)} \\
+\hline
+\texttt{Shift -} & \texttt{\_} \\
+\hline
+\texttt{Shift =} & \texttt{+} \\
+\hline
+\texttt{Shift [} & \texttt{\{} \\
+\hline
+\texttt{Shift ]} & \texttt{\}} \\
+\hline
+\texttt{Shift |} & \texttt{\textbackslash} \\
+\hline
+\texttt{Shift :} & \texttt{;} \\
+\hline
+\texttt{Shift '} & \texttt{"} \\
+\hline
+\texttt{Shift ,} & \texttt{<} \\
+\hline
+\texttt{Shift .} & \texttt{>} \\
+\hline
+\texttt{Shift /} & \texttt{?} \\
+\hline
+\texttt{Shift \`} & \texttt{\~} \\
+\hline
+\texttt{Control [} & \texttt{Escape} \\
+\hline
+\texttt{Control h} & \texttt{Backspace} \\
+\hline
+\texttt{Control m} & \texttt{Return} \\
+\texttt{Control j} & \texttt{Return} \\
+\hline
+\end{tabular}
+\label{tab:replacements}
 \end{table}
-

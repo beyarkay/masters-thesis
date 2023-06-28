@@ -1,31 +1,86 @@
-build:
+report: checkpoint
 	# Note: pandoc-mustache must be installed via:
 	# `pip install -U pandoc-mustache`
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 00_preface.md 01_introduction.md 02_background.md 03_lit_review.md 04_methodology.md 05_results.md 06_conclusion.md 07_postmatter.md -o "26723077 TG7 Ergo Report.pdf"
+	# Compile the entire project
+	pandoc \
+		--verbose \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/01_introduction.md \
+		src/02_background.md \
+		src/03_lit_review.md \
+		src/04_methodology.md \
+		src/05_results.md \
+		src/06_conclusion.md \
+		src/07_postmatter.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/Boyd Kane Master's Thesis.pdf"
 
-preface:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 00_preface.md -o "preface.pdf"
+checkpoint:
+	# Make the directory if it doesn't exist
+	[[ -d  "checkpoints/$(date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$(date '+%Y-%m-%d')"
 
-intro:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 01_introduction.md -o "intro.pdf"
+intro: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/01_introduction.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/01_introduction.pdf"
 
-bg:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 02_background.md -o "bg.pdf"
+bg: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/02_background.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/02_background.pdf"
 
-lit:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 03_lit_review.md -o "lit.pdf"
+lit: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/03_lit_review.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/03_lit_review.pdf"
 
-method:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 04_methodology.md -o "method.pdf"
+method: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/04_methodology.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/04_methodology.pdf"
 
-results:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 05_results.md -o "results.pdf"
+results: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/05_results.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/05_results.pdf"
 
-conc:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 06_conclusion.md -o "conc.pdf"
-
-post:
-	pandoc --filter pandoc-mustache --bibliography=cite.bib --citeproc --number-sections 07_postmatter.md -o "post.pdf"
+conc: checkpoint
+	pandoc \
+		--filter pandoc-mustache \
+		--bibliography=src/cite.bib \
+		--citeproc \
+		--number-sections \
+		src/00_preface.md \
+		src/06_conclusion.md \
+		-o "checkpoints/$$(date '+%Y-%m-%d')/06_conclusion.pdf"
 
 watch:
 	# Install `entr` first: https://github.com/eradman/entr
@@ -35,13 +90,3 @@ watch:
 	echo '04_methodology.md' | entr -s 'make method' &
 	echo '05_results.md' | entr -s 'make results' &
 	echo '06_conclusion.md' | entr -s 'make conc' &
-	echo '07_postmatter.md' | entr -s 'make post' &
-
-open:
-	open "26723077 TG7 Ergo Report.pdf"
-
-tex:
-	pandoc  --bibliography=cite.bib --citeproc report.md --standalone -o "26723077 TG7 Ergo Report.tex"
-
-clean:
-	rm *.tex *.aux *.log *.toc

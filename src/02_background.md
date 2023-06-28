@@ -1,21 +1,3 @@
----
-header-includes: |
-  \usepackage{algorithm}
-  \usepackage{algpseudocode}
-  \usepackage{bm}
-  \usepackage{booktabs}
-  \usepackage{graphicx}
-  \usepackage{pdfpages}
-  \usepackage{soul}
-  \usepackage{tikz}
-  \usepackage{xcolor}
-  \usepackage{pgfplots}
-  \newcommand{\pr}{\mathbb{P}}
-  \newcommand{\indep}{\perp\!\!\!\!\perp}
-  \DeclareMathOperator*{\argmax}{arg\,max}
-  \DeclareMathOperator*{\argmin}{arg\,min}
----
-
 # Background
 
 This chapter describes various concepts which _Ergo_ utilizes. The relevant

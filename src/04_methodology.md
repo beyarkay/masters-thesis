@@ -1,8 +1,8 @@
-
 # Methodology
+
 ## Design and Implementation
 
-This section describes the development of *Ergo* and the implementation
+This section describes the development of _Ergo_ and the implementation
 thereof.
 
 Section \ref{defining-the-gestures-to-be-used} describes the structured system
@@ -26,20 +26,20 @@ Section \ref{model-evaluation} discusses the best performing model found after
 hyperparameter optimisation. Section \ref{post-processing-model-predictions}
 describes how the forty predictions per second which the model provides is
 converted into keystrokes. Section \ref{using-ergo-as-a-keyboard} evaluates the
-end-to-end use of *Ergo* as a keyboard. Section \ref{lines-of-code-written}
+end-to-end use of _Ergo_ as a keyboard. Section \ref{lines-of-code-written}
 lists the number of lines of code written.
 
 ### Defining the Gestures to be Used
 
-*Ergo* does not directly classify sensor measurements as particular keystrokes,
+_Ergo_ does not directly classify sensor measurements as particular keystrokes,
 as this would unnecessarily couple hand movements with keystrokes. Rather,
-*Ergo* classifies sensor measurements as particular gestures, and these
+_Ergo_ classifies sensor measurements as particular gestures, and these
 gestures are mapped to keystrokes via a user-defined configuration file. This
 allows for different configuration files to be used depending on either user
 preferences or on the application.
 
 In this report, a gesture is defined as a motion of the hands and/or fingers
-that takes less than half a second to complete. The gestures known by *Ergo*
+that takes less than half a second to complete. The gestures known by _Ergo_
 are labelled in an ordered manner. First the form of the labels will be
 described and then the gestures associated with each label will be given.
 
@@ -47,7 +47,7 @@ Each gesture is assigned a label in the form `gesture0000`, `gesture0001`,
 `gesture0003`, `gesture0004`, and so on, through to `gesture9999`. This
 provides more than enough unique gesture labels for the current report, and
 provides flexibility in how gestures are assigned to labels. Due to the number
-of gestures which are recognised by *Ergo*, an abbreviated form is often
+of gestures which are recognised by _Ergo_, an abbreviated form is often
 necessary for annotating graphs.
 
 For the gesture labels `gesture0000` through to `gesture0999`, the abbreviated
@@ -64,16 +64,16 @@ the resting position) while all other fingers are still and the hands do not
 move. See Figure \ref{fig:hand_movements} for visual example.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/hand_movements.png}
-    \caption{Two example gestures: \texttt{gesture0034} on the left (frames
-    $1a$, $1b$, $1c$) and \texttt{gesture0025} on the right (frames $2a$, $2b$,
-    $2c$). Frames $1a$ and $2a$ show the initial resting state before the
-    gesture is performed. Frames $1b$ and $2b$ show the hand states in the
-    middle of the gesture as the thumb is in flexion. Frames $1c$ and $2c$ show
-    the hand states once the gesture has been completed and the hands have
-    returned to a resting position.}
-    \label{fig:hand_movements}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/hand_movements.png}
+\caption{Two example gestures: \texttt{gesture0034} on the left (frames
+$1a$, $1b$, $1c$) and \texttt{gesture0025} on the right (frames $2a$, $2b$,
+$2c$). Frames $1a$ and $2a$ show the initial resting state before the
+gesture is performed. Frames $1b$ and $2b$ show the hand states in the
+middle of the gesture as the thumb is in flexion. Frames $1c$ and $2c$ show
+the hand states once the gesture has been completed and the hands have
+returned to a resting position.}
+\label{fig:hand_movements}
 \end{figure}
 
 The exact movement of the hands for a gesture is dictated by the final two
@@ -97,26 +97,26 @@ right hand's thumb, index finger, middle finger, ring finger, and little
 finger.
 
 \begin{table}
-    \centering
-    \caption{Correspondance between gesture labels and which finger is in
-    motion. A question mark represents any digit.}
-    \begin{tblr}{
-        hlines,
-        vlines,
-    }
-    \textbf{Gesture Label} & \textbf{Hand and Finger}              \\
-        \texttt{gesture00?0} & Left hand little finger    \\
-        \texttt{gesture00?1} & Left hand ring finger      \\
-        \texttt{gesture00?2} & Left hand middle finger    \\
-        \texttt{gesture00?3} & Left hand index finger     \\
-        \texttt{gesture00?4} & Left hand thumb            \\
-        \texttt{gesture00?5} & Right hand thumb           \\
-        \texttt{gesture00?6} & Right hand index finger    \\
-        \texttt{gesture00?7} & Right hand middle finger   \\
-        \texttt{gesture00?8} & Right hand ring finger     \\
-        \texttt{gesture00?9} & Right hand little finger
-    \end{tblr}
-    \label{tab:gesturelabels_to_fingers}
+\centering
+\caption{Correspondance between gesture labels and which finger is in
+motion. A question mark represents any digit.}
+\begin{tblr}{
+hlines,
+vlines,
+}
+\textbf{Gesture Label} & \textbf{Hand and Finger} \\
+\texttt{gesture00?0} & Left hand little finger \\
+\texttt{gesture00?1} & Left hand ring finger \\
+\texttt{gesture00?2} & Left hand middle finger \\
+\texttt{gesture00?3} & Left hand index finger \\
+\texttt{gesture00?4} & Left hand thumb \\
+\texttt{gesture00?5} & Right hand thumb \\
+\texttt{gesture00?6} & Right hand index finger \\
+\texttt{gesture00?7} & Right hand middle finger \\
+\texttt{gesture00?8} & Right hand ring finger \\
+\texttt{gesture00?9} & Right hand little finger
+\end{tblr}
+\label{tab:gesturelabels_to_fingers}
 \end{table}
 
 In a similar fashion, the rotation of each hand is dictated by the "tens"
@@ -128,28 +128,27 @@ left hand is rotated at the wrist such that the thumb is directly above the
 little finger. The correspondence between gesture label and hand rotation is
 given in Table \ref{tab:gesturelabels_to_orientation}.
 
-
 \begin{table}
-    \centering
-    \caption{Correspondance between gesture labels and rotation of the hand.
-    Ellipses denote an inclusive range from one gesture label to another.}
-    \begin{tblr}{
-        hlines,
-        vlines,
-    }
-    \textbf{Gesture Label} & \textbf{Hand rotation}                 \\
-        \texttt{gesture0000}\ldots\texttt{gesture0004} & Left palm towards the ground.    \\
-        \texttt{gesture0005}\ldots\texttt{gesture0009} & Right palm towards the ground.    \\
-        \texttt{gesture0010}\ldots\texttt{gesture0014} & Left palm at $45^{\circ}$ to the ground.      \\
-        \texttt{gesture0015}\ldots\texttt{gesture0019} & Right palm at $45^{\circ}$ to the ground.      \\
-        \texttt{gesture0020}\ldots\texttt{gesture0024} & Left palm at $90^{\circ}$ to the ground.\\
-        \texttt{gesture0025}\ldots\texttt{gesture0029} & Right palm at $90^{\circ}$ to the ground.\\
-        \texttt{gesture0030}\ldots\texttt{gesture0034} & Left palm at $135^{\circ}$ to the ground.\\
-        \texttt{gesture0035}\ldots\texttt{gesture0039} & Right palm at $135^{\circ}$ to the ground.\\
-        \texttt{gesture0040}\ldots\texttt{gesture0044} & Left palm towards the sky.\\
-        \texttt{gesture0045}\ldots\texttt{gesture0049} & Right palm towards the sky.\\
-    \end{tblr}
-    \label{tab:gesturelabels_to_orientation}
+\centering
+\caption{Correspondance between gesture labels and rotation of the hand.
+Ellipses denote an inclusive range from one gesture label to another.}
+\begin{tblr}{
+hlines,
+vlines,
+}
+\textbf{Gesture Label} & \textbf{Hand rotation} \\
+\texttt{gesture0000}\ldots\texttt{gesture0004} & Left palm towards the ground. \\
+\texttt{gesture0005}\ldots\texttt{gesture0009} & Right palm towards the ground. \\
+\texttt{gesture0010}\ldots\texttt{gesture0014} & Left palm at $45^{\circ}$ to the ground. \\
+\texttt{gesture0015}\ldots\texttt{gesture0019} & Right palm at $45^{\circ}$ to the ground. \\
+\texttt{gesture0020}\ldots\texttt{gesture0024} & Left palm at $90^{\circ}$ to the ground.\\
+\texttt{gesture0025}\ldots\texttt{gesture0029} & Right palm at $90^{\circ}$ to the ground.\\
+\texttt{gesture0030}\ldots\texttt{gesture0034} & Left palm at $135^{\circ}$ to the ground.\\
+\texttt{gesture0035}\ldots\texttt{gesture0039} & Right palm at $135^{\circ}$ to the ground.\\
+\texttt{gesture0040}\ldots\texttt{gesture0044} & Left palm towards the sky.\\
+\texttt{gesture0045}\ldots\texttt{gesture0049} & Right palm towards the sky.\\
+\end{tblr}
+\label{tab:gesturelabels_to_orientation}
 \end{table}
 
 Note that the rotation only applies to the hand which has a finger in motion.
@@ -172,21 +171,21 @@ for `gesture0255`) as they are reserved for future work.
 
 ### Hardware Description
 
-*Ergo* consists of ten ADXL335 tri-axis linear accelerometers, each one of
+_Ergo_ consists of ten ADXL335 tri-axis linear accelerometers, each one of
 which is mounted to the back of the user's fingertips (see Figure
 \ref{fig:accelerometers}).
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{imgs/accelerometers.jpg}
-    \caption{The user's left hand while wearing \textit{Ergo}, with the
-    accelerometers highlighted in red.}
-    \label{fig:accelerometers}
+\centering
+\includegraphics[width=0.5\textwidth]{src/imgs/accelerometers.jpg}
+\caption{The user's left hand while wearing \textit{Ergo}, with the
+accelerometers highlighted in red.}
+\label{fig:accelerometers}
 \end{figure}
 
 These accelerometers can measure linear acceleration in three
 orthogonal directions, but cannot measure rotational acceleration. Due to how
-the accelerometers are built, the measurements they provide *do* include
+the accelerometers are built, the measurements they provide _do_ include
 gravity. For example, an accelerometer at rest will register a large
 acceleration towards the centre of the earth. This makes distinguishing
 acceleration due to finger movement and acceleration due to gravity impossible
@@ -199,14 +198,13 @@ directions (see Figure \ref{fig:adxl335-xyz}). This results in fifteen
 measurements for each hand.
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{imgs/accel_xyz.jpg}
-    \caption{The user's left hand while wearing \textit{Ergo} with the
-    accelerometer directions indicated. The X direction is in red, the Y
-    direction is in green, and the Z direction is in blue.}
-    \label{fig:adxl335-xyz}
+\centering
+\includegraphics[width=0.5\textwidth]{src/imgs/accel_xyz.jpg}
+\caption{The user's left hand while wearing \textit{Ergo} with the
+accelerometer directions indicated. The X direction is in red, the Y
+direction is in green, and the Z direction is in blue.}
+\label{fig:adxl335-xyz}
 \end{figure}
-
 
 The fifteen measurements provided by the five accelerometers on the left hand
 are collected by an Arduino Nano 3.3v BLE microcontroller which is mounted to
@@ -240,10 +238,10 @@ record new data, the program will prompt the user to perform a certain gesture.
 The full process for associating gesture labels with sensor measurements is as
 follows:
 
-1. The user attaches *Ergo* to their hands and from the terminal runs the
+1. The user attaches _Ergo_ to their hands and from the terminal runs the
    command which will save sensor data to disc: `python3 ergo.py --save`.
 2. `ergo.py` starts reading sensor measurements and storing them to disc,
-   initially labelling *every* set of sensor measurements as belonging to
+   initially labelling _every_ set of sensor measurements as belonging to
    `gesture0255`.
 3. The program displays a gesture label and a one second countdown to the user.
    For ease of explanation, let us assume the displayed gesture label was
@@ -266,21 +264,21 @@ An example of this procedure is given in Figure
 \ref{fig:explain_recording_procedure}.
 
 \begin{figure}[!htb]
-    \centering
-    \includegraphics[width=1.0\textwidth]{imgs/explain_recording_procedure.png}
-    \caption{An annotated plot describing the gesture process. Each plot in the
-    figure describes the sensor readings over time for one finger's three-axis
-    accelerometer. Starting at time step $00$, the countdown is initialised and
-    begins to approach zero. When the user sees that the countdown is close to
-    zero, they will begin to start performing \texttt{gesture0000} (indicated
-    by the vertical red bar labelled $4$). When the countdown is within 30ms of
-    zero, it will start labelling every time step as \texttt{gesture0000}
-    (indicated by the vertical red bar labelled $5$). When the countdown
-    reaches zero, it will stop labelling every time step as `gesture0000` and
-    start labelling every time step as \texttt{gesture0255} and reset back to
-    one second (indicated by the vertical red bar labelled $6$). This process
-    repeats the next time the countdown reaches zero, around time step 56.}
-    \label{fig:explain_recording_procedure}
+\centering
+\includegraphics[width=1.0\textwidth]{src/imgs/explain_recording_procedure.png}
+\caption{An annotated plot describing the gesture process. Each plot in the
+figure describes the sensor readings over time for one finger's three-axis
+accelerometer. Starting at time step $00$, the countdown is initialised and
+begins to approach zero. When the user sees that the countdown is close to
+zero, they will begin to start performing \texttt{gesture0000} (indicated
+by the vertical red bar labelled $4$). When the countdown is within 30ms of
+zero, it will start labelling every time step as \texttt{gesture0000}
+(indicated by the vertical red bar labelled $5$). When the countdown
+reaches zero, it will stop labelling every time step as `gesture0000` and
+start labelling every time step as \texttt{gesture0255} and reset back to
+one second (indicated by the vertical red bar labelled $6$). This process
+repeats the next time the countdown reaches zero, around time step 56.}
+\label{fig:explain_recording_procedure}
 \end{figure}
 
 Only one or two sets of sensor measurements are labelled as `gesture0001` even
@@ -295,7 +293,7 @@ of the dataset. A simplistic model will therefore be able to achieve 95% to 98%
 accuracy by simply predicting `gesture0255` for every single time step. This is
 not favourable, and methods for preventing this behaviour are discussed in
 Section \ref{model-architecture}. Note that this imbalance correctly represents
-the real-world usage of *Ergo*, and so any model should predict `gesture0255`
+the real-world usage of _Ergo_, and so any model should predict `gesture0255`
 the majority of the time.
 
 Segmentation of the dataset also presents a challenge, as there are no explicit
@@ -353,11 +351,11 @@ that non-`gesture255` gesture label. See Figure \ref{fig:label_expansion} for
 an visual description.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/label_expansion.png}
-    \caption{An excerpt of the labels before (top) and after (bottom) a label
-    expansion of one was applied.}
-    \label{fig:label_expansion}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/label_expansion.png}
+\caption{An excerpt of the labels before (top) and after (bottom) a label
+expansion of one was applied.}
+\label{fig:label_expansion}
 \end{figure}
 
 For the machine learning model to be better able to predict which gesture is
@@ -386,16 +384,16 @@ observations will share exactly the same sensor measurements from time steps
 \ref{fig:window_size}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/window_size.png}
-    \caption{An example of how measurements are grouped together into
-    observations and associated with labels. This example uses a window size of
-    four for simplicity. Note how observation 8 contains the
-    measurements from time steps 5, 6, 7, and 8, and is labelled with the
-    gesture label from time step 8. In a similar fashion, observation 9
-    contains the measurements from time steps 6, 7, 8, and 9, and is labelled
-    with the gesture label at time step 9.}
-    \label{fig:window_size}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/window_size.png}
+\caption{An example of how measurements are grouped together into
+observations and associated with labels. This example uses a window size of
+four for simplicity. Note how observation 8 contains the
+measurements from time steps 5, 6, 7, and 8, and is labelled with the
+gesture label from time step 8. In a similar fashion, observation 9
+contains the measurements from time steps 6, 7, 8, and 9, and is labelled
+with the gesture label at time step 9.}
+\label{fig:window_size}
 \end{figure}
 
 The values of the sensor measurements during a gesture can be seen in Figure
@@ -403,20 +401,20 @@ The values of the sensor measurements during a gesture can be seen in Figure
 approximately 13:20:40.497 and ends at approximately 13:20:40.775.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1.0\textwidth]{imgs/gesture_over_time.pdf}
-    \caption{An example of the sensor readings over time. Each plot in this
-    figure describes the sensor readings from one finger. The time stamp is
-    along the x-axis, and the normalised sensor readings are along the y-axis.
-    The three lines on each plot represent the three acceleration directions:
-    red is X, green is Y, and blue is Z. The shaded region on each plot
-    indicates the sensor measurements which have a non-\texttt{gesture0255}
-    gesture label. Looking at the plots for the right hand's index and middle
-    finger, one can see that \texttt{gesture0036} started at approximately
-    13:20:40.497 and ended at approximately 13:20:40.775, but only time steps
-    at 13:20:41.083 and 13:20:41.108 are labelled as being from
-    \texttt{gesture0036}.}
-    \label{fig:gesture_over_time}
+\centering
+\includegraphics[width=1.0\textwidth]{src/imgs/gesture_over_time.pdf}
+\caption{An example of the sensor readings over time. Each plot in this
+figure describes the sensor readings from one finger. The time stamp is
+along the x-axis, and the normalised sensor readings are along the y-axis.
+The three lines on each plot represent the three acceleration directions:
+red is X, green is Y, and blue is Z. The shaded region on each plot
+indicates the sensor measurements which have a non-\texttt{gesture0255}
+gesture label. Looking at the plots for the right hand's index and middle
+finger, one can see that \texttt{gesture0036} started at approximately
+13:20:40.497 and ended at approximately 13:20:40.775, but only time steps
+at 13:20:41.083 and 13:20:41.108 are labelled as being from
+\texttt{gesture0036}.}
+\label{fig:gesture_over_time}
 \end{figure}
 
 This pre-processing results in there being approximately 180 000 observations,
@@ -438,7 +436,7 @@ would be fit to the data, due to the speed at which they can make predictions
 and their relative efficiency in many dimensions. See @geron2019 for a review
 of Feed Forward Neural Networks.
 
-The classification problem presented by *Ergo* is a many-class one, where the
+The classification problem presented by _Ergo_ is a many-class one, where the
 model should classify a given observation into one of many classes. The
 categorical cross-entropy loss function (described in Appendix \ref{app:cce})
 intuitively measures the difference between two distributions, and will be used
@@ -485,7 +483,7 @@ This is desirable as it means that an untrained model with bias initialisation
 will not have to waste training epochs learning that the dataset is unbalanced.
 For this reason, the biases of the final layer are initialised as recommended
 by @karpathy2019. The correct bias initialisation is dependant on the
-activation function of the final layer. Because *Ergo* uses the softmax
+activation function of the final layer. Because _Ergo_ uses the softmax
 activation function for the final layer, the proper initialisations for each
 bias can be calculated based on the frequency of each class:
 
@@ -513,25 +511,27 @@ distributions for each hyperparameter and then samples from each of these
 distributions to acquire a set of hyperparameters. The distributions of the
 hyperparameters is given in Table \ref{tab:hyperpar_dists}
 
+<!---
 \begin{table}
-    \centering
-    \caption{Distribution of Hyperparameter values}
-    \begin{tabular}{ll}
-        \textbf{Hyperparameter} & \textbf{Values}  \\
-        \hline
-        Activation Function         & ReLU or ELU \\
-        Batch Size                  & 16, 32, 64, 128, 256, 512 \\
-        Dropout Fraction            & $[0.5, 0.8]$ \\
-        Learning Rate               & $[0.0001, 0.1]$ \\
-        Hidden units in layer 1     & $16, 17, 18, \ldots, 256$\\
-        Hidden units in layer 2     & $16, 17, 18, \ldots, 256$\\
-        Optimiser                   & ADAM, SGD, or RMSProp \\
-        \texttt{label\_expansion}    & $1, 2, 3, \ldots, 10$\\
-        \texttt{window\_size}        & $5, 6, 7, \ldots, 40$ \\
-        \hline
-    \end{tabular}
-    \label{tab:hyperpar_dists}
+\centering
+\caption{Distribution of Hyperparameter values}
+\begin{tabular}{ll}
+\textbf{Hyperparameter} & \textbf{Values} \\
+\hline
+Activation Function & ReLU or ELU \\
+Batch Size & 16, 32, 64, 128, 256, 512 \\
+Dropout Fraction & $[0.5, 0.8]$ \\
+Learning Rate & $[0.0001, 0.1]$ \\
+Hidden units in layer 1 & $16, 17, 18, \ldots, 256$\\
+Hidden units in layer 2 & $16, 17, 18, \ldots, 256$\\
+Optimiser & ADAM, SGD, or RMSProp \\
+\texttt{label_expansion} & $1, 2, 3, \ldots, 10$\\
+\texttt{window_size} & $5, 6, 7, \ldots, 40$ \\
+\hline
+\end{tabular}
+\label{tab:hyperpar_dists}
 \end{table}
+--->
 
 During hyperparameter optimisation, it was found that the categorical cross
 entropy does not always reflect the intuitive measure of a good model. To
@@ -572,13 +572,13 @@ hyperparameters. The parallel coordinates plot of this training is available in
 Figure \ref{fig:par_coords}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/par_coords.png}
-    \caption{A parallel coordinates plot showing each of the 228 models as a
-    different line. Each vertical bar represents a different hyperparameter,
-    and the ten models with the lowest DTW distance are highlighted for
-    clarity.}
-    \label{fig:par_coords}
+\centering
+\includegraphics[width=0.9\textwidth]{src/imgs/par_coords.png}
+\caption{A parallel coordinates plot showing each of the 228 models as a
+different line. Each vertical bar represents a different hyperparameter,
+and the ten models with the lowest DTW distance are highlighted for
+clarity.}
+\label{fig:par_coords}
 \end{figure}
 
 ### Model Evaluation
@@ -608,12 +608,12 @@ gesture is `gesture0255`. The baseline model has a categorical cross entropy of
 cross entropy of 0.51 on the validation set
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.45\textwidth]{imgs/catxentropy.pdf}
-    \caption{The categorical cross-entropy loss over time for the best
-    performing model found by hyperparameter optimisation, as well as for a
-    baseline model which always predicts \texttt{gesture0255}.}
-    \label{fig:catxentropy}
+\centering
+\includegraphics[width=0.45\textwidth]{src/imgs/catxentropy.pdf}
+\caption{The categorical cross-entropy loss over time for the best
+performing model found by hyperparameter optimisation, as well as for a
+baseline model which always predicts \texttt{gesture0255}.}
+\label{fig:catxentropy}
 \end{figure}
 
 Figure \ref{fig:precision_recall_f1} shows the precision, recall, and $F_1$
@@ -627,13 +627,13 @@ for both `gesture0255` and for all other gestures is quite high at around 80%,
 indicating that the model is rarely misclassifying gestures.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{imgs/precision_recall_f1.pdf}
-    \caption{The precision, recall, and $F_1$-score for the best performing
-    model found by hyperparameter optimisation. \texttt{gesture0255} is in
-    blue, the mean of all other gestures is in orange, and one standard
-    deviation around the mean is indicated by the orange shaded region.}
-    \label{fig:precision_recall_f1}
+\centering
+\includegraphics[width=0.8\textwidth]{src/imgs/precision_recall_f1.pdf}
+\caption{The precision, recall, and $F_1$-score for the best performing
+model found by hyperparameter optimisation. \texttt{gesture0255} is in
+blue, the mean of all other gestures is in orange, and one standard
+deviation around the mean is indicated by the orange shaded region.}
+\label{fig:precision_recall_f1}
 \end{figure}
 
 Figure \ref{fig:val_confusion_matrices} shows the confusion matrix for the
@@ -648,18 +648,18 @@ as another, but these are in the minority. It is likely that this is caused by
 the model either predicting the start of a gesture too soon or too late.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1.0\textwidth]{imgs/val_confusion_matrices.pdf}
-    \caption{The confusion matrix of the validation dataset of the best
-    performing model found by hyperparameter optimisation. The number in each
-    cell is the percentage of the total dataset contained in that cell. If a
-    cell does not contain a number, then exactly 0\% of observations are in that
-    cell. Most of the cells contain the digit 0, indicating nearly 0\% of
-    observations fall into that cell. This is because of the class imbalance
-    which causes the vast majority of observations to belong to
-    \texttt{gesture0255}. Each cell is coloured based on its content, so darker
-    cells have fewer observations and lighter cells have more observations.}
-    \label{fig:val_confusion_matrices}
+\centering
+\includegraphics[width=1.0\textwidth]{src/imgs/val_confusion_matrices.pdf}
+\caption{The confusion matrix of the validation dataset of the best
+performing model found by hyperparameter optimisation. The number in each
+cell is the percentage of the total dataset contained in that cell. If a
+cell does not contain a number, then exactly 0\% of observations are in that
+cell. Most of the cells contain the digit 0, indicating nearly 0\% of
+observations fall into that cell. This is because of the class imbalance
+which causes the vast majority of observations to belong to
+\texttt{gesture0255}. Each cell is coloured based on its content, so darker
+cells have fewer observations and lighter cells have more observations.}
+\label{fig:val_confusion_matrices}
 \end{figure}
 
 ### Post-Processing Model Predictions
@@ -684,9 +684,9 @@ will need explicit gestures. For example, `Control` + `[` will be replaced with
 the Escape keystroke. A full list of these replacements (such as Enter and
 Backspace) is also available in Appendix \ref{app:replacements}.
 
-### Using *Ergo* as a Keyboard
+### Using _Ergo_ as a Keyboard
 
-When *Ergo* is being used as a keyboard via the command `python ergo.py
+When _Ergo_ is being used as a keyboard via the command `python ergo.py
 --as-keyboard`, the trained model is invoked at every time step and the
 predicted gesture is stored. When the predicted gesture changes from
 `gesture0255` to a non-`gesture0255` gesture, then the gesture to keystroke
@@ -706,18 +706,18 @@ before the lines of code can be extracted.
 There are 2349 lines of Arduino and Python code:
 
 \begin{lstlisting}[basicstyle=\fontsize{8}{8}\ttfamily]
-$ wc -l arduino/*.ino machine_learning/*.py
-      94 arduino/left_main/left_main.ino
-     173 arduino/right_main/right_main.ino
-      76 arduino/test_bt_peri/test_bt_peri.ino
-      62 arduino/test_functionality/test_functionality.ino
-      31 arduino/test_multiplexor/test_multiplexor.ino
-     622 machine_learning/ergo.py
-     232 machine_learning/ergo.test.py
-     919 machine_learning/ml_utils.py
-      72 machine_learning/qt_predict.py
-      68 machine_learning/train_via_wandb.py
-    2349 total
+$ wc -l arduino/_.ino machine_learning/_.py
+94 arduino/left_main/left_main.ino
+173 arduino/right_main/right_main.ino
+76 arduino/test_bt_peri/test_bt_peri.ino
+62 arduino/test_functionality/test_functionality.ino
+31 arduino/test_multiplexor/test_multiplexor.ino
+622 machine_learning/ergo.py
+232 machine_learning/ergo.test.py
+919 machine_learning/ml_utils.py
+72 machine_learning/qt_predict.py
+68 machine_learning/train_via_wandb.py
+2349 total
 \end{lstlisting}
 
 And there are 289 lines of source code in the notebook:
@@ -749,4 +749,3 @@ plus, minus, plus-minus)}'
 This means that 15 000 lines of code (in the languages Python, Rust, or
 Arduino) were written over the course of the project, with 12 000 of those
 lines ending up being removed.
-
