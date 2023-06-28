@@ -1,3 +1,6 @@
+
+all: intro bg lit method results conc report
+
 report: checkpoint
 	# Note: pandoc-mustache must be installed via:
 	# `pip install -U pandoc-mustache`
