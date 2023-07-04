@@ -58,13 +58,6 @@
 
 - Possibly look at RNNs/LSTMs/Transformers for predicting the Ergo data, time
   dependant.
-- Willem & Cornelia: Maybe get feedback from them wrt Honours thesis?
-- Explain that _Ergo_ comes from ergonomic/consequently/therefore
-- Something about post-processing: Filtering the predictions of the model with
-  something like autocomplete (or maybe adding in priors for the model) - this
-  was mentioned by Brink.
-  - Use two existing out-of-the-box autocomplete programs to help out with
-    this, and compare the two programs.
 - Maybe a simple idea is to just identify which finger is moving (by simply
   checking if the magnitude of the acceleration vector for each finger exceeds
   some threshold) and then do a mapping from "These fingers are moving" to
@@ -93,6 +86,28 @@ September hand in, november oral, ~december graduation
 December hand in, february
 
 Once a week, Mondays from 14h to 15h.
+
+NOTE: Look into recording a lot more data. This might make the gestures a lot
+easier to classify. Experiment with only providing 20%, 40%, 60%, 80%, 100% of
+the dataset and see how quickly each model trains. If it looks like we haven't
+reached data saturation, then record more data.
+
+## 2023-07-03
+
+- DTW?
+- Stellies writing lab/service for grammar checking
+- Literature review
+- Honeycomb plot kinda like a [radar plot](https://en.wikipedia.org/wiki/Radar_chart)
+  - One for each dimensions (number of classes, types of models, type of
+    technology)
+- Submit dataset of Ergo data to https://zenodo.org/
+
+## 2023-06-28 (feedback on background chapter)
+
+- PS it is unclear how you would use HMM for gesture classification, assuming you will explain this in methodology chapter.
+- PS just mention why you can say event intersection matrix in the HMM section.
+- You need to discuss some of the neural network initialization schemes.
+- See `checkpoints/2022-06-19/`
 
 ## 2023-06-26
 
@@ -400,105 +415,8 @@ For next week:
 - August: Results
 - September: Conclusion and Introduction
 
-# Tech architecture
-
-- Jupyter notebooks for visualisations / graphs
-- Also notebooks for exploring models
-- Python script for actually running the models
-- Python script for interfacing with the glove
-
-Several modules:
-
-- **read**: One module takes care of reading in data from the serial port stream and
-  converts it to numpy arrays
-
-- **pred**: One module takes care of making predictions, and is given a model with which
-  predictions can be made. This module should also take care of pre-processing
-  the given data into a format that's appropriate for the model.
-
-- **model**: One module defines an AbstractModel class (TODO: or maybe this just inherits
-  from the [SKLearn API](https://scikit-learn.org/stable/developers/develop.html#rolling-your-own-estimator)). All models
-  (HMMs, CNNs, etc) inherit from this, and so provide a common API. This will
-  allow GridSearchCV to be used to grid/random search for the best
-  hyperparameters.
-
-- **vis**: One module should take care of visualising the results. This should include
-  functions for visualising results via a live GUI, as well as for visualising
-  results via the CLI.
-
-- **save**: One module takes care of saving the incoming data to disk.
-
 # Tasks
 
-- [ ] Perform the experiments
-  - [ ] Allow for arbitrary specification of a predictive model (use a `Model` class?)
-  - [ ] HMM:
-    - [ ] Implement Multi-class HMM in notebook
-    - [ ] Integrate HMM with main driver
-    - [ ] Test HMM Classifier: time to make classification, accuracy, etc
-  - [ ] CuSUM
-    - [ ] Implement CuSUM in notebook
-    - [ ] Integrate CuSUM with main driver
-    - [ ] Test CuSUM Classifier: time to make classification, accuracy, etc
-  - [ ] LSTM
-    - [ ] Implement LSTM in notebook
-    - [ ] Integrate LSTM with main driver
-    - [ ] Test LSTM Classifier: time to make classification, accuracy, etc
-  - [ ] NN
-    - [ ] Implement NN in notebook
-    - [ ] List out all possible ways of transforming the data which could
-          be easier to predict:
-      - Raw: One big NN takes in 30D time series and predicts a gesture
-      - Finger+Orientation: One NN detects the orientation of each hand,
-        one NN detects which finger is moving, and the result is
-        combined.
-      - Per-finger: One NN per finger, so each NN either detects g255, or
-        detects the orientation of that finger and the degree to which
-        that finger is moving. Each of these networks only needs to
-        accept just one 3D time series.
-      - Magnitude+Orientation: Augment/replace the raw acceleration data
-        with features that describe the magnitude and orientation of each
-        finger.
-    - [ ] What if there is one NN detecting orientation, and one NN detecting the finger?
-    - [ ] Integrate NN with main driver
-    - [ ] Test NN Classifier: time to make classification, accuracy, etc
-  - [ ] DTW
-    - [ ] Implement DTW in notebook
-    - [ ] Integrate DTW with main driver
-    - [ ] Test DTW Classifier: time to make classification, accuracy, etc
-  - [ ] CNN
-    - [ ] Implement CNN in notebook
-    - [ ] Integrate CNN with main driver
-    - [ ] Test CNN Classifier: time to make classification, accuracy, etc
-- [ ] Implement autocomplete (ie make it something useful, not just a good model)
-  - [ ] Find a python-based, fast autocorrect
-  - [ ] Add in a hook to driver code to allow for fixing previous words and
-        re-typing them (Will pykeyboard allow this?)
-  - [ ] Evaluate autocorrect on _some_ metric.
-- [ ] Evaluate typing speed
-  - [ ] Typing speed someone who knows how to use it.
-  - [ ] Typing speed of someone who doesn't?
-  - [ ] Typing speed over time
-  - [ ] Typing speed compared to people beginning to learn how to type
-- [ ] Background
-  - [ ] Describe NNs in intimate detail
-  - [ ] Describe HMMs in intimate detail
-  - [ ] Describe CuSUM in intimate detail
-  - [ ] (Maybe also describe LSTMs, RNNs, CNNs iff they're used)
-- [ ] Literature Review
-  - [ ] Review by hardware:
-    - [ ] accelerometers
-    - [ ] computer vision
-    - [ ] EMG
-    - [ ] (other?)
-  - [ ] Review by tech:
-    - [ ] ML: HMMs
-    - [ ] ML: CNNs
-    - [ ] ML: LSTMs
-    - [ ] ML: RNNs
-    - [ ] ML: NNs
-    - [ ] Hand programming
-  - [ ] Review by use-case: Novelty, Sign language, more intuitive interaction
 - [ ] Methodology
   - [ ] How is the hardware constructed?
   - [ ] How does the hardware get data to the software?
@@ -509,47 +427,6 @@ Several modules:
         seems like a solvable problem
   - [ ] How are the models evaluated offline?
   - [ ] How are the models evaluated online?
-- [ ] Results
-  - [ ] Compare different models architectures and different feature variants based on:
-    - [ ] Speed of prediction
-    - [ ] Recall/Precision
-    - [ ] Data needed vs recall/precision
-- [ ] Conclusion
-  - [ ] Future work:
-    - [ ] Wireless
-    - [ ] Bluetooth keyboard
-- [ ] Introduction
-  - [ ] Keyboard replacement
-
-# Outline
-
-1. Introduction
-   1. A statement of the problem
-   2. Description of remaining chapters
-2. Literature Review
-   - Very thorough
-3. Background
-   - Hidden Markov Models
-   - CUSUM
-   - Neural Networks
-4. Methodology
-   - Entire design of the project: hardware, software
-   - All experiments conducted
-   - How the thing was built
-   - Experimental setup
-5. Results
-   - Comparison to HMM
-   - Comparison to CUSUM
-6. Conclusion
-
-# Literature
-
-- eickeler1998: HMM Based Continuous Online Gesture Recognition
-  - yamato1992: Recognizing Human Action in Time Sequential Images Using HMMs
-  - starner1995: Visual Recognition of American Sign Language Using HMMs
-  - rigoll1997a: New improved feature extraction methods for real-time high
-    performance image sequence recognition
-  - rigoll1997b: High Performance Real-Time Gesture Recognition Using HMMs
 
 # Experiments
 
@@ -560,7 +437,7 @@ Several modules:
 - What if we have one network filtering out the gesture0255 observations and
   another one classifying the 'real' gestures?
 
-# Dependant variables (these are always the same):
+## Dependant variables (these are always the same):
 
 - Time to train
 - Number of observations it was trained on
@@ -568,14 +445,14 @@ Several modules:
 - Number of observations it predicted
 - `y_true` vs `y_pred`
 
-# 1. How do the different models scale with more and more gesture classes?
+## 1. How do the different models scale with more and more gesture classes?
 
 Independent variables:
 
 - Type of model (HMM, FFNN, CuSUM)
 - Number of gesture classes (5, 10, 20, 30, 40, 50)
 
-# 2. How do the different models scale with more and more observations per class?
+## 2. How do the different models scale with more and more observations per class?
 
 Independent variables:
 
@@ -583,7 +460,7 @@ Independent variables:
 - Always use the full 50 classes
 - Scale up the number of observations per class (10, 20, 40, 60, 80, 100)
 
-# 3. On the full dataset, what's the best performing FFNN?
+## 3. On the full dataset, what's the best performing FFNN?
 
 Other models architectures don't scale, so we can't compare them here.
 
@@ -596,29 +473,29 @@ Independent variables:
 - number of layers
 - etc
 
-# 4. Is the FFNN more accurate with greater `n_timesteps`?
+## 4. Is the FFNN more accurate with greater `n_timesteps`?
 
 - `n_timesteps` in (15, 20, 25, 30, 35)
 - For this, it'll probably be easier to pre-portion the data to have
   a `n_timesteps` of 40, and then in pre-processing to discard the latter
   portions of those timesteps as required by the `n_timesteps`.
 
-# 5. What effect does the delay have on the FFNN?
+## 5. What effect does the delay have on the FFNN?
 
 The NN can be trained to predict with windows having a greater amount of data.
 So try that.
 
-# 5a. Is the FFNN more accurate with a larger delay?
+## 5a. Is the FFNN more accurate with a larger delay?
 
 Try training the FFNN but with the `y_true` offset by some amount, with the offset in
 0, 1, 2, 5, 10, 15
 
-## 5b. What's the cost of a larger delay?
+### 5b. What's the cost of a larger delay?
 
 Try to figure out what the real-world feeling is when the delay is increased.
 How much delay between making a gesture and seeing it appear is acceptable?
 
-# 6. How does the model perform for real world data?
+## 6. How does the model perform for real world data?
 
 - What's the real-world latency between a gesture being performed and the
   keystroke being emitted?
@@ -639,12 +516,12 @@ How much delay between making a gesture and seeing it appear is acceptable?
   - For the test passages, also record video of you typing so that you can
     reference this later.
 
-# 7. How well does the autocorrect work?
+## 7. How well does the autocorrect work?
 
 For this, autocorrect must be implemented. It's probably only possible to use
 this on the read world dataset, since trying to do autocorrect on random text
 strings won't be effective
 
-# 8. Do the model predictions improve with some priors applied?
+## 8. Do the model predictions improve with some priors applied?
 
 We can construct typing-specific priors so that typing Rust will have a higher prior for the key `<` being typed than if you're just typing regular English
