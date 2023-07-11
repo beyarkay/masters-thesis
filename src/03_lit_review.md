@@ -13,6 +13,72 @@ For referencing survey papers,
   strategy, or use a strategy already used in a review)
 - Can use the survey papers to find the references
 
+TODO:
+
+- Look at the existing references in this file and move them over to Zotero
+
+# Notes
+
+- Wearable systems need something like the Kinect to come onto the scene.
+  There's no modern well-known option for recording glove-like, and until that
+  is created there will be a lack of progress in the field because everyone is
+  working with different hardware (and so cannot stand on the shoulders of
+  giants). The problem is that no company will build a glove-like system until
+  there is research showing that something is possible. So there's a catch-22
+  at play here.
+
+# Structure
+
+First divide by Vision/Glove/Other, (then by ML technique?), then divide
+chronologically.
+
+Make sure to identify the seminal papers:
+
+- First to use HMMs for gesture classification
+- First to use NNs for gesture classification, etc.
+
+HAVE GRAPHICS! Otherwise it will be boring. Include pictures
+
+- Previous surveys
+- By decade
+  - 1980s (?)
+  - 1990s
+  - 2000s
+  - 2010s
+  - 2020s
+- Vision-based vs glove-based
+  - Effect of commercial products on research
+  - Vision-based:
+    - RGB
+    - RGB-D
+  - Glove-based:
+    - Capacitive
+    - Accelerometer (Linear/rotational/both)
+    - EMG/MechanoMyoGraphy
+    - Flex
+  - Other:
+    - WiFi
+- By applications (rethink these categories, they could be better)
+  - Medical
+  - Assistive
+    - Sign Language
+  - No stated purpose
+  - 3D design
+  - General computer interaction
+  - Game Control/VR/AR
+  - Robot Control
+- By classification model
+  - HMM
+  - KNN
+  - SVM
+  - NN (FFNN)
+  - RNN (LSTM, GRU)
+  - Decision Tree
+  - Finite State Machine
+  - Naïve Bayes
+  - Self-organising feature map
+  - custom
+
 ## Outline
 
 - Describe commercial products
@@ -26,23 +92,7 @@ For referencing survey papers,
 
 - Describe previous surveys
 
-  - 0002 citations @Park2019AdvancedML
-  - 0025 citations @Chatzis2020ACS
-  - 0051 citations @Li2019ASO
   - 0065 citations @AlShamayleh2018ASL
-  - 0078 citations @Vuletic2019SystematicLR
-  - 0154 citations @Supani2015DepthBasedHP
-  - 0301 citations @Cheok2019ARO
-  - 0884 citations @Erol2007VisionbasedHP
-  - 1300 citations @Rautaray2012VisionBH
-  - @Cai2017RGBDDU RGB-D datasets using microsoft kinect or similar sensors: a survey
-  - @Chen2020ASO A Survey on Hand Pose Estimation with Wearable Sensors and Computer-Vision-Based Methods
-  - @Cheng2016SurveyO3 Survey on 3D Hand Gesture Recognition
-  - @Harshith2010SurveyOV Survey on Various Gesture Recognition Techniques for Interfacing Machines Based on Ambient Intelligence
-  - @Pavlovic1997VisualIO Visual Interpretation of Hand Gestures for Human-Computer Interaction: A Review
-  - @Sturman1994ASO: A survey of glove-based input (~850 citations)
-  - @khan2012hand: Hand gesture recognition: a literature review
-  - @oudah2020hand: Hand gesture recognition based on computer vision: a review of techniques
   - @suarez2012hand: Hand gesture recognition with depth images: A review
 
 - Describe the anatomical structure of the hand
@@ -59,10 +109,6 @@ For referencing survey papers,
     - Vision-based: Depth, RGB, RGB-D, fiducial markers or not, monocular/multi-ocular
     - Glove based: bend(flex), IMU(acceleration),
     - Glove based: bend/flex, stretch, IMU/acceleration, magnetic
-      > "As summarized by @Rashid2018WearableTF, there are typically four types
-      > of sensors that can be used for hand-related tasks: bend sensors,
-      > stretch sensors, inertial measurement units (IMUs), and magnetic
-      > sensors."
 
   - Application: Novel computer input, virtual reality, sign language
     recognition, computer game control, unspecified
@@ -71,8 +117,6 @@ For referencing survey papers,
 
 To lookup:
 
-- @madadiFG2017 Occlusion aware hand pose recovery from sequences of depth
-  images (ChaLearn Gesture Recognition dataset)
 - American Sign Language (ASL) alphabet dataset
 - MSRC-12 Kinect Gesture Dataset
 - Cui, Z., Wang, Y., Wang, J., & Luo, J. (2017). Hand gesture recognition based
@@ -88,28 +132,17 @@ To lookup:
   20(11), 3212.(TODO: Check this)
 - Pu, S., & Han, J. (2021). A survey on hand gesture recognition. ACM Computing
   Surveys, 54(3), 1-34.(TODO: Check this)
-- @fang2007real: A real-time hand gesture recognition method
-- @freeman1995orientation: Orientation histograms for hand gesture recognition
-
-- @Zhang2009HandGR Hand gesture recognition and virtual game control based on
-  3D accelerometer and EMG sensors
-- @jimaging6080073 Hand Gesture Recognition Based on Computer Vision: A Review of Techniques
-- @Fang2007ARTH A Real-Time Hand Gesture Recognition Method
-- @liu2004HandGRU Hand gesture recognition using depth data
-- @chen2003hand Hand gesture recognition using a real-time tracking method and hidden Markov models
-- @Baudel1993CharadeRC Charade: remote control of objects using free-hand gestures
-- @Liu2009uWaveAP uWave: Accelerometer-based personalized gesture recognition and its applications
-- @Mntyjrvi2004EnablingFA: Enabling fast and effortless customisation in accelerometer based gesture interaction
-- @Rekimoto2001GestureWristAG: GestureWrist and GesturePad: unobtrusive wearable interaction devices
-- @Kela2006AccelerometerbasedGC Accelerometer-based gesture control for a design environment
-- @Erol2007VisionbasedHP Vision-based hand pose estimation: A review
-- @Sharma1998TowardMH toward multimodal human-computer interface
-- @Li2016WiFingerTT WiFinger: talk to your smart devices with finger-grained
-  gesture
-
-- @Kessler1995EvaluationOT Evaluation of the CyberGlove as a whole-hand input device
-
 - Keyglove and [similar](https://keyglove.net/resources/similar/)
+
+From meeting notes:
+
+- eickeler1998: HMM Based Continuous Online Gesture Recognition
+
+  - yamato1992: Recognizing Human Action in Time Sequential Images Using HMMs
+  - starner1995: Visual Recognition of American Sign Language Using HMMs
+  - rigoll1997a: New improved feature extraction methods for real-time high
+    performance image sequence recognition
+  - rigoll1997b: High Performance Real-Time Gesture Recognition Using HMMs
 
 - Have a long look at [Jani Mäntyjärvi](https://scholar.google.com/citations?user=uvLXYPMAAAAJ)
 
@@ -147,7 +180,6 @@ With acceleration data:
 
 Visual data:
 
-- @garg2009vision Vision based hand gesture recognition
 - Wang, H., Ullah, H., Kläser, A., Laptev, I., & Schmid, C. (2013). Evaluation
   of local spatio-temporal features for action recognition. Proceedings of the
   British Machine Vision Conference, 2013.(TODO: Check this)
@@ -178,8 +210,6 @@ Visual data:
   Systems, 47(6), 958-969.(TODO: Check this)
 
 Alternative data collection:
-
-- @Kundu2018HandGR Hand Gesture Recognition Based Omnidirectional Wheelchair Control Using IMU and EMG Sensors
 
 - Li, W., & Zhang, Z. (2012). EMG-based continuous human-computer interaction
   approaches: Challenges and potential solutions. International Journal of
@@ -218,70 +248,6 @@ Alternative data collection:
 Different technologies and algorithms used for gesture classification along
 with relevant papers for each:
 
-Other:
-
-- @Sun2020GestureRA Gesture recognition algorithm based on multi-scale feature
-  fusion in RGB-D images
-
-Kinect:
-
-- @Zhao2016MultifeatureGR Multi-feature gesture recognition based on Kinect
-
-Recurrent Neural Networks:
-
-- @Koch2019ARN A Recurrent Neural Network for Hand Gesture Recognition based on Accelerometer Data
-
-EMG based:
-
-- @Zhang2019RealTimeSE Real-Time Surface EMG Pattern Recognition for Hand
-  Gestures Based on an Artificial Neural Network
-
-RGBD based:
-
-- @Wan2016ExploreEL Explore Efficient Local Features from RGB-D Data for
-  One-Shot Learning Gesture Recognition
-
-Wifi based:
-
-- @Alqaness2016WiGeRWG WiGeR: WiFi-Based Gesture Recognition System
-- @He2015WiGWG WiG: WiFi-Based Gesture Recognition System
-
-1. Hidden Markov Models (HMMs):
-
-   - @Wilson1999ParametricHM Wilson, A. D., & Bobick, A. F. (1997). Parametric
-     hidden Markov models for gesture recognition. IEEE International
-     Conference on Computer Vision, 1997. Proceedings, 1, 695-701.
-   - @Starner1995RealtimeAS Starner, T., & Pentland, A. (1995). Real-time
-     American sign language recognition from video using hidden Markov models.
-     IEEE Transactions on Pattern Analysis and Machine Intelligence, 17(6),
-     583-591. (and @Starner1998RealTimeAS)
-
-2. Convolutional Neural Networks (CNNs):
-
-- @Ma2017HandGR Hand gesture recognition with convolutional neural networks for
-  the multimodal UAV control
-- @Hakim2019DynamicHG Dynamic Hand Gesture Recognition Using 3DCNN and LSTM
-  with FSM Context-Aware Model
-- @zhang2020gesture: Gesture recognition based on deep deformable 3D
-  convolutional neural networks
-- @Huang2014SignLR Sign Language Recognition using 3D convolutional neural networks
-- @Funke2019Using3C Using 3D Convolutional Neural Networks to Learn
-  Spatiotemporal Features for Automatic Surgical Gesture Recognition in Video.
-- @Lu2019OneshotLH One-shot learning hand gesture recognition based on modified
-  3d convolutional neural networks
-- @UrRehman2022DynamicHG Dynamic Hand Gesture Recognition Using 3D-CNN and
-  LSTM Networks
-- @Wu2016DeepDN Deep Dynamic Neural Networks for Multimodal Gesture
-  Segmentation and Recognition
-- @ElBadawy2017ArabicSL Arabic sign language recognition with 3D convolutional
-  neural networks
-- @Liang20183DCN 3D Convolutional Neural Networks for Dynamic Sign Language Recognition
-- @Bhagat2019IndianSL Indian Sign Language Gesture Recognition using Image
-  Processing and Deep Learning
-- @Huang2015SignLR Sign Language Recognition using 3D convolutional neural networks
-- @Sharma2021ASL3DCNNAS ASL-3DCNN: American sign language recognition technique
-  using 3-D convolutional neural networks
-
 3. Dynamic Time Warping (DTW):
 
    - Nafornita, C., Florea, A. M., Florea, C., & Vertan, C. (2015). Hand
@@ -316,7 +282,6 @@ Wifi based:
 - Ahuja, N., & Kumar, M. (2018). Real-time hand gesture recognition using
   convolutional neural network. International Journal of Advanced Computer
   Science and Applications, 9(6), 540-546. (TODO: Check this)
-- @Mohammed2019ADL A Deep Learning-Based End-to-End Composite System for Hand Detection and Gesture Recognition
 
 Literature by the decade, in chronological order:
 
