@@ -36,6 +36,7 @@ intro:
 		src/00_preface.md \
 		src/01_introduction.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/01_introduction.pdf"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/01_introduction.pdf"
 
 bg:
 	# Make the directory if it doesn't exist
@@ -48,6 +49,7 @@ bg:
 		src/00_preface.md \
 		src/02_background.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/02_background.pdf"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/02_background.pdf"
 
 lit:
 	# Make the directory if it doesn't exist
@@ -60,6 +62,7 @@ lit:
 		src/00_preface.md \
 		src/03_lit_review.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/03_lit_review.pdf"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/03_lit_review.pdf"
 
 method:
 	# Make the directory if it doesn't exist
@@ -72,6 +75,8 @@ method:
 		src/00_preface.md \
 		src/04_methodology.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/04_methodology.pdf"
+	echo "checkpoints/$$(/bin/date '+%Y-%m-%d')"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/04_methodology.pdf"
 
 results:
 	# Make the directory if it doesn't exist
@@ -84,6 +89,7 @@ results:
 		src/00_preface.md \
 		src/05_results.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/05_results.pdf"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/05_results.pdf"
 
 conc:
 	# Make the directory if it doesn't exist
@@ -96,6 +102,7 @@ conc:
 		src/00_preface.md \
 		src/06_conclusion.md \
 		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/06_conclusion.pdf"
+	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/06_conclusion.pdf"
 
 watch:
 	# Install `entr` first: https://github.com/eradman/entr
