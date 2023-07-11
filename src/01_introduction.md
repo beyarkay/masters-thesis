@@ -2,6 +2,10 @@
 
 \footnote{TODO: rewrite the introduction}
 
+Ergo comes from Ergonomic or the latin for *therefore*.
+
+----
+
 <!---
 \begin{figure}[!htb]
 \centering
