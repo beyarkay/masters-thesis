@@ -61,7 +61,7 @@ and the numerals 0 through to 9 in a manner similar to American Sign Language.
 The Dexterous HandMaster [@jacobsenUTAHDextrousHand1984, @marcusSensingHumanHand1988] was
 developed in 1984 as a controller for the Utah/MIT Dexterous Hand robot
 [@jacobsenDesignUtahDextrous1986], and has since been redesigned and was sold
-commercially by Exos. It uses 20 hall-effect\footnote{define these} sensors to
+commercially by Exos. It uses 20 hall-effect\sidenote{define these} sensors to
 measure the flexion of the interphalangeal joints, with 4 sensors for each
 finger and thumb. @watsonSurveyGestureRecognition1993 reports the price of the Dexterous Hand
 Robot at US$15 000 in 1993.
@@ -83,7 +83,7 @@ along the fingers. Bending the finger reduces the amount of light which can
 reach the end of the fibre optic. This reduction can be measured by a
 photo-resistor, which allows the glove to calculate the flexion at each joint.
 @watsonSurveyGestureRecognition1993 reports the price of the DataGlove at US$8 000 in 1993.
-\footnote{TODO: Note that the DataGlove could be combined with a Polhemus 3D tracker}
+\sidenote{TODO: Note that the DataGlove could be combined with a Polhemus 3D tracker}
 
 The DataGlove was used in many research applications. @fisherVirtualEnvironmentDisplay1987 and
 @scotts.fisherVIRTUALENVIRONMENTSPERSONAL1991 who used it to interact with their Virtual
@@ -128,7 +128,7 @@ the VirTex CyberGlove. The talking glove was designed for general purpose
 communication with deaf-blind or non-vocal people. For sensors, the Talking
 Glove used flexible strain gauges to detect the amount of flexion in each
 finger. Gestures are recognised using $k$-Nearest-Neighbours with $k=1$, such
-that only one training example is required for each gesture. \footnote{mention
+that only one training example is required for each gesture. \sidenote{mention
 Pohelmus 3SPACE }
 
 ![Talking glove, @kramerTalkingGlove1988](src/imgs/03_kramer_talking_1988.png)
@@ -271,7 +271,7 @@ number of groups based on similarity. Instead of querying all the HMMs, only
 the clusters were queried, and then all the HMMs from the cluster which best
 fit the data were queried.
 
-@hernandez-rebollarAcceleGloveWholehandInput2002 \footnote{TODO: First to use
+@hernandez-rebollarAcceleGloveWholehandInput2002 \sidenote{TODO: First to use
 accelerometers?} used six accelerometers mounted in rings on the back of the
 middle phalanges, on the distal phalange of the thumb, and on the back of the
 wrist. The authors briefly mention developing virtual hand software which could map
@@ -302,7 +302,7 @@ ring finger, the roll of the forearm, the pitch of the wrist, and the angular
 position of the thumb.
 
 @mohandesAutomationArabicSign2004 used a PowerGlove and a support vector
-machine to classify signs from the Arabic sign language. \footnote{TODO no PDF
+machine to classify signs from the Arabic sign language. \sidenote{TODO no PDF
 could be found for this}
 
 @mantyjarviEnablingFastEffortless2004 used HMMs to recognise
@@ -322,25 +322,59 @@ distinguished.
 
 @mantyjarviIdentifyingUsersPortable2005 showed that it was possible to identify
 users based on their walking gait via data collected from an accelerometer
-mounted near the small of their back.
+mounted near the small of their back. \sidenote{TODO:Maybe this is a little
+off-topic?}
 
-@mantyjarviGestureInteractionSmall2005
-
-@pylvanainenAccelerometerBasedGesture2005
-@ongAutomaticSignLanguage2005
-@immersionincImmersionIncCyberGlove2005
+@mantyjarviGestureInteractionSmall2005 proposed using the accelerometer built
+into mobile phones and personal digital agents (PDAs) could be used for
+multimedia control, and trained HMMs to recognise 18 gestures made while
+holding those devices. @pylvanainenAccelerometerBasedGesture2005 also used HMMs
+to recognise gestures recorded by an accelerometer built into a handheld
+device.
 
 #### 2006
 
-@karantonisImplementationRealTimeHuman2006
-@kelaAccelerometerbasedGestureControl2006
+@karantonisImplementationRealTimeHuman2006 used accelerometers to monitor
+and classify human movement in real time using decision trees and custom
+metrics derived from the acceleration data.
+
+@kelaAccelerometerbasedGestureControl2006 used the SoapBox
+[@tuulariSoapBoxPlatformUbiquitous2002] as a control device for interaction
+with a virtual reality centre. The virtual reality centre used wall-sized
+projection displays that allowed users to be completely immersed in engineering
+sketches or CAD prototypes which were projected onto the walls. Users remarked
+on the speed of use and naturalness of the system when compared to a mouse and
+keyboard. The authors did not describe how the gestures were recognised nor
+exactly what gestures were performed.
 
 #### 2007
 
-@alviPakistanSignLanguage2007
-@mitraGestureRecognitionSurvey2007
-@kratzWiizards3DGesture2007
-@heumerGraspRecognitionUncalibrated2007
+@mitraGestureRecognitionSurvey2007 surveyed both glove- and vision-based
+gesture recognition, however the vision-based portion of the survey will be
+discussed in Section \ref{vision-based-systems}. Mitra notes that statistical
+modelling techniques (PCA, HMMs, Kalman filters, particle filtering,
+condensation algorithms, Dynamic Time Warping, Neural Networks) are often
+employed, but that Finite State Machines have also been used effectively. Mitra
+also notes that sign language recognition is the subject of a lot of research.
+
+@alviPakistanSignLanguage2007 used statistical template matching to recognise
+33 one-handed signs from the Pakistan Sign Language and 26 one-handed signs
+from American Sign Language. The data was recorded with a 5DT DataGlove5 (the
+successor to the original DataGlove). \sidenote{TODO should I define
+statistical template matching?}
+
+@heumerGraspRecognitionUncalibrated2007 performed a survey of various
+grasp-recognition methods with 28 different classification models.
+Historically, glove-based systems needed a lengthy calibration process by which
+the range of the sensors could be detected. Heumer found that calibration is
+rarely required to achieve acceptable accuracy, and performed a thorough
+comparison of the advantages and disadvantages of the different classifiers.
+
+@kratzWiizards3DGesture2007 used data from a Wii Remote, classified by a HMM,
+to control a simple multiplayer video game in which the player could perform
+"spells" by moving the Wii Remote in certain patterns.
+
+![Wiizards, @kratzWiizards3DGesture2007](src/imgs/03_kratzWiizards3DGesture2007.png)
 
 #### 2008
 
@@ -415,7 +449,7 @@ a completely immersive replacement for a computer terminal:
 
 The media room contained numerous computers, an armchair fitted with some
 controls in the armrest, and projector which displays an image on one wall.
-\marginpar{flesh this out a bit more}
+\sidenote{flesh this out a bit more}
 
 ![Put-that-there, @boltPutthatthereVoiceGesture1980](src/imgs/03_bolt_put-that-there_1980.png)
 
@@ -478,7 +512,20 @@ TODO: see background of @wilsonParametricHiddenMarkov1999
 
 #### 2005
 
+@ongAutomaticSignLanguage2005 provided a survey of sign language recognition,
+emphasising the significance of non-manual signs (those made with the body or
+face) and the lack of attention to those signs in the literature. They also
+critiqued how sign languages are often treated as an encoding of some spoken
+language, instead of a language of its own right. For example, the signs for
+"you" and "study" can be recognised by observing the hands alone, but observing
+the body of the signer will reveal the true meaning "Are you studying very
+hard?" in how the body is leaning forward, the head thrust out, and the raised
+eyebrows towards the end of the sentence. \sidenote{TODO also describe the SoTA
+for vision-based recognition}
+
 #### 2006
+
+\sidenote{TODO: add GeFighters}
 
 @moeslundSurveyAdvancesVisionbased2006
 
@@ -557,6 +604,7 @@ TODO
 
 TODO
 
+- Popularisation of accelerometers in phones and PDAs.
 - Microsoft Kinect
 - Nintendo Wii
 - CyberGlove

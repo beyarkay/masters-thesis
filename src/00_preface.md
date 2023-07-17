@@ -18,5 +18,7 @@ header-includes: |
   \usepackage{tikz}
   \usepackage{wrapfig}
   \usepackage{xcolor}
+  \usepackage{marginfix}
+  \usepackage{sidenotes}
 mustache: src/dynamic_content.yaml
 ---
