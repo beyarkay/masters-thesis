@@ -355,9 +355,10 @@ exactly what gestures were performed.
 gesture recognition, however the vision-based portion of the survey will be
 discussed in Section \ref{vision-based-systems}. Mitra notes that statistical
 modelling techniques (PCA, HMMs, Kalman filters, particle filtering,
-condensation algorithms, Dynamic Time Warping, Neural Networks) are often
-employed, but that Finite State Machines have also been used effectively. Mitra
-also notes that sign language recognition is the subject of a lot of research.
+condensation algorithms, Dynamic Time Warping
+[@myersComparativeStudySeveral1981], Neural Networks) are often employed, but
+that Finite State Machines have also been used effectively. Mitra also notes
+that sign language recognition is the subject of a lot of research.
 
 @alviPakistanSignLanguage2007 used statistical template matching to recognise
 33 one-handed signs from the Pakistan Sign Language and 26 one-handed signs
@@ -409,11 +410,25 @@ to direct traffic manually.
 
 #### 2009
 
-@klingmannAccelerometerBasedGestureRecognition2009
+@liuUWaveAccelerometerbasedPersonalized2009 developed a model "uWave"
+explicitly designed for one-shot recognition of gestures using a single
+three-axis accelerometer such as those embedded in consumer electronics. uWave
+is identical to Dynamic Time Warping [@myersComparativeStudySeveral1981],
+except the acceleration data are quantised into 32 discrete buckets before DTW
+is applied.
 
-@kongGestureRecognitionModel2009
+@wuGestureRecognition3D2009 developed a variant of SVMs, the _Frame-based
+Descriptor and multi-class SVM_ (FDSVM), to classify gestures based on
+time-series data from a single three-axis accelerometers. Wu compared the
+results of FDSVM to C4.5, HMM, DTW, and Naïve Bayes and found the FDSVM to be
+superior when classifying 12 gestures and gathering data from a Nintendo
+Wii remote.
 
-@liuUWaveAccelerometerbasedPersonalized2009
+@zhangHandGestureRecognition2009 combines information from a three axis
+accelerometer and multi-channel surface electromyography sensors (sEMG or EMG)
+to recognise 18 different gestures. A HMM is used for classification. Zhang
+shows that an HMM trained on both the EMG data and the acceleration data
+outperforms HMMs trained on either the EMG or acceleration data
 
 ![Sensors for the four-channel EMG and 3-axis accelerometer, @zhangHandGestureRecognition2009](src/imgs/03_zhangHandGestureRecognition2009.png){ width=50% }
 
@@ -602,6 +617,10 @@ complexity required to get started, allow for results to be reproduced, and
 allow for new techniques to be compared to old ones.
 
 Split by decade, noting any trends along the way. Note the seminal paper.
+
+### 2010s
+
+### 2020s
 
 # Overview
 
