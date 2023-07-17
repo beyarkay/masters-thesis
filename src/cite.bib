@@ -31,7 +31,7 @@
   urldate = {2023-07-11},
   abstract = {In recent years, several technologies have been utilized to bridge the communication gap between persons who have hearing or speaking impairments and those who don't. This paper presents the development of a novel sign language recognition system which translates Ethiopian sign language (ETHSL) to Amharic alphabets using computer vision technology and Deep Convolutional Neural Network (CNN). The system accepts sign language images as input and gives Amharic text as the desired output. The proposed system comprises of three main stages which are: preprocessing, feature extraction, and recognition. The methodology employed involves data acquisition, preprocessing the acquired data, background normalization, image resizing, region of interest (ROI) identification, noise removal, brightness adjustment, and feature extraction, while Deep Convolutional Neural Network (CNN) was used for end-to-end classification. The data used in this study was acquired from students with hearing impairments at the Debre Markos Teaching College with an iPhone 6s phone which has a resolution of 3024\,\texttimes\,4020. The images are in JPEG file format and were collected in a controlled environment. The proposed system was implemented using Kera's (Tensorflow2.3.0 as backend) in python and tested using the image dataset collected from Debre Markos Teaching College graduating students of 2012. The results show that the running time was minimized by adjusting the images to a suitable size and color. In addition, the results show an improved recognition accuracy compared to previous works. The proposed model achieves 98.5\% training, 95.59\% validation, and 98.3\% testing accuracy of recognition.},
   langid = {english},
-  keywords = {app:ethiopian-sl,app:sign-language,model:cnn},
+  keywords = {app:ethiopian-sl,app:sign-language,based-on-vision,model:cnn},
   annotation = {2 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 
@@ -48,7 +48,7 @@
   author = {{Adan Arriaga}},
   year = {2022},
   url = {https://www.charachorder.com/},
-  keywords = {type:product}
+  keywords = {background,type:product}
 }
 
 @article{adibSeeWallsWiFi2013,
@@ -135,7 +135,7 @@
   urldate = {2023-03-07},
   abstract = {Researchers have been inspired to use technology to enable people with hearing and speech impairment to communicate and engage with others around them. Sensory approach to recognition facilitates real-time and accurate recognition of signs. Thus, this study proposes a Malaysian Sign Language (MSL) recognition framework. The framework consists of three sub-modules for the recognition of static isolated signs based on data collected from a DataGlove. The first module focuses on the characteristics of signs, yielding sign recognition system requirements. The second module describes the different steps required to develop a wearable sign-capture device. The third module discusses the real-time SL recognition approach, which uses a template-matching algorithm to recognize acquired data. The final design of the DataGlove with 65 data channel fulfils the requirement identified from an analysis of MSL. The DataGlove is able to record data for all of the signs (both dynamic and static) of MSL due to the wide range of captured hand features. As a result, the recognition engine can accurately recognize complex signs.},
   langid = {english},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-gloves},
   annotation = {18 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -223,7 +223,7 @@
   urldate = {2023-06-26},
   abstract = {Human Computer Interaction (HCI) technologies are rapidly evolving the way we interact with computing devices and adapting to the constantly increasing demands of modern paradigms. One of the most useful tools in this regard is the integration of Human-to-Human Interaction gestures to facilitate communication and expressing ideas. Gesture recognition requires the integration of postures, gestures, face expressions and movements for communicating or conveying certain messages. The aim of this study is to aggregate and synthesize experiences and accumulated knowledge about Vision-Based Recognition (VBR) techniques. The major objective of conducting this Systematic Literature Review (SLR) is to highlight the state-of-the-art in the context of vision-based gesture recognition with specific focus on hand gesture recognition (HGR) techniques and enabling technologies. After a careful systematic selection process, 100 studies relevant to the four research questions were selected. This process was followed by data collection, a detailed analysis, and a synthesis of the selected studies. The results reveal that among the VBR techniques, HGR is a predominant and highly focused area of research. Research focus is also found to be converging towards sign language recognition. Potential applications of HGR techniques include desktop applications, smart environments, entertainment, sign language interpretation, virtual reality and gamification. Although various experimental research efforts have been devoted to gestures recognition, there are still numerous open issues and research challenges in this field. Lastly, considering the results from this SLR, potential future research directions are suggested, including a much needed focus on grammatical interpretation, hybrid approaches, smartphone devices, normalization, and real-life systems.},
   langid = {english},
-  keywords = {app:sign-language,read-priority-1,type:survey},
+  keywords = {app:sign-language,based-on-vision,read-priority-1,type:survey},
   annotation = {71 Citations},
   file = {/Users/brk/Zotero/storage/BL4SNP7J/Al-Shamayleh et al. - 2018 - A systematic literature review on vision based ges.pdf}
 }
@@ -316,7 +316,7 @@
   url = {https://iopscience.iop.org/article/10.1088/1757-899X/745/1/012045},
   urldate = {2023-03-07},
   abstract = {Abstract             Talking about gestures make us return to the historical beginning of human communication because there is no language completely free of gestures. People cannot communicate without gestures. Any action or movement without gestures is free of real feelings and cannot express the thoughts. The purpose of any hand gesture recognition system is to recognize the hand gesture and used it to transfer a certain meaning or for computer control or/and a device. This paper introduced an efficient system to recognize hand gestures in real-time. Generally, the system is divided into five phases, first to image acquisition, second to pre-processing the image, third for detection and segmentation of the hand region, fourth to features extraction and fifth to count the numbers of fingers for gesture recognition. The system has been coded by Python language, PyAutoGUI library, OS Module of Python and the Open CV library.},
-  keywords = {classes:10-29,tech:rgb},
+  keywords = {based-on-vision,classes:10-29,tech:rgb},
   annotation = {2 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/2NTXV8NA/AlSaedi and AlAsadi - 2020 - An efficient hand gestures recognition system.pdf}
 }
@@ -361,7 +361,7 @@
   urldate = {2023-03-07},
   abstract = {People with speech disorders often communicate through special gestures and sign language gestures. However, other people around them might not understand the meaning of those gestures. The research described in this article is aimed at providing an assistive device to help those people communicate with others by translating their gestures into a spoken voice that others can understand. The proposed device includes an electronic glove that is worn on the hand. It employs an MPU6050 accelerometer/gyro with 6 degrees of freedom to continuously monitor hand orientation and movement, plus a potentiometer for each finger, to monitor changes in finger posture. The signals from the MPU6050 and the potentiometers are routed to an Arduino board, where they are processed to determine the meaning of each gesture, which is then voiced using the audio streams stored in an SD memory card. The audio output drives a speaker, allowing the listener to understand the meaning of each gesture. We built a database with the help of 10 deaf people who cannot speak. We asked them to wear the glove while performing a set of 40 Arabic sign language words and recorded the resulting data stream from the glove. That data was then used to train seven different learning algorithms. The results showed that the Decision Tree learning algorithm achieved the highest accuracy of 98\%. A usability study was then conducted to determine the usefulness of the assistive device in real-time.},
   langid = {english},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-gloves},
   annotation = {3 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -412,8 +412,9 @@
   abstract = {A human\textendash computer interaction is generally limited to taking input from the user using handheld devices like keyboard, mouse, or scanners. With the advancement in computers, the user interaction approaches have also advanced. Direct use of hands as an input device is an attractive method for providing natural Human\textendash Computer Interaction. It is also helpful for people who use sign language. The chapter aims to study the existing methods for Hand Gesture Recognition and provide a comparative analysis of the same. The entire process of hand gesture recognition is divided into three phases: hand detection, hand tracking, and recognition. The chapter includes a review of the different methods used for the hand gesture recognition. The recognition phase is classified based on the way the input is received as glove based or vision based. For recognition, various methods like Feature extraction, Hidden Markov Model (HMM), Principal Component Analysis (PCA) are compared along with the reported accuracy.},
   isbn = {9789811307751 9789811307768},
   langid = {english},
-  keywords = {type:survey},
-  annotation = {25 citations (Semantic Scholar/DOI) [2023-07-02]}
+  keywords = {based-on-gloves,based-on-vision,contains-more-references,type:survey},
+  annotation = {25 citations (Semantic Scholar/DOI) [2023-07-02]},
+  file = {/Users/brk/Zotero/storage/IY3XGDPZ/Anwar et al. - 2019 - Hand Gesture Recognition A Survey.pdf}
 }
 
 @misc{arduinoArduinoHome2005,
@@ -441,7 +442,7 @@
   author = {Arregui, Patxi Xabier Quintana},
   year = {2017},
   url = {https://sensorglove.wixsite.com/sensorglove/producto},
-  keywords = {based-on-gloves,from:cite.bib,type:product}
+  keywords = {background,based-on-gloves,from:cite.bib,type:product}
 }
 
 @article{asadi-aghbolaghiSurveyDeepLearning2017,
@@ -523,7 +524,7 @@
   url = {https://ieeexplore.ieee.org/document/8410764/},
   urldate = {2023-07-02},
   abstract = {Hand gesture recognition is still a topic of great interest for the computer vision community. In particular, sign language and semaphoric hand gestures are two foremost areas of interest due to their importance in human\textendash human communication and human\textendash computer interaction, respectively. Any hand gesture can be represented by sets of feature vectors that change over time. Recurrent neural networks (RNNs) are suited to analyze this type of set thanks to their ability to model the long-term contextual information of temporal sequences. In this paper, an RNN is trained by using as features the angles formed by the finger bones of the human hands. The selected features, acquired by a leap motion controller sensor, are chosen because the majority of human hand gestures produce joint movements that generate truly characteristic corners. The proposed method, including the effectiveness of the selected angles, was initially tested by creating a very challenging dataset composed by a large number of gestures defined by the American sign language. On the latter, an accuracy of over 96\% was achieved. Afterwards, by using the Shape Retrieval Contest (SHREC) dataset, a wide collection of semaphoric hand gestures, the method was also proven to outperform in accuracy competing approaches of the current literature.},
-  keywords = {app:american-sl,app:sign-language,model:rnn},
+  keywords = {app:american-sl,app:sign-language,based-on-vision,model:rnn,tech:rgb},
   annotation = {108 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/SQ8WF2YE/Avola et al. - 2019 - Exploiting Recurrent Neural Networks and Leap Moti.pdf}
 }
@@ -564,7 +565,7 @@
   url = {http://www.ijcaonline.org/research/volume139/number2/bansal-2016-ijca-909103.pdf},
   urldate = {2023-03-07},
   abstract = {With increasing use of computers in our daily lives, lately there has been a rapid increase in the efforts to develop a better human computer interaction interface. The need of easy to use and advance types of human-computer interaction with natural interfaces is more than ever. In the present framework, the UI (User Interface) of a computer allows user to interact with electronic devices with graphical icons and visual indicators, which is still inconvenient and not suitable for working in virtual environments. An interface which allow user to communicate through gestures is the next step in the direction of advance human computer interface. In the present paper author explore different aspects of gesture recognition techniques.},
-  keywords = {type:survey},
+  keywords = {based-on-vision,type:survey},
   annotation = {650 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/DXTI6K39/Bansal - 2016 - Gesture Recognition A Survey.pdf}
 }
@@ -841,7 +842,7 @@
   url = {https://www.frontiersin.org/articles/10.3389/frobt.2020.594196/full},
   urldate = {2023-07-12},
   abstract = {The field of rehabilitation and assistive devices is being disrupted by innovations in desktop 3D printers and open-source designs. For upper limb prosthetics, those technologies have demonstrated a strong potential to aid those with missing hands. However, there are basic interfacing issues that need to be addressed for long term usage. The functionality, durability, and the price need to be considered especially for those in difficult living conditions. We evaluated the most popular designs of body-powered, 3D printed prosthetic hands. We selected a representative sample and evaluated its suitability for its grasping postures, durability, and cost. The prosthetic hand can perform three grasping postures out of the 33 grasps that a human hand can do. This corresponds to grasping objects similar to a coin, a golf ball, and a credit card. Results showed that the material used in the hand and the cables can withstand a 22 N normal grasping force, which is acceptable based on standards for accessibility design. The cost model showed that a 3D printed hand could be produced for as low as \$19. For the benefit of children with congenital missing limbs and for the war-wounded, the results can serve as a baseline study to advance the development of prosthetic hands that are functional yet low-cost.},
-  keywords = {medical},
+  keywords = {background,medical},
   annotation = {6 citations (Semantic Scholar/DOI) [2023-07-12]},
   file = {/Users/brk/Zotero/storage/KXV4GLFK/Cabibihan et al. - 2021 - Suitability of the Openly Accessible 3D Printed Pr.pdf}
 }
@@ -913,7 +914,7 @@
   urldate = {2023-06-26},
   abstract = {The field of 3D hand pose estimation has been gaining a lot of attention recently, due to its significance in several applications that require human-computer interaction (HCI). The utilization of technological advances, such as cost-efficient depth cameras coupled with the explosive progress of Deep Neural Networks (DNNs), has led to a significant boost in the development of robust markerless 3D hand pose estimation methods. Nonetheless, finger occlusions and rapid motions still pose significant challenges to the accuracy of such methods. In this survey, we provide a comprehensive study of the most representative deep learning-based methods in literature and propose a new taxonomy heavily based on the input data modality, being RGB, depth, or multimodal information. Finally, we demonstrate results on the most popular RGB and depth-based datasets and discuss potential research directions in this rapidly growing field.},
   langid = {english},
-  keywords = {model:deep-learning,read-priority-9,tech:rgbd,type:survey},
+  keywords = {based-on-vision,model:deep-learning,read-priority-9,tech:rgbd,type:survey},
   annotation = {25 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/5NQQ3Z7T/Chatzis et al. - 2020 - A Comprehensive Study on Deep Learning-Based 3D Ha.pdf}
 }
@@ -1028,7 +1029,7 @@
   urldate = {2023-06-23},
   abstract = {Real-time sensing and modeling of the human body, especially the hands, is an important research endeavor for various applicative purposes such as in natural human computer interactions. Hand pose estimation is a big academic and technical challenge due to the complex structure and dexterous movement of human hands. Boosted by advancements from both hardware and artificial intelligence, various prototypes of data gloves and computer-vision-based methods have been proposed for accurate and rapid hand pose estimation in recent years. However, existing reviews either focused on data gloves or on vision methods or were even based on a particular type of camera, such as the depth camera. The purpose of this survey is to conduct a comprehensive and timely review of recent research advances in sensor-based hand pose estimation, including wearable and vision-based solutions. Hand kinematic models are firstly discussed. An in-depth review is conducted on data gloves and vision-based sensor systems with corresponding modeling methods. Particularly, this review also discusses deep-learning-based methods, which are very promising in hand pose estimation. Moreover, the advantages and drawbacks of the current hand gesture estimation methods, the applicative scope, and related challenges are also discussed.},
   langid = {english},
-  keywords = {have-read,type:survey},
+  keywords = {based-on-gloves,based-on-vision,have-read,type:survey},
   annotation = {54 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/Y67RWII7/Chen et al. - 2020 - A Survey on Hand Pose Estimation with Wearable Sen.pdf}
 }
@@ -1066,7 +1067,7 @@
   urldate = {2023-06-26},
   abstract = {Hand gesture recognition serves as a key for overcoming many difficulties and providing convenience for human life. The ability of machines to understand human activities and their meaning can be utilized in a vast array of applications. One specific field of interest is sign language recognition. This paper provides a thorough review of state-of-the-art techniques used in recent hand gesture and sign language recognition research. The techniques reviewed are suitably categorized into different stages: data acquisition, pre-processing, segmentation, feature extraction and classification, where the various algorithms at each stage are elaborated and their merits compared. Further, we also discuss the challenges and limitations faced by gesture recognition research in general, as well as those exclusive to sign language recognition. Overall, it is hoped that the study may provide readers with a comprehensive introduction into the field of automated gesture and sign language recognition, and further facilitate future research efforts in this area.},
   langid = {english},
-  keywords = {type:survey},
+  keywords = {based-on-vision,tech:rgb,type:survey},
   annotation = {301 Citations},
   file = {/Users/brk/Zotero/storage/62H2TEM2/Cheok et al. - 2019 - A review of hand gesture and sign language recogni.pdf}
 }
@@ -1105,7 +1106,7 @@
   urldate = {2023-03-07},
   abstract = {In this paper, we propose a sensor-based data acquisition glove for Japanese Sign Language (JSL) hand gesture recognition. Five flex sensors, an Inertial Measurement Unit (IMU), and three Force Sensing Resistors (FSRs) are used to detect the bending degree of fingers and hand movement information. The detected data are transmitted to the computer by an Arduino Micro. The average accuracy of the hand gesture recognition for a single subject, using the Support Vector Machine (SVM) based and the Dynamic Time Wrapping (DTW) based algorithm are 96.9\% and 94.5\%, respectively. Our proposed system also achieves an average recognition accuracy of about 82.5\% for the cross-recognition among three subjects. The experimental results indicate that our proposed system has great potential for JSL hand gesture recognition.},
   isbn = {9781665418751},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-gloves},
   annotation = {8 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -1124,7 +1125,7 @@
   urldate = {2023-07-11},
   abstract = {Recently, it has been proven that targeting motor impairments as early as possible while using wearable mechatronic devices for assisted therapy can improve rehabilitation outcomes. However, despite the advanced progress on control methods for wearable mechatronic devices, the need for a more natural interface that allows for better control remains. To address this issue, electromyography (EMG)-based gesture recognition systems have been studied as a potential solution for human\textendash machine interface applications. Recent studies have focused on developing user-independent gesture recognition interfaces to reduce calibration times for new users. Unfortunately, given the stochastic nature of EMG signals, the performance of these interfaces is negatively impacted. To address this issue, this work presents a user-independent gesture classification method based on a sensor fusion technique that combines EMG data and inertial measurement unit (IMU) data. The Myo Armband was used to measure muscle activity and motion data from healthy subjects. Participants were asked to perform seven types of gestures in four different arm positions while using the Myo on their dominant limb. Data obtained from 22 participants were used to classify the gestures using three different classification methods. Overall, average classification accuracies in the range of 67.5\textendash 84.6\% were obtained, with the Adaptive Least-Squares Support Vector Machine model obtaining accuracies as high as 92.9\%. These results suggest that by using the proposed sensor fusion approach, it is possible to achieve a more natural interface that allows better control of wearable mechatronic devices during robot assisted therapies.},
   langid = {english},
-  keywords = {app:medical,model:svm,participants:22,tech:emg,tech:imu},
+  keywords = {app:medical,based-on-gloves,model:svm,participants:22,tech:emg,tech:imu},
   annotation = {13 citations (Semantic Scholar/DOI) [2023-07-11]},
   file = {/Users/brk/Zotero/storage/BBADBX3U/Colli Alfaro and Trejos - 2022 - User-Independent Hand Gesture Recognition Classifi.pdf}
 }
@@ -1187,7 +1188,7 @@
   urldate = {2023-07-12},
   abstract = {In recent years, the researchers have witnessed the important role of air gesture recognition in human-computer interactive (HCI), smart home, and virtual reality (VR). The traditional air gesture recognition method mainly depends on external equipment (such as special sensors and cameras) whose costs are high and also with a limited application scene. In this paper, we attempt to utilize channel state information (CSI) derived from a WLAN physical layer, a Wi-Fibased air gesture recognition system, namely, WiNum, which solves the problems of users' privacy and energy consumption compared with the approaches using wearable sensors and depth cameras. In the process of recognizing the WiNum method, the collected raw data of CSI should be screened, among which can reflect the gesture motion. Meanwhile, the screened data should be preprocessed by noise reduction and linear transformation. After preprocessing, the joint of amplitude information and phase information is extracted, to match and recognize different air gestures by using the S-DTW algorithm which combines dynamic time warping algorithm (DTW) and support vector machine (SVM) properties. Comprehensive experiments demonstrate that under two different indoor scenes, WiNum can achieve higher recognition accuracy for air number gestures; the average recognition accuracy of each motion reached more than 93\%, in order to achieve effective recognition of air gestures.},
   langid = {english},
-  keywords = {based-on-wifi,classes:10,model:dtw,model:svm,tech:wifi},
+  keywords = {based-on-vision,based-on-wifi,classes:10,model:dtw,model:svm,tech:wifi},
   annotation = {9 citations (Semantic Scholar/DOI) [2023-07-12]},
   file = {/Users/brk/Zotero/storage/9WJ72HZQ/Dang et al. - 2020 - Air Gesture Recognition Using WLAN Physical Layer .pdf}
 }
@@ -1207,23 +1208,6 @@
   langid = {english},
   keywords = {based-on-vision,model:fsm,tech:rgb,type:seminal},
   annotation = {272 citations (Semantic Scholar/DOI) [2023-07-11]}
-}
-
-@inproceedings{dept.ofbiomedicalengineeringkyungheeuniversityrepublicofkoreaRecognitionHumanHand2017,
-  title = {Recognition of {{Human Hand Activities Based}} on a {{Single Wrist IMU Using Recurrent Neural Networks}}},
-  booktitle = {International {{Journal}} of {{Pharma Medicine}} and {{Biological Sciences}}},
-  author = {{Dept. of Biomedical Engineering, Kyung Hee University, Republic of Korea} and Rivera, Patricio and Valarezo, Edwin and Choi, Mun-Taek and Kim, Tae-Seong},
-  year = {2017},
-  volume = {6},
-  pages = {114--118},
-  issn = {22785221},
-  doi = {10.18178/ijpmbs.6.4.114-118},
-  url = {http://www.ijpmbs.com/uploadfile/2017/1227/20171227050020234.pdf},
-  urldate = {2023-07-11},
-  abstract = {Recognition of hand activities could provide new information towards daily human activity logging and gesture interface applications. However, there is a technical challenge due to delicate hand motions and complex movement contexts. In this work, we proposed hand activity recognition (HAR) based on a single inertial measurement unit (IMU) sensor at one wrist via deep learning recurrent neural network. The proposed HAR works directly with signals from a tri-axial accelerometer, gyroscope, and magnetometer sensors within one IMU. We evaluated the performance of our HAR with a public human hand activity database for six hand activities including Open Door, Close Door, Open Fridge, Close Fridge, Clean Table and Drink from Cup. Our results show an overall recognition accuracy of 80.09\% with discrete standard epochs and 74.92\% with noise-added epochs. With continuous time series epochs, the accuracy of 71.75\% was obtained. },
-  keywords = {based-on-gloves,classes:6,model:rnn,tech:imu},
-  annotation = {19 citations (Semantic Scholar/DOI) [2023-07-11]},
-  file = {/Users/brk/Zotero/storage/38I9KL9J/Dept. of Biomedical Engineering, Kyung Hee University, Republic of Korea et al. - 2017 - Recognition of Human Hand Activities Based on a Si.pdf}
 }
 
 @article{dipietroSurveyGloveBasedSystems2008,
@@ -1426,7 +1410,7 @@
   urldate = {2023-07-02},
   abstract = {Millions of people with speech and hearing impairments, worldwide, communicate through sign languages every day. In the same way that voice recognition provides a simple communication platform for most users, gesture recognition is a natural means of correspondence for the hearing-impaired. In this paper, we explore the problem of translating/converting sign language to speech, and propose an improved solution using different machine learning techniques. We seek to build a system that can be employed in the daily lives of people with hearing impairments, in order to enhance communication and collaboration between the hearing-impaired community and those untrained in American Sign Language (ASL). The system architecture is based on using wearable motion sensors and machine learning techniques. In this study, we propose a solution using Artificial Neural Networks (ANN) and Support Vector Machines (SVM), and compare their accuracy with the Hidden Markov Model (HMM) results from our previous work to recognize ASL words. Experimental results show that using ANN gives an overall higher accuracy in recognizing ASL words, compared to other machine learning techniques.},
   isbn = {9781728105543},
-  keywords = {app:american-sl,app:sign-language,model:ffnn,model:hmm,model:svm},
+  keywords = {app:american-sl,app:sign-language,based-on-gloves,model:ffnn,model:hmm,model:svm,tech:imu},
   annotation = {20 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -1583,7 +1567,7 @@
   url = {https://www.semanticscholar.org/paper/Robust-South-African-sign-language-gesture-using-Frieslaar/af10d1bb6ef67ab9c8b624b5fcafd9dd2e2daf69},
   urldate = {2023-07-02},
   abstract = {Research has shown that five fundamental parameters are required to recognize any sign language gesture: hand shape, hand motion, hand location, hand orientation and facial expressions. The South African Sign Language (SASL) research group at the University of the Western Cape (UWC) has created several systems to recognize sign language gestures using single parameters. These systems are, however, limited to a vocabulary size of 20 \textendash{} 23 signs, beyond which the recognition accuracy is expected to decrease. The first aim of this research is to investigate the use of two parameters \textendash{} hand motion and hand shape \textendash{} to recognise a larger vocabulary of SASL gestures at a high accuracy. Also, the majority of related work in the field of sign language gesture recognition using these two parameters makes use of Hidden Markov Models (HMMs) to classify gestures. Hidden Markov Support Vector Machines (HM-SVMs) are a relatively new technique that make use of Support Vector Machines (SVMs) to simulate the functions of HMMs. Research indicates that HM-SVMs may perform better than HMMs in some applications. To our knowledge, they have not been applied to the field of sign language gesture recognition. This research compares the use of these two techniques in the context of SASL gesture recognition. The results indicate that, using two parameters results in a 15\% increase in accuracy over the use of a single parameter. Also, it is shown that HM-SVMs are a more accurate technique than HMMs, generally performing better or at least as good as HMMs.},
-  keywords = {classes:23,model:hmm,model:svm},
+  keywords = {based-on-vision,classes:23,model:hmm,model:svm},
   annotation = {6 Citations},
   file = {/Users/brk/Zotero/storage/U9U3CGTS/Frieslaar - 2014 - Robust South African sign language gesture recogni.pdf}
 }
@@ -2068,7 +2052,7 @@
   url = {https://www.semanticscholar.org/paper/Sign-Language-Recognition-System-using-Neural-and-Hurroo-Elham/5ecc9d2073755a1364433d83df2a4007e42b16e1},
   urldate = {2023-07-11},
   abstract = {Conversing to a person with hearing disability is always a major challenge. Sign language has indelibly become the ultimate panacea and is a very powerful tool for individuals with hearing and speech disability to communicate their feelings and opinions to the world. It makes the integration process between them and others smooth and less complex. However, the invention of sign language alone, is not enough . There are many strings attached to this boon.The sign gestures often get mixed and confused for someone who has never learnt it or knows it in a different language. However, this communication gap which has existed for years can now be narrowed with the introduction of various techniques to automate the detection of sign gestures . In this paper, we introduce a Sign Language recognition using American Sign Language. In this study, the user must be able to capture images of the hand gesture using web camera and the system shall predict and display the name of the captured image. We use the HSV colour algorithm to detect the hand gesture and set the background to black. The images undergo a series of processing steps which include various Computer vision techniques such as the conversion to grayscale, dilation and mask operation. And the region of interest which, in our case is the hand gesture is segmented. The features extracted are the binary pixels of the images. We make use of Convolutional Neural Network(CNN) for training and to classify the images. We are able to recognise 10 American Sign gesture alphabets with high accuracy. Our model has achieved a remarkable accuracy of above 90\%.},
-  keywords = {app:american-sl,app:sign-language,claims-to-be-first,classes:10,from:cite.bib,model:cnn},
+  keywords = {app:american-sl,app:sign-language,based-on-vision,claims-to-be-first,classes:10,from:cite.bib,model:cnn},
   file = {/Users/brk/Zotero/storage/IQGA9ZVK/Hurroo and Elham - 2020 - Sign Language Recognition System using Convolution.pdf}
 }
 
@@ -2153,7 +2137,7 @@
   url = {http://ijeecs.iaescore.com/index.php/IJEECS/article/view/26823},
   urldate = {2023-07-02},
   abstract = {{$<$}p{$>$}In computer vision, one of the most difficult problems is human gestures in videos recognition Because of certain irrelevant environmental variables. This issue has been solved by using single deep networks to learn spatiotemporal characteristics from video data, and this approach is still insufficient to handle both problems at the same time. As a result, the researchers fused various models to allow for the effective collection of important shape information as well as precise spatiotemporal variation of gestures. In this study, we collected the dynamic dataset for twenty meaningful words of Arabic sign language (ArSL) using a Microsoft Kinect v2 camera. The recorded data included 7350 red, green, and blue (RGB) videos and 7350 depth videos. We proposed four deep neural networks models using 2D and 3D convolutional neural network (CNN) to cover all feature extraction methods and then passing these features to the recurrent neural network (RNN) for sequence classification. Long short-term memory (LSTM) and gated recurrent unit (GRU) are two types of using RNN. Also, the research included evaluation fusion techniques for several types of multiple models. The experiment results show the best multi-model for the dynamic dataset of the ArSL recognition achieved 100\% accuracy.{$<$}/p{$>$}},
-  keywords = {app:arabic-sl,app:sign-language,model:cnn,model:gru,model:lstm,model:rnn},
+  keywords = {app:arabic-sl,app:sign-language,based-on-vision,model:cnn,model:gru,model:lstm,model:rnn},
   annotation = {5 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/UKX6R46H/Ismail et al. - 2022 - Dynamic hand gesture recognition of Arabic sign la.pdf}
 }
@@ -2172,7 +2156,7 @@
   url = {https://iopscience.iop.org/article/10.1088/1757-899X/1155/1/012056},
   urldate = {2023-07-11},
   abstract = {Abstract             The presented compact algorithm for recognizing handwritten digits of the MNIST database, created on the LogNNet reservoir neural network, reaches the recognition accuracy of 82\%. The algorithm was tested on a low-memory Arduino board with 2 Kb static RAM low-power microcontroller. The dependences of the accuracy and time of image recognition on the number of neurons in the reservoir have been investigated. The memory allocation demonstrates that the algorithm stores all the necessary information in RAM without using additional data storage, and operates with original images without preliminary processing. The simple structure of the algorithm, with appropriate training, can be adapted for wide practical application, for example, for creating mobile biosensors for early diagnosis of adverse events in medicine. The study results are important for the implementation of artificial intelligence on peripheral constrained IoT devices and for edge computing.},
-  keywords = {app:resource-constrained,dataset:mnist,from:cite.bib,hardware:arduino,hardware:iot,model:nn},
+  keywords = {app:resource-constrained,background,dataset:mnist,from:cite.bib,hardware:arduino,hardware:iot,model:nn},
   annotation = {5 citations (Semantic Scholar/DOI) [2023-07-11]},
   file = {/Users/brk/Zotero/storage/ZZ94MAW3/Izotov et al. - 2021 - Recognition of handwritten MNIST digits on low-mem.pdf}
 }
@@ -2339,7 +2323,7 @@
   journal = {Andrej Karpathy Blog},
   publisher = {{https://karpathy.github.io}},
   url = {https://karpathy.github.io/2019/04/25/recipe/},
-  keywords = {from:cite.bib,model:nn,type:blog}
+  keywords = {background,from:cite.bib,model:nn,type:blog}
 }
 
 @inproceedings{kaufmanToolsInteractionThree1989,
@@ -2636,7 +2620,7 @@
   url = {https://ieeexplore.ieee.org/document/9178440/},
   urldate = {2023-03-07},
   abstract = {Sign language is used as a primary form of communication by many people who are Deaf, deafened, hard of hearing, and non-verbal. Communication barriers exist for members of these populations during daily interactions with those who are unable to understand or use sign language. Advancements in technology and machine learning techniques have led to the development of innovative approaches for gesture recognition. This literature review focuses on analyzing studies that use wearable sensor-based systems to classify sign language gestures. A review of 72 studies from 1991 to 2019 was performed to identify trends, best practices, and common challenges. Attributes including sign language variation, sensor configuration, classification method, study design, and performance metrics were analyzed and compared. Results from this literature review could aid in the development of user-centred and robust wearable sensor-based systems for sign language recognition.},
-  keywords = {app:sign-language,type:survey},
+  keywords = {app:sign-language,based-on-gloves,type:survey},
   annotation = {37 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -2684,7 +2668,7 @@
   url = {https://ieeexplore.ieee.org/document/9264164/},
   urldate = {2023-03-07},
   abstract = {In this article, a real-time dynamic finger gesture recognition using a soft sensor embedded data glove is presented, which measures the metacarpophalangeal (MCP) and proximal interphalangeal (PIP) joint angles of five fingers. In the gesture recognition field, a challenging problem is that of separating meaningful dynamic gestures from a continuous data stream. Unconscious hand motions or sudden tremors, which can easily lead to segmentation ambiguity, makes this problem difficult. Furthermore, the hand shapes and speeds of users differ when performing the same dynamic gesture, and even those made by one user often vary. To solve the problem of separating meaningful dynamic gestures, we propose a deep learning-based gesture spotting algorithm that detects the start/end of a gesture sequence in a continuous data stream. The gesture spotting algorithm takes window data and estimates a scalar value named gesture progress sequence (GPS). GPS is a quantity that represents gesture progress. Moreover, to solve the gesture variation problem, we propose a sequence simplification algorithm and a deep learning-based gesture recognition algorithm. The proposed three algorithms (gesture spotting algorithm, sequence simplification algorithm, and gesture recognition algorithm) are unified into the real-time gesture recognition system and the system was tested with 11 dynamic finger gestures in real-time. The proposed system took only 6 ms to estimate a GPS and no more than 12 ms to recognize the completed gesture in real-time.},
-  keywords = {classes:10-29,movement:dynamic,tech:flex},
+  keywords = {based-on-gloves,classes:10-29,movement:dynamic,tech:flex},
   annotation = {20 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/NRM9LBZL/Lee and Bae - 2020 - Deep Learning Based Real-Time Recognition of Dynam.pdf}
 }
@@ -2703,7 +2687,7 @@
   url = {http://ieeexplore.ieee.org/document/8126796/},
   urldate = {2023-03-07},
   abstract = {Gesturing is an instinctive way of communicating to present a specific meaning or intent. Therefore, research into sign language interpretation using gestures has been explored progressively during recent decades to serve as an auxiliary tool for deaf and mute people to blend into society without barriers. In this paper, a smart sign language interpretation system using a wearable hand device is proposed to meet this purpose. This wearable system utilizes five flex-sensors, two pressure sensors, and a three-axis inertial motion sensor to distinguish the characters in the American sign language alphabet. The entire system mainly consists of three modules: 1) a wearable device with a sensor module; 2) a processing module; and 3) a display unit mobile application module. Sensor data are collected and analyzed using a built-in embedded support vector machine classifier. Subsequently, the recognized alphabet is further transmitted to a mobile device through Bluetooth low energy wireless communication. An Android-based mobile application was developed with a text-to-speech function that converts the received textinto audible voice output. Experiment results indicate that a true sign language recognition accuracy rate of 65.7\% can be achieved on average in the first version without pressure sensors. A second version of the proposed wearable system with the fusion of pressure sensors on the middle finger increased the recognition accuracy rate dramatically to 98.2\%. The proposed wearable system outperforms the existing method, for instance, although background lights, and other factors are crucial to a vision-based processing method, they are not for the proposed system.},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-gloves},
   annotation = {102 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/CQT634W2/Lee and Lee - 2018 - Smart Wearable Hand Device for Sign Language Inter.pdf}
 }
@@ -2805,25 +2789,6 @@
   annotation = {41 citations (Semantic Scholar/DOI) [2023-07-12]}
 }
 
-@article{limingchenSensorBasedActivityRecognition2012,
-  title = {Sensor-{{Based Activity Recognition}}},
-  author = {{Liming Chen} and Hoey, J. and Nugent, C. D. and Cook, D. J. and {Zhiwen Yu}},
-  year = {2012},
-  month = nov,
-  journal = {IEEE Transactions on Systems, Man, and Cybernetics, Part C (Applications and Reviews)},
-  volume = {42},
-  number = {6},
-  pages = {790--808},
-  issn = {1094-6977, 1558-2442},
-  doi = {10.1109/TSMCC.2012.2198883},
-  url = {http://ieeexplore.ieee.org/document/6208895/},
-  urldate = {2023-07-12},
-  abstract = {Research on sensor-based activity recognition has, recently, made significant progress and is attracting growing attention in a number of disciplines and application domains. However, there is a lack of high-level overview on this topic that can inform related communities of the research state of the art. In this paper, we present a comprehensive survey to examine the development and current status of various aspects of sensor-based activity recognition. We first discuss the general rationale and distinctions of vision-based and sensor-based activity recognition. Then, we review the major approaches and methods associated with sensor-based activity monitoring, modeling, and recognition from which strengths and weaknesses of those approaches are highlighted. We make a primary distinction in this paper between data-driven and knowledge-driven approaches, and use this distinction to structure our survey. We also discuss some promising directions for future research.},
-  keywords = {type:survey},
-  annotation = {910 citations (Semantic Scholar/DOI) [2023-07-12]},
-  file = {/Users/brk/Zotero/storage/JNW2SD2L/Liming Chen et al. - 2012 - Sensor-Based Activity Recognition.pdf}
-}
-
 @article{linnainmaaTaylorExpansionAccumulated1976,
   title = {Taylor Expansion of the Accumulated Rounding Error},
   author = {Linnainmaa, Seppo},
@@ -2877,7 +2842,7 @@
   urldate = {2023-03-07},
   abstract = {Gesture recognition is one of the important ways of human-computer interaction, which is mainly detected by visual technology. The temporal and spatial features are extracted by convolution of the video containing gesture. However, compared with the convolution calculation of a single image, multiframe image of dynamic gestures has more computation, more complex feature extraction, and more network parameters, which affects the recognition efficiency and real-time performance of the model. To solve above problems, a dynamic gesture recognition model based on CBAM-C3D is proposed. Key frame extraction technology, multimodal joint training, and network optimization with BN layer are used for making the network performance better. The experiments show that the recognition accuracy of the proposed 3D convolutional neural network combined with attention mechanism reaches 72.4\% on EgoGesture dataset, which is improved greatly compared with the current main dynamic gesture recognition methods, and the effectiveness of the proposed algorithm is verified.},
   langid = {english},
-  keywords = {model:cnn,tech:rgb},
+  keywords = {based-on-vision,model:cnn,tech:rgb},
   annotation = {40 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/ELPL8EWG/Liu et al. - 2021 - Dynamic Gesture Recognition Algorithm Based on 3D .pdf}
 }
@@ -3083,7 +3048,7 @@
   url = {https://beei.org/index.php/EEI/article/view/2926},
   urldate = {2023-07-11},
   abstract = {Recently, the recognition of human hand gestures is becoming a valuable technology for various applications like sign language recognition, virtual games and robotics control, video surveillance, and home automation. Owing to the recent development of deep learning and its excellent performance, deep learning-based hand gesture recognition systems can provide promising results. However, accurate recognition of hand gestures remains a substantial challenge that faces most of the recently existing recognition systems. In this paper, convolutional neural networks (CNN) framework with multiple layers for accurate, effective, and less complex human hand gesture recognition has been proposed. Since the images of the infrared hand gestures can provide accurate gesture information through the low illumination environment, the proposed system is tested and evaluated on a database of hand-based near-infrared which including ten gesture poses. Extensive experiments prove that the proposed system provides excellent results of accuracy, precision, sensitivity (recall), and F1-score. Furthermore, a comparison with recently existing systems is reported.},
-  keywords = {classes:10,model:cnn,tech:infrared,tech:rgb,tech:rgbd},
+  keywords = {based-on-vision,classes:10,model:cnn,tech:infrared,tech:rgb,tech:rgbd},
   annotation = {5 citations (Semantic Scholar/DOI) [2023-07-11]},
   file = {/Users/brk/Zotero/storage/NDPUWIZE/Mahmoud et al. - 2021 - Convolutional neural networks framework for human .pdf}
 }
@@ -3102,7 +3067,7 @@
   urldate = {2023-03-07},
   abstract = {This paper evaluates the possibility of performing fine gesture recognition including finger movements on a low-tech device. In particular, we present a solution with a recognition model that is small enough to fit in the memory of a low- tech device and describe related difficulties associated with this approach. Several different Machine Learning techniques are employed and their individual advantages and drawbacks are explored for the task at hand. Our results indicate an average of 95\% accuracy during real-time testing for an eight class decoding task with a custom Recurrent Neural Network approach, that runs on the low-tech device, namely an Arduino Nano 33 BLE. The novelty and strength of this research lies in the fact that we are able to recognize fine hand gestures including finger movements rather than recognizing only coarse hand gestures. The recognition process is conducted on the low-tech device and as a result this solution has all advantages that are typically associated with embedded systems, namely cost-efficiency, battery life efficiency, and a high degree of independence from other devices as well as compatibility with them.},
   isbn = {9781728185262},
-  keywords = {arduino-nano-ble,classes:{$<$}10,model:rnn,read-priority-1,tech:accelerometer},
+  keywords = {arduino-nano-ble,based-on-gloves,classes:{$<$}10,model:rnn,read-priority-1,tech:accelerometer},
   annotation = {3 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -3336,7 +3301,7 @@
   url = {https://www.semanticscholar.org/paper/Survey-on-Multiclass-Classification-Methods-Mehra-Gupta/f0fcf860031b356a3c68b330735634c00e5d7602},
   urldate = {2023-07-11},
   abstract = {Supervised learning is based on the target value or the desired outputs. Various successful techniques have been proposed to solve the problem in the binary classification case. The multiclass classification case is more delicate one. In this short survey we investigate the various techniques for solving the multiclass classification problem. Various authors and research modified the multiclass classification approach such as one against one, one against all and Directed Acyclic Graph (DAG) which creates many binary classifiers and combines their results to determine the class label of a test pixel. They also describe the various extensible methods that are extended from binary class to solve the multiclass problem and also explain the method in which the classes are arranged into a tree.},
-  keywords = {classification,multiclass},
+  keywords = {background,classification,multiclass},
   file = {/Users/brk/Zotero/storage/FPR3M2AA/Mehra and Gupta - 2013 - Survey on Multiclass Classification Methods.pdf}
 }
 
@@ -3355,7 +3320,7 @@
   urldate = {2023-07-02},
   abstract = {Automatic sign language recognition is a challenging task in machine learning and computer vision. Most works have focused on recognizing sign language using hand gestures only. However, body motion and facial gestures play an essential role in sign language interaction. Taking this into account, we introduce an automatic sign language recognition system based on multiple gestures, including hands, body, and face. We used a depth camera (OAK-D) to obtain the 3D coordinates of the motions and recurrent neural networks for classification. We compare multiple model architectures based on recurrent networks such as Long Short-Term Memories (LSTM) and Gated Recurrent Units (GRU) and develop a noise-robust approach. For this work, we collected a dataset of 3000 samples from 30 different signs of the Mexican Sign Language (MSL) containing features coordinates from the face, body, and hands in 3D spatial coordinates. After extensive evaluation and ablation studies, our best model obtained an accuracy of 97\% on clean test data and 90\% on highly noisy data.},
   langid = {english},
-  keywords = {app:mexican-sl,app:sign-language,classes:30-50,model:gru,model:lstm},
+  keywords = {app:mexican-sl,app:sign-language,based-on-vision,classes:30-50,model:gru,model:lstm},
   annotation = {5 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/BVMX8PCK/Mejía-Peréz et al. - 2022 - Automatic Recognition of Mexican Sign Language Usi.pdf}
 }
@@ -3547,7 +3512,7 @@
   urldate = {2023-03-07},
   abstract = {Wearable devices that monitor muscle activity based on surface electromyography could be of use in the development of hand gesture recognition applications. Such devices typically use machine-learning models, either locally or externally, for gesture classification. However, most devices with local processing cannot offer training and updating of the machine-learning model during use, resulting in suboptimal performance under practical conditions. Here we report a wearable surface electromyography biosensing system that is based on a screen-printed, conformal electrode array and has in-sensor adaptive learning capabilities. Our system implements a neuro-inspired hyperdimensional computing algorithm locally for real-time gesture classification, as well as model training and updating under variable conditions such as different arm positions and sensor replacement. The system can classify 13 hand gestures with 97.12\% accuracy for two participants when training with a single trial per gesture. A high accuracy (92.87\%) is preserved on expanding to 21 gestures, and accuracy is recovered by 9.5\% by implementing model updates in response to varying conditions, without additional computation on an external device. A surface electromyography biosensing system that is based on a screen-printed, conformal electrode array and has in-sensor adaptive learning capabilities can classify human gestures in real time and with high accuracy.},
   langid = {english},
-  keywords = {classes:10-29,tech:emg},
+  keywords = {based-on-gloves,classes:10-29,tech:emg},
   annotation = {222 citations (Crossref) [2023-07-02] 0 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/NMEFHCRT/Moin et al. - 2020 - A wearable biosensing system with in-sensor adapti.pdf}
 }
@@ -3586,7 +3551,7 @@
   urldate = {2023-03-07},
   abstract = {Using gestures can help people with certain disabilities in communicating with other people. This paper proposes a lightweight model based on YOLO (You Only Look Once) v3 and DarkNet-53 convolutional neural networks for gesture recognition without additional preprocessing, image filtering, and enhancement of images. The proposed model achieved high accuracy even in a complex environment, and it successfully detected gestures even in low-resolution picture mode. The proposed model was evaluated on a labeled dataset of hand gestures in both Pascal VOC and YOLO format. We achieved better results by extracting features from the hand and recognized hand gestures of our proposed YOLOv3 based model with accuracy, precision, recall, and an F-1 score of 97.68, 94.88, 98.66, and 96.70\%, respectively. Further, we compared our model with Single Shot Detector (SSD) and Visual Geometry Group (VGG16), which achieved an accuracy between 82 and 85\%. The trained model can be used for real-time detection, both for static hand images and dynamic gestures recorded on a video.},
   langid = {english},
-  keywords = {model:cnn,movement:dynamic,movement:static,tech:rgb},
+  keywords = {based-on-vision,model:cnn,movement:dynamic,movement:static,tech:rgb},
   annotation = {85 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/VWFYIVN9/Mujahid et al. - 2021 - Real-Time Hand Gesture Recognition Based on Deep L.pdf}
 }
@@ -3717,7 +3682,7 @@
   abstract = {The South African Sign Language research group at the University of the Western Cape has created several systems to recognize Sign Language gestures using single parameters. Research has shown that five parameters are required to recognize any sign language gesture: hand shape, location, orientation and motion, as well as facial expressions. Using a single parameter can cause conflicts in recognition of signs that are similarly signed. This paper pioneers research at the group towards combining multiple parameters to better distinguish between similar signs. This eventually aims to enable the recognition of a large SASL vocabulary. The proposed methodology combines hand location and hand shape recognition into one combined recognition system. The recognition approach is applied to 12 SASL signs that consist of six pairs of signs with the same hand shape performed at two different locations. It is shown that the approach is able to achieve a high average recognition accuracy of 79\% across all signs and distinguish between the signs effectively. It is also shown to be robust to variations in test subjects.},
   isbn = {978-1-4503-2112-9},
   langid = {english},
-  keywords = {app:sign-language,app:south-african-sl},
+  keywords = {app:sign-language,app:south-african-sl,based-on-vision},
   annotation = {7 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/R5QLW7FJ/Nel et al. - 2013 - An integrated sign language recognition system.pdf}
 }
@@ -3830,7 +3795,7 @@
   abstract = {Hand gestures are a form of nonverbal communication that can be used in several fields such as communication between deaf-mute people, robot control, human\textendash computer interaction (HCI), home automation and medical applications. Research papers based on hand gestures have adopted many different techniques, including those based on instrumented sensor technology and computer vision. In other words, the hand sign can be classified under many headings, such as posture and gesture, as well as dynamic and static, or a hybrid of the two. This paper focuses on a review of the literature on hand gesture techniques and introduces their merits and limitations under different circumstances. In addition, it tabulates the performance of these methods, focusing on computer vision techniques that deal with the similarity and difference points, technique of hand segmentation used, classification algorithms and drawbacks, number and types of gestures, dataset used, detection range (distance) and type of camera used. This paper is a thorough general overview of hand gesture methods with a brief discussion of some possible applications.},
   copyright = {http://creativecommons.org/licenses/by/3.0/},
   langid = {english},
-  keywords = {tech:rgb,type:survey},
+  keywords = {based-on-vision,tech:rgb,type:survey},
   annotation = {178 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/WREJRICA/Oudah et al. - 2020 - Hand Gesture Recognition Based on Computer Vision.pdf}
 }
@@ -3960,7 +3925,7 @@
   urldate = {2023-03-07},
   abstract = {Due to the communication abilities impairment, deaf \& dumb peoples are more or less isolated from mainstream societal activities. NGOs, social workers \& Governments in India are putting efforts with multiple initiatives to increase the involvement of these peoples in the mainstream activities happening in the rest of world. This paper proposes to establish an alternative method to streamline the communications among normal \& speech impaired persons by using smart hand glove system equipped with 3D accelerometer modules at the fingertips. The proposed system is delivering the measurement results in very proficient way. The experiments were carried out over 15 persons using the sign gestures, providing good co-relation between the Posed gestures versus system mapped gestures.},
   isbn = {9781665487719},
-  keywords = {app:marathi-sl,app:sign-language,tech:accelerometer},
+  keywords = {app:marathi-sl,app:sign-language,based-on-gloves,tech:accelerometer},
   annotation = {0 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -4026,7 +3991,7 @@
   urldate = {2023-07-11},
   abstract = {Nowadays, hand gestures are becoming one of the most natural and intuitive ways of communication between human and computer. To this end, a complex process including hand gesture acquisition, hand detection, gesture representation and recognition must be carried out. This paper presents a method that detects hand and segments hand regions from images captured by a Kinect sensor. As Kinect sensor provides not only RGB images as conventional camera, but also depth and skeleton, in our work, we incorporate multi-modal data from Kinect to deal with hand detection and segmentation. Specifically, we use skeleton to approximately determine hand palm. Then a skin based detector will be applied to discard non-skin pixels from the region of interest. Using depth data helps to limit the human body regions and remove false positive regions from the previous steps. Finally, morphological operations will be applied to fill holes in the hand region. The main advantage of this method is very easy to implement and it performs in real-time on an ordinary computer. We evaluate the proposed method on a dataset of hand gestures captured from different viewpoints. Experiment shows that it provides reasonable accuracy at very high frame rate. It also produces comparable performance in comparison with deep learning based methods.},
   isbn = {9781728165554},
-  keywords = {hardware:kinect,read-priority-9,tech:rgbd},
+  keywords = {based-on-vision,hardware:kinect,read-priority-9,tech:rgbd},
   annotation = {2 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 
@@ -4112,7 +4077,7 @@
   urldate = {2023-03-07},
   abstract = {Semantic Scholar extracted view of "Smart, comfortable wearable system for recognizing Arabic Sign Language in real-time using IMUs and features-based fusion" by Aziz Qaroush et al.},
   langid = {english},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-gloves,tech:imu},
   annotation = {2 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -4170,7 +4135,7 @@
   url = {https://ieeexplore.ieee.org/document/9457168/},
   urldate = {2023-03-07},
   abstract = {Touch-free guided hand gesture recognition for human-robot interactions plays an increasingly significant role in teleoperated surgical robot systems. Indeed, despite depth cameras provide more practical information for recognition accuracy enhancement, the instability and computational burden of depth data represent a tricky problem. In this letter, we propose a novel multi-sensor guided hand gesture recognition system for surgical robot teleoperation. A multi-sensor data fusion model is designed for performing interference in the presence of occlusions. A multilayer Recurrent Neural Network (RNN) consisting of a Long Short-Term Memory (LSTM) module and a dropout layer (LSTM-RNN) is proposed for multiple hand gestures classification. Detected hand gestures are used to perform a set of human-robot collaboration tasks on a surgical robot platform. Classification performance and prediction time is compared among the LSTM-RNN model and several traditional Machine Learning (ML) algorithms, such as k-Nearest Neighbor (k-NN) and Support Vector Machines (SVM). Results show that the proposed LSTM-RNN classifier is able to achieve a higher recognition rate and faster inference speed. In addition, the present adaptive data fusion system shows a strong anti-interference capability for hand gesture recognition in real-time.},
-  keywords = {app:robot-control,app:surgery,model:knn,model:lstm,model:rnn,model:svm},
+  keywords = {app:robot-control,app:surgery,based-on-vision,model:knn,model:lstm,model:rnn,model:svm},
   annotation = {62 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/8MHHF5ZG/Qi et al. - 2021 - Multi-Sensor Guided Hand Gesture Recognition for a.pdf}
 }
@@ -4236,7 +4201,7 @@
   urldate = {2023-06-26},
   abstract = {Semantic Scholar extracted view of "Wearable technologies for hand joints monitoring for rehabilitation: A survey" by Adnan Rashid et al.},
   langid = {english},
-  keywords = {type:survey},
+  keywords = {app:medical,based-on-gloves,type:survey},
   annotation = {58 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -4256,7 +4221,7 @@
   urldate = {2023-06-26},
   abstract = {As computers become more pervasive in society, facilitating natural human\textendash computer interaction (HCI) will have a positive impact on their use. Hence, there has been growing interest in the development of new approaches and technologies for bridging the human\textendash computer barrier. The ultimate aim is to bring HCI to a regime where interactions with computers will be as natural as an interaction between humans, and to this end, incorporating gestures in HCI is an important research area. Gestures have long been considered as an interaction technique that can potentially deliver more natural, creative and intuitive methods for communicating with our computers. This paper provides an analysis of comparative surveys done in this area. The use of hand gestures as a natural interface serves as a motivating force for research in gesture taxonomies, its representations and recognition techniques, software platforms and frameworks which is discussed briefly in this paper. It focuses on the three main phases of hand gesture recognition i.e. detection, tracking and recognition. Different application which employs hand gestures for efficient interaction has been discussed under core and advanced application domains. This paper also provides an analysis of existing literature related to gesture recognition systems for human computer interaction by categorizing it under different key parameters. It further discusses the advances that are needed to further improvise the present hand gesture recognition systems for future perspective that can be widely used for efficient human computer interaction. The main goal of this survey is to provide researchers in the field of gesture based HCI with a summary of progress achieved to date and to help identify areas where further research is needed.},
   langid = {english},
-  keywords = {have-read,type:survey},
+  keywords = {based-on-vision,have-read,type:survey},
   annotation = {1303 Citations},
   file = {/Users/brk/Zotero/storage/78UXQTNQ/Rautaray and Agrawal - 2015 - Vision based hand gesture recognition for human co.pdf}
 }
@@ -4371,6 +4336,23 @@
   annotation = {20 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 
+@inproceedings{riveraRecognitionHumanHand2017,
+  title = {Recognition of {{Human Hand Activities Based}} on a {{Single Wrist IMU Using Recurrent Neural Networks}}},
+  booktitle = {International {{Journal}} of {{Pharma Medicine}} and {{Biological Sciences}}},
+  author = {Rivera, Patricio and Valarezo, Edwin and Choi, Mun-Taek and Kim, Tae-Seong},
+  year = {2017},
+  volume = {6},
+  pages = {114--118},
+  issn = {22785221},
+  doi = {10.18178/ijpmbs.6.4.114-118},
+  url = {http://www.ijpmbs.com/uploadfile/2017/1227/20171227050020234.pdf},
+  urldate = {2023-07-11},
+  abstract = {Recognition of hand activities could provide new information towards daily human activity logging and gesture interface applications. However, there is a technical challenge due to delicate hand motions and complex movement contexts. In this work, we proposed hand activity recognition (HAR) based on a single inertial measurement unit (IMU) sensor at one wrist via deep learning recurrent neural network. The proposed HAR works directly with signals from a tri-axial accelerometer, gyroscope, and magnetometer sensors within one IMU. We evaluated the performance of our HAR with a public human hand activity database for six hand activities including Open Door, Close Door, Open Fridge, Close Fridge, Clean Table and Drink from Cup. Our results show an overall recognition accuracy of 80.09\% with discrete standard epochs and 74.92\% with noise-added epochs. With continuous time series epochs, the accuracy of 71.75\% was obtained. },
+  keywords = {based-on-gloves,classes:6,model:rnn,tech:imu},
+  annotation = {19 citations (Semantic Scholar/DOI) [2023-07-11]},
+  file = {/Users/brk/Zotero/storage/38I9KL9J/Dept. of Biomedical Engineering, Kyung Hee University, Republic of Korea et al. - 2017 - Recognition of Human Hand Activities Based on a Si.pdf}
+}
+
 @article{rollEffectivenessOccupationalTherapy2016,
   title = {Effectiveness of {{Occupational Therapy Interventions}} for {{Adults With Musculoskeletal Conditions}} of the {{Forearm}}, {{Wrist}}, and {{Hand}}: {{A Systematic Review}}},
   author = {Roll, Shawn C. and Hardison, Mark E.},
@@ -4440,7 +4422,7 @@
   urldate = {2023-07-02},
   abstract = {Motion recognition is a topic in software engineering and dialect innovation with a goal of interpreting human signals through mathematical algorithm. Hand gesture is a strategy for nonverbal communication for individuals as it expresses more liberally than body parts. Hand gesture acknowledgment has more prominent significance in planning a proficient human computer interaction framework, utilizing signals as a characteristic interface favorable to circumstance of movements. Regardless, the distinguishing proof and acknowledgment of posture, gait, proxemics and human behaviors is furthermore the subject of motion to appreciate human nonverbal communication, thus building a richer bridge between machines and humans than primitive text user interfaces or even graphical user interfaces, which still limits the majority of input to electronics gadget. In this paper, a study on various motion recognition methodologies is given specific accentuation on available motions. A survey on hand posture and gesture is clarified with a detailed comparative analysis of hidden Markov model approach with other classifier techniques. Difficulties and future investigation bearing are also examined.},
   langid = {english},
-  keywords = {app:vr,model:hmm,type:survey},
+  keywords = {app:vr,based-on-vision,model:hmm,type:survey},
   annotation = {9 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -4459,7 +4441,7 @@
   urldate = {2023-07-11},
   abstract = {Hand gesture recognition is one of the most effective modes of interaction between humans and computers due to being highly flexible and user-friendly. A real-time hand gesture recognition system should aim to develop a user-independent interface with high recognition performance. Nowadays, convolutional neural networks (CNNs) show high recognition rates in image classification problems. Due to the unavailability of large labeled image samples in static hand gesture images, it is a challenging task to train deep CNN networks such as AlexNet, VGG-16 and ResNet from scratch. Therefore, inspired by CNN performance, an end-to-end fine-tuning method of a pre-trained CNN model with score-level fusion technique is proposed here to recognize hand gestures in a dataset with a low number of gesture images. The effectiveness of the proposed technique is evaluated using leave-one-subject-out cross-validation (LOO CV) and regular CV tests on two benchmark datasets. A real-time American sign language (ASL) recognition system is developed and tested using the proposed technique.},
   langid = {english},
-  keywords = {app:american-sl,app:sign-language,model:cnn},
+  keywords = {app:american-sl,app:sign-language,based-on-vision,model:cnn},
   annotation = {28 citations (Semantic Scholar/DOI) [2023-07-11]},
   file = {/Users/brk/Zotero/storage/CUKP99QW/Sahoo et al. - 2022 - Real-Time Hand Gesture Recognition Using Fine-Tune.pdf}
 }
@@ -4606,7 +4588,7 @@
   urldate = {2023-06-22},
   abstract = {The communication between a person from the impaired community with a person who does not understand sign language could be a tedious task. Sign language is the art of conveying messages using hand gestures. Recognition of dynamic hand gestures in American Sign Language (ASL) became a very important challenge that is still unresolved. In order to resolve the challenges of dynamic ASL recognition, a more advanced successor of the Convolutional Neural Networks (CNNs) called 3-D CNNs is employed, which can recognize the patterns in volumetric data like videos. The CNN is trained for classification of 100 words on Boston ASL (Lexicon Video Dataset) LVD dataset with more than 3300 English words signed by 6 different signers. 70\% of the dataset is used for Training while the remaining 30\% dataset is used for testing the model. The proposed work outperforms the existing state-of-art models in terms of precision (3.7\%), recall (4.3\%), and f-measure (3.9\%). The computing time (0.19 seconds per frame) of the proposed work shows that the proposal may be used in real-time applications.},
   langid = {english},
-  keywords = {app:sign-language},
+  keywords = {app:sign-language,based-on-vision},
   annotation = {44 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -4618,7 +4600,7 @@
   url = {https://www.semanticscholar.org/paper/Gesture-Recognition-%3A-A-Survey-of-Gesture-using-Sharma-Chawla/70c11356829e83ba2976af1e6a6e69785d0d56ca},
   urldate = {2023-07-02},
   abstract = {Understanding human motions can be posed as a pattern recognition problem. In order to convey visual messages to a receiver, a human expresses motion patterns. Loosely called gestures, these patterns are variable but distinct and have an associated meaning. The Pattern recognition by any computer or machine can be implemented via various methods such as Hidden Harkov Models, Linear Programming and Neural Networks. Each method has its own advantages and disadvantages, which will be studied separately later on. This paper reviews why using ANNs in particular is better suited for analyzing human},
-  keywords = {model:nn,type:survey},
+  keywords = {based-on-vision,model:nn,type:survey},
   file = {/Users/brk/Zotero/storage/2GC2XFLL/Sharma and Chawla - 2013 - Gesture Recognition  A Survey of Gesture Recognit.pdf}
 }
 
@@ -5000,7 +4982,7 @@
   urldate = {2023-06-22},
   abstract = {: Recognition of dynamic hand gestures in real-time is a difficult task because the system can never know when or from where the gesture starts and ends in a video stream. Many researchers have been working on vision-based gesture recognition due to its various applications. This paper proposes a deep learning architecture based on the combination of a 3D Convolutional Neural Network (3D-CNN) and a Long Short-Term Memory (LSTM) network. The proposed architecture extracts spatial-temporal information from video sequences input while avoiding extensive computation. The 3D-CNN is used for the extraction of spectral and spatial features which are then given to the LSTM network through which classification is carried out. The proposed model is a light-weight architecture with only 3.7 million training parameters. The model has been evaluated on 15 classes from the 20BN-jester dataset available publicly. The model was trained on 2000 video-clips per class which were separated into 80\% training and 20\% validation sets. An accuracy of 99\% and 97\% was achieved on training and testing data, respectively. We further show that the combination of 3D-CNN with LSTM gives superior results as compared to MobileNetv2 + LSTM.},
   langid = {english},
-  keywords = {dataset:20bn-jester,model:cnn,model:lstm,movement:dynamic,tech:rgb},
+  keywords = {based-on-vision,dataset:20bn-jester,model:cnn,model:lstm,movement:dynamic,tech:rgb},
   annotation = {14 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/7NE5RC22/Ur Rehman et al. - 2022 - Dynamic Hand Gesture Recognition Using 3D-CNN and .pdf}
 }
@@ -5047,7 +5029,7 @@
   urldate = {2023-03-07},
   abstract = {Hand gesture recognition systems (HGR) based on electromyography signals (EMGs) and inertial measurement unit signals (IMUs) have been studied for different applications in recent years. Most commonly, cutting-edge HGR methods are based on supervised machine learning methods. However, the potential benefits of reinforcement learning (RL) techniques have shown that these techniques could be a viable option for classifying EMGs. Methods based on RL have several advantages such as promising classification performance and online learning from experience. In this work, we developed an HGR system made up of the following stages: pre-processing, feature extraction, classification, and post-processing. For the classification stage, we built an RL-based agent capable of learning to classify and recognize eleven hand gestures\textemdash five static and six dynamic\textemdash using a deep Q-network (DQN) algorithm based on EMG and IMU information. The proposed system uses a feed-forward artificial neural network (ANN) for the representation of the agent policy. We carried out the same experiments with two different types of sensors to compare their performance, which are the Myo armband sensor and the G-force sensor. We performed experiments using training, validation, and test set distributions, and the results were evaluated for user-specific HGR models. The final accuracy results demonstrated that the best model was able to reach up to 97.50\%{$\pm$}1.13\% and 88.15\%{$\pm$}2.84\% for the classification and recognition, respectively, with regard to static gestures, and 98.95\%{$\pm$}0.62\% and 90.47\%{$\pm$}4.57\% for the classification and recognition, respectively, with regard to dynamic gestures with the Myo armband sensor. The results obtained in this work demonstrated that RL methods such as the DQN are capable of learning a policy from online experience to classify and recognize static and dynamic gestures using EMG and IMU signals.},
   langid = {english},
-  keywords = {tech:emg},
+  keywords = {based-on-gloves,tech:emg},
   annotation = {1 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/AJ2WMLPJ/Vásconez et al. - 2022 - Hand Gesture Recognition Using EMG-IMU Signals and.pdf}
 }
@@ -5508,7 +5490,7 @@
   urldate = {2023-03-07},
   abstract = {The rapid progress of Internet of things (IoT) technology raises an imperative demand on human machine interfaces (HMIs) which provide a critical linkage between human and machines. Using a glove as an intuitive and low-cost HMI can expediently track the motions of human fingers, resulting in a straightforward communication media of human\textendash machine interactions. When combining several triboelectric textile sensors and proper machine learning technique, it has great potential to realize complex gesture recognition with the minimalist-designed glove for the comprehensive control in both real and virtual space. However, humidity or sweat may negatively affect the triboelectric output as well as the textile itself. Hence, in this work, a facile carbon nanotubes/thermoplastic elastomer (CNTs/TPE) coating approach is investigated in detail to achieve superhydrophobicity of the triboelectric textile for performance improvement. With great energy harvesting and human motion sensing capabilities, the glove using the superhydrophobic textile realizes a low-cost and self-powered interface for gesture recognition. By leveraging machine learning technology, various gesture recognition tasks are done in real time by using gestures to achieve highly accurate virtual reality/augmented reality (VR/AR) controls including gun shooting, baseball pitching, and flower arrangement, with minimized effect from sweat during operation.},
   langid = {english},
-  keywords = {classes:{$<$}10,classes:9,model:cnn,tech:flex},
+  keywords = {based-on-gloves,classes:{$<$}10,classes:9,model:cnn,tech:flex},
   annotation = {189 citations (Semantic Scholar/DOI) [2023-07-02]},
   file = {/Users/brk/Zotero/storage/ETVGGB62/Wen et al. - 2020 - Machine Learning Glove Using Self‐Powered Conducti.pdf}
 }
@@ -5528,7 +5510,7 @@
   urldate = {2023-07-12},
   abstract = {The human hand is a complex biological system able to perform numerous tasks with impressive accuracy and dexterity. Gestures furthermore play an important role in our daily interactions, and humans are particularly skilled at perceiving and interpreting detailed signals in communications. Creating believable hand motions for virtual characters is an important and challenging task. Many new methods have been proposed in the Computer Graphics community within the last years, and significant progress has been made towards creating convincing, detailed hand and finger motions. This state of the art report presents a review of the research in the area of hand and finger modeling and animation. Starting with the biological structure of the hand and its implications for how the hand moves, we discuss current methods in motion capturing hands, data-driven and physics-based algorithms to synthesize their motions, and techniques to make the appearance of the hand model surface more realistic. We then focus on areas in which detailed hand motions are crucial such as manipulation and communication. Our report concludes by describing emerging trends and applications for virtual hand animation.},
   langid = {english},
-  keywords = {hand-modelling},
+  keywords = {background,hand-modelling},
   annotation = {71 citations (Semantic Scholar/DOI) [2023-07-12]},
   file = {/Users/brk/Zotero/storage/B7NNE55B/Wheatland et al. - 2015 - State of the Art in Hand and Finger Modeling and A.pdf}
 }
@@ -5618,7 +5600,7 @@
   url = {https://ieeexplore.ieee.org/document/9314169/},
   urldate = {2023-03-07},
   abstract = {Gesture recognition technology enables machines to understand human gestures. The technology is considered as a key enabler for gaming and virtual reality applications. In this paper, we propose an effective, low-cost capacitive sensor device to recognize hand gestures. In particular, we designed a prototype of a wearable capacitive sensor unit to capture the capacitance values from the electrodes placed on finger phalanges. The sensor captures finger capacitance values. Each gesture has specific finger capacitance values. We applied a running median filter to the output of the sensor and extracted 15 features for gesture classification training and testing tasks. Subsequently, various analyses were performed to provide more insights into the sensing data. We applied and compared two machine learning algorithms: Error Correction Output Code Support Vector Machines (ECOC-SVM) and \$\{K\}\$ -Nearest Neighbour (KNN) classifiers. The training and testing recognition rates were observed for both intra-participant and inter-participant data sets. Further, we introduced a feature compression approach derived from correlation analysis to reduce the complexity of the machine learning algorithms. Using cross validation, we achieved a classification rate of approximately 99\% for intra-participant data. We achieved a lower recognition rate of 97\% (average cross validation testing) for compressed feature data set using both machine learning approaches. For the inter-participant data, the recognition rate was 99\% (normalized feature data) using KNN and 97\% using ECOC-SVM. The research findings show that our recognition system is competitive and has an immense potential for further study.},
-  keywords = {model:knn,model:svm,tech:capacitive},
+  keywords = {based-on-gloves,model:knn,model:svm,tech:capacitive},
   annotation = {35 citations (Semantic Scholar/DOI) [2023-07-02]}
 }
 
@@ -5926,7 +5908,7 @@
   url = {https://ieeexplore.ieee.org/document/9158332/},
   urldate = {2023-07-11},
   abstract = {Hand gesture recognition is an important way for human machine interaction, and it is widely used in many areas, such as health care, smart home, virtual reality as well as other areas. While many valuable efforts have been made, it still lacks efficient ways to capture fine grain hand gesture as well as track data of long distance dependency in complex gesture. In this paper, we firstly design a novel data glove with two arm rings and a specially integrated three-dimensional flex sensor to capture fine grain motion from full arm and all knuckles. Secondly, an improved deep feature fusion network is proposed to detect long distance dependency in complex hand gestures. In order to track detailed motion features, a convolutional neural network based feature fusion strategy is given to fuse data from multi-sensors by extracting both shallow and deep features. Moreover, a residual module is introduced to avoid over fitting and gradient vanishing during deepening the neural network. Thirdly, a long short term memory (LSTM) model with fused feature vector as input is introduced to classify complex hand motions into corresponding categories. Results of comprehensive experiments demonstrate that our work performs better than related algorithms, especially in America sign language (with the precise of 99.93\%) and Chinese sign language (with the precise of 96.1\%).},
-  keywords = {app:american-sl,app:chinese-sl,app:sign-language,model:cnn,model:lstm,model:nn,tech:flex},
+  keywords = {app:american-sl,app:chinese-sl,app:sign-language,based-on-gloves,model:cnn,model:lstm,model:nn,tech:flex},
   annotation = {32 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 
@@ -6074,7 +6056,7 @@
   urldate = {2023-07-11},
   abstract = {Dynamic gesture recognition, which plays an essential role in human-computer interaction, has been widely investigated but not yet fully addressed. The challenge mainly lies in three folders: 1) to model both of the spatial appearance and the temporal evolution simultaneously; 2) to address the interference from the varied and complex background; 3) the requirement of real-time processing. In this paper, we address the above challenges by proposing a novel deep deformable 3D convolutional neural network for end-to-end learning, which not only gains impressive accuracy in challenging datasets but also can meet the requirement of the real-time processing. We propose three types of very deep 3D CNNs for gesture recognition, which can directly model the spatiotemporal information with their inherent hierarchical structure. To eliminate the background interference, a light-weight spatiotemporal deformable convolutional module is specially designed to augment the spatiotemporal sampling locations of the 3D convolution by learning additional offsets according to the preceding feature map. It can not only diversify the shape of the convolution kernel to better fit the appearance of the hands and arms, but also help the models pay more attention to the discriminative frames in the video sequence. The proposed method is evaluated on three challenging datasets, EgoGesture, Jester and Chalearn-IsoGD, and achieves the state-of-the-art performance on all of them. Our model ranked first on Jester's official leader-board until the submission time. The code and the trained models are released for better communication and future works.},
   langid = {english},
-  keywords = {dataset:chalearn-isogd,dataset:egogesture,dataset:jester,model:cnn,movement:dynamic},
+  keywords = {based-on-vision,dataset:chalearn-isogd,dataset:egogesture,dataset:jester,model:cnn,movement:dynamic},
   annotation = {23 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 
@@ -6152,7 +6134,7 @@
   urldate = {2023-07-11},
   abstract = {Hand gesture recognition can be exploited to benefit ubiquitous applications using sensors. Currently, the inherent complexity of human physical activities makes it difficult to accurately recognize gestures with wearable sensors, especially in real time. To this end, a real-time hand gesture recognition system is presented in this paper. In particular, sliding window technology and y-axis threshold are used to detect intended gestures from a continuous data stream and then the segmented data are classified by applying a stacked Long Short-Term Memory (LSTM) model. After noise is removed, six-axis sensor data from wrist-worn devices are fed into the model without requiring feature engineering. We use twelve common hand gestures to evaluate the performance of our model. The experimental results demonstrate the feasibility of our proposed system with an accuracy of 99.8\% on average. Our approach allows for an accurate and nonindividual hand gesture recognition. It holds potential to be integrated into a smart watch or other wearable devices for intuitive human computer interaction.},
   isbn = {9781665442077},
-  keywords = {classes:12,model:lstm,tech:accelerometer},
+  keywords = {based-on-gloves,classes:12,model:lstm,tech:accelerometer},
   annotation = {1 citations (Semantic Scholar/DOI) [2023-07-11]}
 }
 

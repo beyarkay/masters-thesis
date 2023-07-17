@@ -434,31 +434,96 @@ outperforms HMMs trained on either the EMG or acceleration data
 
 ### 2010s
 
+#### 2010
+
+@aklAccelerometerbasedGestureRecognition2010
+@bevilacquaContinuousRealtimeGesture2010
+@harshithSurveyVariousGesture2010
+@netoHighLevelProgramming2010
+
 #### 2011
 
-#### 2012
+@aklNovelAccelerometerBasedGesture2011
+@cooperSignLanguageRecognition2011
+@xuzhangFrameworkHandGesture2011
 
 #### 2013
 
+@chenSurveyHandGesture2013
+@mohandesRecognitionTwoHandedArabic2013
+@premaratneAustralianSignLanguage2013
+@raysarkarHandGestureRecognition2013
+@sethujanakiRealTimeRecognition2013
+@songAntLearningAlgorithm2013
+@wangUserindependentAccelerometerbasedGesture2013
+
 #### 2014
+
+@ammaAirwritingWearableHandwriting2014
+@hamdyaliComparativeStudyUser2014
+@whiteheadAbstractHiddenMarkov2014
+@xieAccelerometerGestureRecognition2014
 
 #### 2015
 
+@marasovicMotionBasedGestureRecognition2015
+@xuFingerwritingSmartwatchCase2015
+
 #### 2016
+
+@galkaInertialMotionSensing2016
+@jiangDevelopmentRealtimeHand2016
+@patilHandwritingRecognitionFree2016
+@wuWearableSystemRecognizing2016
 
 #### 2017
 
+@maHandGestureRecognition2017
+@mardiyantoDevelopmentHandGesture2017
+@riveraRecognitionHumanHand2017
+
 #### 2018
+
+@kunduHandGestureRecognition2018
+@leeSmartWearableHand2018
+@liHandGestureRecognition2018
+@mummadiRealTimeEmbeddedDetection2018
 
 #### 2019
 
+@anwarHandGestureRecognition2019
+@fatmiComparingANNSVM2019
+@kochRecurrentNeuralNetwork2019
+@rashidWearableTechnologiesHand2019
+@zhangRealTimeSurfaceEMG2019
+
 ### 2020s
+
+@chenSurveyHandPose2020
+@leeDeepLearningBased2020
+@makaussovLowCostIMUBasedRealTime2020
+@moinWearableBiosensingSystem2020
+@wenMachineLearningGlove2020
+@yuanHandGestureRecognition2020
 
 #### 2021
 
+@ahmedRealtimeSignLanguage2021
+@chuSensorBasedHandGesture2021
+@kudrinkoWearableSensorBasedSign2021
+@qaroushSmartComfortableWearable2021
+@wongMultiFeaturesCapacitiveHand2021
+@zhangStackedLSTMBasedDynamic2021
+
 #### 2022
 
+@collialfaroUserIndependentHandGesture2022
+@patilMarathiSignLanguage2022
+@vasconezHandGestureRecognition2022
+
 #### 2023
+
+@alzubaidiNovelAssistiveGlove2023
 
 ## Vision-based systems
 
