@@ -123,12 +123,13 @@ reports the price of the PowerGlove as US$20 in 1993.
 
 ![Powerglove, @abramsgentileentertainmentPowerGlove1989](src/imgs/03_abrams_gentile_entertainment_powerglove_1989.jpg)
 
-@kramerTalkingGlove1988 developed the Talking Glove, which would later become the
-VirTex CyberGlove. The talking glove was designed for general purpose communication
-with deaf-blind or non-vocal people. For sensors, the Talking Glove used
-flexible strain gauges to detect the amount of flexion in each finger. Gestures
-are recognised using $k$-Nearest-Neighbours with $k=1$, such that only one
-training example is required for each gesture.
+@kramerTalkingGlove1988 developed the Talking Glove, which would later become
+the VirTex CyberGlove. The talking glove was designed for general purpose
+communication with deaf-blind or non-vocal people. For sensors, the Talking
+Glove used flexible strain gauges to detect the amount of flexion in each
+finger. Gestures are recognised using $k$-Nearest-Neighbours with $k=1$, such
+that only one training example is required for each gesture. \footnote{mention
+Pohelmus 3SPACE }
 
 ![Talking glove, @kramerTalkingGlove1988](src/imgs/03_kramer_talking_1988.png)
 
@@ -157,6 +158,8 @@ adduction, abduction, wrist motion, or the full range of motion for the thumb.
 They concluded that the DataGlove could become an effective clinical tool with
 further development.
 
+#### 1991
+
 @murakamiGestureRecognitionUsing1991 used the DataGlove to capture hand movement information
 for 42 symbols from the Japanese sign language which were then processed by an
 Elman recurrent neural network [@elmanDistributedRepresentationsSimple2004]. This was the first
@@ -170,6 +173,8 @@ gaming product "Virtuality" in 1991 [@sturmanSurveyGlovebasedInput1994]. This de
 uses flex-sensors to measure the bend of the finger joints, with one sensor per
 finger and two sensors for the thumb.
 
+#### 1992
+
 Sturman's PhD thesis [@sturmanWholehandInput1992] and subsequent paper
 [@sturmanDesignMethodWholehand1993] provided a survey of existing whole hand input methods
 and discussed questions about the appropriateness of whole-hand input.
@@ -180,6 +185,8 @@ Various glove-based systems available at the time were compared against each
 other as well as against common non-glove-based systems (such as a set of
 dials). Computer mice and joysticks were omitted from the comparison due to
 technical incompatibility with the software being used.
+
+#### 1993
 
 Surveys by @watsonSurveyGestureRecognition1993 and
 @sturmanSurveyGlovebasedInput1994 on glove-based input provided a comprehensive
@@ -192,13 +199,12 @@ or closed fingers and palm orientation
 
 ![Charade custom gesture description symbols, @baudelCharadeRemoteControl1993](src/imgs/03_baudel_charade_1993.png)
 
+#### 1995
+
 @kesslerEvaluationCyberGloveWholehand1995 performed a critical evaluation of the CyberGlove for
 whole-hand input. They concluded that different hand sizes do not significantly
 impact the user's ability to use the device, but calibration of the glove could
 increase repeatability and accuracy.
-
-From 1995, there was a significant increase in the use of glove-based systems
-for sign-language input and interpretation:
 
 @kadousGRASPRecognitionAustralian1995 (later published as @kadousMachineRecognitionAuslan1996) used data from the
 PowerGlove to recognise 95 signs from Australian Sign Language, comparing a
@@ -208,17 +214,23 @@ previous state of the art [@starnerVisualRecognitionAmerican1995] in terms of th
 signs recognised and showed that glove-based systems did not need significant
 precision in order to distinguish between different gestures.
 
-@liang3DConvolutionalNeural2018 used data from the DataGlove to recognise 50 signs from
+#### 1996
+
+@liangSignLanguageRecognition1996 used data from the DataGlove to recognise 50 signs from
 Taiwanese Sign Language using a set of hidden Markov models, with one model for
 each sign.
 
-@felsBuildingAdaptiveInterfaces1990 used multiple neural networks to convert
+#### 1998
+
+@felsGloveTalkIIaNeuralnetworkInterface1998 used multiple neural networks to convert
 the DataGlove input into phonemes which could then be emitted as spoken words.
 
 @rung-hueiliangRealtimeContinuousGesture1998 expanded their previous work
 [@liang3DConvolutionalNeural2018], using the DataGlove to recognise 65 different states (51
 postures, 6 orientations, and 8 motions) via a set of hidden Markov models and
 a language model to discard syntactically improbably predictions.
+
+#### 1999
 
 @laviolaSurveyHandPosture1999 reviewed the state of the art for gesture recognition
 techniques, covering both glove-based and vision-based systems. The different
@@ -228,81 +240,153 @@ glove-based data into gesture classifications were also discussed.
 
 ### 2000s
 
-@alviPakistanSignLanguage2007
+@rekimotoGestureWristGesturePadUnobtrusive2001 introduced devices designed to
+provide input for wearable computers: the GestureWrist and the GesturePad. The
+GesturePad will not be discussed in this review as -- despite its name -- it
+does not allow for arbitrary gestures to be recognised, but is rather designed
+to be embedded into regular clothing.
 
-@chunliRealTimeLargeVocabulary2002
+The GestureWrist is a wearable device resembling a wristband that consists of a
+single transmitter and multiple receiver electrodes. When worn, the receiver
+electrodes make contact with the wearer's skin. The transmitter emits a square
+wave signal that traverses through the wearer's wrist and reaches the
+receivers. The received signal's amplitude is influenced by the capacitance
+between the transmitter and the wrist. As the wearer moves their hand, the
+capacitance of their wrist fluctuates, resulting in corresponding changes in
+the amplitude of the received signal. By analyzing these changes, it becomes
+possible to predict and associate specific gestures with the wearer's
+movements. The GestureWrist also has a tilt sensor which measures the
+horizontal inclination of the device.
 
-@damasioAnimatingVirtualHumans2002
+![GestureWrist, @rekimotoGestureWristGesturePadUnobtrusive2001](src/imgs/03_rekimotoGestureWristGesturePadUnobtrusive2001.png)
 
-@dipietroSurveyGloveBasedSystems2008
+#### 2002
 
-@fifthdimensiontechnologiesDataGlove52005
+@@chunliRealTimeLargeVocabulary2002 (continuing work from
+@wangRealTimeLargeVocabulary2001) used two CyberGloves and a 3D tracker to
+recognize 5100 different signs from the Chinese Sign Language. The system used
+one HMM for each sign, resulting in 5100 HMMs. To query all 5100 HMMs in real
+time, the emission distributions of the HMMs were first clustered into a small
+number of groups based on similarity. Instead of querying all the HMMs, only
+the clusters were queried, and then all the HMMs from the cluster which best
+fit the data were queried.
 
-@gaoChineseSignLanguage2004
+@hernandez-rebollarAcceleGloveWholehandInput2002 \footnote{TODO: First to use
+accelerometers?} used six accelerometers mounted in rings on the back of the
+middle phalanges, on the distal phalange of the thumb, and on the back of the
+wrist. The authors briefly mention developing virtual hand software which could map
+accelerometer readings to hand positions, but no further detail is provided.
 
-@hernandez-rebollarAcceleGloveWholehandInput2002
+![AcceleGlove, @hernandez-rebollarAcceleGloveWholehandInput2002](src/imgs/03_damasioAnimatingVirtualHumans2002.png)
 
-@heumerGraspRecognitionUncalibrated2007
+@kolschKeyboardsKeyboardsSurvey2002 is a survey of various alphanumeric input
+devices, with a focus on being able to touch-type with those devices. Many
+keyboard-like devices are briefly covered, with coverage of general-purpose
+gesture input devices was limited.
 
-@immersioncorporationCyberGlove2001
+@mehdiSignLanguageRecognition2002 used the 5DT DataGlove to classify 26 signs
+from the American Sign Language alphabet using a neural network.
 
-@immersionincImmersionIncCyberGlove2005
+@tuulariSoapBoxPlatformUbiquitous2002 recognised the short lifetime of many
+hardware-interface prototypes, and designed a platform (the Sensing, Operating
+and Activating Peripheral Box, or SoapBox) which is designed to be a
+multipurpose solution to wired and wireless communication with built-in
+sensors.
 
-@karantonisImplementationRealTimeHuman2006
+#### 2004
 
-@kelaAccelerometerbasedGestureControl2006
+@salibaCompactGloveInput2004 built a glove with the aim of more precisely
+measuring the posture of one hand, including the roll of the forearm. Their
+glove had several potentiometers which measured the flexion of the middle and
+ring finger, the roll of the forearm, the pitch of the wrist, and the angular
+position of the thumb.
 
-@klingmannAccelerometerBasedGestureRecognition2009
+@mohandesAutomationArabicSign2004 used a PowerGlove and a support vector
+machine to classify signs from the Arabic sign language. \footnote{TODO no PDF
+could be found for this}
 
-@kolschKeyboardsKeyboardsSurvey2002
+@mantyjarviEnablingFastEffortless2004 used HMMs to recognise
+accelerometer-based gestures with an emphasis on minimal user effort during
+training. The SoapBox [@tuulariSoapBoxPlatformUbiquitous2002] was used to make
+the gestures, with a button press indicating the start and finish of each
+gesture.
 
-@kongGestureRecognitionModel2009
+@gaoChineseSignLanguage2004 developed a Chinese Sign Language recognition system using
+a combination of Self-organising feature maps
+[@kohonenSelforganizedFormationTopologically1982], Simple Recurrent Networks,
+and Hidden Markov Models. Capturing the data from two CyberGloves and three
+Pohelmus 3SPACE-position trackers, 5113 different classes were able to be
+distinguished.
 
-@kratzWiizards3DGesture2007
+#### 2005
 
-@liuUWaveAccelerometerbasedPersonalized2009
-
-@mantyjarviEnablingFastEffortless2004
+@mantyjarviIdentifyingUsersPortable2005 showed that it was possible to identify
+users based on their walking gait via data collected from an accelerometer
+mounted near the small of their back.
 
 @mantyjarviGestureInteractionSmall2005
 
-@mantyjarviIdentifyingUsersPortable2005
-
-@mehdiSignLanguageRecognition2002
-
-@mitraGestureRecognitionSurvey2007
-
-@mohandesAutomationArabicSign2004
-
-@ongAutomaticSignLanguage2005
-
-@parsaniSingleAccelerometerBased2009
-
-@prekopcsakAccelerometerBasedRealTime2008
-
 @pylvanainenAccelerometerBasedGesture2005
+@ongAutomaticSignLanguage2005
+@immersionincImmersionIncCyberGlove2005
 
-@rekimotoGestureWristGesturePadUnobtrusive2001
+#### 2006
 
-@salibaCompactGloveInput2004
+@karantonisImplementationRealTimeHuman2006
+@kelaAccelerometerbasedGestureControl2006
 
+#### 2007
+
+@alviPakistanSignLanguage2007
+@mitraGestureRecognitionSurvey2007
+@kratzWiizards3DGesture2007
+@heumerGraspRecognitionUncalibrated2007
+
+#### 2008
+
+@dipietroSurveyGloveBasedSystems2008
+@prekopcsakAccelerometerBasedRealTime2008
 @schlomerGestureRecognitionWii2008
-
-@tuulariSoapBoxPlatformUbiquitous2002
-
-@wangRealTimeLargeVocabulary2001
-
 @wangTrafficPoliceGesture2008
 
-@wuGestureRecognition3D2009
+#### 2009
 
+@klingmannAccelerometerBasedGestureRecognition2009
+@kongGestureRecognitionModel2009
+@liuUWaveAccelerometerbasedPersonalized2009
+@parsaniSingleAccelerometerBased2009
+@wuGestureRecognition3D2009
 @zhangHandGestureRecognition2009
 
 TODO: When do the first accelerometer based gloves appear?
 
 ### 2010s
 
+#### 2011
+
+#### 2012
+
+#### 2013
+
+#### 2014
+
+#### 2015
+
+#### 2016
+
+#### 2017
+
+#### 2018
+
+#### 2019
+
 ### 2020s
+
+#### 2021
+
+#### 2022
+
+#### 2023
 
 ## Vision-based systems
 
@@ -337,15 +421,31 @@ controls in the armrest, and projector which displays an image on one wall.
 
 ### 1990s
 
+#### 1991
+
+#### 1992
+
 @yamatoRecognizingHumanAction1992
 
-@davisVisualGestureRecognition1994 https://www.semanticscholar.org/paper/Visual-gesture-recognition-Davis-Shah/99ad93149fcdcae534e2361a32b0389e83003113/figure/0
+#### 1993
+
+#### 1994
+
+[@davisVisualGestureRecognition1994](https://www.semanticscholar.org/paper/Visual-gesture-recognition-Davis-Shah/99ad93149fcdcae534e2361a32b0389e83003113/figure/0)
+
+#### 1995
 
 @freemanOrientationHistogramsHand1995
 @starnerRealtimeAmericanSign1995
 @starnerVisualRecognitionAmerican1995
 
+#### 1996
+
+#### 1997
+
 @pavlovicVisualInterpretationHand1997
+
+#### 1998
 
 @rigollHighPerformanceRealtime1998
 @hofmannVelocityProfileBased1998
@@ -354,6 +454,8 @@ controls in the armrest, and projector which displays an image on one wall.
 @sharmaASL3DCNNAmericanSign2021
 @segenFastAccurate3D1998
 @eickelerHiddenMarkovModel1998
+
+#### 1999
 
 @ming-hsuanyangRecognizingHandGesture1999
 @hyeon-kyuleeHMMbasedThresholdModel1999
@@ -366,17 +468,55 @@ TODO: see background of @wilsonParametricHiddenMarkov1999
 
 ### 2000s
 
+#### 2001
+
+#### 2002
+
+#### 2003
+
+#### 2004
+
+#### 2005
+
+#### 2006
+
 @moeslundSurveyAdvancesVisionbased2006
+
+#### 2007
+
+#### 2008
+
+#### 2009
 
 TODO
 
 ### 2010s
 
-TODO
+#### 2011
+
+#### 2012
+
+#### 2013
+
+#### 2014
+
+#### 2015
+
+#### 2016
+
+#### 2017
+
+#### 2018
+
+#### 2019
 
 ### 2020s
 
-TODO
+#### 2021
+
+#### 2022
+
+#### 2023
 
 ## WiFi-based systems
 
@@ -407,18 +547,22 @@ TODO
 
 - Flex sensor
 - Hall effect sensor
+- tilt sensor (ADXL202 as used in @rekimotoGestureWristGesturePadUnobtrusive2001)
 - Accelerometer
 - Inertial Measurement Unit
 - Surface Electromyography
+- Linear and rotational potentiometers
 
 ## Hardware Products
 
 TODO
 
 - Microsoft Kinect
+- Nintendo Wii
 - CyberGlove
+  - Pohelmus 3SPACE
 - VPL DataGlove
-- PowerGlove
+- Nintendo PowerGlove
 
 ## Anatomy of the hand
 
@@ -447,8 +591,8 @@ connect:
 
 - _Interphalangeal_ (IP): Those joints between the phalangeal (finger) bones.
   Due to the number of phalangeal bones, these are subdivided into the _distal
-  interphalangeal_ bones (DIP, closest to the fingertip) and the _proximal
-  interphalangeal_ bones (PIP, closest to the palm).
+  interphalangeal_ joints (DIP, closest to the fingertip) and the _proximal
+  interphalangeal_ joints (PIP, closest to the palm).
 
 In addition to the bones and joints, there are terms for each movement of the
 hand. These are named based on the direction of movement.
