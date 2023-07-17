@@ -70,7 +70,7 @@ Robot at US$15 000 in 1993.
 
 @fisherTelepresenceMasterGlove1987 working at NASA's Ames research centre created a
 glove which was capable of transmitting data to the host computer in real time.
-This glove used 15 flex sensors per hand and a "3D magnetic digitizing
+This glove used 15 flex sensors per hand and a "3D magnetic digitising
 device" capable of reporting the X, Y, Z, azimuth, elevation, and roll
 coordinates to the host computer (see Figure \ref{TODO}).
 
@@ -192,7 +192,7 @@ Surveys by @watsonSurveyGestureRecognition1993 and
 @sturmanSurveyGlovebasedInput1994 on glove-based input provided a comprehensive
 description of gesture sensing at the time.
 
-@baudelCharadeRemoteControl1993 utilized the DataGlove to give a presentation and proposed
+@baudelCharadeRemoteControl1993 utilised the DataGlove to give a presentation and proposed
 a set of design guidelines for using glove-based input effectively. A custom
 set of icons was developed to describe a gesture, and included symbols for open
 or closed fingers and palm orientation
@@ -240,6 +240,8 @@ glove-based data into gesture classifications were also discussed.
 
 ### 2000s
 
+\sidenote{TODO: When do the first accelerometer based gloves appear?}
+
 @rekimotoGestureWristGesturePadUnobtrusive2001 introduced devices designed to
 provide input for wearable computers: the GestureWrist and the GesturePad. The
 GesturePad will not be discussed in this review as -- despite its name -- it
@@ -253,7 +255,7 @@ wave signal that traverses through the wearer's wrist and reaches the
 receivers. The received signal's amplitude is influenced by the capacitance
 between the transmitter and the wrist. As the wearer moves their hand, the
 capacitance of their wrist fluctuates, resulting in corresponding changes in
-the amplitude of the received signal. By analyzing these changes, it becomes
+the amplitude of the received signal. By analysing these changes, it becomes
 possible to predict and associate specific gestures with the wearer's
 movements. The GestureWrist also has a tilt sensor which measures the
 horizontal inclination of the device.
@@ -264,7 +266,7 @@ horizontal inclination of the device.
 
 @@chunliRealTimeLargeVocabulary2002 (continuing work from
 @wangRealTimeLargeVocabulary2001) used two CyberGloves and a 3D tracker to
-recognize 5100 different signs from the Chinese Sign Language. The system used
+recognise 5100 different signs from the Chinese Sign Language. The system used
 one HMM for each sign, resulting in 5100 HMMs. To query all 5100 HMMs in real
 time, the emission distributions of the HMMs were first clustered into a small
 number of groups based on similarity. Instead of querying all the HMMs, only
@@ -376,23 +378,48 @@ to control a simple multiplayer video game in which the player could perform
 
 ![Wiizards, @kratzWiizards3DGesture2007](src/imgs/03_kratzWiizards3DGesture2007.png)
 
+![A Wii Remote, @schlomerGestureRecognitionWii2008](src/imgs/03_schlomerGestureRecognitionWii2008.png)
+
 #### 2008
 
-@dipietroSurveyGloveBasedSystems2008
-@prekopcsakAccelerometerBasedRealTime2008
-@schlomerGestureRecognitionWii2008
-@wangTrafficPoliceGesture2008
+@dipietroSurveyGloveBasedSystems2008 provided an extremely extensive review of
+glove-based gesture recognition systems, summarising the work since the survey
+by @sturmanSurveyGlovebasedInput1994 and discussing the limitations of the
+technology of the time. The focus is on the hardware development of glove-based
+systems and their applications, rather than on the software used to classify
+the data being emitted from the hardware. Dipietro also notes the limitations
+of different glove-based systems, and provides a set of metrics to consider
+when constructing or selecting a glove for a particular purpose: Number, type,
+and placement of sensors; Glove measurement repeatability and accuracy; and
+calibration procedure. Dipietro specifically notes that future work should
+address the limitations of 1) mounting sensors onto cloth, 2) lengthy
+calibration procedures, 3) the lack of portability/wirelessness, and 4) cost.
+
+@prekopcsakAccelerometerBasedRealTime2008 used a Sony-Ericsson W910i mobile
+phone (which has an accelerometer built in) as the input method by which 10
+different gestures can be recognised. An HMM and a SVM were constructed and
+trained on the dataset, achieving similar performance.
+
+@schlomerGestureRecognitionWii2008 used the accelerometer inside of a Wii
+Remote to classify 5 different gestures using k-means clustering and an HMM.
+
+@wangTrafficPoliceGesture2008 used two accelerometers, one mounted in the back
+of each hand, to recognise the 9 gestures used by the traffic police of China
+to direct traffic manually.
 
 #### 2009
 
 @klingmannAccelerometerBasedGestureRecognition2009
-@kongGestureRecognitionModel2009
-@liuUWaveAccelerometerbasedPersonalized2009
-@parsaniSingleAccelerometerBased2009
-@wuGestureRecognition3D2009
-@zhangHandGestureRecognition2009
 
-TODO: When do the first accelerometer based gloves appear?
+@kongGestureRecognitionModel2009
+
+@liuUWaveAccelerometerbasedPersonalized2009
+
+@parsaniSingleAccelerometerBased2009
+
+@wuGestureRecognition3D2009
+
+@zhangHandGestureRecognition2009
 
 ### 2010s
 
