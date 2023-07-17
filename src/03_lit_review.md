@@ -39,16 +39,16 @@ between 1962 and 1971 which performed full body capture for use in computer
 graphics, but did not have the fidelity for finger-level gesture capture (see
 Figure \ref{TODO}).
 
-![ANIMAC, @experimentaltelevisioncenterComputerImageCorporation1969](src/imgs/03_experimental_television_center_computer_1969.jpg)
+![ANIMAC, @experimentaltelevisioncenterComputerImageCorporation1969](src/imgs/03_experimental_television_center_computer_1969.jpg){ width=50% }
 
 The first glove-based system which could capture per-finger movement was the
 Sayre Glove [@thomasa.defantiUSNEAR60341631977]. The Sayre glove was based on an idea
 by their colleague, Richard Sayre. The glove used flexible tubes which would
 occlude a light source from a sensor placed at opposite ends of the tubes.
 
-![Sayre glove, By @thomasa.defantiUSNEAR60341631977](src/imgs/03_thomas_a_defanti_us_1977_2.png)
+![Sayre glove, By @thomasa.defantiUSNEAR60341631977](src/imgs/03_thomas_a_defanti_us_1977_2.png){ width=50% }
 
-![Sayre glove, By @thomasa.defantiUSNEAR60341631977](src/imgs/03_thomas_a_defanti_us_1977_1.png)
+![Sayre glove, By @thomasa.defantiUSNEAR60341631977](src/imgs/03_thomas_a_defanti_us_1977_1.png){ width=50% }
 
 In 1981 Gary J. Grimes filed a patent through Bell Telephone Laboratories Inc.
 for a Digital data entry glove interface [@garyj.grimesUSPatentDigital1981]. This glove
@@ -56,7 +56,7 @@ used 4 "knuckle-bend-sensors", 18 touch sensors, 2 tilt sensors, and a mode
 switch which in combination would allow the user to sign the English alphabet
 and the numerals 0 through to 9 in a manner similar to American Sign Language.
 
-![Digital data entry glove interface, @garyj.grimesUSPatentDigital1981](src/imgs/03_gary_j_grimes_us_1981.png)
+![Digital data entry glove interface, @garyj.grimesUSPatentDigital1981](src/imgs/03_gary_j_grimes_us_1981.png){ width=50% }
 
 The Dexterous HandMaster [@jacobsenUTAHDextrousHand1984, @marcusSensingHumanHand1988] was
 developed in 1984 as a controller for the Utah/MIT Dexterous Hand robot
@@ -66,7 +66,7 @@ measure the flexion of the interphalangeal joints, with 4 sensors for each
 finger and thumb. @watsonSurveyGestureRecognition1993 reports the price of the Dexterous Hand
 Robot at US$15 000 in 1993.
 
-![Dexterous HandMaster, @marcusSensingHumanHand1988](src/imgs/03_marcus_sensing_1988.png)
+![Dexterous HandMaster, @marcusSensingHumanHand1988](src/imgs/03_marcus_sensing_1988.png){ width=50% }
 
 @fisherTelepresenceMasterGlove1987 working at NASA's Ames research centre created a
 glove which was capable of transmitting data to the host computer in real time.
@@ -74,7 +74,7 @@ This glove used 15 flex sensors per hand and a "3D magnetic digitising
 device" capable of reporting the X, Y, Z, azimuth, elevation, and roll
 coordinates to the host computer (see Figure \ref{TODO}).
 
-![NASA telepresence, @fisherTelepresenceMasterGlove1987](src/imgs/03_fisher_telepresence_1987.png)
+![NASA telepresence, @fisherTelepresenceMasterGlove1987](src/imgs/03_fisher_telepresence_1987.png){ width=50% }
 
 @zimmermanHandGestureInterface1987 developed the DataGlove which measured 10 finger joints,
 and was significantly easier to use and weighed less than previous devices.
@@ -103,11 +103,11 @@ Dexterous Hand robot, but determined the position of the user's fingertips
 using the DataGlove, and moved the Dexterous Hand's fingertips to match those
 positions.
 
-![VPL DataGlove, @zimmermanHandGestureInterface1987](src/imgs/03_zimmerman_hand_1987.png)
+![VPL DataGlove, @zimmermanHandGestureInterface1987](src/imgs/03_zimmerman_hand_1987.png){ width=50% }
 
 ![The outer glove and glove lining of the DataGlove. Flex sensors and fibre
 optic cables are visible, as well as the interface board used to read the
-sensors' measurements. @wiseEvaluationFiberOptic1990](src/imgs/03_wise_evaluation_1990.png)
+sensors' measurements. @wiseEvaluationFiberOptic1990](src/imgs/03_wise_evaluation_1990.png){ width=50% }
 
 The Mattel Toy company produced the PowerGlove in 1989
 [@abramsgentileentertainmentPowerGlove1989] as a low-cost game controller,
@@ -121,7 +121,7 @@ but its low cost prompted many researchers to continue using the glove as an
 input device [@todo, @todo, @todo] for years to come. @watsonSurveyGestureRecognition1993
 reports the price of the PowerGlove as US$20 in 1993.
 
-![Powerglove, @abramsgentileentertainmentPowerGlove1989](src/imgs/03_abrams_gentile_entertainment_powerglove_1989.jpg)
+![Powerglove, @abramsgentileentertainmentPowerGlove1989](src/imgs/03_abrams_gentile_entertainment_powerglove_1989.jpg){ width=50% }
 
 @kramerTalkingGlove1988 developed the Talking Glove, which would later become
 the VirTex CyberGlove. The talking glove was designed for general purpose
@@ -131,7 +131,7 @@ finger. Gestures are recognised using $k$-Nearest-Neighbours with $k=1$, such
 that only one training example is required for each gesture. \sidenote{mention
 Pohelmus 3SPACE }
 
-![Talking glove, @kramerTalkingGlove1988](src/imgs/03_kramer_talking_1988.png)
+![Talking glove, @kramerTalkingGlove1988](src/imgs/03_kramer_talking_1988.png){ width=50% }
 
 ### 1990s
 
@@ -147,7 +147,7 @@ either 18 or 22 flex sensors (depending on the model purchased) which were used
 to measure the relative positions of the fingers and thumb.
 
 ![CyberGlove with its control box,
-@laviolaSurveyHandPosture1999](src/imgs/03_laviola_survey_1999.png)
+@laviolaSurveyHandPosture1999](src/imgs/03_laviola_survey_1999.png){ width=50% }
 
 @wiseEvaluationFiberOptic1990 evaluated the DataGlove as an alternative to manual
 goniometry, such that the range of motion of the hand can be automatically
@@ -197,7 +197,7 @@ a set of design guidelines for using glove-based input effectively. A custom
 set of icons was developed to describe a gesture, and included symbols for open
 or closed fingers and palm orientation
 
-![Charade custom gesture description symbols, @baudelCharadeRemoteControl1993](src/imgs/03_baudel_charade_1993.png)
+![Charade custom gesture description symbols, @baudelCharadeRemoteControl1993](src/imgs/03_baudel_charade_1993.png){ width=50% }
 
 #### 1995
 
@@ -260,7 +260,7 @@ possible to predict and associate specific gestures with the wearer's
 movements. The GestureWrist also has a tilt sensor which measures the
 horizontal inclination of the device.
 
-![GestureWrist, @rekimotoGestureWristGesturePadUnobtrusive2001](src/imgs/03_rekimotoGestureWristGesturePadUnobtrusive2001.png)
+![GestureWrist, @rekimotoGestureWristGesturePadUnobtrusive2001](src/imgs/03_rekimotoGestureWristGesturePadUnobtrusive2001.png){ width=50% }
 
 #### 2002
 
@@ -279,7 +279,7 @@ middle phalanges, on the distal phalange of the thumb, and on the back of the
 wrist. The authors briefly mention developing virtual hand software which could map
 accelerometer readings to hand positions, but no further detail is provided.
 
-![AcceleGlove, @hernandez-rebollarAcceleGloveWholehandInput2002](src/imgs/03_damasioAnimatingVirtualHumans2002.png)
+![AcceleGlove, @hernandez-rebollarAcceleGloveWholehandInput2002](src/imgs/03_damasioAnimatingVirtualHumans2002.png){ width=50% }
 
 @kolschKeyboardsKeyboardsSurvey2002 is a survey of various alphanumeric input
 devices, with a focus on being able to touch-type with those devices. Many
@@ -376,9 +376,9 @@ comparison of the advantages and disadvantages of the different classifiers.
 to control a simple multiplayer video game in which the player could perform
 "spells" by moving the Wii Remote in certain patterns.
 
-![Wiizards, @kratzWiizards3DGesture2007](src/imgs/03_kratzWiizards3DGesture2007.png)
+![Wiizards, @kratzWiizards3DGesture2007](src/imgs/03_kratzWiizards3DGesture2007.png){ width=50% }
 
-![A Wii Remote, @schlomerGestureRecognitionWii2008](src/imgs/03_schlomerGestureRecognitionWii2008.png)
+![A Wii Remote, @schlomerGestureRecognitionWii2008](src/imgs/03_schlomerGestureRecognitionWii2008.png){ width=50% }
 
 #### 2008
 
@@ -415,11 +415,7 @@ to direct traffic manually.
 
 @liuUWaveAccelerometerbasedPersonalized2009
 
-@parsaniSingleAccelerometerBased2009
-
-@wuGestureRecognition3D2009
-
-@zhangHandGestureRecognition2009
+![Sensors for the four-channel EMG and 3-axis accelerometer, @zhangHandGestureRecognition2009](src/imgs/03_zhangHandGestureRecognition2009.png){ width=50% }
 
 ### 2010s
 
@@ -478,7 +474,7 @@ The media room contained numerous computers, an armchair fitted with some
 controls in the armrest, and projector which displays an image on one wall.
 \sidenote{flesh this out a bit more}
 
-![Put-that-there, @boltPutthatthereVoiceGesture1980](src/imgs/03_bolt_put-that-there_1980.png)
+![Put-that-there, @boltPutthatthereVoiceGesture1980](src/imgs/03_bolt_put-that-there_1980.png){ width=50% }
 
 ### 1990s
 
@@ -653,7 +649,7 @@ the thumb) and the _ulnar_ (which is closest to the little finger)
 See Figure \ref{todo} for a visual description. An glossary of all anatomy
 terms is provided in Appendix \ref{TODO}.
 
-![@MedicalGalleryBlausen2014](src/imgs/03_bones.png)
+![@MedicalGalleryBlausen2014](src/imgs/03_bones.png){ width=50% }
 
 The joints between bones are, logically, named according the bones they
 connect:
@@ -700,7 +696,7 @@ hand. These are named based on the direction of movement.
 
 See Figure \ref{TODO} for a visual description.
 
-![@cabibihanSuitabilityOpenlyAccessible2021](src/imgs/03_movements.png)
+![@cabibihanSuitabilityOpenlyAccessible2021](src/imgs/03_movements.png){ width=50% }
 
 ## Gestures vs Poses
 
