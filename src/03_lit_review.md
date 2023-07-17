@@ -434,8 +434,6 @@ outperforms HMMs trained on either the EMG or acceleration data
 
 ### 2010s
 
-#### 2010
-
 @aklAccelerometerbasedGestureRecognition2010
 @bevilacquaContinuousRealtimeGesture2010
 @harshithSurveyVariousGesture2010
@@ -558,62 +556,79 @@ controls in the armrest, and projector which displays an image on one wall.
 
 ### 1990s
 
-#### 1991
-
-#### 1992
-
 @yamatoRecognizingHumanAction1992
 
-#### 1993
+@watsonSurveyGestureRecognition1993
 
-#### 1994
-
-[@davisVisualGestureRecognition1994](https://www.semanticscholar.org/paper/Visual-gesture-recognition-Davis-Shah/99ad93149fcdcae534e2361a32b0389e83003113/figure/0)
-
-#### 1995
+@davisVisualGestureRecognition1994
 
 @freemanOrientationHistogramsHand1995
 @starnerRealtimeAmericanSign1995
 @starnerVisualRecognitionAmerican1995
 
-#### 1996
-
-#### 1997
-
 @pavlovicVisualInterpretationHand1997
 
-#### 1998
-
-@rigollHighPerformanceRealtime1998
-@hofmannVelocityProfileBased1998
-@segenHumancomputerInteractionUsing1998
-@starnerRealtimeAmericanSign1998
-@sharmaASL3DCNNAmericanSign2021
-@segenFastAccurate3D1998
 @eickelerHiddenMarkovModel1998
+@hofmannVelocityProfileBased1998
+@rigollHighPerformanceRealtime1998
+@segenFastAccurate3D1998
+@segenHumancomputerInteractionUsing1998
+@sharmaMultimodalHumancomputerInterface1998
+@starnerRealtimeAmericanSign1998
 
-#### 1999
-
-@ming-hsuanyangRecognizingHandGesture1999
 @hyeon-kyuleeHMMbasedThresholdModel1999
+@laviolaSurveyHandPosture1999
+@ming-hsuanyangRecognizingHandGesture1999
 @moeslundComputerVisionBasedHuman1999
 @moeslundSummaries107Computer1999
-@laviolaSurveyHandPosture1999
 @wilsonParametricHiddenMarkov1999
 
+[@davisVisualGestureRecognition1994](https://www.semanticscholar.org/paper/Visual-gesture-recognition-Davis-Shah/99ad93149fcdcae534e2361a32b0389e83003113/figure/0)
 TODO: see background of @wilsonParametricHiddenMarkov1999
 
 ### 2000s
 
-#### 2001
+@pengyuhongGestureModelingRecognition2000
+@yeasinVisualUnderstandingDynamic2000
 
-#### 2002
+@moeslundSurveyComputerVisionBased2001
+@yoonHandGestureRecognition2001
 
-#### 2003
+@kolschKeyboardsKeyboardsSurvey2002
 
-#### 2004
+@bowdenVisionBasedInterpretation2003
+@chenHandGestureRecognition2003
+@keskinRealTimeHand2003
+@ramamoorthyRecognitionDynamicHand2003
 
-#### 2005
+@bowdenLinguisticFeatureVector2004
+@buchmannFingARtipsGestureBased2004
+@kadirMinimalTrainingLarge2004
+@liuHandGestureRecognition2004
+@zhangVisionbasedSignLanguage2004
+
+@binhRealTimeHandTracking2005
+@lepetitMonocularModelBased3D2005
+@ongAutomaticSignLanguage2005
+
+@marceloGeFightersExperimentGesturebased2006
+@moeslundSurveyAdvancesVisionbased2006
+@moeslundSurveyAdvancesVisionbased2006
+
+@elmezainGestureRecognitionAlphabets2007
+@erolVisionbasedHandPose2007
+@fangRealTimeHandGesture2007
+@mitraGestureRecognitionSurvey2007
+@mustafaHandGestureRecognition2007
+
+@elmezainRealTimeCapableSystem2008
+@hassanpourVisionBasedHand2008
+@zinnenNewApproachEnable2008
+
+@elmezainHandGestureRecognition2009
+@moniHMMBasedHand2009
+@wangEvaluationLocalSpatiotemporal2009
+@zabulisVisionBasedHandGesture2009
 
 @ongAutomaticSignLanguage2005 provided a survey of sign language recognition,
 emphasising the significance of non-manual signs (those made with the body or
@@ -626,47 +641,92 @@ hard?" in how the body is leaning forward, the head thrust out, and the raised
 eyebrows towards the end of the sentence. \sidenote{TODO also describe the SoTA
 for vision-based recognition}
 
-#### 2006
-
 \sidenote{TODO: add GeFighters}
-
-@moeslundSurveyAdvancesVisionbased2006
-
-#### 2007
-
-#### 2008
-
-#### 2009
-
-TODO
 
 ### 2010s
 
-#### 2011
+@naidooSouthAfricanSign2010
 
-#### 2012
+@chaudharySurveyHandGesture2011
+@cooperSignLanguageRecognition2011
+@harrisonOmniTouchWearableMultitouch2011
+@oikonomidisEfficientModelbased3D2011
+@renRobustHandGesture2011
+@wachsVisionbasedHandgestureApplications2011
 
-#### 2013
+@khanSurveyGestureRecognition2012
+@muraseGestureKeyboardMachine2012
+@suarezHandGestureRecognition2012
+@yangDynamicHandGesture2012
+@zamankhanHandGestureRecognition2012
 
-#### 2014
+@chenSurveyHandGesture2013
+@nelIntegratedSignLanguage2013
+@raysarkarHandGestureRecognition2013
+@sharmaGestureRecognitionSurvey2013
+@yanminzhuVisionBasedHand2013
 
-#### 2015
+@frieslaarRobustSouthAfrican2014
+@shyamalaSURVEYVISIONBASED2014
 
-#### 2016
+@ahujaHandGestureRecognition2015
+@jiehuangSignLanguageRecognition2015
+@longSaliencyDetectionVideos2015
+@michahialHandGestureRecognition2015
+@rautarayVisionBasedHand2015
+@supancicDepthBasedHandPose2015
 
-#### 2017
+@bansalGestureRecognitionSurvey2016
+@chaiTwoStreamsRecurrent2016
+@chengSurvey3DHand2016
+@ghotkarDynamicHandGesture2016
+@wanExploreEfficientLocal2016
+@wuDeepDynamicNeural2016
+@zhaoMultifeatureGestureRecognition2016
 
-#### 2018
+@asadi-aghbolaghiSurveyDeepLearning2017
+@caiRGBDDatasetsUsing2017
+@elbadawyArabicSignLanguage2017
+@madadiOcclusionAwareHand2017
+@sagayamHandPostureGesture2017
+@zhaoRealtimeHeadGesture2017
 
-#### 2019
+@al-shamaylehSystematicLiteratureReview2018
+@liang3DConvolutionalNeural2018
+
+@anwarHandGestureRecognition2019
+@avolaExploitingRecurrentNeural2019
+@bhagatIndianSignLanguage2019
+@cheokReviewHandGesture2019
+@funkeUsing3DConvolutional2019
+@guptaDefocusBasedNovel2019
+@hakimDynamicHandGesture2019
+@kopukluRealtimeHandGesture2019
+@luOneshotLearningHand2019
+@mohammedDeepLearningBasedEndtoEnd2019
 
 ### 2020s
 
-#### 2021
+@alsaediEfficientHandGestures2020
+@chatzisComprehensiveStudyDeep2020
+@chenSurveyHandPose2020
+@dangAirGestureRecognition2020
+@hurrooSignLanguageRecognition2020
+@oudahHandGestureRecognition2020
+@phamHandDetectionSegmentation2020
+@zhangGestureRecognitionBased2020
 
-#### 2022
+@liuDynamicGestureRecognition2021
+@mahmoudConvolutionalNeuralNetworks2021
+@mujahidRealTimeHandGesture2021
+@qiMultiSensorGuidedHand2021
+@sharmaASL3DCNNAmericanSign2021
 
-#### 2023
+@abejeEthiopianSignLanguage2022
+@ismailDynamicHandGesture2022
+@mejia-perezAutomaticRecognitionMexican2022
+@sahooRealTimeHandGesture2022
+@urrehmanDynamicHandGesture2022
 
 ## WiFi-based systems
 
@@ -685,7 +745,74 @@ Split by decade, noting any trends along the way. Note the seminal paper.
 
 ### 2010s
 
+@halperinToolReleaseGathering2011
+
+@adibSeeWallsWiFi2013
+@puWholehomeGestureRecognition2013
+
+@abdelnasserWigestUbiquitousWifibased2014
+@kelloggBringingGestureRecognition2014
+@liuWiSleepContactlessSleep2014
+@wangEeyesDevicefreeLocationoriented2014
+@wangWeCanHear2014
+
+@aliKeystrokeRecognitionUsing2015
+@heWiGWiFiBasedGesture2015
+@kotaruSpotFiDecimeterLevel2015
+@liuTrackingVitalSigns2015
+@sunWiDrawEnablingHandsfree2015
+@wangUnderstandingModelingWiFi2015
+@wuNonInvasiveDetectionMoving2015
+@zengAnalyzingShopperBehavior2015
+
+@al-qanessWiGeRWiFiBasedGesture2016
+@liWhenCSIMeets2016
+@liWiFingerTalkYour2016
+@tanWiFingerLeveragingCommodity2016
+@vasishtDecimeterLevelLocalizationSingle2016
+@wangGaitRecognitionUsing2016
+@wangHumanRespirationDetection2016
+@zengWiWhoWiFiBasedPerson2016
+@zhangMudraUserfriendlyFinegrained2016
+@zhangWiFiIDHumanIdentification2016
+
+@aliRecognizingKeystrokesUsing2017
+@liIndoTrackDeviceFreeIndoor2017
+@qianWidarDecimeterLevelPassive2017
+@shangRobustSignLanguage2017
+@virmaniPositionOrientationAgnostic2017
+@wangDeviceFreeHumanActivity2017
+@wangRTFallRealTimeContactless2017
+@wangWiFallDeviceFreeFall2017
+@yousefiSurveyBehaviorRecognition2017
+
+@maSignFiSignLanguage2018
+@qianWidar2PassiveHuman2018
+
+@chenWiFiCSIBased2019
+@fengWiMultiThreePhaseSystem2019
+@zengFarSensePushingRange2019
+
 ### 2020s
+
+@ahmedDFWiSLRDeviceFreeWiFibased2020
+@alazraiDatasetWiFibasedHumantohuman2020
+@alazraiEndtoEndDeepLearning2020
+@dangAirGestureRecognition2020
+@haoWiSLContactlessFineGrained2020
+@hussainReviewCategorizationTechniques2020
+@maWiFiSensingChannel2020
+@shenWiPassCSIbasedKeystroke2020
+@shengDeepSpatialTemporal2020
+@thariqahmedDeviceFreeHuman2020
+
+@wangCSIbasedHumanSensing2021
+@zhangWidar3ZeroEffortCrossDomain2021
+
+@wangPlacementMattersUnderstanding2022
+
+@chenCrossDomainWiFiSensing2023
+@wuWiTrajRobustIndoor2023
 
 # Overview
 
