@@ -58,12 +58,13 @@ and the numerals 0 through to 9 in a manner similar to American Sign Language.
 
 ![Digital data entry glove interface, @garyj.grimesUSPatentDigital1981](src/imgs/03_gary_j_grimes_us_1981.png){ width=50% }
 
-The Dexterous HandMaster [@jacobsenUTAHDextrousHand1984, @marcusSensingHumanHand1988] was
-developed in 1984 as a controller for the Utah/MIT Dexterous Hand robot
-[@jacobsenDesignUtahDextrous1986], and has since been redesigned and was sold
-commercially by Exos. It uses 20 hall-effect\sidenote{define these} sensors to
-measure the flexion of the interphalangeal joints, with 4 sensors for each
-finger and thumb. @watsonSurveyGestureRecognition1993 reports the price of the Dexterous Hand
+The Dexterous HandMaster [@jacobsenUTAHDextrousHand1984,
+@marcusSensingHumanHand1988] was developed in 1984 as a controller for the
+Utah/MIT Dexterous Hand robot [@jacobsenDesignUtahDextrous1986], and has since
+been redesigned and was sold commercially by Exos. It uses 20
+hall-effect\sidenote{define these} sensors to measure the flexion of the
+interphalangeal joints, with 4 sensors for each finger and thumb.
+@watsonSurveyGestureRecognition1993 reports the price of the Dexterous Hand
 Robot at US$15 000 in 1993.
 
 ![Dexterous HandMaster, @marcusSensingHumanHand1988](src/imgs/03_marcus_sensing_1988.png){ width=50% }
@@ -116,10 +117,9 @@ flex sensors that measure the bending of the thumb, index, middle, and ring
 fingers. Two ultrasonic transmitters mounted on the back of the glove and
 paired with three ultrasonic receivers mounted at known relative distances on
 the user's monitor allow the glove to calculate the locations of the
-transmitters via triangulation. The device was discontinued after two years,
-but its low cost prompted many researchers to continue using the glove as an
-input device [@todo, @todo, @todo] for years to come. @watsonSurveyGestureRecognition1993
-reports the price of the PowerGlove as US$20 in 1993.
+transmitters via triangulation. The device was discontinued after two years.
+@watsonSurveyGestureRecognition1993 reports the price of the PowerGlove as
+US$20 in 1993.
 
 ![Powerglove, @abramsgentileentertainmentPowerGlove1989](src/imgs/03_abrams_gentile_entertainment_powerglove_1989.jpg){ width=50% }
 
@@ -133,7 +133,7 @@ Pohelmus 3SPACE }
 
 ![Talking glove, @kramerTalkingGlove1988](src/imgs/03_kramer_talking_1988.png){ width=50% }
 
-### 1990s
+### 1990s {#sss:glove-based-1990s}
 
 @feinerVisualizingDimensionalVirtual1990 used the DataGlove to explore $n$-dimensional spaces.
 @felsBuildingAdaptiveInterfaces1990 used the DataGlove for speech synthesis, utilising the
@@ -230,7 +230,7 @@ the DataGlove input into phonemes which could then be emitted as spoken words.
 postures, 6 orientations, and 8 motions) via a set of hidden Markov models and
 a language model to discard syntactically improbably predictions.
 
-#### 1999
+#### 1999 {#ssss:glove-based-1990s-1999}
 
 @laviolaSurveyHandPosture1999 reviewed the state of the art for gesture recognition
 techniques, covering both glove-based and vision-based systems. The different
@@ -536,7 +536,7 @@ greater and greater progress.
 
 Split by decade, noting any trends along the way. Note the seminal paper.
 
-### 1980s and before
+### 1980s and before {#sss:vision-based-1980s}
 
 @boltPutthatthereVoiceGesture1980 augmented voice input with gestural input, allowing
 the user to point at digital objects on a monitor and move them with spoken
@@ -550,43 +550,153 @@ a completely immersive replacement for a computer terminal:
 
 The media room contained numerous computers, an armchair fitted with some
 controls in the armrest, and projector which displays an image on one wall.
-\sidenote{flesh this out a bit more}
+Additionally, a Polhemus ROPAMS (Remote Object Position Attitude Measurement
+System) is used to sense the location and orientation of the user's hand. The
+device takes the form of a transmitter cube (about 4cm on each edge) and a
+sensor cube (about 2cm on each edge). The sensor cube is mounted onto the back
+of the user's hand. Inside each cubes, there are three coils mounted to be
+orthogonal to each other. Each coil creates an antenna such that when an
+alternating current is applied through each of the three coils in the
+transmitter cube, some amount of current will be induced in each of the coils
+in the sensor cube. The strength and frequency of these three induced
+alternating currents can be used to calculate the relative orientations of the
+cubes, and the location of the sensor cube can be calculated by the
+$\frac{1}{R^3}$ decay of the signal strength, or by triangulating the signals
+from multiple transmitter cubes.
 
 ![Put-that-there, @boltPutthatthereVoiceGesture1980](src/imgs/03_bolt_put-that-there_1980.png){ width=50% }
 
-### 1990s
+### 1990s {#sss:vision-based-1990s}
 
-@yamatoRecognizingHumanAction1992
+#### 1992
 
-@watsonSurveyGestureRecognition1993
+@yamatoRecognizingHumanAction1992 extracted feature-vectors from a grayscale
+video feed (at $200 \times 200$ resolution) with 30 frames per second (fps).
+These feature-vectors were then classified by an HMM. The feature vectors were
+calculated via mesh-features[@umedaRecognitionMultiFontPrinted1982], a method
+similar to the average pooling layer used in Convolutional Neural Networks. Six
+different tennis actions were classified, as performed by three people.
 
-@davisVisualGestureRecognition1994
+#### 1993
 
-@freemanOrientationHistogramsHand1995
-@starnerRealtimeAmericanSign1995
-@starnerVisualRecognitionAmerican1995
+@watsonSurveyGestureRecognition1993 largely concentrated on glove-based systems
+of the time (see Section \ref{glove-based-systems}), noting the Salk Institutes
+work [@jenningsComputergraphicModelingAnalysis1988] in analysing sign language
+which could not be done in real time due to computational constraints. Watson
+also notes that @myronw.kruegerArtificialRealityII1991 was able to track
+participants using a single video camera, a process enabled by extracting only
+the silhouette of the figure. There is a noticeable dearth of literature
+utilising vision-based gesture recognition systems from this time due to the
+lack of affordable consumer camera systems and the computational power
+available to researchers for image-processing.
 
-@pavlovicVisualInterpretationHand1997
+#### 1994
 
-@eickelerHiddenMarkovModel1998
-@hofmannVelocityProfileBased1998
-@rigollHighPerformanceRealtime1998
-@segenFastAccurate3D1998
-@segenHumancomputerInteractionUsing1998
-@sharmaMultimodalHumancomputerInterface1998
-@starnerRealtimeAmericanSign1998
+@davisVisualGestureRecognition1994 used images sampled at 4fps on a Sun
+Microsystems
+SPARC-1\sidenote{\href{https://en.wikipedia.org/wiki/SPARC}{Wikipedia}} to
+classify seven gestures using a finite state machine. Fingertips were tracked
+between frames to calculate trajectories and those trajectories are then
+matched against a list of known gestures.
 
-@hyeon-kyuleeHMMbasedThresholdModel1999
-@laviolaSurveyHandPosture1999
-@ming-hsuanyangRecognizingHandGesture1999
-@moeslundComputerVisionBasedHuman1999
-@moeslundSummaries107Computer1999
-@wilsonParametricHiddenMarkov1999
+#### 1995
 
-[@davisVisualGestureRecognition1994](https://www.semanticscholar.org/paper/Visual-gesture-recognition-Davis-Shah/99ad93149fcdcae534e2361a32b0389e83003113/figure/0)
-TODO: see background of @wilsonParametricHiddenMarkov1999
+@freemanOrientationHistogramsHand1995 introduces _orientation histograms_ as a
+dimensionality reduction technique that extracted a feature vector from images.
+The orientation histograms were then used to recognise grayscale ten hand gestures in
+real time with no special hardware.
 
-### 2000s
+![Images with different lighting conditions (a,b) and their corresponding local
+orientations (c,d),
+@freemanOrientationHistogramsHand1995](src/imgs/03_freemanOrientationHistogramsHand1995.png){ width=50% }
+
+@starnerRealtimeAmericanSign1995 (which was derived from the author's Master's
+thesis @starnerVisualRecognitionAmerican1995 and later revised and accepted in
+@starnerRealtimeAmericanSign1998) uses a single grayscale camera (at $320
+\times 240$ resolution) and HMMs to recognise 40 signs from American Sign
+Language in real time.
+
+#### 1997
+
+@pavlovicVisualInterpretationHand1997 provides a review of vision-based gesture
+recognition systems, noting that the field is still in its infancy and there
+exist many theoretical and practical challenges to be overcome before fluent
+vision-based gesture interaction is possible.
+
+#### 1998
+
+@eickelerHiddenMarkovModel1998 achieves position-independence, unknown-gesture
+rejection, and continuous real-time recognition without requiring the user to
+delimitate each gesture. The images are preprocessed by taking the difference
+of sequential images (as a heuristic for movement) and then calculating various
+moments from these difference images. This moments are then classified by an
+HMM.
+
+@rigollHighPerformanceRealtime1998 also extracts the difference between
+sequential frames, calculates a bespoke feature-vector, and classifies those
+feature-vectors into 24 gestures using a HMM. The 24 gestures were performed by
+14 people. The video sequences were grayscale with a resolution of $96 \times
+72$ pixels and recorded at 16 frames per second. Each observation was made of
+50 frames.
+
+@segenFastAccurate3D1998 describe a two-camera system that recognises three
+gestures at 60fps. The system finds the outline of the user's hand, and then
+calculates the fingertips by identifying points on this outline with curvature
+greater than some threshold value. This system is used to control video games
+such as Doom (by ID software) as well as flight simulation software.
+
+![Controlling the video game Doom using hand gestures,
+@segenFastAccurate3D1998](src/imgs/03_segenFastAccurate3D1998.png){ width=50% }
+
+The authors expanded this work in @segenHumancomputerInteractionUsing1998, to
+provide 10 degrees of freedom.
+
+@sharmaMultimodalHumancomputerInterface1998 surveyed the literature for
+multimodal human-computer interface methods. They note that vision-based
+systems need to work in real-time to be useful, but the massive quantity of
+data involved in image processing makes this difficult.
+
+#### 1999
+
+@hyeon-kyuleeHMMbasedThresholdModel1999 uses two staggered HMMs to continuously
+classify 10 gestures from grayscale images. The first HMM detects if there is a
+known gesture in the observation. If the likelihood from the first HMM exceeds
+some threshold, then the second HMM is used to classify that observation as
+some gesture. In this way the user can perform gestures without needing to
+inform the recognition system.
+
+@laviolaSurveyHandPosture1999 performed a review of hand gesture recognition,
+including tracking, glove-based systems (see
+\ref{#ssss:glove-based-1990s-1999}), vision-based systems, algorithms,
+and applications. It is noted that both glove- and vision-based systems have
+their own flaws, and that the better system will likely depend on the
+application.
+
+@ming-hsuanyangRecognizingHandGesture1999 finds matching regions in sequential
+frames to generate trajectories for those regions. These trajectories are then
+learned using a time-delay neural network [@waibelPhonemeRecognitionUsing1989],
+where a time delay is introduced between the layers of a feed-forward neural
+network to represent the temporal relationships. The video observations had a
+resolution of $160 \times 120$ pixels and were taken at 30fps.
+
+@moeslundComputerVisionBasedHuman1999 surveys computer vision-based human
+motion capture. It describes the field at a high level, with sections on the
+sensors used, the simplifying assumptions, tracking, pose estimation, and
+gesture recognition. It is noted that depth information will likely be required
+before precise gesture tracking can be implemented. This paper is accompanied
+by @moeslundSummaries107Computer1999 which contains alphabetical summaries of
+the 107 referenced papers.
+
+@wilsonParametricHiddenMarkov1999 introduces a parameterised HMM which is then
+used for identifying the position of a user's hand in 3D space. The hand position is
+first calculated using an existing system, the Stereo Interactive Virtual
+Environment (STIVE). STIVE operates at 20fps and outputs the Cartesian
+coordinates of the two hands at each time step. These coordinates are used as
+the ground truth on which the HMM is trained.
+
+![An example of the STIVE stereo camera system with views from the two cameras and the calculated locations of the hands and head, @wilsonParametricHiddenMarkov1999](src/imgs/03_wilsonParametricHiddenMarkov1999.png){ width=50% }
+
+### 2000s {#sss:vision-based-2000s}
 
 @pengyuhongGestureModelingRecognition2000
 @yeasinVisualUnderstandingDynamic2000
@@ -643,7 +753,7 @@ for vision-based recognition}
 
 \sidenote{TODO: add GeFighters}
 
-### 2010s
+### 2010s {#sss:vision-based-2010s}
 
 @naidooSouthAfricanSign2010
 
@@ -705,7 +815,7 @@ for vision-based recognition}
 @luOneshotLearningHand2019
 @mohammedDeepLearningBasedEndtoEnd2019
 
-### 2020s
+### 2020s {#sss:vision-based-2020s}
 
 @alsaediEfficientHandGestures2020
 @chatzisComprehensiveStudyDeep2020
