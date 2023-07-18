@@ -1,10 +1,15 @@
 # Introduction
 
+Note: What you bring to the table is _fidelity_. There has been oodles of work
+trying to classify big obvious gestures, but nothing that comes close to
+replacing the keyboard. Nobody wants to wave their hands around just to type
+the letter "a", but Ergo lets you do a simple motion and it's done.
+
 \footnote{TODO: rewrite the introduction}
 
-Ergo comes from Ergonomic or the latin for *therefore*.
+Ergo comes from Ergonomic or the latin for _therefore_.
 
-----
+---
 
 <!---
 \begin{figure}[!htb]
