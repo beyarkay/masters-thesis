@@ -238,7 +238,7 @@ glove-based systems are enumerated and compared, describing their accuracy,
 price, and ease-of-use. Different algorithms used for processing the vision- or
 glove-based data into gesture classifications were also discussed.
 
-### 2000s
+### 2000s {#sss:glove-based-2000s}
 
 \sidenote{TODO: When do the first accelerometer based gloves appear?}
 
@@ -280,11 +280,6 @@ wrist. The authors briefly mention developing virtual hand software which could 
 accelerometer readings to hand positions, but no further detail is provided.
 
 ![AcceleGlove, @hernandez-rebollarAcceleGloveWholehandInput2002](src/imgs/03_damasioAnimatingVirtualHumans2002.png){ width=50% }
-
-@kolschKeyboardsKeyboardsSurvey2002 is a survey of various alphanumeric input
-devices, with a focus on being able to touch-type with those devices. Many
-keyboard-like devices are briefly covered, with coverage of general-purpose
-gesture input devices was limited.
 
 @mehdiSignLanguageRecognition2002 used the 5DT DataGlove to classify 26 signs
 from the American Sign Language alphabet using a neural network.
@@ -432,7 +427,7 @@ outperforms HMMs trained on either the EMG or acceleration data
 
 ![Sensors for the four-channel EMG and 3-axis accelerometer, @zhangHandGestureRecognition2009](src/imgs/03_zhangHandGestureRecognition2009.png){ width=50% }
 
-### 2010s
+### 2010s {#sss:glove-based-2010s}
 
 @aklAccelerometerbasedGestureRecognition2010
 @bevilacquaContinuousRealtimeGesture2010
@@ -459,7 +454,7 @@ outperforms HMMs trained on either the EMG or acceleration data
 
 @ammaAirwritingWearableHandwriting2014
 @hamdyaliComparativeStudyUser2014
-@whiteheadAbstractHiddenMarkov2014
+@whiteheadGestureRecognitionAccelerometers2014
 @xieAccelerometerGestureRecognition2014
 
 #### 2015
@@ -495,7 +490,7 @@ outperforms HMMs trained on either the EMG or acceleration data
 @rashidWearableTechnologiesHand2019
 @zhangRealTimeSurfaceEMG2019
 
-### 2020s
+### 2020s {#sss:glove-based-2020s}
 
 @chenSurveyHandPose2020
 @leeDeepLearningBased2020
@@ -683,9 +678,10 @@ resolution of $160 \times 120$ pixels and were taken at 30fps.
 motion capture. It describes the field at a high level, with sections on the
 sensors used, the simplifying assumptions, tracking, pose estimation, and
 gesture recognition. It is noted that depth information will likely be required
-before precise gesture tracking can be implemented. This paper is accompanied
-by @moeslundSummaries107Computer1999 which contains alphabetical summaries of
-the 107 referenced papers.
+before precise gesture tracking can be implemented. This PhD thesis is
+accompanied by @moeslundSummaries107Computer1999 which contains alphabetical
+summaries of the 107 referenced papers. This is later published as
+@moeslundSurveyComputerVisionBased2001.
 
 @wilsonParametricHiddenMarkov1999 introduces a parameterised HMM which is then
 used for identifying the position of a user's hand in 3D space. The hand position is
@@ -696,49 +692,81 @@ the ground truth on which the HMM is trained.
 
 ![An example of the STIVE stereo camera system with views from the two cameras and the calculated locations of the hands and head, @wilsonParametricHiddenMarkov1999](src/imgs/03_wilsonParametricHiddenMarkov1999.png){ width=50% }
 
+In 1999, ARToolKit [@hirokazokatoARToolKit1999] was developed, providing
+researchers with comprehensive software tooling to develop Augmented Reality
+applications. This toolkit will be used by many researchers in the new
+millennium.
+
 ### 2000s {#sss:vision-based-2000s}
 
-@pengyuhongGestureModelingRecognition2000
-@yeasinVisualUnderstandingDynamic2000
+@pengyuhongGestureModelingRecognition2000 uses video data to extract the
+locations of the head and hands. These are tracked over the course of the
+video, and clustered using k-means. These clusters are used to construct a
+Finite State Machine (FSM) of clusters and temporal transitions between
+clusters. The constructed FSM is then compared to a database of FSMs
+representing known gestures. If there is a match, then the gesture is
+recognised.
 
-@moeslundSurveyComputerVisionBased2001
-@yoonHandGestureRecognition2001
+@yeasinVisualUnderstandingDynamic2000 interprets five different hand positions
+as states of a Finite State Machine (FSM), and then classifies gestures as
+different FSMs that only accept certain sequences of states. The resolution of
+the grayscale camera is $256 \times 256$ and the video is taken at 15fps.
 
-@kolschKeyboardsKeyboardsSurvey2002
+#### 2001 {#ssss:vision-based-2000s-2001}
 
-@bowdenVisionBasedInterpretation2003
-@chenHandGestureRecognition2003
-@keskinRealTimeHand2003
-@ramamoorthyRecognitionDynamicHand2003
+@yoonHandGestureRecognition2001 used an HMM to classify 48 unique hand gestures
+based on calculated hand trajectories and other bespoke features.
 
-@bowdenLinguisticFeatureVector2004
-@buchmannFingARtipsGestureBased2004
-@kadirMinimalTrainingLarge2004
-@liuHandGestureRecognition2004
-@zhangVisionbasedSignLanguage2004
+#### 2003 {#ssss:vision-based-2000s-2003}
 
-@binhRealTimeHandTracking2005
-@lepetitMonocularModelBased3D2005
-@ongAutomaticSignLanguage2005
+@bowdenVisionBasedInterpretation2003 was able to classify 55 unique signs from
+the British Sign Language using Markov chains trained on video observations.
 
-@marceloGeFightersExperimentGesturebased2006
-@moeslundSurveyAdvancesVisionbased2006
-@moeslundSurveyAdvancesVisionbased2006
+@chenHandGestureRecognition2003 extracted feature vectors from grayscale 30fps
+video data with a resolution of $256 \times 256$. An set of HMMs were then used
+to classify 20 unique gestures in real time, with one HMM for each gesture.
 
-@elmezainGestureRecognitionAlphabets2007
-@erolVisionbasedHandPose2007
-@fangRealTimeHandGesture2007
-@mitraGestureRecognitionSurvey2007
-@mustafaHandGestureRecognition2007
+@ramamoorthyRecognitionDynamicHand2003 used Kalman filters to track hand
+positions in real time and HMMs to classify 3 hand gestures based on those hand
+positions. Images were processed at 25fps.
 
-@elmezainRealTimeCapableSystem2008
-@hassanpourVisionBasedHand2008
-@zinnenNewApproachEnable2008
+#### 2004 {#ssss:vision-based-2000s-2004}
 
-@elmezainHandGestureRecognition2009
-@moniHMMBasedHand2009
-@wangEvaluationLocalSpatiotemporal2009
-@zabulisVisionBasedHandGesture2009
+@bowdenLinguisticFeatureVector2004 introduced a one-shot sign-language
+classification system which first extracts high level hand descriptors and then
+classifies those descriptors using a set of Markov chains. There is one Markov
+chain for each sign, and 49 signs are classified from a 25fps video.
+
+@buchmannFingARtipsGestureBased2004 introduces a fingertip-based system
+designed to be used to interact with virtual objects in AR. Fiducial markers
+are used to aid with tracking. The user wears an i-visor Head Mounted Display
+(HMD) with a web camera attached. Both the camera and i-visor have a resolution
+of $640 \times 480$ and the application runs at 20fps. The fiducial markers
+largely remove the need for gesture tracking, as they are designed to be easily
+and automatically recognised by ARToolKit [@hirokazokatoARToolKit1999].
+
+![FingARtips with the fiducial markers clearly visible on the table and on the
+user's gloves. The web camera and i-visor HMD are also visible.
+@buchmannFingARtipsGestureBased2004](src/imgs/03_buchmannFingARtipsGestureBased2004.png){
+width=50% }
+
+@kadirMinimalTrainingLarge2004 designed a single-camera system capable of
+classifying 164 different gestures, significantly more than all previous work.
+The system works at 25fps and needs few training examples (with good
+performance achieved using only one example per gesture). The gestures are
+signs from the British Sign Language, and one Markov chain was trained for each
+gesture.
+
+@zhangVisionbasedSignLanguage2004 uses coloured gloves to recognise 439 signs
+from Chinese Sign Language. Principle Component Analysis is first used for
+dimensionality reduction, after which an HMM is used to perform the
+classification. The resolution of the camera was $320 \times 240$
+
+#### 2005 {#ssss:vision-based-2000s-2005}
+
+@binhRealTimeHandTracking2005 introduces a 25fps hand gesture recognition
+system using HMMs and Kalman filters. 36 signs from the American Sign Language
+are classified.
 
 @ongAutomaticSignLanguage2005 provided a survey of sign language recognition,
 emphasising the significance of non-manual signs (those made with the body or
@@ -751,7 +779,48 @@ hard?" in how the body is leaning forward, the head thrust out, and the raised
 eyebrows towards the end of the sentence. \sidenote{TODO also describe the SoTA
 for vision-based recognition}
 
-\sidenote{TODO: add GeFighters}
+#### 2006 {#ssss:vision-based-2000s-2006}
+
+@marceloGeFightersExperimentGesturebased2006 presents a 3D fighting game where
+the players use gestures to control their characters. For each player, two
+fiducial markers (one on each hand) are recognised using ARToolKit [@hirokazokatoARToolKit1999]
+and their relative position is used to indicate the game command.
+
+@moeslundSurveyAdvancesVisionbased2006 surveyed over 300 publications between
+2000 and 2006, following up from @moeslundSurveyComputerVisionBased2001.
+
+#### 2007 {#ssss:vision-based-2000s-2007}
+
+@elmezainGestureRecognitionAlphabets2007 uses HMMs to recognise the 26 letters
+of the American Sign Language alphabet using a stereo camera with an image
+resolution of $240 \times 320$.
+
+@fangRealTimeHandGesture2007 uses AdaBoost to detect hands in the video, which
+are then tracked and classified by examining the hand and finger locations. The
+resolution was $320 \times 240$ and the recognition was processed at about
+10fps.
+
+@mustafaHandGestureRecognition2007
+
+@mitraGestureRecognitionSurvey2007
+
+#### 2008 {#ssss:vision-based-2000s-2008}
+
+@elmezainRealTimeCapableSystem2008
+
+@hassanpourVisionBasedHand2008
+
+@zinnenNewApproachEnable2008
+
+#### 2009 {#ssss:vision-based-2000s-2009}
+
+@elmezainHandGestureRecognition2009
+
+@moniHMMBasedHand2009
+
+@wangEvaluationLocalSpatiotemporal2009
+
+@zabulisVisionBasedHandGesture2009
 
 ### 2010s {#sss:vision-based-2010s}
 
