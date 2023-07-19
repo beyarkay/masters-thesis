@@ -1021,13 +1021,19 @@ all with colour video and depth data.
 
 #### 2021 {#ssss:vision-based-2020s-2021}
 
-@liuDynamicGestureRecognition2021
+@liuDynamicGestureRecognition2021 recognised dynamic gestures using 3D-CNNs
+trained on colour video with depth data.
 
-@mujahidRealTimeHandGesture2021
+@mujahidRealTimeHandGesture2021 train a CNN to extract features from colour
+video with depth data that can be used for real-time detection of five
+postures.
 
-@qiMultiSensorGuidedHand2021
+@qiMultiSensorGuidedHand2021 uses a multi-sensor system (optical, depth, and
+radar) to classify gestures made by a user while driving. Their system uses
+CNNs to classify the sensor data into one of 11 classes.
 
-@sharmaASL3DCNNAmericanSign2021
+@sharmaASL3DCNNAmericanSign2021 used 3D-CNNs to classify 100 dynamic signs from
+the American Sign Language.
 
 #### 2022 {#ssss:vision-based-2020s-2022}
 
