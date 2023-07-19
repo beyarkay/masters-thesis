@@ -430,88 +430,130 @@ outperforms HMMs trained on either the EMG or acceleration data
 ### 2010s {#sss:glove-based-2010s}
 
 @aklAccelerometerbasedGestureRecognition2010
+
 @bevilacquaContinuousRealtimeGesture2010
+
 @harshithSurveyVariousGesture2010
+
 @netoHighLevelProgramming2010
 
 #### 2011
 
 @aklNovelAccelerometerBasedGesture2011
-@cooperSignLanguageRecognition2011
+
+@cooperSignLanguageRecognition2011 explores automated sign language
+recognition. They note that sign language recognition shares many difficulties
+with gesture recognition, but is a problem of its own right due to non-manual
+signs (signs involving the face or other parts of the body).
+
 @xuzhangFrameworkHandGesture2011
 
 #### 2013
 
 @chenSurveyHandGesture2013
+
 @mohandesRecognitionTwoHandedArabic2013
+
 @premaratneAustralianSignLanguage2013
+
 @raysarkarHandGestureRecognition2013
+
 @sethujanakiRealTimeRecognition2013
+
 @songAntLearningAlgorithm2013
+
 @wangUserindependentAccelerometerbasedGesture2013
 
 #### 2014
 
 @ammaAirwritingWearableHandwriting2014
+
 @hamdyaliComparativeStudyUser2014
+
 @whiteheadGestureRecognitionAccelerometers2014
+
 @xieAccelerometerGestureRecognition2014
 
 #### 2015
 
 @marasovicMotionBasedGestureRecognition2015
+
 @xuFingerwritingSmartwatchCase2015
 
 #### 2016
 
 @galkaInertialMotionSensing2016
+
 @jiangDevelopmentRealtimeHand2016
+
 @patilHandwritingRecognitionFree2016
+
 @wuWearableSystemRecognizing2016
 
 #### 2017
 
 @maHandGestureRecognition2017
+
 @mardiyantoDevelopmentHandGesture2017
+
 @riveraRecognitionHumanHand2017
 
 #### 2018
 
 @kunduHandGestureRecognition2018
+
 @leeSmartWearableHand2018
+
 @liHandGestureRecognition2018
+
 @mummadiRealTimeEmbeddedDetection2018
 
 #### 2019
 
 @anwarHandGestureRecognition2019
+
 @fatmiComparingANNSVM2019
+
 @kochRecurrentNeuralNetwork2019
+
 @rashidWearableTechnologiesHand2019
+
 @zhangRealTimeSurfaceEMG2019
 
 ### 2020s {#sss:glove-based-2020s}
 
 @chenSurveyHandPose2020
+
 @leeDeepLearningBased2020
+
 @makaussovLowCostIMUBasedRealTime2020
+
 @moinWearableBiosensingSystem2020
+
 @wenMachineLearningGlove2020
+
 @yuanHandGestureRecognition2020
 
 #### 2021
 
 @ahmedRealtimeSignLanguage2021
+
 @chuSensorBasedHandGesture2021
+
 @kudrinkoWearableSensorBasedSign2021
+
 @qaroushSmartComfortableWearable2021
+
 @wongMultiFeaturesCapacitiveHand2021
+
 @zhangStackedLSTMBasedDynamic2021
 
 #### 2022
 
 @collialfaroUserIndependentHandGesture2022
+
 @patilMarathiSignLanguage2022
+
 @vasconezHandGestureRecognition2022
 
 #### 2023
@@ -857,80 +899,136 @@ This information is enough to classify the four postures.
 
 ### 2010s {#sss:vision-based-2010s}
 
-@naidooSouthAfricanSign2010
+@naidooSouthAfricanSign2010 presents a vision-based gesture recognition system
+for South African Sign Language using feature vectors classified by HMMs, with
+a resultant classification rate of 69%.
 
-@chaudharySurveyHandGesture2011
-@cooperSignLanguageRecognition2011
-@harrisonOmniTouchWearableMultitouch2011
-@oikonomidisEfficientModelbased3D2011
-@renRobustHandGesture2011
-@wachsVisionbasedHandgestureApplications2011
+#### 2011 {#ssss:vision-based-2010s-2011}
 
-@khanSurveyGestureRecognition2012
-@muraseGestureKeyboardMachine2012
-@suarezHandGestureRecognition2012
-@yangDynamicHandGesture2012
-@zamankhanHandGestureRecognition2012
+@chaudharySurveyHandGesture2011 survey vision-based hand gesture recognition
+in the context of soft computing (neural networks, fuzzy logic, genetic
+algorithms). They note that many researchers use fingertip identification as
+the primary feature with which they recognise gestures.
 
-@chenSurveyHandGesture2013
-@nelIntegratedSignLanguage2013
-@raysarkarHandGestureRecognition2013
-@sharmaGestureRecognitionSurvey2013
-@yanminzhuVisionBasedHand2013
+@cooperSignLanguageRecognition2011 explores automated sign language
+recognition. They note that sign language recognition shares many difficulties
+with gesture recognition, but is a problem of its own right due to non-manual
+signs (signs involving the face or other parts of the body). Future progress,
+they note, should be focussed on continuous sign recognition, signer
+independence, and the inclusion of non-manual signs into classification models.
 
-@frieslaarRobustSouthAfrican2014
-@shyamalaSURVEYVISIONBASED2014
+@harrisonOmniTouchWearableMultitouch2011 created the OmniTouch wearable
+depth-sensing and projection system which projects a display onto any surface
+and allows the user to interact with that display. Finger segmentation is
+performed with template matching using the depth data.
 
-@ahujaHandGestureRecognition2015
-@jiehuangSignLanguageRecognition2015
-@longSaliencyDetectionVideos2015
-@michahialHandGestureRecognition2015
-@rautarayVisionBasedHand2015
-@supancicDepthBasedHandPose2015
+#### 2012 {#ssss:vision-based-2010s-2012}
 
-@bansalGestureRecognitionSurvey2016
-@chaiTwoStreamsRecurrent2016
-@chengSurvey3DHand2016
-@ghotkarDynamicHandGesture2016
-@wanExploreEfficientLocal2016
-@wuDeepDynamicNeural2016
-@zhaoMultifeatureGestureRecognition2016
+@khanSurveyGestureRecognition2012 surveys gesture recognition from images of
+hand postures. They note that posture recognition is composed of three main
+phases: hand detection, feature extraction, and gesture recognition. Major
+preprocessing steps include segmentation, edge detection, and noise removal.
 
-@asadi-aghbolaghiSurveyDeepLearning2017
-@caiRGBDDatasetsUsing2017
-@elbadawyArabicSignLanguage2017
-@madadiOcclusionAwareHand2017
-@sagayamHandPostureGesture2017
-@zhaoRealtimeHeadGesture2017
+@suarezHandGestureRecognition2012 reviews the use of depth data for hand
+tracking and gesture recognition, examining 37 papers. The Microsoft Kinect and
+the OpenNI libraries for hand tracking are often used. It is found that the
+release of the Kinect increased the amount of research using depth-based
+information, and moved the focus of research papers from gesture classification
+to the applications of gesture-based input.
 
-@al-shamaylehSystematicLiteratureReview2018
-@liang3DConvolutionalNeural2018
+#### 2013 {#ssss:vision-based-2010s-2013}
 
-@anwarHandGestureRecognition2019
-@avolaExploitingRecurrentNeural2019
-@bhagatIndianSignLanguage2019
-@cheokReviewHandGesture2019
-@funkeUsing3DConvolutional2019
+@nelIntegratedSignLanguage2013 recognised 50 static signs from the South African Sign
+Language with an accuracy of 74%, and is robust against skin colour.
+
+@raysarkarHandGestureRecognition2013 surveyed vision-based hand gesture
+recognition systems, enumerating papers by their approaches to different
+problems such as hand segmentation, background segmentation, robustness to
+skin-colour, scene illumination, and noise removal. \footnote{TODO: From here
+on, surveys were not included, as about half the papers are just surveys, and
+there are already too many references to cover each paper consistently.}
+
+#### 2014 {#ssss:vision-based-2010s-2014}
+
+@frieslaarRobustSouthAfrican2014 explored the classification of signs from the
+South African Sign Language using a combination of HMMs and Support Vector
+Machines (SVMs) called Hidden Markov Support Vector machines (HMSVMs). It is
+able to recognise 35 signs.
+
+#### 2015 {#ssss:vision-based-2010s-2015}
+
+@jiehuangSignLanguageRecognition2015 used 3D Convolutional Neural Networks
+(3DCNNs) to extracts features from the images and depth information of video
+streams. The Microsoft Kinect is used to collect the data, which provides RGB
+video data, depth information, and a description of the skeleton of the user.
+25 custom defined gestures are classified with both a 3DCNN and a Gaussian
+Mixture Model-Hidden Markov Model (GMM-HMM). The results concluded that the
+3DCNN outperformed the GMM-HMM.
+
+@michahialHandGestureRecognition2015 used edge detection and Histogram of
+Gradients for feature extraction from video data. These features are then
+classified into one of 20 gestures using SVMs.
+
+#### 2016 {#ssss:vision-based-2010s-2016}
+
+@chaiTwoStreamsRecurrent2016 used two Recurrent Neural Networks (RNNs) to
+classify continuous gestures from video with depth data. The first RNN segments
+the continuous stream of data to isolate the gestures, and the second RNN
+classifiers those gestures.
+
+@ghotkarDynamicHandGesture2016 classified 20 dynamic hand gestures using a HMM
+with video, depth, and skeleton data from a Microsoft Kinect. The gestures came
+from Indian Sign Language
+
+@wuDeepDynamicNeural2016 used deep neural networks to perform continuous
+gesture classification using video with depth data. 20 gestures are classified.
+
+#### 2019 {#ssss:vision-based-2010s-2019}
+
+@avolaExploitingRecurrentNeural2019 used recurrent neural networks (RNNs)
+trained on the data from Leap Motion Controllers to recognise a subset of 28
+gestures from the American Sign Language. The Leap Motion Controller uses depth
+information to extract a candidate skeleton model of the hand.
+
+@funkeUsing3DConvolutional2019 used 3D Convolutional Neural Networks (3DCNNs)
+to recognise ten surgical gestures from video data.
+
 @hakimDynamicHandGesture2019
+
 @kopukluRealtimeHandGesture2019
+
 @luOneshotLearningHand2019
+
 @mohammedDeepLearningBasedEndtoEnd2019
 
 ### 2020s {#sss:vision-based-2020s}
 
 @chatzisComprehensiveStudyDeep2020
+
 @chenSurveyHandPose2020
+
 @dangAirGestureRecognition2020
+
 @hurrooSignLanguageRecognition2020
+
 @oudahHandGestureRecognition2020
+
 @zhangGestureRecognitionBased2020
 
+#### 2021 {#ssss:vision-based-2020s-2021}
+
 @liuDynamicGestureRecognition2021
+
 @mujahidRealTimeHandGesture2021
+
 @qiMultiSensorGuidedHand2021
+
 @sharmaASL3DCNNAmericanSign2021
 
+#### 2022 {#ssss:vision-based-2020s-2022}
+
 @sahooRealTimeHandGesture2022
+
 @urrehmanDynamicHandGesture2022
 
 ## WiFi-based systems
