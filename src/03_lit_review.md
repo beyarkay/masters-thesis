@@ -993,13 +993,22 @@ information to extract a candidate skeleton model of the hand.
 @funkeUsing3DConvolutional2019 used 3D Convolutional Neural Networks (3DCNNs)
 to recognise ten surgical gestures from video data.
 
-@hakimDynamicHandGesture2019
+@hakimDynamicHandGesture2019 used a video feed with depth information to
+classify 24 gestures using a 3DCNN to extract features and a LSTM to extract
+temporal features. These temporal features were then classified using a Finite
+State Machine.
 
-@kopukluRealtimeHandGesture2019
+@kopukluRealtimeHandGesture2019 used a CNN to classify dynamic hand gestures
+from a video stream in real time. The system uses one CNN to detect if a
+gesture is present, and another CNN to detect _which_ gesture is present, given
+that a gesture _is_ present.
 
-@luOneshotLearningHand2019
-
-@mohammedDeepLearningBasedEndtoEnd2019
+@mohammedDeepLearningBasedEndtoEnd2019 used a two-stage approach to detect
+hands in four hand detection datasets and two gesture classification datasets,
+where one CNN was trained to output bounding boxes containing hands, and
+another CNN was trained to classify those hands as gestures. The system was
+designed to be adaptable to different datasets. The two gesture classification
+datasets contained 81 and 7 unique gestures.
 
 ### 2020s {#sss:vision-based-2020s}
 
