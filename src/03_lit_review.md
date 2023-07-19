@@ -344,13 +344,13 @@ on the speed of use and naturalness of the system when compared to a mouse and
 keyboard. The authors did not describe how the gestures were recognised nor
 exactly what gestures were performed.
 
-#### 2007
+#### 2007 {#ssss:glove-based-2000s-2007}
 
 @mitraGestureRecognitionSurvey2007 surveyed both glove- and vision-based
 gesture recognition, however the vision-based portion of the survey will be
-discussed in Section \ref{vision-based-systems}. Mitra notes that statistical
-modelling techniques (PCA, HMMs, Kalman filters, particle filtering,
-condensation algorithms, Dynamic Time Warping
+discussed in subsection \ref{ssss:vision-based-2000s-2007}. Mitra notes that
+statistical modelling techniques (PCA, HMMs, Kalman filters, particle
+filtering, condensation algorithms, Dynamic Time Warping
 [@myersComparativeStudySeveral1981], Neural Networks) are often employed, but
 that Finite State Machines have also been used effectively. Mitra also notes
 that sign language recognition is the subject of a lot of research.
@@ -800,27 +800,60 @@ are then tracked and classified by examining the hand and finger locations. The
 resolution was $320 \times 240$ and the recognition was processed at about
 10fps.
 
-@mustafaHandGestureRecognition2007
-
-@mitraGestureRecognitionSurvey2007
+@mitraGestureRecognitionSurvey2007 surveys the state of gesture recognition,
+both glove- and vision-based. See subsection \ref{ssss:glove-based-2000s-2007}
+for discussion on the glove-based parts of the survey. Mitra notes that
+connectionist approaches (neural networks and similar) have been effectively
+utilised for gesture recognition, and that while static pose recognition can
+typically be accomplished by simple models, dynamic gesture recognition has
+often required time to be explicitly modelled, often with techniques such as
+time-compressing templates, dynamic time warping, HMMs, and Time-Delayed Neural
+Networks.
 
 #### 2008 {#ssss:vision-based-2000s-2008}
 
-@elmezainRealTimeCapableSystem2008
+@elmezainRealTimeCapableSystem2008 developed a system to recognise 36
+one-handed gestures from colour video using HMMs. The gestures consisted of
+writing out a simplified version the upper-case English alphabet (A-Z) and
+numerals (0-9) in the air with one hand.
 
-@hassanpourVisionBasedHand2008
+@hassanpourVisionBasedHand2008 surveys the state of vision-based hand gesture
+recognition and finds that while much research has been completed, there still
+exist largely unexplored problems such as automatically segmenting hands from
+the background or classifying gestures performed against complex backgrounds.
+These problems hinder real-world application of the findings. Occlusion is also
+an unsolved problem, with researchers either turning to expensive multi-camera
+or depth based systems.
 
 @zinnenNewApproachEnable2008
 
 #### 2009 {#ssss:vision-based-2000s-2009}
 
-@elmezainHandGestureRecognition2009
+@elmezainHandGestureRecognition2009 proposes a method by which the English
+alphabet (A-Z) and numerals (0-9) can be recognised when drawn by the hand in
+the air in front of a colour camera with depth information. This method uses
+HMMs after a feature vector containing hand position information is extracted
+using Kalman filters.
 
-@moniHMMBasedHand2009
+@moniHMMBasedHand2009 conducted a review on using HMMs for vision-based hand
+gesture recognition, noting that a unique HMM is required for each gesture
+class and how this constraint restricts HMM-based approaches.
 
-@wangEvaluationLocalSpatiotemporal2009
+@wangEvaluationLocalSpatiotemporal2009 reviews different action recognition
+methods for vision-based systems from the literature. The reviewed methods and
+algorithms often are evaluated on unrealistic dataset (easily segmented
+background, unmoving camera position, static lighting conditions, low skin
+colour diversity). Wang implements numerous methods and compares them on a
+diverse dataset of different human actions (not limited to human gestures).
+They note that dense sampling [@fei-feiliBayesianHierarchicalModel2005]
+consistently performs all other methods, at the cost of producing 15-20 times
+more features.
 
-@zabulisVisionBasedHandGesture2009
+@zabulisVisionBasedHandGesture2009 develops a gesture recognition system of
+four static single-hand postures. Classification is done by identifying the
+points on the outline of the hand with high curvature, labelling those as
+fingertips, and then counting the number of fingertips and orientation thereof.
+This information is enough to classify the four postures.
 
 ### 2010s {#sss:vision-based-2010s}
 
@@ -878,7 +911,6 @@ resolution was $320 \times 240$ and the recognition was processed at about
 @bhagatIndianSignLanguage2019
 @cheokReviewHandGesture2019
 @funkeUsing3DConvolutional2019
-@guptaDefocusBasedNovel2019
 @hakimDynamicHandGesture2019
 @kopukluRealtimeHandGesture2019
 @luOneshotLearningHand2019
@@ -886,24 +918,18 @@ resolution was $320 \times 240$ and the recognition was processed at about
 
 ### 2020s {#sss:vision-based-2020s}
 
-@alsaediEfficientHandGestures2020
 @chatzisComprehensiveStudyDeep2020
 @chenSurveyHandPose2020
 @dangAirGestureRecognition2020
 @hurrooSignLanguageRecognition2020
 @oudahHandGestureRecognition2020
-@phamHandDetectionSegmentation2020
 @zhangGestureRecognitionBased2020
 
 @liuDynamicGestureRecognition2021
-@mahmoudConvolutionalNeuralNetworks2021
 @mujahidRealTimeHandGesture2021
 @qiMultiSensorGuidedHand2021
 @sharmaASL3DCNNAmericanSign2021
 
-@abejeEthiopianSignLanguage2022
-@ismailDynamicHandGesture2022
-@mejia-perezAutomaticRecognitionMexican2022
 @sahooRealTimeHandGesture2022
 @urrehmanDynamicHandGesture2022
 
