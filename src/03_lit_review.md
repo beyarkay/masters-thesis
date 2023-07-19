@@ -1045,16 +1045,17 @@ to classify 15 dynamic hand gestures.
 
 ## WiFi-based systems
 
-In the year TODO, it was realised that the signals used for household WiFi were
+In the year 2001, it was realised that the signals used for household WiFi were
 sensitive enough that they would be affected by small changes in the
-environment, such as a person breathing or chewing. @todo were the first to
-show that device-free gesture detection was possible via this mechanism, and
-since then many researchers have explored this area. Because WiFi-based systems
-are dependant only on commercially available routers, many high quality
-datasets have been gathered and released. These datasets facilitate the
-advancement of WiFi-based gesture detection because they drastically lower the
-complexity required to get started, allow for results to be reproduced, and
-allow for new techniques to be compared to old ones.
+environment, such as a person breathing or chewing
+[@halperinToolReleaseGathering2011]. @todo were the first to show that
+device-free gesture detection was possible via this mechanism, and since then
+many researchers have explored this area. Because WiFi-based systems are
+dependant only on commercially available routers, many high quality datasets
+have been gathered and released. These datasets facilitate the advancement of
+WiFi-based gesture detection because they drastically lower the complexity
+required to get started, allow for results to be reproduced, and allow for new
+techniques to be compared to old ones.
 
 Split by decade, noting any trends along the way. Note the seminal paper.
 
