@@ -958,12 +958,12 @@ able to recognise 35 signs.
 #### 2015 {#ssss:vision-based-2010s-2015}
 
 @jiehuangSignLanguageRecognition2015 used 3D Convolutional Neural Networks
-(3DCNNs) to extracts features from the images and depth information of video
+(3D-CNNs) to extracts features from the images and depth information of video
 streams. The Microsoft Kinect is used to collect the data, which provides RGB
 video data, depth information, and a description of the skeleton of the user.
-25 custom defined gestures are classified with both a 3DCNN and a Gaussian
+25 custom defined gestures are classified with both a 3D-CNN and a Gaussian
 Mixture Model-Hidden Markov Model (GMM-HMM). The results concluded that the
-3DCNN outperformed the GMM-HMM.
+3D-CNN outperformed the GMM-HMM.
 
 @michahialHandGestureRecognition2015 used edge detection and Histogram of
 Gradients for feature extraction from video data. These features are then
@@ -990,11 +990,11 @@ trained on the data from Leap Motion Controllers to recognise a subset of 28
 gestures from the American Sign Language. The Leap Motion Controller uses depth
 information to extract a candidate skeleton model of the hand.
 
-@funkeUsing3DConvolutional2019 used 3D Convolutional Neural Networks (3DCNNs)
+@funkeUsing3DConvolutional2019 used 3D Convolutional Neural Networks (3D-CNNs)
 to recognise ten surgical gestures from video data.
 
 @hakimDynamicHandGesture2019 used a video feed with depth information to
-classify 24 gestures using a 3DCNN to extract features and a LSTM to extract
+classify 24 gestures using a 3D-CNN to extract features and a LSTM to extract
 temporal features. These temporal features were then classified using a Finite
 State Machine.
 
@@ -1012,17 +1012,12 @@ datasets contained 81 and 7 unique gestures.
 
 ### 2020s {#sss:vision-based-2020s}
 
-@chatzisComprehensiveStudyDeep2020
+@hurrooSignLanguageRecognition2020 recognised 10 signs from the American Sign
+Language alphabet using CNNs.
 
-@chenSurveyHandPose2020
-
-@dangAirGestureRecognition2020
-
-@hurrooSignLanguageRecognition2020
-
-@oudahHandGestureRecognition2020
-
-@zhangGestureRecognitionBased2020
+@zhangGestureRecognitionBased2020 used 3D-CNNs to classify hand gestures from
+three public datasets. The datasets contain 83, 27, and 249 unique gestures,
+all with colour video and depth data.
 
 #### 2021 {#ssss:vision-based-2020s-2021}
 
