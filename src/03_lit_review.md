@@ -1033,13 +1033,15 @@ radar) to classify gestures made by a user while driving. Their system uses
 CNNs to classify the sensor data into one of 11 classes.
 
 @sharmaASL3DCNNAmericanSign2021 used 3D-CNNs to classify 100 dynamic signs from
-the American Sign Language.
+the American Sign Language in real time.
 
 #### 2022 {#ssss:vision-based-2020s-2022}
 
-@sahooRealTimeHandGesture2022
+@sahooRealTimeHandGesture2022 proposes a system of CNNs to recognise 34 static
+signs from the American Sign Language using colour video with depth datasets.
 
-@urrehmanDynamicHandGesture2022
+@urrehmanDynamicHandGesture2022 proposes a combination of a 3D-CNN and a LSTM
+to classify 15 dynamic hand gestures.
 
 ## WiFi-based systems
 
