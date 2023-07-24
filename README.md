@@ -92,6 +92,86 @@ easier to classify. Experiment with only providing 20%, 40%, 60%, 80%, 100% of
 the dataset and see how quickly each model trains. If it looks like we haven't
 reached data saturation, then record more data.
 
+## 2023-07-24
+
+Deadlines:
+
+- When is the hand in?
+
+Still to complete:
+
+- Lit Review
+- Methodology
+- Results
+- Conclusion
+- Introduction
+
+Questions:
+
+- Details about what exactly is expected of each chapter
+
+Weeks:
+
+- 2023-07-24 [01]:
+- 2023-07-31 [02]:
+- 2023-08-07 [03]:
+- 2023-08-14 [04]:
+- 2023-08-21 [05]:
+- 2023-08-28 [06]:
+- 2023-09-04 [07]:
+- 2023-09-11 [08]:
+- 2023-09-18 [09]:
+- 2023-09-25 [10]:
+- 2023-10-02 [11]:
+  - 4 October: **Deadline for December Graduation**
+- 2023-10-09 [12]:
+- 2023-10-16 [13]:
+- 2023-10-23 [14]:
+- 2023-11-30 [15]:
+- 2023-11-06 [16]:
+  - 1 November: **Deadline for March Graduation**
+
+Previous timeline:
+
+- March & April: Perform the experiments & do autocomplete
+- May: Background
+- June: Literature Review
+- July: Methodology
+- August: Results
+- September: Conclusion and Introduction
+
+## 2023-07-20
+
+Thursday meeting due to Trienko's holiday on the Monday
+
+- Literature review still not complete.
+- Many more references (300+) than I thought
+- Describing each of them in turn isn't going to work out
+
+TODO:
+
+- Summarize by theme, not by year or decade
+- focus on the glove-based systems, brief summaries of others
+- note the journal and focus on those with a high "impact factor"
+- Only describe the high-impact papers, as judged by your own intuition
+- Make tables of paper, year, citations, contributions, etc
+- make tables with the common hardware, common datasets, common electronics
+  pieces
+- Make plots:
+  - Nodes and edges graph of the papers and their citations: look at the
+    islands
+  - Citations vs year
+  - Datasets over time
+  - application over time
+- Note that many papers seem to duplicate other research, or do something
+  inferior to it
+- Make a note that many papers don't reference many other papers except for one
+  or two seminal reviews. It seems like a common story that someone will have
+  an idea that "gesture based input doesn't exist" and also "gesture based
+  input is cool" so they throw together a prototype and publish it.
+- Maybe the reason why so many papers have poor literature reviews is because
+  there doesn't seem to be any coherence in the field?
+
 ## 2023-07-03
 
 - DTW?
