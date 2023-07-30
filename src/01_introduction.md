@@ -9,6 +9,21 @@ the letter "a", but Ergo lets you do a simple motion and it's done.
 
 Ergo comes from Ergonomic or the latin for _therefore_.
 
+Contributions:
+
+- Gestures are far more subtle than found before
+- Gestures can be completed far faster than before
+- Application is explicitly for full computer interaction
+- Many more gestures than before
+- Glove is very unintrusive due to the fingernail design
+- Segmentation is done automatically, which is often not considered
+
+Note: Using Tikz graphics make things look _legit_. See Moin, Ali, Andy Zhou,
+Abbas Rahimi, Alisha Menon, Simone Benatti, George Alexandrov, Senam Tamakloe,
+et al. “A Wearable Biosensing System with In-Sensor Adaptive Machine Learning
+for Hand Gesture Recognition.” Nature Electronics 4, no. 1 (December 21, 2020):
+54–63. https://doi.org/10.1038/s41928-020-00510-8.
+
 ---
 
 <!---

@@ -1,4 +1,5 @@
 ---
+toc: true
 header-includes: |
   \DeclareMathOperator*{\argmax}{arg\,max}
   \DeclareMathOperator*{\argmin}{arg\,min}
