@@ -1,5 +1,7 @@
 ---
 toc: true
+csl: ieee.csl
+link-citations: true
 header-includes: |
   \DeclareMathOperator*{\argmax}{arg\,max}
   \DeclareMathOperator*{\argmin}{arg\,min}

@@ -26,7 +26,8 @@ A "gesture" is often used to mean a movement of one or two hands. Sometimes a
 "gesture" includes a static position of one or more hands [@TODO], and
 sometimes a "gesture" is not limited to hands but also encompasses arm or full
 body movement [@TODO]. Sometimes the word "posture" or "pose" is used to
-distinguish a hand movement from a hand position [@TODO]. This review will use
+distinguish a hand movement from a hand position [@TODO], despite the
+distinction being made in the literature since 1999 @laviolaSurveyHandPosture1999. This review will use
 the term "gesture" to cover both static and dynamic hand movements, with the
 clarification of "dynamic gesture" or "static gesture" when confusion could
 arise. Gestures shall also be assumed to be of the hands and fingers (and not
@@ -78,10 +79,10 @@ The majority of this review will discuss glove-based gesture recognition
 (subsection \ref{glove-based-gesture-recognition}) as the subject of this
 thesis is a glove-based system for gesture recognition. Subsection
 \ref{vision--and-wiki-based-gesture-recognition} will cover other means of
-gesture recognition that do not use a physical glove of some sort. Finally,
-subsection \ref{applications-of-gesture-recognition} will discuss how gesture
-recognition has been used over the decades and how that has affected its
-development.
+gesture recognition that do not use a physical glove of some sort, namely
+vision-based and WiFi-based. Finally, subsection
+\ref{applications-of-gesture-recognition} will discuss how gesture recognition
+has been used over the decades and how that has affected its development.
 
 There are many different mechanical and electrical technologies involved. These
 will be given a brief explanation when they are first mentioned in a section,
@@ -93,6 +94,21 @@ of glove-based systems, and many glove-based systems declare the background
 sensitivity/occlusion problems of vision-based software. Both systems seem
 entirely unaware of wifi-based systems. Possibly because a popular survey
 (Mitra 2007) came out just before wifi CSI tech was discovered.}
+
+### Metrics used for comparison
+
+(TODO)
+
+- Explicit vs implicit segmentation
+- Number of classes
+- number of participants
+- number of repetitions
+- Model(s) used
+- Hardware used
+- Technology used
+- Movement (dynamic/static)
+- Glove/Vision/Wifi based
+- fidelity
 
 ## Glove-based Gesture Recognition
 
@@ -136,14 +152,6 @@ measure very acute angles (such as those between fingers) but are very
 intuitive to use, so would see use in commercial applications like the
 CyberGlove, the PowerGlove, and the DataGlove.
 
-Surface Electromyography (sEMG or EMG) measures the electrical impulses of a
-user's muscles. This method generally involves a very noisy signal and does not
-have the interpretability of a flex sensor and so requires advanced machine
-learning techniques to classify the data. It was used for gesture recognition
-by @zhangHandGestureRecognition2009. A general overview of the use of
-Myoelectric signals provided by the survey
-@asgharioskoeiMyoelectricControlSystems2007.
-
 Accelerometers measure linear acceleration in up to three axes, and Inertial
 Measurement Units (IMUs) can measure linear and rotational acceleration,
 although the exact details about what is measured often depend on the product
@@ -156,6 +164,8 @@ gesture. They have been used in many systems, either via a pre-built product
 which contained the sensor, or by embedding the sensor into a custom designed
 device.
 
+![Different technologies used for glove-based systems](src/imgs/graphs/03_tech_for_gloves.pdf)
+
 Accelerometers were first used by @fukumotoBodyCoupledFingerRing1997 and were
 mounted in rings worn at the base of the fingertips. These accelerometers
 measured the jerk caused when the user tapped their fingers against a table or
@@ -164,36 +174,218 @@ flat surface, and mapped certain jerks to certain keystrokes. Following
 for gesture recognition due to their small size and
 interpretability\footnote{TODO maybe include more references here?}.
 
+Surface Electromyography (sEMG or EMG) measures the electrical impulses of a
+user's muscles. This method generally involves a very noisy signal and does not
+have the interpretability of a flex sensor and so requires advanced machine
+learning techniques to classify the data. A general overview of the use of
+myoelectric signals is provided by the survey
+@asgharioskoeiMyoelectricControlSystems2007.
+
+After acceleration and EMG sensors are introduced, there are a few papers
+[@zhangHandGestureRecognition2009, @xuzhangFrameworkHandGesture2011,
+@kimBichannelSensorFusion2008] which combine acceleration and EMG sensors (often
+called "sensor-fusion") to gain better recognition results than either sensor
+in isolation.
+
 @rekimotoGestureWristGesturePadUnobtrusive2001 used the changing capacitance of
 the body to recognise gestures. This was done by using a bracelet-like device
 which would measure how the capacitance through the upper forearm changed as
 the user's muscles moved their fingers.
 
----
-
-Note: sEMG becomes popular and sEMG+IMU often can solve many issues with
-recognising sign language (since some signs have nearly identical features for
-IMU but are distinguishable with sEMG, however sEMG isn't enough to distinguish
-many other gestures easily)
+@wenMachineLearningGlove2020 used triboelectric textile sensors to measure the
+stretch of a textile glove.
 
 ### Landmark Papers
 
-Landmark papers in the field
+The inaugural investigation into glove-based input was undertaken by Sturman
+and Zeltzer in 1994 @sturmanSurveyGlovebasedInput1994 (following Sturman's
+dissertation @sturmanWholehandInput1992 on whole-hand input). Sturman and
+Zeltzer's survey comprehensively examines the predominant glove-based systems
+that were accessible during that period and delves into their respective
+applications. Regrettably, the primary accounts concerning these systems have
+succumbed to the passage of time, rendering Sturman and Zeltzer's work as the
+sole surviving repository of knowledge on the state of the field during that
+time.
+
+Following @sturmanSurveyGlovebasedInput1994 the interest in hand gesture
+recognition increased significantly, prompting the survey by LaViola
+@laviolaSurveyHandPosture1999 which discussed the models and techniques used
+for glove and vision based classification, a perspective not present in
+@sturmanSurveyGlovebasedInput1994.
+
+In 2007, Mitra and Acharya @mitraGestureRecognitionSurvey2007 surveyed the
+software and modelling developments for human gesture recognition (including
+face and head tracking)
+
+Shortly after, Dipietro \emph{et~al.} @dipietroSurveyGloveBasedSystems2008
+describes the state of glove-based input and how the technology has evolved,
+providing a comprehensive summary of the different systems and how they compare
+to one another.
+
+Following 2008, there have been several smaller reviews of the literature
+[@anwarHandGestureRecognition2019; @chenSurveyHandGesture2013;
+@chenSurveyHandPose2020; @harshithSurveyVariousGesture2010;
+@kudrinkoWearableSensorBasedSign2021; @rashidWearableTechnologiesHand2019;
+@raysarkarHandGestureRecognition2013] however the field has largely moved
+towards vision-based systems due to the availability of high quality vision
+datasets and the computational power to process them.
+
+![Trend of glove/vision/WiFi based systems over time](src/imgs/graphs/03_based_on_over_time.pdf)
 
 ### Hardware Products
 
-Hardware products that got released
+Commercially available gloves which can measure the movement of a user's hands
+often result in research using those gloves, as the researchers capable of
+purchasing a glove-based system are a strict subset of researchers capable of
+designing and building a glove-based system. This subsection explores hardware
+products which have been used for glove-based gesture recognition.
 
-- MyoWare product
+The Computer Image Corporation of Denver, Colorado developed the ANIMAC (later
+named the
+[Scanimate](https://www.fondation-langlois.org/html/e/page.php?NumPage=442))
+between 1962 and 1971 which performed full body capture for use in computer
+graphics, but did not have the fidelity for finger-level gesture capture.
+
+![ANIMAC, @experimentaltelevisioncenterComputerImageCorporation1969](src/imgs/03_experimental_television_center_computer_1969.jpg){ width=50% }
+
+The SayreGlove [@thomasa.defantiUSNEAR60341631977] is often credited as the
+first glove-based system developed. It used a combination of optical tubes
+which occluded light when bent and parallel conductive pads which touched and
+therefore conducted electricity when bent to sense the movement of the user's
+hand.
+
+In the 1990s there were three main commercially available products: The
+DataGlove developed by VPL systems [@TODO], the PowerGlove developed Abrams
+Gentile Entertainment for Nintendo [@TODO], and the CyberGlove [@TODO]. These
+gloves were similar in nature, with some combination of flex sensors over the
+phalanges and accelerometers mounted on the back of the hands.
+
+The Utah/MIT Dexterous Hand and the associated Utah/MIT Dexterous HandMaster
+[@jacobsenUTAHDextrousHand1984; @jacobsenDesignUtahDextrous1986] was a complex
+system that included both a controller which sensed the position of a human
+hand through a series of hall-effect sensors (the HandMaster) and a robotic
+hand which could be controlled by this HandMaster.
+
+@marcusSensingHumanHand1988 and @hongCalibratingVPLDataGlove1989 used the VPL
+DataGlove to control the Utah/MIT Dexterous Hand.
+
+The Nintendo Wii Remote (often called the Wiimote) was a cheap, commercially
+available game controller developed for the Nintendo Wii. It contained a 3-axis
+accelerometer and so was used by several researchers to explore gesture
+recognition using the acceleration data it provided
+[@kratzWiizards3DGesture2007; @netoHighLevelProgramming2010;
+@schlomerGestureRecognitionWii2008].
+
+![Different hardware used for glove-based systems](src/imgs/graphs/03_hardware_for_gloves.pdf)
+
+The development of mobile devices with integrated IMU microchips also inspired
+development, with several papers proposing systems where the user would simply
+hold their smart phone [@xieAccelerometerGestureRecognition2014], smart watch
+[@xuFingerwritingSmartwatchCase2015], or Personal Digital Assistant (PDA)
+[@kelaAccelerometerbasedGestureControl2006] in their hand and perform a gesture
+which would control the device.
+
+The development of the MyoWare Armband resulted in several papers
+[@vasconezHandGestureRecognition2022;
+@collialfaroUserIndependentHandGesture2022; @zhangRealTimeSurfaceEMG2019].
+
+The Delsys Myomonitor IV was used by @zhangHandGestureRecognition2009 and
+@kimBichannelSensorFusion2008.
+
+Notably, @moinWearableBiosensingSystem2020 developed a custom sheet of densely
+clustered sEMG sensors which wrapped around the forearm of the user.
 
 ### Datasets
 
-Commonly used datasets and the lack of common base upon which development can
-be made.
+There has largely been a lack of commonly used datasets for glove-based systems
+due to the lack of commonly used hardware solutions. Many researchers [@TODO]
+have recently started making their datasets and code public in the interest of
+reproducibility. However, there are no datasets in common use as it is often
+easier to develop custom hardware than to try and recreate another researcher's
+hardware. There is also a lack of clearly superior glove-based hardware, which
+incentivises the development of new hardware and new datasets, instead of using
+existing datasets recorded using existing hardware.
+
+The widespread adoption of some standard glove-based system would likely
+accelerate the development of superior gesture recognition systems, as curious
+researchers would not have to create the hardware themselves but would be able
+to focus on creating the classification models. This has already occurred in
+vision-based systems, where there now exist widely used datasets recorded on
+standard and easily available hardware (see subsection
+\ref{non-glove-datasets}).
+
+While commercially available systems do exist [@TODO], they are largely aimed
+at industrial applications and are generally too costly for exploratory
+research. It is unlikely for glove-based datasets to become commonly used until
+a glove-based system becomes commonly used, and that will require the
+glove-based system to be easy to build, cost effective, and applicable to a
+wide range of different applications. The SoapBox
+[@tuulariSoapBoxPlatformUbiquitous2002] was proposed as such a device, but it
+did not receive widespread adoption.
 
 ### Models and Recognition Techniques
 
-Trends in the types of models used
+![Models used for gesture recognition](src/imgs/graphs/03_models.pdf)
+
+Different techniques have been applied to recognise gestures. The exact
+application of the model depends on the dataset collected, however some high
+level trends can be noticed. The datasets being classified often take the form
+of a multi-dimensional time series.
+
+Early on in the field, many researchers extracted a custom designed feature
+vector from their data and trained a model on that feature vector. This
+approach has recently fallen out of favour, with many recent papers using a
+variety of deep learning based methods to learn the features implicitly.
+
+Hidden Markov Models (HMMs) have often been favoured due to their explicit encoding of
+time-dependant data. Support Vector Machines (SVMs), Dynamic Time Warping
+(DTW), and k-Nearest Neighbours (kNN) have all also been frequently used.
+
+Neural Network based approaches first appeared with
+@murakamiGestureRecognitionUsing1991 using a recurrent neural network to
+classify a dataset of 42 classes.
+
+Papers which attack implicit segmentation (where not every observation
+necessarily contains a gesture, often resulting in a highly imbalanced
+dataset) often [@TODO] use a two-model approach, with one model being used for
+gesture detection (without attempting to classify which gesture is being
+observed) and a second (often more complex) model being used for gesture
+recognition _given_ that the observation already contains a gesture. These two
+models are chained together, such that the gesture recogniser is only applied
+to observations which the gesture detector has found to actually contain a
+gesture.
+
+The training times and inference times of different models scale in different
+ways. HMMs are unable of performing multi-class classification, and the only
+way to create a HMM-based classifier for multiple classes is to train one HMM
+for each class. At inference time, every HMM must output the log-likelihood of
+the given observation being generated. These log-likelihoods are then compared,
+and the class associated with the most likely HMM is selected as the
+classifiers prediction. This is called one-vs-rest classification. SVMs also
+require one-vs-rest classification.
+
+The problem with one-vs-rest classification is that it scales linearly with the
+number of classes being predicted. So performing inference on a dataset with 5
+classes will take approximately 10 times shorter than performing inference on a
+dataset with 50 classes.
+
+Notably, HMMs have been used by researchers Wang Chunli and Gao Wen to classify
+thousands of unique gestures from Chinese Sign Language:
+@chunliwangRealTimeLargeVocabulary2001 classified 4800 signs,
+@wangchunliRealTimeLargeVocabulary2002 classified 5100 signs, and
+@wengaoChineseSignLanguage2004 classified 5113 signs.
+@wengaoChineseSignLanguage2004 applied a multi-stage approach, where a
+Self-Organising Feature Map (SOM) was used to reduce the dimensionality of the
+input data. A simple Recurrent Neural Network was used to detect if there was a
+gesture in a particular observation, and then (conditional on a positive
+detection) a set of 5113 HMMs were used to recognise which gesture was in that
+observation. They applied a modified version of the Viterbi algorithm (the
+"lattice" Viterbi Algorithm) to efficiently evaluate the most likely of the
+many different HMMs.
+
+The inference and prediction times for neural network based methods do not tend
+to grow linearly with the number of classes being predicted. This is due to
+their internal architecture being able to support multi-class classification.
 
 ## Vision- and WiFi-based Gesture Recognition
 
@@ -206,13 +398,66 @@ Hardware products that got released
 Commonly used datasets and the lack of common base upon which development can
 be made.
 
+### Models and Recognition Techniques
+
+Convolutional Neural Networks (CNNs) are easily the favoured technique for
+vision based data. Before CNNs, vision based data was manually filtered with
+various computer vision techniques before feature vectors could be defined and
+extracted. The chosen features were often some combination of the mean location
+for the largest blob of darkness/lightness in the image and the approximate
+orientation of that blob. These feature vectors often classified using an HMM.
+
+### Datasets {#non-glove-datasets}
+
 Trends in the types of models used
+
+@chaiTwoStreamsRecurrent2016
+
+> In this section, our proposed method is evaluated on the Large-scale Continuous
+> Gesture Recognition Dataset of the ChaLearn LAP challenge 2016(ChaLearn LAP
+> ConGD Dataset). First, we give a brief overview on ConGD and its evaluation
+> protocol. Then, we show the performances on different features and also
+> different networks in order to verify the effectiveness of the proposed 2S-RNN
+> method. Finally, the final test results of the top three winners are given and
+> we win the first place.
 
 ## Applications of Gesture Recognition
 
-- Sign language is like the Utah Teapot
-  - The point often isn't sign language, it's just the first set of
-    non-trivial easy-to-explain signs that most people know about.
+![Applications of gesture recognition](src/imgs/graphs/03_applications.pdf)
+
+One of the most common applications for gesture recognition is classification
+of the sign language local to the researcher (for example, American Sign
+Language for the USA or Japanese Sign Language for Japan). These languages
+appear ideal at first glance, as they provide a large set of non-trivial
+gestures which do not require extensive description. The ability to
+automatically translate a sign language into a spoken language has immediate
+and clear benefit.
+
+However, sign language communication goes beyond the simple hand signs that are
+popularly shown in simple charts. Sign languages include non-manual markers which
+use the face or body posture of the signer to convey grammatical structure and
+lexical distinctions, for example questions or negations.
+
+This means that the common task of developing a system to recognise sign
+language is often reported as a complete system, even though it is a partial
+solution.
+
+![Sign Language applications of gesture recognition](src/imgs/graphs/03_sl_applications.pdf)
+
+This has raised some critique from sign language communities [@TODO], however
+it should be noted that many authors use gestures from their local sign
+language simply as a useful collection of gestures, and the fact that the
+gestures have distinct meaning is not of direct interest to the research being
+performed.
+
+An analogy can be made to the Utah Teapot [@torrenceMartinNewellOriginal2006],
+common in computer graphics research. The utility of the Utah Teapot is not
+that it is an accurate representation of a specific teapot, but rather that it
+is a shape complex enough to be non-trivial and common enough that it does not
+require significant explanation. Similarly, The utility of using gestures from
+a sign language is not that they have semantic meaning, but rather that they
+are complex enough to be non-trivial and common enough that they do not require
+significant explanation.
 
 ---
 
@@ -352,5 +597,9 @@ This section is incomplete
   - Pohelmus 3SPACE
 - VPL DataGlove
 - Nintendo PowerGlove
+
+## Models and techniques
+
+- Instance based learning = k-Nearest Neighbours with $k=1$
 
 # References
