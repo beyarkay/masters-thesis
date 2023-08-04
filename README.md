@@ -92,6 +92,10 @@ easier to classify. Experiment with only providing 20%, 40%, 60%, 80%, 100% of
 the dataset and see how quickly each model trains. If it looks like we haven't
 reached data saturation, then record more data.
 
+Note: Probably should also implement DTW
+
+# List of Journals
+
 ## 2023-07-24
 
 Deadlines:
@@ -105,30 +109,100 @@ Still to complete:
 - Results
 - Conclusion
 - Introduction
+- Time to run extra experiments if needed?
+
+"Late" graduation: oral exam in the new year
+
+After the oral I'll know if I've passed or not (**Q**: How long between oral
+and pass?)
+
+How the oral works:
+
+Guests can be invited to an oral. Or other prospective masters students, or
+anyone. It takes about an hour in total. The oral is more just checking if you
+actually wrote it. It counts 10% of the final mark, but you can fail if they
+see that you didn't actually do the work. Thesis mark is the remaining 90%.
+Trienko will do a few dry runs for the oral. Very similar to the honours
+presentation.
+
+1. 30m presentation
+2. Open questions to the floor from the general audience
+3. Guests are then removed
+4. Faculty staff ask questions
+5. Faculty removed
+6. Examiners ask questions (two of them)
+7. Student and Supervisor leave venue
+8. Examiners deliberate (~10m)
+9. Supervisor is informed of the result
+10. Supervisor informs the students
 
 Questions:
 
 - Details about what exactly is expected of each chapter
 
+Dates:
+
+- Oct 17 Trienko submits the examiners
+- 17 October to 1 November: final hand in (actual latest is 1 January)
+
+Approaches to complete intro&conc:
+
+1. In the intro, describe the problem, write problem statement, write
+   contributions, list chapters and what's in them. In the conclusion, just
+   summarize the thesis in a bit more detail than the abstract (about 2 pages)
+
+2. **RECOMMENDED**: Small intro to the problem, problem statement, list
+   **research questions** that you'll try to answer (ie what's been done,
+   what's the best approach for Ergo, how does the system differ from the
+   existing literature), then list the chapters and what's in them. In the
+   conclusion, write answers to the research questions. half page describing
+   the thesis, a few more pages about something...
+
+Always include a "future work" section in the conclusion.
+
+Methodology chapter:
+
+Describe how you utilised the existing knowledge/algorithms/approaches (as
+given in the bg chapter) to make them work. Also list any modifications made.
+Also describe the dataset. Also describe how ergo looks like. Then explain
+experimental setup which will let you answer the research questions made in the
+introduction. This is where you describe the exact architecture of the neural
+network and the hyperparameters you're iterating over. Also describe how the
+HMMs are used for gesture based classification.
+
+Results chapter:
+
+First add the graphs that will be discussed. Then, start writing the content
+and analysing the data. This helps because you already have what your data is
+and is a lot better than writing what you think your conclusions are before you
+
 Weeks:
 
-- 2023-07-24 [01]:
-- 2023-07-31 [02]:
-- 2023-08-07 [03]:
-- 2023-08-14 [04]:
-- 2023-08-21 [05]:
-- 2023-08-28 [06]:
-- 2023-09-04 [07]:
-- 2023-09-11 [08]:
-- 2023-09-18 [09]:
-- 2023-09-25 [10]:
-- 2023-10-02 [11]:
-  - 4 October: **Deadline for December Graduation**
-- 2023-10-09 [12]:
-- 2023-10-16 [13]:
-- 2023-10-23 [14]:
-- 2023-11-30 [15]:
-- 2023-11-06 [16]:
+- Lit Review: 2 weeks
+- pre-methodology to write out what the experiments are, and generate the
+  graphs
+- Linked together (12 weeks):
+  - Results: 8 weeks
+  - Methodology: 4 weeks
+- Conclusion & Introduction: 1 week
+- Appendices!?
+
+- 2023-07-24 [01]: Lit Review
+- 2023-07-31 [02]: Lit Review
+- 2023-08-07 [03]: Results
+- 2023-08-14 [04]: Results
+- 2023-08-21 [05]: Results
+- 2023-08-28 [06]: Results
+- 2023-09-04 [07]: Results
+- 2023-09-11 [08]: Results
+- 2023-09-18 [09]: Results
+- 2023-09-25 [10]: Results
+- 2023-10-02 [11]: Methodology
+- 2023-10-09 [12]: Methodology
+- 2023-10-16 [13]: Methodology
+- 2023-10-23 [14]: Methodology
+- 2023-11-30 [15]: Conclusion & Introduction
+  - Go through intro and conclusion of the other MSc papers
   - 1 November: **Deadline for March Graduation**
 
 Previous timeline:
