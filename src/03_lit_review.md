@@ -4,8 +4,21 @@ This section will review the literature as related to human hand gesture
 detection. There are three primary methods of sensing the movement of a user's
 hands: glove-based, vision-based, and (most recently) WiFi-based.
 
-A glossary of useful electronic and anatomical terms is provided in Section
-\ref{glossary-of-terms}.
+This review is divided into four sections. The first will provide an overview
+of the field and some important metrics which will be used to compare different
+works. The second section discusses glove-based gesture recognition (Section
+\ref{glove-based-gesture-recognition}). This contains the most detail as a
+glove-based system for gesture recognition is the subject of this thesis.
+Section \ref{vision--and-wiki-based-gesture-recognition} will cover other means
+of gesture recognition that do not use a physical glove of some sort, namely
+vision-based and WiFi-based. Finally, Section
+\ref{applications-of-gesture-recognition} will discuss how gesture recognition
+has been used over the decades and how that has affected its development.
+
+There are many different mechanical and electrical technologies involved. These
+will be given a brief explanation when they are first mentioned, but the reader
+is guided towards the Glossary of Terms \ref{glossary-of-terms} for a more
+thorough description
 
 ## Overview
 
@@ -17,21 +30,111 @@ is not to say that reference will not be made to the work done in the field,
 but rather that the emphasis will be on the progress made and on relevant
 literature surveys.
 
-Automatic gesture recognition has largely evaded a well-established terminology,
-with different terms being defined for various concepts based on the
-requirements at hand. Nonetheless, these differing definitions are often guided
-by similar intuition and so rarely conflict with one another.
+Automatic gesture recognition has largely evaded a well-established
+terminology, with different terms being defined for various concepts based on
+the requirements at hand. Nonetheless, these differing definitions are often
+guided by similar intuition and so do not result in significant conflict with
+one another.
+
+Some of the systems developed aim for "real-time" usage, although a consistent
+definition for real-time is lacking. One definition would be to consider the
+response time of the system in terms of the number of predictions per second.
+This metric is often used, however papers have claimed "real-time" predictions
+when their systems make predictions at a rate between 15Hz [@TODO] and 400Hz
+[@TODO]. Some papers neglect to mention the prediction rate, and only describe
+the system as "real-time" [@TODO]. \footnote{TODO should a description of what
+this paper will consider "real-time" be included here?}
+
+\footnote{TODO Note: Many vision-based papers declare the cumber
+of glove-based systems, and many glove-based systems declare the background
+sensitivity/occlusion problems of vision-based software. Both systems seem
+entirely unaware of WiFi-based systems. Possibly because a popular survey
+(Mitra 2007) came out just before WiFi CSI tech was discovered.}
+
+### Metrics used for comparison
+
+This review will use several metrics to enable systematic comparison across
+different works in the literature. Different authors have tackled tasks which
+are often described similarly, but vary significantly in their difficulty. For
+this reason, oft-reported metrics such as model accuracy or number of gesture
+classes are rarely directly comparable.
+
+Note that not all authors publicise enough data to describe every metric, and
+some papers might have tested multiple systems, resulting in multiple metrics
+recorded for that paper.
+
+The metrics are listed below, with short explanations. More detailed
+explanations are also given for the metrics which require them.
+
+- Glove/Vision/Wifi based: There are (broadly speaking) three main categories
+  of gesture capture systems: Glove-based, Vision-based, and (most recently)
+  WiFi-based. Glove-based systems have some instrument physically connected to
+  the person's hands or forearms. Vision-based systems use cameras to capture
+  the colour (and possibly also depth) information of the person performing the
+  gesture. WiFi-based systems are a relatively new development, and use the
+  noise WiFi signals to infer the position of the human body.
+
+- Technology used: This refers to the underlying technology that enables data
+  collection, for example: flexion sensors, accelerometers, electromyography,
+  RGB cameras with depth information.
+
+- Number of classes: The number of classes classified by the system. This is
+  often 26 (one class for each letter a through z) or 36 (the letters a through
+  z and the numerals 0 through 9).
+
+- number of participants: The total number of people who contributed gesture
+  data to the entire dataset, before the dataset is split into
+  training/validation/testing subsets. One person recording data in different
+  locations or on different days is still considered as one person.
+
+- Number of repetitions: The number of times each person repeated each class.
+  Papers which attempted one-shot learning often only recorded one repetition
+  for each class.
+
+- Model(s) used: The type of model used to classify the data. Multiple models
+  can be recorded for each paper. When a paper used a derivation of a commonly
+  used model, then the commonly used model was recorded.
+
+- Hardware used: This is the pre-built hardware used to collect the data. For
+  example, this might be the Microsoft Kinect, the Nintendo PowerGlove, or a
+  commercially available webcam.
+
+- Movement (dynamic/static): Whether or not the gesture has a critical temporal
+  element. See subsection \ref{gestures-vs-postures}.
+
+- Fidelity: The granularity or level of detail of the gesture. The ability to
+  recognise someone waving their arms in the air is very different from the
+  ability to distinguish the dexterous movements required while typing. See
+  subsection \ref{gesture-fidelity}.
+
+- Explicit vs implicit segmentation: Do all observations contain _some_
+  gesture, or does the classification system have to make that distinction?
+  Explicit segmentation is where the observations have been segmented such that
+  the start and end of each gesture is provided to the model, whereas implicit
+  segmentation requires that the classifier first detect which observations
+  have gestures and then recognise which gestures are in those observations.
+  See subsection \ref{explicit-and-implicit-segmentation}.
+
+#### Gestures vs Postures
 
 A "gesture" is often used to mean a movement of one or two hands. Sometimes a
 "gesture" includes a static position of one or more hands [@TODO], and
 sometimes a "gesture" is not limited to hands but also encompasses arm or full
 body movement [@TODO]. Sometimes the word "posture" or "pose" is used to
 distinguish a hand movement from a hand position [@TODO], despite the
-distinction being made in the literature since 1999 @laviolaSurveyHandPosture1999. This review will use
-the term "gesture" to cover both static and dynamic hand movements, with the
-clarification of "dynamic gesture" or "static gesture" when confusion could
-arise. Gestures shall also be assumed to be of the hands and fingers (and not
-of the arms or body) unless explicitly noted.
+distinction being made in the literature since 1999
+@laviolaSurveyHandPosture1999. This review will use the term "gesture" to cover
+both static and dynamic hand movements, with the clarification of "dynamic
+gesture" or "static gesture" when confusion could arise. Gestures shall also be
+assumed to be of the hands and fingers (and not of the arms or body) unless
+explicitly noted.
+
+TODO: Note that some sign languages require a temporal element but this is
+ignored by some papers. For example, the American Sign Language "j" and "z"
+require moving the pinky in a "j" or "z" shape respectively, but these are
+often ignored.
+
+#### Gesture Fidelity
 
 The fidelity or granularity of a gesture is not often reported, but has great
 impact on the difficulty of the problem being attempted. A high-fidelity
@@ -46,6 +149,8 @@ comparison, this survey will discretise fidelity into three levels:
 finger-fidelity, hand-fidelity, and arm-fidelity.\footnote{TODO: do these need
 precise definitions?} Further clarification will be provided if these
 categories do not adequately classify a certain gesture.
+
+#### Explicit and implicit segmentation
 
 Gesture recognition and gesture detection are sometimes used interchangeably
 [@TODO] and sometimes distinguished. This review will define gesture detection
@@ -65,50 +170,6 @@ gesture) drastically reduces the practicality of those systems, as any
 real-world system would need some way to eliminate the portions of the dataset
 which do not contain any gestures. This is often [@TODO] called the
 segmentation problem.
-
-Some of the systems developed aim for "real-time" usage, although a consistent
-definition for real-time in this field is lacking. One approach would be to
-consider the response time of the system in terms of the number of predictions
-per second. This metric is often used, however papers have claimed "real-time"
-predictions when their systems operate at anywhere between 15Hz [@TODO] and
-400Hz [@TODO]. Some papers neglect to mention the prediction rate, and only
-describe the system as "real-time" [@TODO].\footnote{TODO should a description
-of what this paper will consider "real-time" be included here?}
-
-The majority of this review will discuss glove-based gesture recognition
-(subsection \ref{glove-based-gesture-recognition}) as the subject of this
-thesis is a glove-based system for gesture recognition. Subsection
-\ref{vision--and-wiki-based-gesture-recognition} will cover other means of
-gesture recognition that do not use a physical glove of some sort, namely
-vision-based and WiFi-based. Finally, subsection
-\ref{applications-of-gesture-recognition} will discuss how gesture recognition
-has been used over the decades and how that has affected its development.
-
-There are many different mechanical and electrical technologies involved. These
-will be given a brief explanation when they are first mentioned in a section,
-but the reader is guided towards the Glossary of Terms \ref{glossary-of-terms}
-for a more thorough description
-
-\footnote{TODO Note: Many vision-based papers declare the clumber
-of glove-based systems, and many glove-based systems declare the background
-sensitivity/occlusion problems of vision-based software. Both systems seem
-entirely unaware of wifi-based systems. Possibly because a popular survey
-(Mitra 2007) came out just before wifi CSI tech was discovered.}
-
-### Metrics used for comparison
-
-(TODO)
-
-- Explicit vs implicit segmentation
-- Number of classes
-- number of participants
-- number of repetitions
-- Model(s) used
-- Hardware used
-- Technology used
-- Movement (dynamic/static)
-- Glove/Vision/Wifi based
-- fidelity
 
 ## Glove-based Gesture Recognition
 
@@ -389,13 +450,53 @@ their internal architecture being able to support multi-class classification.
 
 ## Vision- and WiFi-based Gesture Recognition
 
-Landmark papers in the field
+Vision-based systems use visual information (such as that from a commercial
+video camera) to detect the human hand and thereafter recognise the gesture
+being performed. With the advent of cheap depth tracking (most notably with the
+sale of the Microsoft Kinect), depth information is often incorporated into
+vision-based systems.
 
-Trends in the type of sensors used
+The Channel State Information (CSI) was described by the IEE 802.11n standard,
+released in 2009. CSI is intended to be used to improve the connection quality
+between transmitter and receiver. It is similar in function to RSSI, but
+contains significantly more detail.
 
-Hardware products that got released
+In 2011, a tool [@halperinToolReleaseGathering2011] was released which provided
+a detailed picture of the wireless channel conditions using CSI information.
+The release of this tool showed the amount of information available in CSI
+information about the environment. Adib and Katabi first applied the data
+available in CSI to recognise human gestures [@adibSeeWallsWiFi2013] and were
+followed by numerous papers exploring this technique.
 
-Commonly used datasets and the lack of common base upon which development can
+To describe the technique at a high level, CSI contains data which is very
+sensitive to the surrounding environment, and changes in the environment affect
+changes in the CSI. CSI can therefore provide information about the state of
+the environment, and modern machine learning methods have proven capable at
+extracting inference from this data.
+
+Since then, many researchers have explored this area. Because WiFi-based
+systems are dependant only on commercially available routers, many high quality
+datasets have been gathered and released [@TODO]. These datasets facilitate the
+advancement of WiFi-based gesture detection because they drastically lower the
+complexity required to get started, allow for results to be reproduced, and
+allow for new techniques to be compared to old ones.
+
+---
+
+Vision based systems have been discussed since the 1980s
+[@boltPutthatthereVoiceGesture1980;
+@jenningsComputergraphicModelingAnalysis1988;
+@myronw.kruegerArtificialRealityII1991] but the first working system was Yamato
+\emph{et~al.}'s paper recognising human actions using feature vectors
+recognised by a HMM [@yamatoRecognizingHumanAction1992].
+
+TODO: Landmark papers in the field
+
+TODO: Trends in the type of sensors used
+
+TODO: Hardware products that got released
+
+TODO: Commonly used datasets and the lack of common base upon which development can
 be made.
 
 ### Models and Recognition Techniques
@@ -480,34 +581,6 @@ Themes to make Ergo look good:
 - Is segmentation automatic or does the user have to specify the start/end of
   the gesture?
 - How much freedom does the user have when moving their hands?
-
-## Glove-based systems
-
-Glove-based systems are characterised by electronic sensors which were embedded
-in a "glove" that the user would wear. Many different sensor types have been
-proposed over the decades measuring acceleration, skin capacitance, joint
-flexion, and muscle-based electrical impulses.
-
-The lack of an affordable high-fidelity sensor glove has resulted in a high
-barrier to entry. Those researchers who are able to acquire or build a sensor
-glove have often had to reinvent the wheel, as the findings from one sensor
-suite will not be applicable to any other sensor suite.
-
-## Vision-based systems
-
-## WiFi-based systems
-
-In the year 2001, it was realised that the signals used for household WiFi were
-sensitive enough that they would be affected by small changes in the
-environment, such as a person breathing or chewing
-[@halperinToolReleaseGathering2011]. @adibSeeWallsWiFi2013 were the first to
-show that device-free gesture detection was possible via this mechanism, and
-since then many researchers have explored this area. Because WiFi-based systems
-are dependant only on commercially available routers, many high quality
-datasets have been gathered and released. These datasets facilitate the
-advancement of WiFi-based gesture detection because they drastically lower the
-complexity required to get started, allow for results to be reproduced, and
-allow for new techniques to be compared to old ones.
 
 # Glossary of terms
 
