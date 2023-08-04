@@ -106,9 +106,9 @@ conc:
 
 watch:
 	# Install `entr` first: https://github.com/eradman/entr
-	echo '01_introduction.md' | entr -s 'make intro' &
-	echo '02_background.md' | entr -s 'make bg' &
-	echo '03_lit_review.md' | entr -s 'make lit' &
-	echo '04_methodology.md' | entr -s 'make method' &
-	echo '05_results.md' | entr -s 'make results' &
-	echo '06_conclusion.md' | entr -s 'make conc' &
+	echo 'src/01_introduction.md' | entr -s 'make intro' &
+	echo 'src/02_background.md' | entr -s 'make bg' &
+	echo 'src/03_lit_review.md' | entr -s 'make lit' &
+	echo 'src/04_methodology.md' | entr -s 'make method' &
+	echo 'src/05_results.md' | entr -s 'make results' &
+	echo 'src/06_conclusion.md' | entr -s 'make conc' &
