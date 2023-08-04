@@ -51,8 +51,6 @@ sensitivity/occlusion problems of vision-based software. Both systems seem
 entirely unaware of WiFi-based systems. Possibly because a popular survey
 (Mitra 2007) came out just before WiFi CSI tech was discovered.}
 
-### Metrics used for comparison
-
 This review will use several metrics to enable systematic comparison across
 different works in the literature. Different authors have tackled tasks which
 are often described similarly, but vary significantly in their difficulty. For
@@ -66,56 +64,53 @@ recorded for that paper.
 The metrics are listed below, with short explanations. More detailed
 explanations are also given for the metrics which require them.
 
-- Glove/Vision/Wifi based: There are (broadly speaking) three main categories
-  of gesture capture systems: Glove-based, Vision-based, and (most recently)
-  WiFi-based. Glove-based systems have some instrument physically connected to
-  the person's hands or forearms. Vision-based systems use cameras to capture
-  the colour (and possibly also depth) information of the person performing the
-  gesture. WiFi-based systems are a relatively new development, and use the
-  noise WiFi signals to infer the position of the human body.
+### Glove/Vision/Wifi based
 
-- Technology used: This refers to the underlying technology that enables data
-  collection, for example: flexion sensors, accelerometers, electromyography,
-  RGB cameras with depth information.
+There are (broadly speaking) three main categories of gesture capture systems:
+Glove-based, Vision-based, and (most recently) WiFi-based. Glove-based systems
+have some instrument physically connected to the person's hands or forearms.
+Vision-based systems use cameras to capture the colour (and possibly also
+depth) information of the person performing the gesture. WiFi-based systems are
+a relatively new development, and use the noise WiFi signals to infer the
+position of the human body.
 
-- Number of classes: The number of classes classified by the system. This is
-  often 26 (one class for each letter a through z) or 36 (the letters a through
-  z and the numerals 0 through 9).
+### Technology Used
 
-- number of participants: The total number of people who contributed gesture
-  data to the entire dataset, before the dataset is split into
-  training/validation/testing subsets. One person recording data in different
-  locations or on different days is still considered as one person.
+This refers to the underlying technology that enables data collection, for
+example: flexion sensors, accelerometers, electromyography, RGB cameras with
+depth information.
 
-- Number of repetitions: The number of times each person repeated each class.
-  Papers which attempted one-shot learning often only recorded one repetition
-  for each class.
+### Number of Classes
 
-- Model(s) used: The type of model used to classify the data. Multiple models
-  can be recorded for each paper. When a paper used a derivation of a commonly
-  used model, then the commonly used model was recorded.
+The number of classes classified by the system. This is often 26 (one class for
+each letter a through z) or 36 (the letters a through z and the numerals 0
+through 9).
 
-- Hardware used: This is the pre-built hardware used to collect the data. For
-  example, this might be the Microsoft Kinect, the Nintendo PowerGlove, or a
-  commercially available webcam.
+### Number of Participants
 
-- Movement (dynamic/static): Whether or not the gesture has a critical temporal
-  element. See subsection \ref{gestures-vs-postures}.
+The total number of people who contributed gesture data to the entire dataset,
+before the dataset is split into training/validation/testing subsets. One
+person recording data in different locations or on different days is still
+considered as one person.
 
-- Fidelity: The granularity or level of detail of the gesture. The ability to
-  recognise someone waving their arms in the air is very different from the
-  ability to distinguish the dexterous movements required while typing. See
-  subsection \ref{gesture-fidelity}.
+### Number of Repetitions
 
-- Explicit vs implicit segmentation: Do all observations contain _some_
-  gesture, or does the classification system have to make that distinction?
-  Explicit segmentation is where the observations have been segmented such that
-  the start and end of each gesture is provided to the model, whereas implicit
-  segmentation requires that the classifier first detect which observations
-  have gestures and then recognise which gestures are in those observations.
-  See subsection \ref{explicit-and-implicit-segmentation}.
+The number of times each person repeated each class. Papers which attempted
+one-shot learning often only recorded one repetition for each class.
 
-#### Gestures vs Postures
+### Model(s) Used
+
+The type of model used to classify the data. Multiple models can be recorded
+for each paper. When a paper used a derivation of a commonly used model, then
+the commonly used model was recorded.
+
+### Hardware Used
+
+This is the pre-built hardware used to collect the data. For example, this
+might be the Microsoft Kinect, the Nintendo PowerGlove, or a commercially
+available webcam.
+
+### Gestures vs Postures
 
 A "gesture" is often used to mean a movement of one or two hands. Sometimes a
 "gesture" includes a static position of one or more hands [@TODO], and
@@ -131,26 +126,37 @@ explicitly noted.
 
 TODO: Note that some sign languages require a temporal element but this is
 ignored by some papers. For example, the American Sign Language "j" and "z"
-require moving the pinky in a "j" or "z" shape respectively, but these are
+require moving a finger in a "j" or "z" shape respectively, but these are
 often ignored.
 
-#### Gesture Fidelity
+### Gesture Fidelity
 
-The fidelity or granularity of a gesture is not often reported, but has great
-impact on the difficulty of the problem being attempted. A high-fidelity
-gesture would be one which requires the precise control of the user's fingers
-or thumbs (such as tapping fingertips together), while a medium-fidelity
-gesture would require only the movement of the hand (such the "royal wave"
-which doesn't move the arm). A low-fidelity gesture would only require movement
-of the whole arm, such as a shaking-of-fists. Higher fidelity gestures are
-generally a lot trickier to measure accurately as there are greater degrees of
-freedom involved and the absolute amount of motion is less. For ease of
-comparison, this survey will discretise fidelity into three levels:
-finger-fidelity, hand-fidelity, and arm-fidelity.\footnote{TODO: do these need
-precise definitions?} Further clarification will be provided if these
-categories do not adequately classify a certain gesture.
+The granularity or level of detail of the gesture. The ability to recognise
+someone waving their arms in the air is very different from the ability to
+distinguish the dexterous movements required while typing.
 
-#### Explicit and implicit segmentation
+The fidelity of a gesture is not often reported, but has great impact on the
+difficulty of the problem being attempted. A high-fidelity gesture would be one
+which requires the precise control of the user's fingers or thumbs (such as
+tapping fingertips together), while a medium-fidelity gesture would require
+only the movement of the hand (such the "royal wave" which doesn't move the
+arm). A low-fidelity gesture would only require movement of the whole arm, such
+as a shaking-of-fists. Higher fidelity gestures are generally a lot trickier to
+measure accurately as there are greater degrees of freedom involved and the
+absolute amount of motion is less. For ease of comparison, this survey will
+discretise fidelity into three levels: finger-fidelity, hand-fidelity, and
+arm-fidelity.\footnote{TODO: do these need precise definitions?} Further
+clarification will be provided if these categories do not adequately classify a
+certain gesture.
+
+### Explicit and Implicit Segmentation
+
+Do all observations contain _some_ gesture, or does the classification system
+have to make that distinction? Explicit segmentation is where the observations
+have been segmented such that the start and end of each gesture is provided to
+the model, whereas implicit segmentation requires that the classifier first
+detect which observations have gestures and then recognise which gestures are
+in those observations.
 
 Gesture recognition and gesture detection are sometimes used interchangeably
 [@TODO] and sometimes distinguished. This review will define gesture detection
@@ -450,11 +456,31 @@ their internal architecture being able to support multi-class classification.
 
 ## Vision- and WiFi-based Gesture Recognition
 
+### History of Vision-based Systems
+
+Vision based systems have been discussed since the 1980s
+[@boltPutthatthereVoiceGesture1980;
+@jenningsComputergraphicModelingAnalysis1988;
+@myronw.kruegerArtificialRealityII1991] but the first working system was Yamato
+\emph{et~al.}'s paper recognising human actions using feature vectors
+recognised by a HMM [@yamatoRecognizingHumanAction1992].
+
+TODO: Landmark papers in the field
+
+TODO: Trends in the type of sensors used
+
+TODO: Hardware products that got released
+
+TODO: Commonly used datasets and the lack of common base upon which development can
+be made.
+
 Vision-based systems use visual information (such as that from a commercial
 video camera) to detect the human hand and thereafter recognise the gesture
 being performed. With the advent of cheap depth tracking (most notably with the
 sale of the Microsoft Kinect), depth information is often incorporated into
 vision-based systems.
+
+### History of WiFi-based Systems
 
 The Channel State Information (CSI) was described by the IEE 802.11n standard,
 released in 2009. CSI is intended to be used to improve the connection quality
@@ -481,24 +507,6 @@ advancement of WiFi-based gesture detection because they drastically lower the
 complexity required to get started, allow for results to be reproduced, and
 allow for new techniques to be compared to old ones.
 
----
-
-Vision based systems have been discussed since the 1980s
-[@boltPutthatthereVoiceGesture1980;
-@jenningsComputergraphicModelingAnalysis1988;
-@myronw.kruegerArtificialRealityII1991] but the first working system was Yamato
-\emph{et~al.}'s paper recognising human actions using feature vectors
-recognised by a HMM [@yamatoRecognizingHumanAction1992].
-
-TODO: Landmark papers in the field
-
-TODO: Trends in the type of sensors used
-
-TODO: Hardware products that got released
-
-TODO: Commonly used datasets and the lack of common base upon which development can
-be made.
-
 ### Models and Recognition Techniques
 
 Convolutional Neural Networks (CNNs) are easily the favoured technique for
@@ -508,9 +516,9 @@ extracted. The chosen features were often some combination of the mean location
 for the largest blob of darkness/lightness in the image and the approximate
 orientation of that blob. These feature vectors often classified using an HMM.
 
-### Datasets {#non-glove-datasets}
+TODO expand this
 
-Trends in the types of models used
+### Datasets {#non-glove-datasets}
 
 @chaiTwoStreamsRecurrent2016
 
@@ -559,28 +567,6 @@ require significant explanation. Similarly, The utility of using gestures from
 a sign language is not that they have semantic meaning, but rather that they
 are complex enough to be non-trivial and common enough that they do not require
 significant explanation.
-
----
-
-What themes should be covered?
-
-To include:
-
-- Table of common datasets
-- Table of common products
-- Table of references
-- Make it obvious when one paper doesn't contribute much
-- Details about the stand-out papers
-- Cover the large themes
-
-Themes to make Ergo look good:
-
-- What level of detail do the gestures permit? (phalange, finger, hand, arm,
-  body?). Are they static or dynamic?
-- How many gestures can be recognised?
-- Is segmentation automatic or does the user have to specify the start/end of
-  the gesture?
-- How much freedom does the user have when moving their hands?
 
 # Glossary of terms
 
@@ -649,7 +635,7 @@ hand. These are named based on the direction of movement.
 
 ## Electronic Sensors
 
-This section is incomplete
+TODO This section is incomplete
 
 - Flex sensor
 - Hall effect sensor
@@ -661,7 +647,7 @@ This section is incomplete
 
 ## Hardware Products
 
-This section is incomplete
+TODO This section is incomplete
 
 - Popularisation of accelerometers in phones and PDAs.
 - Microsoft Kinect
@@ -671,8 +657,14 @@ This section is incomplete
 - VPL DataGlove
 - Nintendo PowerGlove
 
-## Models and techniques
+# Tables
 
-- Instance based learning = k-Nearest Neighbours with $k=1$
+TODO
+
+## Table of common datasets
+
+## Table of common products
+
+## Table of references
 
 # References
