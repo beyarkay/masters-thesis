@@ -3,6 +3,7 @@ toc: true
 csl: ieee.csl
 link-citations: true
 header-includes: |
+  \setlength{\tabcolsep}{2pt}
   \DeclareMathOperator*{\argmax}{arg\,max}
   \DeclareMathOperator*{\argmin}{arg\,min}
   \newcommand{\indep}{\perp\!\!\!\!\perp}
