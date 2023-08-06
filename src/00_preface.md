@@ -23,5 +23,6 @@ header-includes: |
   \usepackage{xcolor}
   \usepackage{marginfix}
   \usepackage{sidenotes}
+  \usepackage{longtable}
 mustache: src/dynamic_content.yaml
 ---
