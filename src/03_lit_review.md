@@ -145,9 +145,8 @@ as a shaking-of-fists. Higher fidelity gestures are generally a lot trickier to
 measure accurately as there are greater degrees of freedom involved and the
 absolute amount of motion is less. For ease of comparison, this survey will
 discretise fidelity into three levels: finger-fidelity, hand-fidelity, and
-arm-fidelity.\footnote{TODO: do these need precise definitions?} Further
-clarification will be provided if these categories do not adequately classify a
-certain gesture.
+arm-fidelity. Further clarification will be provided if these categories do not
+adequately classify a certain gesture.
 
 ### Explicit and Implicit Segmentation
 
@@ -174,8 +173,7 @@ detection and only train a gesture recognition system.
 Note that the second approach (which assumes every observation is a valid
 gesture) drastically reduces the practicality of those systems, as any
 real-world system would need some way to eliminate the portions of the dataset
-which do not contain any gestures. This is often [@TODO] called the
-segmentation problem.
+which do not contain any gestures.
 
 ## Glove-based Gesture Recognition
 
@@ -322,10 +320,12 @@ therefore conducted electricity when bent to sense the movement of the user's
 hand.
 
 In the 1990s there were three main commercially available products: The
-DataGlove developed by VPL systems [@TODO], the PowerGlove developed Abrams
-Gentile Entertainment for Nintendo [@TODO], and the CyberGlove [@TODO]. These
-gloves were similar in nature, with some combination of flex sensors over the
-phalanges and accelerometers mounted on the back of the hands.
+DataGlove developed by VPL systems [@sturmanSurveyGlovebasedInput1994], the
+PowerGlove developed Abrams Gentile Entertainment for Nintendo
+[@sturmanSurveyGlovebasedInput1994], and the CyberGlove
+[@sturmanSurveyGlovebasedInput1994]. These gloves were similar in nature, with
+some combination of flex sensors over the phalanges and accelerometers mounted
+on the back of the hands.
 
 The Utah/MIT Dexterous Hand and the associated Utah/MIT Dexterous HandMaster
 [@jacobsenUTAHDextrousHand1984; @jacobsenDesignUtahDextrous1986] was a complex
@@ -365,7 +365,7 @@ clustered sEMG sensors which wrapped around the forearm of the user.
 ### Datasets
 
 There has largely been a lack of commonly used datasets for glove-based systems
-due to the lack of commonly used hardware solutions. Many researchers [@TODO]
+due to the lack of commonly used hardware solutions. Some researchers
 have recently started making their datasets and code public in the interest of
 reproducibility. However, there are no datasets in common use as it is often
 easier to develop custom hardware than to try and recreate another researcher's
@@ -381,7 +381,7 @@ vision-based systems, where there now exist widely used datasets recorded on
 standard and easily available hardware (see subsection
 \ref{non-glove-datasets}).
 
-While commercially available systems do exist [@TODO], they are largely aimed
+While commercially available systems do exist, they are largely aimed
 at industrial applications and are generally too costly for exploratory
 research. It is unlikely for glove-based datasets to become commonly used until
 a glove-based system becomes commonly used, and that will require the
@@ -414,7 +414,7 @@ classify a dataset of 42 classes.
 
 Papers which attack implicit segmentation (where not every observation
 necessarily contains a gesture, often resulting in a highly imbalanced
-dataset) often [@TODO] use a two-model approach, with one model being used for
+dataset) often use a two-model approach, with one model being used for
 gesture detection (without attempting to classify which gesture is being
 observed) and a second (often more complex) model being used for gesture
 recognition _given_ that the observation already contains a gesture. These two
@@ -456,7 +456,58 @@ their internal architecture being able to support multi-class classification.
 
 ## Vision- and WiFi-based Gesture Recognition
 
-### History of Vision-based Systems
+TODO: Include some indication of how big the two fields are. Maybe give a bunch
+of recent surveys and the number of references each of them have?
+
+This section focuses on non-glove based gesture recognition, which resolves to
+just two categories: vision-based (using visible light and depth data), and
+WiFi-based (using the effect the human body has on diagnostic information
+collected in WiFi networks). This section will not be as detailed as Section
+\ref{glove-based-gesture-recognition}, due to the focus of the thesis being
+glove-based systems. There is a wealth of research in each of these fields,
+with recent review papers of WiFi-based systems citing 157
+[@maWiFiSensingChannel2020], 141 [@hussainReviewCategorizationTechniques2020],
+68 [@wangCSIbasedHumanSensing2021], and 50 [@maSurveyWiFiBased2016] papers.
+Recent reviews of vision-based systems cited 273
+[@rautarayVisionBasedHand2015], 150 [@cheokReviewHandGesture2019], and 100
+[@oudahHandGestureRecognition2020], papers. While the number of cited papers is
+not a precise measure of the size of the field, is does provide an
+approximation. The interested reader is directed towards these reviews for a
+more detailed treatment of the material.
+
+**How Vision-based systems work** Vision-based systems collect visual data
+using video cameras and more recently, depth information, either using LiDAR or
+by measuring the reflection of a known infrared projection. The field has
+progressed with improved hardware: earlier systems did not have depth
+information, had lower-resolution images, did not have colour information, and
+had fewer frames per second when compared to modern hardware.
+
+**How WiFi-based systems work** The technology enabling gesture-recognition
+with WiFi was implemented in 2009 in the IEEE 802.11n standard. This standard
+introduced Channel State Information (CSI) which provided significantly more
+information about the noise in an environment than was previously available.
+CSI allows transmitters in a WiFi network to change how they transmit data
+based on the current channel conditions, which enables more reliable
+communication.
+
+Since CSI is very sensitive to the surrounding environment, changes such as a
+person moving within a room [@wuWiTrajRobustIndoor2023] or even just breathing
+[@wangWeCanHear2014] can induce a change in the CSI, which can then be
+detected.
+
+**Datasets** Both vision- and WiFi-based systems have benefited from
+standardised hardware, which enables the creation of high-quality diverse
+datasets of gestures being performed and recorded on relevant hardware
+[@guyonChaLearnGestureChallenge2012, @materzynskaJesterDatasetLargeScale2019,
+@alazraiDatasetWiFibasedHumantohuman2020,]. These datasets promote research in
+the field, as they provide a common baseline against which new algorithms can
+be tested. They also reduce the barrier to entry, as researchers skilled in
+modelling but without the resources to collect a large amount of data can still
+contributed to the field.
+
+### Chronology of Non-glove-based Systems
+
+##### 1980s
 
 Vision based systems have been discussed since the 1980s
 [@boltPutthatthereVoiceGesture1980;
@@ -465,70 +516,17 @@ Vision based systems have been discussed since the 1980s
 \emph{et~al.}'s paper recognising human actions using feature vectors
 recognised by a HMM [@yamatoRecognizingHumanAction1992].
 
-TODO: Landmark papers in the field
+##### 2010s
 
-TODO: Trends in the type of sensors used
-
-TODO: Hardware products that got released
-
-TODO: Commonly used datasets and the lack of common base upon which development can
-be made.
-
-Vision-based systems use visual information (such as that from a commercial
-video camera) to detect the human hand and thereafter recognise the gesture
-being performed. With the advent of cheap depth tracking (most notably with the
-sale of the Microsoft Kinect), depth information is often incorporated into
-vision-based systems.
-
-### History of WiFi-based Systems
-
-The Channel State Information (CSI) was described by the IEE 802.11n standard,
-released in 2009. CSI is intended to be used to improve the connection quality
-between transmitter and receiver. It is similar in function to RSSI, but
-contains significantly more detail.
-
-In 2011, a tool [@halperinToolReleaseGathering2011] was released which provided
-a detailed picture of the wireless channel conditions using CSI information.
-The release of this tool showed the amount of information available in CSI
-information about the environment. Adib and Katabi first applied the data
+In 2011, a Halperin \emph{et~al.} published a tool
+[@halperinToolReleaseGathering2011] which provided a detailed picture of the
+wireless channel conditions using CSI information. The release of this tool
+made apparent the level of detail available in CSI and how that information
+changes with changes to the environment. Adib and Katabi first applied the data
 available in CSI to recognise human gestures [@adibSeeWallsWiFi2013] and were
 followed by numerous papers exploring this technique.
 
-To describe the technique at a high level, CSI contains data which is very
-sensitive to the surrounding environment, and changes in the environment affect
-changes in the CSI. CSI can therefore provide information about the state of
-the environment, and modern machine learning methods have proven capable at
-extracting inference from this data.
-
-Since then, many researchers have explored this area. Because WiFi-based
-systems are dependant only on commercially available routers, many high quality
-datasets have been gathered and released [@TODO]. These datasets facilitate the
-advancement of WiFi-based gesture detection because they drastically lower the
-complexity required to get started, allow for results to be reproduced, and
-allow for new techniques to be compared to old ones.
-
-### Models and Recognition Techniques
-
-Convolutional Neural Networks (CNNs) are easily the favoured technique for
-vision based data. Before CNNs, vision based data was manually filtered with
-various computer vision techniques before feature vectors could be defined and
-extracted. The chosen features were often some combination of the mean location
-for the largest blob of darkness/lightness in the image and the approximate
-orientation of that blob. These feature vectors often classified using an HMM.
-
-TODO expand this
-
-### Datasets {#non-glove-datasets}
-
-@chaiTwoStreamsRecurrent2016
-
-> In this section, our proposed method is evaluated on the Large-scale Continuous
-> Gesture Recognition Dataset of the ChaLearn LAP challenge 2016(ChaLearn LAP
-> ConGD Dataset). First, we give a brief overview on ConGD and its evaluation
-> protocol. Then, we show the performances on different features and also
-> different networks in order to verify the effectiveness of the proposed 2S-RNN
-> method. Finally, the final test results of the top three winners are given and
-> we win the first place.
+---
 
 ## Applications of Gesture Recognition
 
