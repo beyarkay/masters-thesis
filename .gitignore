@@ -3,6 +3,7 @@
 *.nav
 *.out
 *.pdf
+!src/imgs/*
 *.snm
 *.toc
 *.mp4
