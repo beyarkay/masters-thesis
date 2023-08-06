@@ -14,15 +14,15 @@ header-includes: |
   \usepackage{flafter}
   \usepackage{graphicx}
   \usepackage{listings}
+  \usepackage{longtable}
+  \usepackage{marginfix}
   \usepackage{pdfpages}
   \usepackage{pgfplots}
+  \usepackage{sidenotes}
   \usepackage{soul}
   \usepackage{tabularray}
   \usepackage{tikz}
   \usepackage{wrapfig}
   \usepackage{xcolor}
-  \usepackage{marginfix}
-  \usepackage{sidenotes}
-  \usepackage{longtable}
 mustache: src/dynamic_content.yaml
 ---
