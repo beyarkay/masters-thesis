@@ -507,16 +507,30 @@ contributed to the field.
 
 ### Chronology of Non-glove-based Systems
 
-##### 1980s
-
 Vision based systems have been discussed since the 1980s
 [@boltPutthatthereVoiceGesture1980;
 @jenningsComputergraphicModelingAnalysis1988;
 @myronw.kruegerArtificialRealityII1991] but the first working system was Yamato
 \emph{et~al.}'s paper recognising human actions using feature vectors
-recognised by a HMM [@yamatoRecognizingHumanAction1992].
-
-##### 2010s
+recognised by a HMM [@yamatoRecognizingHumanAction1992]. Starner and Pentland
+@starnerRealtimeAmericanSign1995 were the first to use vision-based systems to
+recognise sign language gestures, using HMMs to recognise 40 signs from the
+American Sign Language. Due to the computational power available at the time,
+the user had to wear brightly coloured gloves to aid in hand detection and the
+system ran at 5 frames per second. HMMs paired with some form of manual feature
+extraction would remain the favoured modelling technique for vision-based
+systems for many years [@binhRealTimeHandTracking2005;
+@chenHandGestureRecognition2003; @eickelerHiddenMarkovModel1998;
+@elmezainGestureRecognitionAlphabets2007; @elmezainHandGestureRecognition2009;
+@elmezainRealTimeCapableSystem2008; @frieslaarRobustSouthAfrican2014;
+@ghotkarDynamicHandGesture2016; @hyeon-kyuleeHMMbasedThresholdModel1999;
+@keskinRealTimeHand2003; @naidooSouthAfricanSign2010;
+@ramamoorthyRecognitionDynamicHand2003; @rigollHighPerformanceRealtime1998;
+@starnerRealtimeAmericanSign1995; @starnerRealtimeAmericanSign1998;
+@starnerVisualRecognitionAmerican1995; @wilsonParametricHiddenMarkov1999;
+@wuDeepDynamicNeural2016; @yamatoRecognizingHumanAction1992;
+@yangDynamicHandGesture2012; @yoonHandGestureRecognition2001;
+@zhangVisionbasedSignLanguage2004; @zhaoRealtimeHeadGesture2017].
 
 In 2011, a Halperin \emph{et~al.} published a tool
 [@halperinToolReleaseGathering2011] which provided a detailed picture of the
@@ -524,9 +538,55 @@ wireless channel conditions using CSI information. The release of this tool
 made apparent the level of detail available in CSI and how that information
 changes with changes to the environment. Adib and Katabi first applied the data
 available in CSI to recognise human gestures [@adibSeeWallsWiFi2013] and were
-followed by numerous papers exploring this technique.
+followed by numerous papers exploring this technique. Since then, many papers
+have investigated different applications such as breathing detection
+[@liuWiSleepContactlessSleep2014; @wangHumanRespirationDetection2016;
+@wuNonInvasiveDetectionMoving2015], sign language recognition
+[@liWiFingerTalkYour2016], fall detection [@wangRTFallRealTimeContactless2017;
+@wangWiFallDeviceFreeFall2017], distinguishing different people from one
+another based on their movement or gait [@wangGaitRecognitionUsing2016;
+@zengWiWhoWiFiBasedPerson2016; @zhangWiFiIDHumanIdentification2016], keystroke
+and password inference [@aliRecognizingKeystrokesUsing2017;
+@liWhenCSIMeets2016; @shenWiPassCSIbasedKeystroke2020], sleep detection
+[@liuWiSleepContactlessSleep2014], speech recognition [@wangWeCanHear2014], and
+the monitoring of vital signs [@liuTrackingVitalSigns2015].
 
----
+The applications of vision-based gesture recognition have been less varied,
+with an emphasis on sign language [@avolaExploitingRecurrentNeural2019;
+@bhagatIndianSignLanguage2019; @binhRealTimeHandTracking2005;
+@bowdenLinguisticFeatureVector2004; @bowdenVisionBasedInterpretation2003;
+@chenHandGestureRecognition2003; @elbadawyArabicSignLanguage2017;
+@ghotkarDynamicHandGesture2016; @hurrooSignLanguageRecognition2020;
+@jiehuangSignLanguageRecognition2015; @kadirMinimalTrainingLarge2004;
+@liang3DConvolutionalNeural2018; @ming-hsuanyangRecognizingHandGesture1999;
+@nelIntegratedSignLanguage2013; @sahooRealTimeHandGesture2022;
+@sharmaASL3DCNNAmericanSign2021; @starnerRealtimeAmericanSign1995;
+@starnerRealtimeAmericanSign1998; @starnerVisualRecognitionAmerican1995;
+@zhangVisionbasedSignLanguage2004]. Other applications have included
+augmented/virtual reality [@buchmannFingARtipsGestureBased2004;
+@sagayamHandPostureGesture2017], video game control
+[@freemanOrientationHistogramsHand1995;
+@marceloGeFightersExperimentGesturebased2006], generic gesture recognition
+[@ahujaHandGestureRecognition2015], various medical applications
+[@funkeUsing3DConvolutional2019; @wanExploreEfficientLocal2016], and remote
+robot control [@qiMultiSensorGuidedHand2021;
+@ramamoorthyRecognitionDynamicHand2003; @wanExploreEfficientLocal2016]
+
+![Wifi- and Vision-based applications.](src/imgs/graphs/03_wifi_vision_applications.pdf)
+
+Convolutional Neural Networks (CNNs) were first used for gesture recognition in
+2015 by Huang \emph{et~al.} [@jiehuangSignLanguageRecognition2015] and neural
+network based models have been used by many researchers [@funkeUsing3DConvolutional2019;
+@hakimDynamicHandGesture2019; @hurrooSignLanguageRecognition2020;
+@jiehuangSignLanguageRecognition2015; @kopukluRealtimeHandGesture2019;
+@liuDynamicGestureRecognition2021; @luOneshotLearningHand2019;
+@mohammedDeepLearningBasedEndtoEnd2019; @mujahidRealTimeHandGesture2021;
+@sahooRealTimeHandGesture2022; @sharmaASL3DCNNAmericanSign2021;
+@urrehmanDynamicHandGesture2022; @wuDeepDynamicNeural2016;
+@zhangGestureRecognitionBased2020].
+
+![Hidden Markov Models (HMMs) have been used less frequently in recent years, with
+Neural Network based models gaining in popularity.](src/imgs/graphs/03_models_hmm_vs_cnn.pdf)
 
 ## Applications of Gesture Recognition
 
