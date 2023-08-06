@@ -36,21 +36,6 @@ the requirements at hand. Nonetheless, these differing definitions are often
 guided by similar intuition and so do not result in significant conflict with
 one another.
 
-Some of the systems developed aim for "real-time" usage, although a consistent
-definition for real-time is lacking. One definition would be to consider the
-response time of the system in terms of the number of predictions per second.
-This metric is often used, however papers have claimed "real-time" predictions
-when their systems make predictions at a rate between 15Hz [@TODO] and 400Hz
-[@TODO]. Some papers neglect to mention the prediction rate, and only describe
-the system as "real-time" [@TODO]. \footnote{TODO should a description of what
-this paper will consider "real-time" be included here?}
-
-\footnote{TODO Note: Many vision-based papers declare the cumber
-of glove-based systems, and many glove-based systems declare the background
-sensitivity/occlusion problems of vision-based software. Both systems seem
-entirely unaware of WiFi-based systems. Possibly because a popular survey
-(Mitra 2007) came out just before WiFi CSI tech was discovered.}
-
 This review will use several metrics to enable systematic comparison across
 different works in the literature. Different authors have tackled tasks which
 are often described similarly, but vary significantly in their difficulty. For
@@ -112,22 +97,11 @@ available webcam.
 
 ### Gestures vs Postures
 
-A "gesture" is often used to mean a movement of one or two hands. Sometimes a
-"gesture" includes a static position of one or more hands [@TODO], and
-sometimes a "gesture" is not limited to hands but also encompasses arm or full
-body movement [@TODO]. Sometimes the word "posture" or "pose" is used to
-distinguish a hand movement from a hand position [@TODO], despite the
-distinction being made in the literature since 1999
-@laviolaSurveyHandPosture1999. This review will use the term "gesture" to cover
-both static and dynamic hand movements, with the clarification of "dynamic
-gesture" or "static gesture" when confusion could arise. Gestures shall also be
-assumed to be of the hands and fingers (and not of the arms or body) unless
-explicitly noted.
-
-TODO: Note that some sign languages require a temporal element but this is
-ignored by some papers. For example, the American Sign Language "j" and "z"
-require moving a finger in a "j" or "z" shape respectively, but these are
-often ignored.
+A "gesture" is often used to mean a movement of one or two hands. This review
+will use the term "gesture" to cover both static and dynamic hand movements,
+with the clarification of "dynamic gesture" or "static gesture" when confusion
+could arise. Gestures shall also be assumed to be of the hands and fingers (and
+not of the arms or body) unless explicitly noted.
 
 ### Gesture Fidelity
 
@@ -144,7 +118,7 @@ arm). A low-fidelity gesture would only require movement of the whole arm, such
 as a shaking-of-fists. Higher fidelity gestures are generally a lot trickier to
 measure accurately as there are greater degrees of freedom involved and the
 absolute amount of motion is less. For ease of comparison, this survey will
-discretise fidelity into three levels: finger-fidelity, hand-fidelity, and
+categorise fidelity into three levels: finger-fidelity, hand-fidelity, and
 arm-fidelity. Further clarification will be provided if these categories do not
 adequately classify a certain gesture.
 
@@ -157,13 +131,12 @@ the model, whereas implicit segmentation requires that the classifier first
 detect which observations have gestures and then recognise which gestures are
 in those observations.
 
-Gesture recognition and gesture detection are sometimes used interchangeably
-[@TODO] and sometimes distinguished. This review will define gesture detection
-as the boolean classification task of identifying whether _any_ gesture is
-present in some data sample, and will define gesture recognition as the
-multi-class classification problem of identifying _which_ gesture is present in
-some data sample. Note that a gesture recognition system could be trained to
-recognise the lack of a gesture as itself being a kind of "null" gesture.
+This review will define gesture _detection_ as the boolean classification task
+of identifying whether any gesture is present in some data sample, and will
+define gesture _recognition_ as the multi-class classification problem of
+identifying _which_ gesture is present in some data sample. Note that a gesture
+recognition system could be trained to recognise the lack of a gesture as
+itself being a kind of "null" gesture.
 
 This distinction will prove useful as there have been enough papers which
 either 1) train a two-stage system where the gesture recogniser is only invoked
@@ -180,9 +153,9 @@ which do not contain any gestures.
 Glove-based gesture recognition can be defined as any gesture recognition
 system which gathers hand information using a device physically attached to the
 user's hands or upper arms. While there are some devices which fit this
-definition but would not typically be described as a glove [@TODO], they share
-enough technical challenges with glove-like devices that this definition will
-prove to be a logical one.
+definition but would not typically be described as a glove, they share enough
+technical challenges with glove-like devices that this definition will prove to
+be a logical one.
 
 ### Technologies Used
 
@@ -215,7 +188,22 @@ strip) were first placed across joints and used successfully in several papers
 @zimmermanHandGestureInterface1987]. Flex sensors are unable to accurately
 measure very acute angles (such as those between fingers) but are very
 intuitive to use, so would see use in commercial applications like the
-CyberGlove, the PowerGlove, and the DataGlove.
+CyberGlove, the PowerGlove, and the DataGlove. They have since been used in
+many papers due to their interpretability and relatively low cost
+[@alviPakistanSignLanguage2007; @atzoriNinaproDatabaseResource2015;
+@baudelCharadeRemoteControl1993; @feinerVisualizingDimensionalVirtual1990;
+@felsBuildingAdaptiveInterfaces1990;
+@felsGloveTalkIIaNeuralnetworkInterface1998;
+@frankhofmannSensorGloveAnthropomorphicRobot1995;
+@heumerGraspRecognitionUncalibrated2007; @immersioncorporationCyberGlove2001;
+@kadousGRASPRecognitionAustralian1995;
+@kesslerEvaluationCyberGloveWholehand1995; @laviolaSurveyHandPosture1999;
+@leeDeepLearningBased2020; @leeSmartWearableHand2018;
+@liangSignLanguageRecognition1996; @mardiyantoDevelopmentHandGesture2017;
+@murakamiGestureRecognitionUsing1991;
+@rung-hueiliangRealtimeContinuousGesture1998; @takahashiHandGestureCoding1991;
+@wenMachineLearningGlove2020; @wiseEvaluationFiberOptic1990;
+@yuanHandGestureRecognition2020].
 
 Accelerometers measure linear acceleration in up to three axes, and Inertial
 Measurement Units (IMUs) can measure linear and rotational acceleration,
@@ -237,25 +225,63 @@ measured the jerk caused when the user tapped their fingers against a table or
 flat surface, and mapped certain jerks to certain keystrokes. Following
 @fukumotoBodyCoupledFingerRing1997, acceleration sensors would become popular
 for gesture recognition due to their small size and
-interpretability\footnote{TODO maybe include more references here?}.
+interpretability [@aklAccelerometerbasedGestureRecognition2010;
+@aklNovelAccelerometerBasedGesture2011; @alviPakistanSignLanguage2007;
+@alzubaidiNovelAssistiveGlove2023; @ammaAirwritingWearableHandwriting2014;
+@atzoriNinaproDatabaseResource2015; @bevilacquaContinuousRealtimeGesture2010;
+@galkaInertialMotionSensing2016; @hamdyaliComparativeStudyUser2014;
+@hernandez-rebollarAcceleGloveWholehandInput2002;
+@heumerGraspRecognitionUncalibrated2007;
+@karantonisImplementationRealTimeHuman2006;
+@kelaAccelerometerbasedGestureControl2006; @kimBichannelSensorFusion2008;
+@klingmannAccelerometerBasedGestureRecognition2009;
+@kochRecurrentNeuralNetwork2019; @kongGestureRecognitionModel2009;
+@kratzWiizards3DGesture2007; @kunduHandGestureRecognition2018;
+@leeSmartWearableHand2018; @liHandGestureRecognition2018;
+@liuUWaveAccelerometerbasedPersonalized2009;
+@makaussovLowCostIMUBasedRealTime2020; @mantyjarviEnablingFastEffortless2004;
+@mantyjarviGestureInteractionSmall2005;
+@mantyjarviIdentifyingUsersPortable2005;
+@marasovicMotionBasedGestureRecognition2015;
+@mardiyantoDevelopmentHandGesture2017; @mummadiRealTimeEmbeddedDetection2018;
+@netoHighLevelProgramming2010; @parsaniSingleAccelerometerBased2009;
+@patilMarathiSignLanguage2022; @pylvanainenAccelerometerBasedGesture2005;
+@raysarkarHandGestureRecognition2013;
+@rekimotoGestureWristGesturePadUnobtrusive2001;
+@schlomerGestureRecognitionWii2008; @sethujanakiRealTimeRecognition2013;
+@songAntLearningAlgorithm2013; @tuulariSoapBoxPlatformUbiquitous2002;
+@wangTrafficPoliceGesture2008;
+@wangUserindependentAccelerometerbasedGesture2013;
+@whiteheadGestureRecognitionAccelerometers2014; @wuGestureRecognition3D2009;
+@wuWearableSystemRecognizing2016; @xieAccelerometerGestureRecognition2014;
+@xuzhangFrameworkHandGesture2011; @zhangHandGestureRecognition2009;
+@zhangStackedLSTMBasedDynamic2021].
 
 Surface Electromyography (sEMG or EMG) measures the electrical impulses of a
 user's muscles. This method generally involves a very noisy signal and does not
 have the interpretability of a flex sensor and so requires advanced machine
-learning techniques to classify the data. A general overview of the use of
-myoelectric signals is provided by the survey
-@asgharioskoeiMyoelectricControlSystems2007.
+learning techniques to classify the data. Many systems have used EMG
+[@atzoriNinaproDatabaseResource2015;
+@collialfaroUserIndependentHandGesture2022; @jiangDevelopmentRealtimeHand2016;
+@kimBichannelSensorFusion2008; @kochRecurrentNeuralNetwork2019;
+@kunduHandGestureRecognition2018; @moinWearableBiosensingSystem2020;
+@vasconezHandGestureRecognition2022; @wuWearableSystemRecognizing2016;
+@xuzhangFrameworkHandGesture2011; @zhangHandGestureRecognition2009;
+@zhangRealTimeSurfaceEMG2019] with a general overview of the field given by
+Asghari and Hu's survey @asgharioskoeiMyoelectricControlSystems2007.
 
 After acceleration and EMG sensors are introduced, there are a few papers
-[@zhangHandGestureRecognition2009, @xuzhangFrameworkHandGesture2011,
-@kimBichannelSensorFusion2008] which combine acceleration and EMG sensors (often
-called "sensor-fusion") to gain better recognition results than either sensor
-in isolation.
+[@ammaAirwritingWearableHandwriting2014; @leeSmartWearableHand2018;
+@liHandGestureRecognition2018; @wuWearableSystemRecognizing2016] which combine
+acceleration and EMG sensors (often called "sensor-fusion") to gain better
+recognition results than either sensor in isolation.
 
-@rekimotoGestureWristGesturePadUnobtrusive2001 used the changing capacitance of
-the body to recognise gestures. This was done by using a bracelet-like device
-which would measure how the capacitance through the upper forearm changed as
-the user's muscles moved their fingers.
+The changing capacitance of the body has also been used to recognise gestures
+[@rekimotoGestureWristGesturePadUnobtrusive2001;
+@wongMultiFeaturesCapacitiveHand2021]. Rekimoto
+[@rekimotoGestureWristGesturePadUnobtrusive2001] achieved this by using a
+bracelet-like device which would measure how the capacitance through the upper
+forearm changed as the user's muscles moved their fingers.
 
 @wenMachineLearningGlove2020 used triboelectric textile sensors to measure the
 stretch of a textile glove.
@@ -320,12 +346,12 @@ therefore conducted electricity when bent to sense the movement of the user's
 hand.
 
 In the 1990s there were three main commercially available products: The
-DataGlove developed by VPL systems [@sturmanSurveyGlovebasedInput1994], the
-PowerGlove developed Abrams Gentile Entertainment for Nintendo
-[@sturmanSurveyGlovebasedInput1994], and the CyberGlove
-[@sturmanSurveyGlovebasedInput1994]. These gloves were similar in nature, with
-some combination of flex sensors over the phalanges and accelerometers mounted
-on the back of the hands.
+DataGlove developed by Visual Programming Languages (VPL)
+[@sturmanSurveyGlovebasedInput1994], the PowerGlove developed Abrams Gentile
+Entertainment for Nintendo [@abramsgentileentertainmentPowerGlove1989], and the
+CyberGlove by Immersion Inc [@immersioncorporationCyberGlove2001]. These gloves
+were similar in nature, with some combination of flex sensors over the
+phalanges and accelerometers mounted on the back of the hands.
 
 The Utah/MIT Dexterous Hand and the associated Utah/MIT Dexterous HandMaster
 [@jacobsenUTAHDextrousHand1984; @jacobsenDesignUtahDextrous1986] was a complex
@@ -404,13 +430,63 @@ vector from their data and trained a model on that feature vector. This
 approach has recently fallen out of favour, with many recent papers using a
 variety of deep learning based methods to learn the features implicitly.
 
-Hidden Markov Models (HMMs) have often been favoured due to their explicit encoding of
-time-dependant data. Support Vector Machines (SVMs), Dynamic Time Warping
-(DTW), and k-Nearest Neighbours (kNN) have all also been frequently used.
+Hidden Markov Models (HMMs) have often been favoured due to their explicit
+encoding of time-dependant data, and have been used by many papers for
+glove-based gesture recognition [@ammaAirwritingWearableHandwriting2014;
+@bevilacquaContinuousRealtimeGesture2010;
+@chunliwangRealTimeLargeVocabulary2001; @fatmiComparingANNSVM2019;
+@galkaInertialMotionSensing2016; @hamdyaliComparativeStudyUser2014;
+@hofmannVelocityProfileBased1998; @jong-sungkimDynamicGestureRecognition1996;
+@kadousGRASPRecognitionAustralian1995;
+@klingmannAccelerometerBasedGestureRecognition2009;
+@kongGestureRecognitionModel2009; @kratzWiizards3DGesture2007;
+@liangSignLanguageRecognition1996; @mantyjarviEnablingFastEffortless2004;
+@mantyjarviGestureInteractionSmall2005;
+@marasovicMotionBasedGestureRecognition2015;
+@prekopcsakAccelerometerBasedRealTime2008;
+@pylvanainenAccelerometerBasedGesture2005;
+@rung-hueiliangRealtimeContinuousGesture1998;
+@schlomerGestureRecognitionWii2008; @wangchunliRealTimeLargeVocabulary2002;
+@wengaoChineseSignLanguage2004; @whiteheadGestureRecognitionAccelerometers2014;
+@wuGestureRecognition3D2009; @xuzhangFrameworkHandGesture2011;
+@zhangHandGestureRecognition2009]. Support Vector Machines (SVMs)
+[@ammaAirwritingWearableHandwriting2014;
+@collialfaroUserIndependentHandGesture2022; @fatmiComparingANNSVM2019;
+@hamdyaliComparativeStudyUser2014; @kimBichannelSensorFusion2008;
+@kunduHandGestureRecognition2018; @leeSmartWearableHand2018;
+@mohandesAutomationArabicSign2004; @mohandesRecognitionTwoHandedArabic2013;
+@mummadiRealTimeEmbeddedDetection2018;
+@prekopcsakAccelerometerBasedRealTime2008;
+@wongMultiFeaturesCapacitiveHand2021; @wuGestureRecognition3D2009;
+@wuWearableSystemRecognizing2016; @xieAccelerometerGestureRecognition2014],
+Dynamic Time Warping (DTW) [@aklNovelAccelerometerBasedGesture2011;
+@hamdyaliComparativeStudyUser2014; @liHandGestureRecognition2018;
+@marasovicMotionBasedGestureRecognition2015;
+@patilHandwritingRecognitionFree2016; @sethujanakiRealTimeRecognition2013;
+@wangUserindependentAccelerometerbasedGesture2013;
+@wuGestureRecognition3D2009], and k-Nearest Neighbours (kNN)
+[@alzubaidiNovelAssistiveGlove2023; @hamdyaliComparativeStudyUser2014;
+@kimBichannelSensorFusion2008; @liHandGestureRecognition2018;
+@sethujanakiRealTimeRecognition2013; @wongMultiFeaturesCapacitiveHand2021;
+@wuWearableSystemRecognizing2016] have all also been frequently used.
 
 Neural Network based approaches first appeared with
 @murakamiGestureRecognitionUsing1991 using a recurrent neural network to
-classify a dataset of 42 classes.
+classify a dataset of 42 classes. The recent increase in computational power
+has allowed neural networks and their variants to be fully utilised for
+glove-based gesture recognition: Feed-Forward Neural Networks
+[@damasioAnimatingVirtualHumans2002; @fatmiComparingANNSVM2019;
+@felsGloveTalkIIaNeuralnetworkInterface1998; @hamdyaliComparativeStudyUser2014;
+@jong-sungkimDynamicGestureRecognition1996; @mehdiSignLanguageRecognition2002;
+@netoHighLevelProgramming2010; @vasconezHandGestureRecognition2022;
+@zhangRealTimeSurfaceEMG2019], Recurrent Neural Networks
+[@kochRecurrentNeuralNetwork2019; @makaussovLowCostIMUBasedRealTime2020;
+@murakamiGestureRecognitionUsing1991; @riveraRecognitionHumanHand2017;
+@wengaoChineseSignLanguage2004;@yuanHandGestureRecognition2020;
+@zhangStackedLSTMBasedDynamic2021] Self-Organising Feature Maps
+[@wengaoChineseSignLanguage2004], and Convolutional Neural Networks
+[@maHandGestureRecognition2017; @wenMachineLearningGlove2020;
+@yuanHandGestureRecognition2020].
 
 Papers which attack implicit segmentation (where not every observation
 necessarily contains a gesture, often resulting in a highly imbalanced
@@ -436,7 +512,7 @@ number of classes being predicted. So performing inference on a dataset with 5
 classes will take approximately 10 times shorter than performing inference on a
 dataset with 50 classes.
 
-Notably, HMMs have been used by researchers Wang Chunli and Gao Wen to classify
+Notably, HMMs have been used by Chunli and Wen to classify
 thousands of unique gestures from Chinese Sign Language:
 @chunliwangRealTimeLargeVocabulary2001 classified 4800 signs,
 @wangchunliRealTimeLargeVocabulary2002 classified 5100 signs, and
@@ -455,9 +531,6 @@ to grow linearly with the number of classes being predicted. This is due to
 their internal architecture being able to support multi-class classification.
 
 ## Vision- and WiFi-based Gesture Recognition
-
-TODO: Include some indication of how big the two fields are. Maybe give a bunch
-of recent surveys and the number of references each of them have?
 
 This section focuses on non-glove based gesture recognition, which resolves to
 just two categories: vision-based (using visible light and depth data), and
@@ -690,30 +763,6 @@ hand. These are named based on the direction of movement.
   plane.
 
 ![@cabibihanSuitabilityOpenlyAccessible2021](src/imgs/03_movements.png){ width=50% }
-
-## Electronic Sensors
-
-TODO This section is incomplete
-
-- Flex sensor
-- Hall effect sensor
-- tilt sensor (ADXL202 as used in @rekimotoGestureWristGesturePadUnobtrusive2001)
-- Accelerometer
-- Inertial Measurement Unit
-- Surface Electromyography
-- Linear and rotational potentiometers
-
-## Hardware Products
-
-TODO This section is incomplete
-
-- Popularisation of accelerometers in phones and PDAs.
-- Microsoft Kinect
-- Nintendo Wii
-- CyberGlove
-  - Pohelmus 3SPACE
-- VPL DataGlove
-- Nintendo PowerGlove
 
 # Tables
 
