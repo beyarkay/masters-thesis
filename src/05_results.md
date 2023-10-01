@@ -78,6 +78,116 @@ From discussion with Trienko:
     observations
 - Very large dataset of observations
 
+The core goal of _Ergo_ is to convert hand motion to keyboard input. To this
+end, there are 10 acceleration sensors mounted on the user's fingertips which
+each measure three axes of linear acceleration at a rate of 40 times per
+second. This leads to a 30 dimensional dataset. A snapshot of this dataset is
+visible in Figure \ref{fig:todo}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{'video' of various gestures being performed}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+These data are recordings of 50 gesture classes and one non-gesture class. The
+50 gesture classes are indexed 0 through 49, and each one represents a unique
+combination of one of ten fingers together with one of five orientations for
+the hand. The product of ten fingers with five orientations results in fifty
+gesture classes. The non-gesture class represents all observations which do not
+represent a gesture.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{Plot showing the 'anatomy' of a gesture: labels, g255, etctodo}
+    \label{fig:todo}
+\end{figure}
+
+This setup results in a 51-class classification problem with a highly
+imbalanced class distribution. During training, one gesture is made every half
+second. Given a data capture frequency of 40 times per second, this means that
+there is one gesture label for every 19 non-gesture labels. The class balance
+is about 97.6% the non-gesture class and the remaining 2.4% divided evenly
+between the 50 gesture classes.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{Bar plot showing class imbalance}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{Time series showing about 20 g255 for each non-g255}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{Time series line plots of the dataset over selected gestures over about 2 seconds (one plot per finger)}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{Time series heatmap of the dataset over selected gestures over about 20 seconds}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+To aid in the intuition gained from looking at the data the below figures show
+all observations for gesture 0:
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{src/imgs/graphs/05_example_g000_plot}
+\caption{All observations for gesture 0, laid on top of one another (one plot per finger)}
+\label{fig:05_example_g000_plot}
+\end{figure}
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_plot}
+    \caption{PCA plot of the data, excluding g255}
+    \label{fig:05_example_pca_plot}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_w_g255}
+    \caption{PCA plot of the data, g255 vs rest}
+    \label{fig:05_example_pca_w_g255}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \caption{PCA plot of the g255 observations, coloured by distance to real gesture}
+    \label{fig:todo}
+\end{figure}
+<!-- prettier-ignore-end -->
+
 ## Comparison of hypothetical models
 
 In this section, hypothetical models will be defined and their performance
@@ -494,6 +604,16 @@ overfitting than the HFFNNs.
 
 ## In-depth model comparisons
 
+This section will explore each of the model types in depth, but will not make
+comparisons between different model types. Characteristics specific to each
+model type are discussed, relating to $F_1$ score, precision, recall, inference
+times, and training times. Where appropriate, confusion matrices of different
+models are also visualised to aid with the analysis of those models.
+
+FFNNs will be discussed in section \ref{in-depth-ffnn}, HMMs in
+\ref{in-depth-hmm}, CuSUMs in \ref{in-depth-cusum}, HFFNNs in
+\ref{in-depth-hffnn}, and SVMs in \ref{in-depth-svm}.
+
 - What effect do hyperparameters have on f1/precision/recall?
 - Are there clusters of hyperparameters that perform similarly?
 - Where does the model perform poorly? Can conclusions be drawn from this?
@@ -538,270 +658,6 @@ Also seem to be clustered in terms of 51-class precision/recall graphs
 
 > SVMs seem to be clustered in terms of training and validation $F_1$ scores
 
-## Evaluation of Autocorrect
+## Evaluation of autocorrect
 
 ## Evaluation of end-to-end process
-
----
-
-## Description of the dataset
-
-The core goal of _Ergo_ is to convert hand motion to keyboard input. To this
-end, there are 10 acceleration sensors mounted on the user's fingertips which
-each measure three axes of linear acceleration at a rate of 40 times per
-second. This leads to a 30 dimensional dataset. A snapshot of this dataset is
-visible in Figure \ref{fig:todo}.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{'video' of various gestures being performed}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-These data are recordings of 50 gesture classes and one non-gesture class. The
-50 gesture classes are indexed 0 through 49, and each one represents a unique
-combination of one of ten fingers together with one of five orientations for
-the hand. The product of ten fingers with five orientations results in fifty
-gesture classes. The non-gesture class represents all observations which do not
-represent a gesture.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot showing the 'anatomy' of a gesture: labels, g255, etctodo}
-    \label{fig:todo}
-\end{figure}
-
-This setup results in a 51-class classification problem with a highly
-imbalanced class distribution. During training, one gesture is made every half
-second. Given a data capture frequency of 40 times per second, this means that
-there is one gesture label for every 19 non-gesture labels. The class balance
-is about 97.6% the non-gesture class and the remaining 2.4% divided evenly
-between the 50 gesture classes.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Bar plot showing class imbalance}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Time series showing about 20 g255 for each non-g255}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Time series line plots of the dataset over selected gestures over about 2 seconds (one plot per finger)}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Time series heatmap of the dataset over selected gestures over about 20 seconds}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-To aid in the intuition gained from looking at the data the below figures show
-all observations for gesture 0:
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{src/imgs/graphs/05_example_g000_plot}
-\caption{All observations for gesture 0, laid on top of one another (one plot per finger)}
-\label{fig:05_example_g000_plot}
-\end{figure}
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_plot}
-    \caption{PCA plot of the data, excluding g255}
-    \label{fig:05_example_pca_plot}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_w_g255}
-    \caption{PCA plot of the data, g255 vs rest}
-    \label{fig:05_example_pca_w_g255}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{PCA plot of the g255 observations, coloured by distance to real gesture}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-## Classification Matrix/F1/precision/recall of various baseline models
-
-- Explain what each baseline model is
-- Explain the things we can notice about each baseline model
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_conf_mats}
-    \caption{Example confusion matrices of various baseline models}
-    \label{fig:05_example_conf_mats}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-- Also include models which have /(zero|perfect)-(precision|recall)/ for /(all gestures|just the non-255 gestures|only the 255 gesture)/
-
-## HMMs are slow and not super accurate
-
-Discuss what the best HMM does/does not predict
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot showing training time per observation, and inference time per
-observation}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Confusion matrices of best HMMs at 5, 50, 51 gestures}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-Discuss how the best HMM for 5 gestures gets confused between ring finger and
-middle finger, likely because it's tricky to move them separately.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot showing similarities between ring-finger gestures and middle finger
-gestures}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-HMM for 50 gestures is largely correct, although sometimes confuses gestures
-from the same hand and orientation.
-
-Note also that the gestures involving the thumbs are very rarely confused with
-other gestures, likely due to the unique orientation of the accelerometers on
-the two thumbs
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot showing the average f1/precision/recall for each finger, regardless of orientation}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot showing the average f1/precision/recall for each orientation, regardless of finger}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-HMM for 51 gestures is similar to that of 50 gestures, except TODO
-
-## CuSUM struggles to get the orientation correct
-
-## SVMs are very slow to train but have a high F1
-
-## FFNNs are slow to train but fast for inference
-
-Also no explicit changes needed for multi-class classification
-
-## Hierarchical FFNNs tested, perform well but take long to train
-
-## How will we know if the model is overfitting on the validation set?
-
-Run Cross validation
-
-## Discuss the FFNN hyperparameters
-
-- All pairs comparisons between the hyperparameters
-
-## Comparison of the models
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Banded scatterplot, each band is a model type and each point that model's f1
-score}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-Show a comparison between the model's f1 scores and that of the baseline models
-
-HMMs are the slowest overall
-
-FFNNs are fast and accurate
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Precision vs recall coloured by model type over 51, 50, 5 gesture classes}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-Note how different models have different precision/recall characteristics, with
-(for 51 classes) CuSUM having high recall but low precision and HMMs having low
-recall but high precision.
-
-## "Real world" tests on some recorded data
-
-- Do a plot with predictions _and_ raw data
-
-## Other observations
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
-    \caption{Plot of best-performing model over time}
-    \label{fig:todo}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-It seems like the HFFNN gets to a better model faster than HMMs or FFNNs for
-some reason, even when they're all searching via random search. The HFFNN also
-has many more hyperparameters than the others. This would indicate that the
-hyperparameter space for HFFNN is, on average, better than that of the FFNN and
-that a random HFFNN is likely to be better than a random FFNN(verify this
-somehow)
