@@ -276,7 +276,7 @@ gestures. The mean $F_1$ score for these classifiers is 0.214.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-## Justification for why each of the model types are tested
+## Justification for why each of the model types are tested \label{model-justification}
 
 Several different classification algorithms were evaluated. The chosen
 classification algorithms were selected based on how well suited they are to a
@@ -347,7 +347,7 @@ one-vs-rest classification. Due to the large number of observations and the
 poor scaling characteristics of SVMs as the number of observations increases,
 only a linear kernel is considered.
 
-## Which model performs the best with 51 classes?
+## Which model performs the best with 51 classes? \label{best-model}
 
 The performance of each of the five classification algorithms can be seen in
 Figure \ref{fig:05_precision_recall_51_classes} (for those models trained on
@@ -422,7 +422,7 @@ This asymmetry between minority/majority classes and precision/recall is a
 consequence of the macro weighting used for calculating $F_1$, recall, and
 precision.
 
-## Model hyperparameter comparison
+## Model hyperparameter comparison \label{hpar-comparison}
 
 As each model was trained five times, an approximate empirical distribution can
 be obtained for each model type and each model and each hyperparameter
@@ -441,7 +441,7 @@ TODO: comparison of the confusion matrices for the best models
 >
 > Maybe this is where the ellipse plots come in?
 
-## Comparison of the inference and training times for each model
+## Comparison of the inference and training times for each model \label{time-comparison}
 
 Raw performance is not the only metric of interest, as _Ergo_ requires
 real-time prediction at a rate of 40 predictions per second. The inference and
@@ -614,34 +614,145 @@ FFNNs will be discussed in section \ref{in-depth-ffnn}, HMMs in
 \ref{in-depth-hmm}, CuSUMs in \ref{in-depth-cusum}, HFFNNs in
 \ref{in-depth-hffnn}, and SVMs in \ref{in-depth-svm}.
 
-- What effect do hyperparameters have on f1/precision/recall?
-- Are there clusters of hyperparameters that perform similarly?
-- Where does the model perform poorly? Can conclusions be drawn from this?
-- Can the model's performance be compared to some of the idealised confusion
-  matrices?
-- Residual analysis on the final models to see why they go wrong where they go
-  wrong, and what patterns can be discerned there from. Also, do these patterns
-  indicate ways in which you could have improved the models?
+> - What effect do hyperparameters have on f1/precision/recall?
+> - Are there clusters of hyperparameters that perform similarly?
+> - Where does the model perform poorly? Can conclusions be drawn from this?
+> - Can the model's performance be compared to some of the idealised confusion
+>   matrices?
+> - Residual analysis on the final models to see why they go wrong where they go
+>   wrong, and what patterns can be discerned there from. Also, do these patterns
+>   indicate ways in which you could have improved the models?
 
 ### FFNN \label{in-depth-ffnn}
 
-> The two neural network based models (FFNN and HFFNN) perform similarly
-> as is to be expected from their similar architecture, however the two-model
-> HFFNN largely performed worse than the single model FFNN\footnote{TODO: why is this
-> the case?}. These models exhibit very large variance in their performance,
-> which may be attributable to the large number of hyperparameters which were
-> tuned. This is discussed more in section TODO.
+Figure \ref{fig:05_in_depth_ffnn_p_vs_r} shows a clear cluster in the recall of the
+FFNN models. This cluster is centred around a recall of about 0.8. Note that
+this plot is the same as Figure \ref{fig:05_precision_recall_stripplot} from
+section \ref{best-model}, but without the other model types.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_p_vs_r}
+    \caption{Precision vs Recall plot for all FFNNs trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey.}
+    \label{fig:05_in_depth_ffnn_p_vs_r}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+To investigate this cluster, Figure \ref{fig:05_in_depth_ffnn_hpars_vs_recall}
+shows the recall of all models trained on the full dataset of 51 classes
+against the hyperparameters for the FFNNs: the dropout rate, the L2
+coefficient, the batch size, the learning rate, the number of layers, and the
+nodes in each layer. This plot clearly shows that a learning rate between
+$10^{-4}$ and $10^{-3}$ have a dramatic impact on the recall of the model.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_recall}
+    \caption{Hyperparameters for FFNNs trained on 51 classes, compared against
+    their recall. Note that some hyperparameters were sampled from a
+    $\log_{10}$ distribution and are therefore plotted over that same
+    distribution.}
+    \label{fig:05_in_depth_ffnn_hpars_vs_recall}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Figure \ref{fig:05_in_depth_ffnn_hpars_vs_f1-score} shows the same models, but
+plotted against their $F_1$ score. No significant patterns can be found between
+the different hyperparameters and the model's $F_1$ score beyond the
+relationship with the L2 coefficient that has been discussed above.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_f1-score}
+    \caption{Hyperparameters for FFNN models trained on 51 classes, compared against
+    their $F_1$ score. Note that some hyperparameters were sampled from a
+    $\log_{10}$ distribution and are therefore plotted over that same
+    distribution.}
+    \label{fig:05_in_depth_ffnn_hpars_vs_f1-score}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+TODO probably also want a confusion matrix or two over here.
 
 ### HMM \label{in-depth-hmm}
-
-Also seem to be clustered in terms of 51-class precision/recall graphs
-
-> HMMs seem to be clustered in terms of the inference/training times(?)
 
 > Discuss why the HMMs couldn't be trained on every training observation but
 > could be evaluated on every validation observation.
 
+Figure \ref{fig:05_in_depth_hmm_p_vs_r_covar_type} shows the precision and
+recall of all HMM models trained on all 51 classes. Since the HMMs only have
+one hyperparameter (the covariance matrix to use for each state). Each
+covariance type is strongly clustered together, with tied covariance matrices
+having the best recall and precision. Tied covariance matrices are when each
+states in each HMM learns using a shared covariance matrix, and every element
+in the covariance matrix can be modified during training.
+
+While there is a positive correlation between the recall and precision for the
+HMMs, note that the range of precision values covered is very small and each
+HMM achieves approximately identical precision.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_p_vs_r_covar_type.pdf}
+    \caption{Precision vs Recall plot for all HMMs trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
+    been adjusted to better show the distribution of the data.}
+    \label{fig:05_in_depth_hmm_p_vs_r_covar_type}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Figure \ref{fig:05_in_depth_hmm_inf_trn_time} depicts the time taken per
+observation for inference and training, for all HMMs trained on the full 51
+class dataset.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_inf_trn_time}
+    \caption{Seconds per observation for training and inference for HMMs
+    trained on the full 51 classes. Plots a and c show the full dataset, while
+    plots b and d are magnified so that the Spherical and Diagonal covariance
+    types can be better inspected.}
+    \label{fig:05_in_depth_hmm_inf_trn_time}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+It is clear that the covariance type has a strong impact on both
+the training times and the inference times of the HMMs, with the Full and Tied
+covariance types being nearly ten times slower both when training and
+predicting. This means that the covariance type which achieved the best
+performance (Tied) is also one of the longest to train and the slowest to
+perform inference.
+
+TODO probably want a few confusion matrices here.
+
 ### CuSUM \label{in-depth-cusum}
+
+Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot a shows the precision and
+recall for all CuSUM models trained on 51 classes. There is a clear positive
+trend between precision, recall, and the CuSUM threshold used although there
+are diminishing returns on increasing the CuSUM threshold beyond 80, as can be
+seen in Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot b.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_cusum_p_vs_r_thresh}
+    \caption{Plot a: Precision vs Recall plot for all CuSUM models trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
+    been adjusted to better show this model's data. Plot b: the CuSUM threshold
+    value plotted against the $F_1$ score, showing the diminishing returns
+    gained by increasing the CuSUM threshold.}
+    \label{fig:05_in_depth_cusum_p_vs_r_thresh}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+TODO probably want a few confusion matrices here.
 
 ### HFFNN \label{in-depth-hffnn}
 
@@ -652,7 +763,33 @@ Also seem to be clustered in terms of 51-class precision/recall graphs
 > which may be attributable to the large number of hyperparameters which were
 > tuned. This is discussed more in section TODO.
 
+Figure \ref{fig:05_in_depth_hffnn_p_vs_r}
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hffnn_p_vs_r}
+    \caption{Precision vs Recall plot for all HFFNN models trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
+    been adjusted to better show this model's data.}
+    \label{fig:05_in_depth_hffnn_p_vs_r}
+\end{figure}
+<!-- prettier-ignore-end -->
+
 ### SVM \label{in-depth-svm}
+
+Figure \ref{fig:05_in_depth_svm_p_vs_r}
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_p_vs_r}
+    \caption{Precision vs Recall plot for all SVM models trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
+    been adjusted to better show this model's data.}
+    \label{fig:05_in_depth_svm_p_vs_r}
+\end{figure}
+<!-- prettier-ignore-end -->
 
 > SVMs seem to be clustered in terms of the inference/training times
 
