@@ -4,45 +4,6 @@ Note: report the accuracy when excluding g255, as most of the literature does
 this. Discuss the difficulties of segmentation and how most of the literature
 does not attempt this.
 
-See the **Word Error Rate** in Amma, Christoph, Marcus Georgi, and Tanja
-Schultz. “Airwriting: A Wearable Handwriting Recognition System.” Personal and
-Ubiquitous Computing 18, no. 1 (January 2014): 191–203.
-https://doi.org/10.1007/s00779-013-0637-3.
-
-From discussion with Trienko:
-
-> Results chapter:
-
-> Also, include some sort of scatter plot with ellipses overlaid on the different
-> groupings on the scatter plot. So the x is the independent variable (ie
-> regularization distance), the y is the dependant variable (ie the validation
-> accuracy), each of the points is one measurement, each hue is one grouping
-> (from identical hyperparameters) and each grouping is encircled by an ellipse
-> with the mean, std dev, and correlation of that group's data
->
-> High level overview
->
-> - Dataset description
-> - What do good/bad models look like wrt F1, confusion matrix, etc?
-> - Motivation for each model
-> - Research questions:
->   - Which model performs the best with 51 classes?
->   - Which model shows the best results after cross validation?
->   - Which model takes the longest to train
->   - Which model takes the longest to perform inference? (and is therefore most
->     suitable to live inference?)
->   - How does each model perform on real-world data?
->   - For each model (SVM, HMM, CuSUM, FFNN, HFFNN):
->     - For each model, what effect do the hyperparameters have on the
->       performance? (increasing/decreasing f1/precision/recall?)
->     - For each model, are there patterns in how the model performs? (Can we
->       compare the confusion matrices of the model with the "platonic ideals" of
->       various models?)
->
-> Talking points for Trienko
->
-> - [ ] Validation plots to show that the selected model is statistically likely to perform well
-> - [ ] Hyperparameter comparison
 > - [ ] Real-time evaluation
 > - [ ] Real-world dataset evaluation
 > - [ ] In depth discussion about the pros/cons of where each model gets confused
@@ -62,6 +23,8 @@ From discussion with Trienko:
 > each row sum to one unless otherwise noted, and that cells without any
 > predictions are left uncoloured (so that you can easily see
 > close-to-zero-but-not-quite-zero cells).
+>
+> NOTE: is hyperparameter importance/fANOVA a widely used thing? http://proceedings.mlr.press/v32/hutter14.html > https://www.semanticscholar.org/paper/An-Efficient-Approach-for-Assessing-Hyperparameter-Hutter-Hoos/cabd6bbdd2be9996dd7473185c9eaf104980fe21
 
 ## Dataset Description
 
@@ -85,9 +48,9 @@ second. This leads to a 30 dimensional dataset. A snapshot of this dataset is
 visible in Figure \ref{fig:todo}.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{'video' of various gestures being performed}
     \label{fig:todo}
 \end{figure}
@@ -101,9 +64,9 @@ gesture classes. The non-gesture class represents all observations which do not
 represent a gesture.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{Plot showing the 'anatomy' of a gesture: labels, g255, etctodo}
     \label{fig:todo}
 \end{figure}
@@ -116,36 +79,36 @@ is about 97.6% the non-gesture class and the remaining 2.4% divided evenly
 between the 50 gesture classes.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{Bar plot showing class imbalance}
     \label{fig:todo}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{Time series showing about 20 g255 for each non-g255}
     \label{fig:todo}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{Time series line plots of the dataset over selected gestures over about 2 seconds (one plot per finger)}
     \label{fig:todo}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{Time series heatmap of the dataset over selected gestures over about 20 seconds}
     \label{fig:todo}
 \end{figure}
@@ -154,35 +117,35 @@ between the 50 gesture classes.
 To aid in the intuition gained from looking at the data the below figures show
 all observations for gesture 0:
 
-\begin{figure}[!htb]
+\begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{src/imgs/graphs/05_example_g000_plot}
+\includegraphics[height=5cm]{src/imgs/graphs/05_example_g000_plot}
 \caption{All observations for gesture 0, laid on top of one another (one plot per finger)}
 \label{fig:05_example_g000_plot}
 \end{figure}
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_plot}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_example_pca_plot}
     \caption{PCA plot of the data, excluding g255}
     \label{fig:05_example_pca_plot}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_example_pca_w_g255}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_example_pca_w_g255}
     \caption{PCA plot of the data, g255 vs rest}
     \label{fig:05_example_pca_w_g255}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{PCA plot of the g255 observations, coloured by distance to real gesture}
     \label{fig:todo}
 \end{figure}
@@ -209,9 +172,9 @@ confusion matrix also makes it clear that the majority of observations belong
 to class 50, the non-gesture class.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_random_preds}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_random_preds}
     \caption{Precision-recall graph and confusion matrix of a classifier that predicts completely randomly.}
     \label{fig:05_pr_conf_mat_random_preds}
 \end{figure}
@@ -224,9 +187,9 @@ precision-recall graph of such a classifier, which has an $F_1$ score of
 0.00164.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_only_50}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_only_50}
     \caption{Precision-recall graph and confusion matrix of a classifier that only predicts the non-gesture class.}
     \label{fig:05_pr_conf_mat_only_50}
 \end{figure}
@@ -252,9 +215,9 @@ might be predicted by these classifiers as one of five gestures, corresponding
 to the five orientations. The mean $F_1$ score for these classifiers is 0.212.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_wrong_orientation}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_orientation}
     \caption{Precision-recall graph and confusion matrix of a classifier that is perfect at predicting the finger being used, but always errs when predicting the orientation of the hand.}
     \label{fig:05_pr_conf_mat_wrong_orientation}
 \end{figure}
@@ -268,9 +231,9 @@ given gesture is only ever incorrectly predicted as one of four other
 gestures. The mean $F_1$ score for these classifiers is 0.214.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_wrong_finger_correct_hand}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_finger_correct_hand}
     \caption{Precision-recall graph and confusion matrix of a classifier that correctly predicts the orientation and hand being used for a gesture, but incorrectly predicts the finger being used.}
     \label{fig:05_pr_conf_mat_wrong_finger_correct_hand}
 \end{figure}
@@ -295,9 +258,9 @@ and the training time increases approximately linearly with the number of
 classes.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/todo}
+    \includegraphics[height=5cm]{src/imgs/todo}
     \caption{TODO: Graphic showing how NN inference and training time does not scale linearly with number of classes, but HMMs do}
     \label{fig:todo}
 \end{figure}
@@ -354,9 +317,9 @@ Figure \ref{fig:05_precision_recall_51_classes} (for those models trained on
 all 51 classes).
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_precision_recall_51_classes}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_precision_recall_51_classes}
     \caption{ Left: Precision and recall for all model types trained on the
     full 51 classes, with the contours depicting the $F_1$-scores for those
     models. Right: The $F_1$-scores for the same models, shown side-by-side for
@@ -397,9 +360,9 @@ Figure \ref{fig:05_precision_recall_stripplot} shows the precision and recall
 for each model type (for all models trained on all 51 classes).
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_precision_recall_stripplot}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_precision_recall_stripplot}
     \caption{Precision and recall for all model types trained on all 51
     classes, aligned for easier comparison.}
     \label{fig:05_precision_recall_stripplot}
@@ -460,9 +423,9 @@ training times and inference times per observation for each model on the
 training and validation dataset.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_inf_trn_times_per_obs}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_inf_trn_times_per_obs}
     \caption{Inference and training times for the validation and training
     datasets. Due to the large range of the data, the plots in the first column
     show the unmagnified data (plots a and d) and the plots in the other two
@@ -509,9 +472,9 @@ apparent, there is no increase in $F_1$ score that could compensate for the
 increase in inference times.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_inference_time_per_obs_vs_f1}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_inference_time_per_obs_vs_f1}
     \caption{Inference time per observation for each model plotted against each model's $F_1$-score. Left shows all inference times, Right shows only those inference times less than 0.0001 seconds.}
     \label{fig:05_inference_time_per_obs_vs_f1}
 \end{figure}
@@ -545,9 +508,9 @@ training dataset but very poorly on the validation dataset is likely to have
 overfit on the data, and therefore is unlikely to perform well on unseen data.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_f1_vs_f1_ratio}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_f1_vs_f1_ratio}
     \caption{$F_1$ ratio (training $F_1$ over validation $F_1$) for each model,
     coloured by the model type. Plots a and c show the full range of their
     data, while plots b and d show the same data but magnified on a subset of
@@ -631,9 +594,9 @@ this plot is the same as Figure \ref{fig:05_precision_recall_stripplot} from
 section \ref{best-model}, but without the other model types.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_p_vs_r}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_ffnn_p_vs_r}
     \caption{Precision vs Recall plot for all FFNNs trained on 51 classes, with
     the model's $F_1$ scores as contours in grey.}
     \label{fig:05_in_depth_ffnn_p_vs_r}
@@ -648,9 +611,9 @@ nodes in each layer. This plot clearly shows that a learning rate between
 $10^{-4}$ and $10^{-3}$ have a dramatic impact on the recall of the model.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_recall}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_recall}
     \caption{Hyperparameters for FFNNs trained on 51 classes, compared against
     their recall. Note that some hyperparameters were sampled from a
     $\log_{10}$ distribution and are therefore plotted over that same
@@ -665,9 +628,9 @@ the different hyperparameters and the model's $F_1$ score beyond the
 relationship with the L2 coefficient that has been discussed above.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_f1-score}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_f1-score}
     \caption{Hyperparameters for FFNN models trained on 51 classes, compared against
     their $F_1$ score. Note that some hyperparameters were sampled from a
     $\log_{10}$ distribution and are therefore plotted over that same
@@ -676,11 +639,9 @@ relationship with the L2 coefficient that has been discussed above.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-TODO probably also want a confusion matrix or two over here.
-
 ### HMM \label{in-depth-hmm}
 
-> Discuss why the HMMs couldn't be trained on every training observation but
+> TODO Discuss why the HMMs couldn't be trained on every training observation but
 > could be evaluated on every validation observation.
 
 Figure \ref{fig:05_in_depth_hmm_p_vs_r_covar_type} shows the precision and
@@ -696,9 +657,9 @@ HMMs, note that the range of precision values covered is very small and each
 HMM achieves approximately identical precision.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_p_vs_r_covar_type.pdf}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_p_vs_r_covar_type.pdf}
     \caption{Precision vs Recall plot for all HMMs trained on 51 classes, with
     the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
     been adjusted to better show the distribution of the data.}
@@ -711,9 +672,9 @@ observation for inference and training, for all HMMs trained on the full 51
 class dataset.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_inf_trn_time}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_inf_trn_time}
     \caption{Seconds per observation for training and inference for HMMs
     trained on the full 51 classes. Plots a and c show the full dataset, while
     plots b and d are magnified so that the Spherical and Diagonal covariance
@@ -729,7 +690,31 @@ predicting. This means that the covariance type which achieved the best
 performance (Tied) is also one of the longest to train and the slowest to
 perform inference.
 
-TODO probably want a few confusion matrices here.
+Figure \ref{fig:05_in_depth_hmm_conf_mats_cov_type} plots four confusion
+matrices, one for each covariance type. The superior recall of the tied
+covariance type is clear from the strong diagonal in the confusion matrices.
+One can also see that the tied HMMs had a greater tendency than the full HMMs
+to mispredict the orientation of the gesture (shown by the two diagonals
+adjacent to the major diagonal). One can also see strong artefacts in the
+spherical and diagonal HMMs causing them to mispredict either the hand or the
+orientation of a gesture. The very low precision of the HMMs is also apparent,
+and can be seen by the row of incorrect predictions at the bottom of each
+confusion matrix where the HMM incorrectly predicted class 50 as one of the
+other classes.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_conf_mats_cov_type}
+    \caption{Mean covariance matrices for the four covariance types: spherical,
+    diagonal, full, and tied. Note that the confusion matrices are \emph{not}
+    normalised, which means that the cell in the bottom right corner
+    (corresponding to the ground-truth and predicted class being class 50) is
+    left blank. The value in this cell is so much larger than any other cell
+    that it renders the plot uninformative.}
+    \label{fig:05_in_depth_hmm_conf_mats_cov_type}
+\end{figure}
+<!-- prettier-ignore-end -->
 
 ### CuSUM \label{in-depth-cusum}
 
@@ -740,9 +725,9 @@ are diminishing returns on increasing the CuSUM threshold beyond 80, as can be
 seen in Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot b.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_cusum_p_vs_r_thresh}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_cusum_p_vs_r_thresh}
     \caption{Plot a: Precision vs Recall plot for all CuSUM models trained on 51 classes, with
     the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
     been adjusted to better show this model's data. Plot b: the CuSUM threshold
@@ -752,23 +737,17 @@ seen in Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot b.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-TODO probably want a few confusion matrices here.
-
 ### HFFNN \label{in-depth-hffnn}
 
-> The two neural network based models (FFNN and HFFNN) perform similarly
-> as is to be expected from their similar architecture, however the two-model
-> HFFNN largely performed worse than the single model FFNN\footnote{TODO: why is this
-> the case?}. These models exhibit very large variance in their performance,
-> which may be attributable to the large number of hyperparameters which were
-> tuned. This is discussed more in section TODO.
-
-Figure \ref{fig:05_in_depth_hffnn_p_vs_r}
+Figure \ref{fig:05_in_depth_hffnn_p_vs_r} shows the precision and recall for
+all HFFNN models trained on the full 51 class dataset. Both precision and
+recall have a large variance, which is likely due to the volume of the
+hyperparameter search space.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hffnn_p_vs_r}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_p_vs_r}
     \caption{Precision vs Recall plot for all HFFNN models trained on 51 classes, with
     the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
     been adjusted to better show this model's data.}
@@ -776,25 +755,138 @@ Figure \ref{fig:05_in_depth_hffnn_p_vs_r}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-### SVM \label{in-depth-svm}
-
-Figure \ref{fig:05_in_depth_svm_p_vs_r}
+As an HFFNN is made of two classifiers, the hyperparameters for the majority
+classifier (which detects if there is a gesture in the observation) and the
+minority classifier (which classifies gestures, given that there is a gesture
+in the observation) will be discussed sequentially. Figure
+\ref{fig:05_in_depth_hffnn_majority_hpars} shows the hyperparameters for the
+majority classifier. There are no clear patterns between the hyperparameters of
+the majority classifier and the HFFNN's $F_1$ score, except possibly for the
+learning rate \footnote{TODO: Maybe look into Hutter, F., Hoos, H. and
+Leyton-Brown, K.. (2014). An Efficient Approach for Assessing Hyperparameter
+Importance. https://proceedings.mlr.press/v32/hutter14.html}.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_p_vs_r}
-    \caption{Precision vs Recall plot for all SVM models trained on 51 classes, with
-    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
-    been adjusted to better show this model's data.}
-    \label{fig:05_in_depth_svm_p_vs_r}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_majority_hpars}
+    \caption{$F_1$ score against all hyperparameters for the majority
+    classifier in every HFFNN.}
+    \label{fig:05_in_depth_hffnn_majority_hpars}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-> SVMs seem to be clustered in terms of the inference/training times
+Figure \ref{fig:05_in_depth_hffnn_minority_hpars} shows the hyperparameters for
+the minority classifier against the $F_1$ score for each HFFNN. The learning
+rate of the minority classifier shows a similar pattern as in Figure
+\ref{fig:05_in_depth_ffnn_hpars_vs_f1-score} which compared the learning rate
+against the $F_1$ score for FFNNs. The region between $10^{-4}$ and $10^{-3}$
+shows a higher $F_1$ score than the surrounding regions.
 
-> SVMs seem to be clustered in terms of training and validation $F_1$ scores
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_minority_hpars}
+    \caption{$F_1$ score against all hyperparameters for the minority
+    classifier in every HFFNN.}
+    \label{fig:05_in_depth_hffnn_minority_hpars}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+### SVM \label{in-depth-svm}
+
+Figure \ref{fig:05_in_depth_svm_p_vs_r_class_weight_C} shows how the
+hyperparameters of the SVMs affect their precision, recall, and $F_1$ score.
+There are two clear clusters formed by whether or not the influence of each
+observation is weighted by how frequent its class is. Both unbalanced and
+balanced class weights lead to approximately the same $F_1$ score, but
+dramatically different precision and recall values. Balanced class weights
+(where the minority classes have greater weighting than the majority class)
+have higher recall but lower precision than unbalanced class weights (where all
+observations are equally weighted).
+
+The regularization parameter C has only a small effect on the $F_1$ score, with
+values below $10^{-4}$ consistently resulting in a decreased $F_1$ score. This
+effect is independent of class weighting.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_p_vs_r_class_weight_C}
+    \caption{Left: Precision and recall of all SVMs, with the regularization
+    parameter C and class weighting mapped to the colour and marker type
+    respectively. Right: The regularization parameter C plotted against the
+    $F_1$ score of each SVM, with the class weight indicated by the marker
+    type.}
+    \label{fig:05_in_depth_svm_p_vs_r_class_weight_C}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+To investigate these clusters relating to the class weight hyperparameter, we
+can plot the mean confusion matrix for both balanced and unbalanced SVMs, shown
+in Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced}
+    \caption{Confusion matrices for SVMs with unbalanced (left) and balanced
+    (right) class weights. Note that the confusion matrices are \emph{not}
+    normalised, which means that the cell in the bottom right corner
+    (corresponding to the ground-truth and predicted class being class 50) is
+    left blank. The value in this cell is so much larger than any other cell
+    that it renders the plot uninformative.}
+    \label{fig:05_in_depth_svm_conf_mats_unbalanced}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+One can see that both the balanced and unbalanced SVMs do fairly well by the
+strong diagonal through the plots. However, note that the balanced class weight
+SVMs generally predict many non-50 classes as belonging to class 50 (as can be
+seen by the column on the far right of the plot). This type of
+misclassification leads to low precision, as the model is over-predicting for
+all of the gesture classes.
+
+In a complementary sense, the SVMs with unbalanced class weights frequently
+mispredict observation belonging to class 50 as belonging to one of the other
+gesture classes (as can be seen by the strong row at the bottom of the plot).
+This type of misclassification leads to low recall, as the model is frequently
+failing to correctly predict correctly for class 50.
+
+Note that the balanced and unbalanced SVMs are approximately complementary in
+their mistakes: the balanced SVMs predict too many observations as belonging to
+class 50, and the unbalanced SVMs predict too _few_ observations as belonging
+to class 50.
+
+Figure \ref{fig:05_svm_hpars_vs_fit_time} depicts the time it takes to fit an
+SVM against the hyperparameters Class Weight and C for all SVMs trained on the
+full 51 classes.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_svm_hpars_vs_fit_time}
+    \caption{Fit times against regularization parameter C for all SVMs trained
+    on 51 classes. Whether or not the observation weights were adjusted is
+    indicated by the marker type.}
+    \label{fig:05_svm_hpars_vs_fit_time}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+As the regularization parameter C increases, the amount of time required to fit
+the SVM increases to a plateau and then remains constant. The rate of increase
+and the fit time at the plateau are both higher for balanced SVMs than for
+unbalanced SVMs. This follows from the extra computation required to calculate
+and apply a weight to every observation.
+
+## Comparison with 5, 50 gesture classes
+
+TODO
 
 ## Evaluation of autocorrect
 
+TODO
+
 ## Evaluation of end-to-end process
+
+TODO
