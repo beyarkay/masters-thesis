@@ -25,5 +25,10 @@ header-includes: |
   \usepackage{tikz}
   \usepackage{wrapfig}
   \usepackage{xcolor}
+  \usepackage{graphicx}
+  \usepackage{rotating}
+  \usepackage{caption}
+  \usepackage{subcaption}
+  \usepackage{multirow}
 mustache: src/dynamic_content.yaml
 ---

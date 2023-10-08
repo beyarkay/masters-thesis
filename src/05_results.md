@@ -18,6 +18,8 @@ does not attempt this.
 > predictions are left uncoloured (so that you can easily see
 > close-to-zero-but-not-quite-zero cells).
 
+TODO: show off that you did 5 repetitions for each run
+
 ## (Some things I'll cover in the Methodology chapter)
 
 Hi Professor, This section will be removed, but I found there were a few times
@@ -36,6 +38,7 @@ reader were reading the thesis in-order.
 1. What does _Ergo_ look like? Where are the sensors places?
 1. Discussion about why the HMMs couldn't be trained on every training
    observation but could be evaluated on every validation observation.
+1. Each set of hyperparameters has 5 repetitions
 
 ## Dataset Description
 
@@ -260,7 +263,8 @@ to class 50, the non-gesture class.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_random_preds}
-    \caption{Precision-recall graph and confusion matrix of a classifier that predicts completely randomly.}
+    \caption{Precision-recall graph and confusion matrix of a classifier that
+    predicts completely randomly.}
     \label{fig:05_pr_conf_mat_random_preds}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -275,7 +279,8 @@ precision-recall graph of such a classifier, which has an $F_1$ score of
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_only_50}
-    \caption{Precision-recall graph and confusion matrix of a classifier that only predicts the non-gesture class.}
+    \caption{Precision-recall graph and confusion matrix of a classifier that
+    only predicts the non-gesture class.}
     \label{fig:05_pr_conf_mat_only_50}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -303,7 +308,9 @@ to the five orientations. The mean $F_1$ score for these classifiers is 0.212.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_orientation}
-    \caption{Precision-recall graph and confusion matrix of a classifier that is perfect at predicting the finger being used, but always errs when predicting the orientation of the hand.}
+    \caption{Precision-recall graph and confusion matrix of a classifier that
+    is perfect at predicting the finger being used, but always errs when
+    predicting the orientation of the hand.}
     \label{fig:05_pr_conf_mat_wrong_orientation}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -319,7 +326,9 @@ gestures. The mean $F_1$ score for these classifiers is 0.214.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_finger_correct_hand}
-    \caption{Precision-recall graph and confusion matrix of a classifier that correctly predicts the orientation and hand being used for a gesture, but incorrectly predicts the finger being used.}
+    \caption{Precision-recall graph and confusion matrix of a classifier that
+    correctly predicts the orientation and hand being used for a gesture, but
+    incorrectly predicts the finger being used.}
     \label{fig:05_pr_conf_mat_wrong_finger_correct_hand}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -335,7 +344,7 @@ literature were also consulted and applied where appropriate, with details
 discussed below.
 
 Feed-forward Neural Networks (FFNNs) scale well as the number of classes
-increases [@TODO]. To scale a FFNN to classify a greater number of classes, one
+increases. To scale a FFNN to classify a greater number of classes, one
 (at least) needs to increase the number of output neurons and retrain the
 entire network. This is favourable when compared to an algorithms that requires
 one classifier to be trained per class, in which case both the inference time
@@ -346,16 +355,17 @@ classes.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/todo}
-    \caption{TODO: Graphic showing how NN inference and training time does not scale linearly with number of classes, but HMMs do}
+    \caption{TODO: Graphic showing how NN inference and training time does not
+    scale linearly with number of classes, but HMMs do}
     \label{fig:todo}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 Hidden Markov Models (HMMs) have frequently been used in the literature for
-gesture detection and classification (see the Background Chapter @TODO) and
+gesture detection and classification and
 while training and inference times scale approximately linearly with the number
 of classes, they do explicitly model time and have shown promise in previous
-works [@TODO]. Their implementation will allow for a better comparison between
+works. Their implementation will allow for a better comparison between
 the current and prior work.
 
 Cumulative Sum (CuSUM) is a simple statistical technique that will provide a
@@ -371,7 +381,7 @@ real-world use requires the handling of a non-gesture class such that the
 "empty space" in between one gesture and the next does not get erroneously
 classified as a gesture even though no gesture is being performed. One
 technique in the literature which has shown promise in dealing with both
-detection and classification is that of a hierarchical setup [@TODO] in which
+detection and classification is that of a hierarchical setup in which
 there are two models trained. The first model (the detector) is a binary
 classifier simply trained to detect if there is any gesture present in an
 observation. The second model (the classifier) is trained on only the
@@ -389,8 +399,8 @@ that there is indeed a gesture present. Despite being composed of two
 independent neural networks, the HFFNN is evaluated as one model.
 
 Support Vector Machines (SVMs) have been used in the literature for glove-based
-gesture classification [@TODO] and so are evaluated here. SVMs do not natively
-support multi-class classification but multiple SVMs can be combined to perform
+gesture classification and so are evaluated here. SVMs do not natively support
+multi-class classification but multiple SVMs can be combined to perform
 one-vs-rest classification. Due to the large number of observations and the
 poor scaling characteristics of SVMs as the number of observations increases,
 only a linear kernel is considered.
@@ -420,7 +430,7 @@ section \ref{best-model}, but without the other model types.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_ffnn_p_vs_r}
-    \caption{Precision vs Recall plot for all FFNNs trained on 51 classes, with
+    \caption{Precision-recall plot for all FFNNs trained on 51 classes, with
     the model's $F_1$ scores as contours in grey.}
     \label{fig:05_in_depth_ffnn_p_vs_r}
 \end{figure}
@@ -517,9 +527,9 @@ HMM achieves approximately identical precision.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_p_vs_r_covar_type.pdf}
-    \caption{Precision vs Recall plot for all HMMs trained on 51 classes, with
-    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
-    been adjusted to better show the distribution of the data.}
+    \caption{Precision-recall plot for all HMMs trained on 51 classes, with
+    the model's $F_1$ scores as contours in grey. Note that the scales of the
+    axes have been adjusted to better show the distribution of the data.}
     \label{fig:05_in_depth_hmm_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -539,9 +549,6 @@ class dataset.
     \label{fig:05_in_depth_hmm_inf_trn_time}
 \end{figure}
 <!-- prettier-ignore-end -->
-
-TODO: why do full HMMs have the worst precision and recall but the best-looking
-confusion matrix.
 
 It is clear that the covariance type has a strong impact on both the training
 times and the inference times of the HMMs, with the Full and Tied covariance
@@ -639,7 +646,7 @@ seen in Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot b.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_cusum_p_vs_r_thresh}
-    \caption{Plot a: Precision vs recall plot for all CuSUM models trained on 51 classes, with
+    \caption{Plot a: precision-recall plot for all CuSUM models trained on 51 classes, with
     the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
     been adjusted to better show this model's data. Plot b: the CuSUM threshold
     value plotted against the $F_1$ score, showing the diminishing returns
@@ -651,7 +658,7 @@ seen in Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} plot b.
 Figure \ref{fig:05_mean_conf_mat_cusum} shows the confusion matrices for CuSUM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
 are the weighted mean of all CuSUM models, based on the $F_1$ score of each
-CuSUM model. TODO discuss this more.
+CuSUM model.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -666,6 +673,11 @@ CuSUM model. TODO discuss this more.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+The "chequerboard" pattern visible in the 50- and 51-class confusion matrices
+originates from the formulation of the CuSUM model: it has little knowledge of
+the orientation of the gestures, and largely distinguishes observations based
+on the finger that is moving.
+
 ### HFFNN \label{in-depth-hffnn}
 
 Figure \ref{fig:05_in_depth_hffnn_p_vs_r} shows the precision and recall for
@@ -677,9 +689,9 @@ hyperparameter search space.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_p_vs_r}
-    \caption{Precision vs Recall plot for all HFFNN models trained on 51 classes, with
-    the model's $F_1$ scores as contours in grey. Note that the scales of the axes have
-    been adjusted to better show this model's data.}
+    \caption{Precision-recall plot for all HFFNN models trained on 51
+    classes, with the model's $F_1$ scores as contours in grey. Note that the
+    scales of the axes have been adjusted to better show this model's data.}
     \label{fig:05_in_depth_hffnn_p_vs_r}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -691,9 +703,7 @@ in the observation) will be discussed sequentially. Figure
 \ref{fig:05_in_depth_hffnn_majority_hpars} shows the hyperparameters for the
 majority classifier. There are no clear patterns between the hyperparameters of
 the majority classifier and the HFFNN's $F_1$ score, except possibly for the
-learning rate \footnote{TODO: Maybe look into Hutter, F., Hoos, H. and
-Leyton-Brown, K.. (2014). An Efficient Approach for Assessing Hyperparameter
-Importance. https://proceedings.mlr.press/v32/hutter14.html}.
+learning rate.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -725,7 +735,7 @@ shows a higher $F_1$ score than the surrounding regions.
 Figure \ref{fig:05_mean_conf_mat_hffnn} shows the confusion matrices for HFFNN
 models trained on 51 classes. The values in the confusion matrices
 are the weighted mean of all HFFNN, based on the $F_1$ score of each
-HFFNN. TODO discuss this more.
+HFFNN.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -760,7 +770,7 @@ effect is independent of class weighting.
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_p_vs_r_class_weight_C}
-    \caption{Left: Precision and recall of all SVMs, with the regularization
+    \caption{Left: precision and recall of all SVMs, with the regularization
     parameter C and class weighting mapped to the colour and marker type
     respectively. Right: The regularization parameter C plotted against the
     $F_1$ score of each SVM, with the class weight indicated by the marker
@@ -829,7 +839,7 @@ and apply a weight to every observation.
 Figure \ref{fig:05_mean_conf_mat_svm} shows the confusion matrices for SVM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
 are the weighted mean of all SVM, based on the $F_1$ score of each
-SVM.TODO discuss this more.
+SVM.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -844,6 +854,19 @@ SVM.TODO discuss this more.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+The 5- and 50-class SVMs performed well, with the vast majority of predictions
+being accurate. On the 5-class confusion matrix, one can see that class 3 (the
+ring finger) gets more consistently confused with other classes; this can
+likely be attributed to how it is difficult to move one's ring finger
+independently of the other fingers.
+
+The 50- and 51-class SVMs both made mispredictions where the orientation of a
+gesture was incorrect, as can be seen by the diagonal lines of cells above and
+below the main diagonal.
+
+The 51-class SVMs also performed well, however many mispredictions were made
+between class 50 and the gesture classes.
+
 ## Which model performs the best with 51 classes? \label{best-model}
 
 The performance of each of the five classification algorithms can be seen in
@@ -854,7 +877,7 @@ all 51 classes).
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_precision_recall_51_classes}
-    \caption{ Left: Precision and recall for all model types trained on the
+    \caption{ Left: precision and recall for all model types trained on the
     full 51 classes, with the contours depicting the $F_1$-scores for those
     models. Right: The $F_1$-scores for the same models, shown side-by-side for
     easier comparison. }
@@ -865,10 +888,10 @@ all 51 classes).
 From these plots we can see that SVMs, FFNNs, and HFFNNs perform competitively.
 HMMs achieve high recall but struggle with precision, and CuSUM similarly
 achieves much higher recall than precision. Individual model types will be
-discussed in more detail in the following sections: HMMs in section
-\ref{in-depth-ffnn}, SVMs in \ref{in-depth-svm}, FFNNs in
-\ref{in-depth-ffnn}, HFFNNs in \ref{in-depth-hffnn}, and CuSUM in
-\ref{in-depth-cusum}\footnote{TODO reorder these}.
+discussed in more detail in the following sections: FFNNs in
+\ref{in-depth-ffnn}, HMMs in section \ref{in-depth-hmm}, HFFNNs in
+\ref{in-depth-hffnn}, CuSUM in \ref{in-depth-cusum} and SVMs in
+\ref{in-depth-svm}.
 
 The SVMs show a bi-modality in the precision-recall plot, despite the resulting
 $F_1$ score being similar. There are clusters around (0.45, 0.90), (0.525,
@@ -918,6 +941,63 @@ class even though only timestep $t$ actually belonged to that minority class.
 This asymmetry between minority/majority classes and precision/recall is a
 consequence of the macro weighting used for calculating $F_1$, recall, and
 precision.
+
+Each set of hyperparameters for each model type was trained and evaluated on
+five different subsets of the data, resulting in five different validation sets
+and five different training sets for each hyperparameter combination. The
+individual performances of all training runs are shown as points in Figure
+Figure \ref{fig:05_hpar_comparison_per_model_type}. The black horizontal bars
+indicate the mean of each set of hyperparameters. Note that, for model types
+with discrete hyperparameters, some sets of hyperparameters were evaluated more
+than five times.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_comparison_per_model_type}
+    \caption{caption is TODO}
+    \label{fig:05_hpar_comparison_per_model_type}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+To rank the distributions of $F_1$ scores for each set of hyperparameters, the
+90% confidence interval for each set is calculated. The hyperparameter sets are
+then ordered by the _lower_ bound of this confidence interval. This ensures
+that hyperparameter combinations with high variance in their performance are
+penalised, as the lower bound of the 90% confidence interval will be smaller
+for a high-variance model than for a low-variance model. Low-variance models
+are desirable as their performance is less dependant on the data it is
+evaluated on, which improves the chance that it will perform well on unseen
+testing data.
+
+One can clearly see from Figure \ref{fig:05_hpar_comparison_per_model_type}
+that the FFNNs, the HFFNNs, and the SVMs all perform well. Figure
+\ref{fig:05_best_hpar_comparison} shows only those models where the lower bound
+of the 90% confidence interval for the $F_1$-score is above 0.6, making it
+clear which hyperparameter combinations performed the best.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_best_hpar_comparison}
+    \caption{Performance of hyperparameter combinations where the lower bound
+    of the 90\% confidence interval of the $F_1$ score is above 0.6. The black
+    horizontal markers indicate the mean performance, and each dot indicates
+    the performance on run.}
+    \label{fig:05_best_hpar_comparison}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+It can be seen that the FFNNs are very prevalent amongst the best-performing
+models. There are a few HFFNNs achieving good performance, and there are many
+SVMs all achieving approximately the same level of performance.
+
+Given that the best 17 performing models are all FFNNs, it can be concluded
+that well-tuned FFNNs perform the best on this dataset. It should be noted that
+SVMs perform relatively well on the dataset, regardless of the hyperparameters
+used. This is in start contrast to neural network based methods which
+outperform SVMs, but only after extensive hyperparameter tuning has been
+performed.
 
 ## Comparison of the inference and training times for each model \label{time-comparison}
 
@@ -1044,7 +1124,6 @@ their validation $F_1$; this is due to the training dataset for HMMs not
 containing every observation of the non-gesture class, leading to inflated
 training metrics. The validation set _does_ include every observation of the
 non-gesture class, and so is an accurate depiction of the model's performance.
-This is discussed more in section TODO (HMM discussion section).
 
 At a high level, models which performed poorly ($F_1 < 0.5$) on the training
 dataset performed similarly on the validation dataset, as can be seen with the
@@ -1054,10 +1133,9 @@ validation $F_1$ of 0.0307 and is obscured on the plots by other models.
 
 Plots b and d highlights the region where $F_1 > 0.5$, showing several clusters
 for SVM models and regions occupied by the two neural network based models:
-FFNN and HFFNN. The clusters for SVM are discussed more in section TODO. One
-can see that the training $F_1$ is almost always higher than the validation
-$F_1$, as would be expected from models with a capacity to overfit to data that
-has been seen before.
+FFNN and HFFNN. One can see that the training $F_1$ is almost always higher
+than the validation $F_1$, as would be expected from models with a capacity to
+overfit to data that has been seen before.
 
 The higher the $F_1$ ratio, the more probable it is that the model has overfit
 to the training data (as it was unable to generalise its performance to the
@@ -1075,7 +1153,18 @@ one can see that the FFNNs with higher validation $F_1$ scores tend to have a
 lower $F_1$ ratio, indicating that the FFNNs are less susceptible to
 overfitting than the HFFNNs.
 
+## Residual analysis of the best performing models
+
+TODO
+
 ## How does each model perform on real-world data?
+
+To evaluate the model on English-language typing data, the sensor measurements
+were stored as the phrase "The quick brown fox jumps over the lazy dog" was
+gestured. This stored phrase can then be fed to any model and that model's
+predictions can be analysed.
+
+TODO
 
 > Using actual "typing" data recorded which plays a known sequence of keys and
 > has a comparison of where the model goes wrong.
