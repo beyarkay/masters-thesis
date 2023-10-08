@@ -999,6 +999,27 @@ used. This is in start contrast to neural network based methods which
 outperform SVMs, but only after extensive hyperparameter tuning has been
 performed.
 
+The best performing hyperparameter combinations for each model type can be seen
+in tables
+\ref{tab:05_best_ffnn_hpars} (FFNN),
+\ref{tab:05_best_majority_hffnn_hpars} (Majority classifier of the HFFNN),
+\ref{tab:05_best_minority_hffnn_hpars} (Minority classifier of the HFFNN),
+\ref{tab:05_best_svm_hpars} (SVM),
+\ref{tab:05_best_hmm_hpars} (HMM), and
+\ref{tab:05_best_cusum_hpars} (CuSUM).
+
+\input{src/tables/05_best_ffnn_hpars.tex}
+
+\input{src/tables/05_best_majority_hffnn_hpars.tex}
+
+\input{src/tables/05_best_minority_hffnn_hpars.tex}
+
+\input{src/tables/05_best_svm_hpars.generated.tex}
+
+\input{src/tables/05_best_hmm_hpars.generated.tex}
+
+\input{src/tables/05_best_cusum_hpars.generated.tex}
+
 ## Comparison of the inference and training times for each model \label{time-comparison}
 
 Raw performance is not the only metric of interest, as _Ergo_ requires
@@ -1153,9 +1174,7 @@ one can see that the FFNNs with higher validation $F_1$ scores tend to have a
 lower $F_1$ ratio, indicating that the FFNNs are less susceptible to
 overfitting than the HFFNNs.
 
-## Residual analysis of the best performing models
-
-TODO
+<!-- TODO: ## Residual analysis of the best performing models -->
 
 ## How does each model perform on real-world data?
 
