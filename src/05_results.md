@@ -1188,14 +1188,44 @@ TODO
 > Using actual "typing" data recorded which plays a known sequence of keys and
 > has a comparison of where the model goes wrong.
 
-## Evaluation of autocorrect
+<!-- TODO ## Evaluation of autocorrect -->
 
-TODO
-
-## Evaluation of end-to-end process
-
-TODO
+<!-- TODO ## Evaluation of end-to-end process -->
 
 ## Evaluation of Models on the test set
 
-TODO
+Figure \ref{fig:05_tst_set_conf_mat} shows confusion matrix and the per-class
+$F_1$-score, precision, and recall for the best performing hyperparameters
+(hyperparameter index 44).
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_tst_set_conf_mat}
+    \caption{Confusion matrix and per-class $F_1$-score, precision, and recall
+    for the best-performing model on the unseen test data.}
+    \label{fig:05_tst_set_conf_mat}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The model performs well on the test set, with the majority of mispredictions
+being between the non-gesture class and the gesture classes. The heatmap at the
+bottom of Figure \ref{fig:05_tst_set_conf_mat} shows the per-class recall,
+precision, and $F_1$-scores. Gesture classes 0, 19, and 45 performed worse than
+the other gesture classes, although the cause is not readily apparent. Figure
+\ref{fig:05_p_r_best_model} shows the precision and recall as a scatter plot
+for each gesture.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_p_r_best_model}
+    \caption{Precision and recall for all 51 classes, as classified on the test
+    set by the most performant model.}
+    \label{fig:05_p_r_best_model}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+It is clear that there is no systematic bias in the model against any gestures
+and that the gestures for which the model performs poorly is due to the data,
+not some bias inherent in the model.
