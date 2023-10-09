@@ -1122,6 +1122,24 @@ The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
 so will be described in detail in the Methodology chapter.
 
+## Support Vector Machines
+
+High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
+library for large linear classification.”, Journal of machine learning research
+9.Aug (2008): 1871-1874.
+
+LibLinear used for implementation
+
+SKlearn details: https://scikit-learn.org/stable/modules/svm.html
+
+SVMs struggle with large numbers of observations
+
+SVCs use one-vs-rest classification
+
+NOTE: I didn't scale the data... It's recommended to scale the data
+
+Different class weights were attempted
+
 ## Autocorrect
 
 Autocorrect is a tool used when the nature of the interface means that small

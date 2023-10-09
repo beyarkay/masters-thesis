@@ -8,27 +8,29 @@ header-includes: |
   \DeclareMathOperator*{\argmin}{arg\,min}
   \newcommand{\indep}{\perp\!\!\!\!\perp}
   \newcommand{\pr}{\mathbb{P}}
+  \usepackage{adjustbox}
   \usepackage{algorithm}
   \usepackage{algpseudocode}
   \usepackage{bm}
   \usepackage{booktabs}
+  \usepackage{caption}
   \usepackage{flafter}
+  \usepackage{graphicx}
   \usepackage{graphicx}
   \usepackage{listings}
   \usepackage{longtable}
   \usepackage{marginfix}
+  \usepackage{multirow}
   \usepackage{pdfpages}
   \usepackage{pgfplots}
+  \usepackage{rotating}
+  \usepackage{rotating}
   \usepackage{sidenotes}
   \usepackage{soul}
+  \usepackage{subcaption}
   \usepackage{tabularray}
   \usepackage{tikz}
   \usepackage{wrapfig}
   \usepackage{xcolor}
-  \usepackage{graphicx}
-  \usepackage{rotating}
-  \usepackage{caption}
-  \usepackage{subcaption}
-  \usepackage{multirow}
 mustache: src/dynamic_content.yaml
 ---

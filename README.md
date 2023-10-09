@@ -94,7 +94,62 @@ reached data saturation, then record more data.
 
 Note: Probably should also implement DTW
 
-# List of Journals
+List of Journals?
+
+## 2023-08-21
+
+- Issues with F1 metric being 1.0 for some models...
+- Lots of work to do in the plots
+- Use CDT thesis results 2.pdf graphs chapter 7 and 8
+  - How is regularization distance calculated? (pp98)
+- Explain variance( or lack thereof) in HMMs
+- Add some hyperparameters to HMMs
+- Look at confusion matrices for the "best" models
+- Also look at results on real-life data
+- Create a `ellipse_plot` function for seaborn objects
+- Also look at bubble plot (scatter plot with dots being different radii)
+- Also look at plotting inference time for each observation, and also training
+  time
+
+## 2023-08-14
+
+Boyd forgot to record notes for this meeting. Some post-hoc notes:
+
+- Validation loss : Training loss ratio should be recorded as a measure of
+  overfitting
+- More FFNN hyperparameters need to be tested
+- CuSUM hyperparameter testing needs to be done
+
+## 2023-08-07
+
+- Use the harvard referencing style
+  - Can't use too many long lists of references. Either have a few references,
+    or refer to a table
+- Need to somewhere discuss what a swarm plot is and the methodology behind how
+  it is generated.
+- Need to reference the figures in the text and give stand alone captions
+- It seems like the papers which are discussed are a bit arbitrary. Should
+  explicitly say that the papers which represent a change in the state of the
+  art. This should be done across the different metrics
+- Should colour/label/marker the papers which get explicitly referenced
+- Need to make the colouring of vision/glove/wifi consistent
+- Need to explicitly mention how much of an outlier the 5113 class HMM paper
+  is.
+- Sometimes paragraphs kinda say the same thing, try to avoid duplicating this.
+- Try to really cleanly separate the different metrics: hardware etc
+- Have to put in a paragraph "many ML approaches are referenced in this review,
+  but are not in the background chapter. The reader is referred to external
+  reviews X, Y, Z. Note that all approaches implemented in the thesis are
+  discussed in the background"
+- Include a section which describes each of the different hardware items and
+  the different technology items
+  - Probably in a table, in the glossary (?)
+- Some papers have multiple technologies: Should clarify this by using
+  different colours/styles/markers
+- In the lit review: describe
+- In the methodology: Need to explicitly describe why building a new glove is
+  not really an option and why building a custom glove enabled greater
+  fidelity.
 
 ## 2023-07-24
 
@@ -159,22 +214,6 @@ Approaches to complete intro&conc:
    the thesis, a few more pages about something...
 
 Always include a "future work" section in the conclusion.
-
-Methodology chapter:
-
-Describe how you utilised the existing knowledge/algorithms/approaches (as
-given in the bg chapter) to make them work. Also list any modifications made.
-Also describe the dataset. Also describe how ergo looks like. Then explain
-experimental setup which will let you answer the research questions made in the
-introduction. This is where you describe the exact architecture of the neural
-network and the hyperparameters you're iterating over. Also describe how the
-HMMs are used for gesture based classification.
-
-Results chapter:
-
-First add the graphs that will be discussed. Then, start writing the content
-and analysing the data. This helps because you already have what your data is
-and is a lot better than writing what you think your conclusions are before you
 
 Weeks:
 

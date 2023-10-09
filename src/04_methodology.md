@@ -1,5 +1,69 @@
 # Methodology
 
+> Things to explain:
+>
+> - HMM theory to HMM multi-class classification implementation
+> - CuSUM theory to CuSUM multi-class classification implementation
+> - What does a perfect model's confusion matrix look like?
+> - What does a random-finger model's confusion matrix look like?
+> - What does a random-orientation model's confusion matrix look like?
+>
+> - Describe the dataset
+>   - Gesture g255 is by far the majority class: create plot showing this
+>     imbalance
+>   - Multiple time series plots showing what a gesture "looks" like, in terms
+>     of the acceleration readings
+>   - 50 other classes that need to be distinguished
+>   - 30 dimensional time series, recorded at ~40Hz, about 100 examples per
+>     class, 50 classes, 1 majority class (g255), around 230k observations.
+>   - Gravity is included in the acceleration readings
+>   - 50 gestures = 10 fingers x 5 orientations (show pictures of some
+>     different gestures being performed)
+>   - Data segmentation is "implicit": There's no nice labels marking the start
+>     and end of each gesture, the model has to learn 1. how to extract
+>     gestures from background and 2. how to differentiate between the
+>     different gestures.
+> - Accuracy vs recall vs precision (vs F1 Score)
+> - Data split into training, validation, testing (elaborate on the purpose of
+>   these datasets, how they were kept separate, and how "leakage" was prevented)
+> - Hyperparameter optimisation: Random search over the hyperparameter search
+>   space
+
+From discussion with Trienko:
+
+> Methodology chapter:
+>
+> Describe how you utilised the existing knowledge/algorithms/approaches (as
+> given in the bg chapter) to make them work. Also list any modifications made.
+> Also describe the dataset. Also describe how ergo looks like. Then explain
+> experimental setup which will let you answer the research questions made in the
+> introduction. This is where you describe the exact architecture of the neural
+> network and the hyperparameters you're iterating over. Also describe how the
+> HMMs are used for gesture based classification.
+
+NOTE:
+
+- HMMs OOM when trying to train on 100k observations, so only train on the
+  first 200
+
+> Indeed, L² regularization and weight decay regularization are equivalent for
+> standard stochastic gradient descent (when rescaled by the learning rate).
+> This is not necessarily true for all gradient-based learning algorithms, and
+> was recently shown to not be the case for adaptive gradient algorithms, such
+> as Adam.
+> Ilya Loshchilov & Frank Hutter Decoupled Weight Decay Regularization
+
+## Converting HMMs into a multi-class classifier
+
+> Make note about the technical problems with training the HMMs on 200k
+> observations
+
+## Converting CuSUM into a multi-class classifier
+
+- Threshold needs to be crossed in certain sensors for a prediction to be made
+
+---
+
 ## Design and Implementation
 
 This section describes the development of _Ergo_ and the implementation
@@ -433,7 +497,7 @@ same fashion.
 
 A Feed Forward Neural Network (FFNN) was chosen as the model architecture which
 would be fit to the data, due to the speed at which they can make predictions
-and their relative efficiency in many dimensions. See @geron2019 for a review
+and their relative efficiency in many dimensions. See @ geron2019 for a review
 of Feed Forward Neural Networks.
 
 The classification problem presented by _Ergo_ is a many-class one, where the
@@ -445,7 +509,7 @@ as the loss function for the FFNN.
 The input layer of the FFNN has `window_size * 30` neurons, and the final layer
 has 51 neurons, one for each gesture. The final layer uses the softmax
 activation function (see Appendix \ref{app:softmax} for a description). Dropout
-[@srivastava2014] is applied after each of the hidden layers.
+[@ srivastava2014] is applied after each of the hidden layers.
 
 The `window_size`, `label_expansion`, activation function of each hidden layer,
 number of hidden layers, number of neurons per hidden layer, optimiser used,
@@ -471,7 +535,7 @@ model more for incorrectly predicting a non-`gesture0255` gesture, which will
 prevent a model which only ever predicts `gesture0255` from achieving a good
 categorical cross-entropy.
 
-@karpathy2019 recommends initialising the biases of the final layer of the FFNN
+@ karpathy2019 recommends initialising the biases of the final layer of the FFNN
 such that an untrained model predicts each gesture with approximately the
 correct frequency. This means that if `gesture0255` occurs approximately 1000
 times as frequently as any other gesture, then the biases of the final layer of
@@ -482,7 +546,7 @@ gesture.
 This is desirable as it means that an untrained model with bias initialisation
 will not have to waste training epochs learning that the dataset is unbalanced.
 For this reason, the biases of the final layer are initialised as recommended
-by @karpathy2019. The correct bias initialisation is dependant on the
+by @ karpathy2019. The correct bias initialisation is dependant on the
 activation function of the final layer. Because _Ergo_ uses the softmax
 activation function for the final layer, the proper initialisations for each
 bias can be calculated based on the frequency of each class:
@@ -506,7 +570,7 @@ definitions of precision, recall, and the $F_1$-score.
 The hyperparameters `window_size`, `label_expansion`, the activation function
 of each hidden layer, the number of hidden layers, the number of neurons per
 hidden layer, the optimiser used, the learning rate, and the dropout rate were
-all optimised via random search [@bergstra2012]. This method defines
+all optimised via random search [@ bergstra2012]. This method defines
 distributions for each hyperparameter and then samples from each of these
 distributions to acquire a set of hyperparameters. The distributions of the
 hyperparameters is given in Table \ref{tab:hyperpar_dists}
@@ -550,7 +614,7 @@ time with a 0.125 second delay is a much better user experience than
 immediately predicting the gesture, but only giving a correct prediction 33% of
 the time.
 
-For this reason, Dynamic Time Warping (abbreviated as DTW, see @senin2008 for a
+For this reason, Dynamic Time Warping (abbreviated as DTW, see @ senin2008 for a
 review) is used to calculate a measure of similarity between the predicted and
 true probability distributions. DTW is a method used in signal processing when
 two time-series signals are known to differ by some small amount of warping

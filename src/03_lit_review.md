@@ -25,6 +25,36 @@ thorough description.
 <!---
 TODO:
 - This lacks the alpha that some tikz diagrams will provide
+
+Notes from Trienko meeting:
+- Use the harvard referencing style
+  - Can't use too many long lists of references. Either have a few references,
+    or refer to a table
+- Need to somewhere discuss what a swarm plot is and the methodology behind how
+  it is generated.
+- Need to reference the figures in the text and give stand alone captions
+- It seems like the papers which are discussed are a bit arbitrary. Should
+  explicitly say that the papers which represent a change in the state of the
+  art. This should be done across the different metrics
+- Should colour/label/marker the papers which get explicitly referenced
+- Need to make the colouring of vision/glove/wifi consistent
+- Need to explicitly mention how much of an outlier the 5113 class HMM paper
+  is.
+- Sometimes paragraphs kinda say the same thing, try to avoid duplicating this.
+- Try to really cleanly separate the different metrics: hardware etc
+- Have to put in a paragraph "many ML approaches are referenced in this review,
+  but are not in the background chapter. The reader is referred to external
+  reviews X, Y, Z. Note that all approaches implemented in the thesis are
+  discussed in the background"
+- Include a section which describes each of the different hardware items and
+  the different technology items
+  - Probably in a table, in the glossary (?)
+- Some papers have multiple technologies: Should clarify this by using
+  different colours/styles/markers
+- In the lit review: describe
+- In the methodology: Need to explicitly describe why building a new glove is
+  not really an option and why building a custom glove enabled greater
+  fidelity.
 --->
 
 ## Overview
