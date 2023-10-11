@@ -1,9 +1,17 @@
-## Construction of Ergo (?)
+This chapter will describe the construction of the hardware that powers _Ergo_,
+how the training data was collected and processed, what experiments were
+conducted, and how different model architectures were applied to the task of
+predicting gestures given an observation. Hyperparameters of those models (and
+their optimisation) is also discussed. The evaluation metrics used to rank the
+models is discussed, and the method for turning gesture predictions into
+keystrokes is described
+
+# Construction of Ergo (?)
 
 - What does _Ergo_ look like?
 - Where are the sensors placed?
 
-## How the data was collected
+# How the data was collected
 
 - Gravity is included
 - 10 sensors, 3 axes per sensor
@@ -16,26 +24,26 @@
 - Data was collected over multiple sessions, performing the same ~5 gestures
   repeatedly and then manually labelling the data
 
-## How the data was labelled
+# How the data was labelled
 
 - Each model gets the same data
 - Data is a time-series window of observations
 - One label per time window
 
-## Splitting the data into train, test, validation
+# Splitting the data into train, test, validation
 
 - Data split into training, validation, testing (elaborate on the purpose of
   these datasets, how they were kept separate, and how "leakage" was prevented)
 
-## How is cross validation performed?
+# How is cross validation performed?
 
-## What experiments will be conducted?
+# What experiments will be conducted?
 
 - (These should tie into the "research questions" asked in the introduction)
 
-## Model-specific stuff
+# Model-specific stuff
 
-### HMM
+## HMM
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.
@@ -50,7 +58,7 @@
 - Probably also need to acknowledge those mad lads with the 5000-class HMM
   classifier
 
-### CuSUM
+## CuSUM
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.
@@ -63,7 +71,7 @@
 - How does CuSUM perform one-vs-rest classification, how does "passing a
   threshold" get transformed into a gesture detection?
 
-### FFNN
+## FFNN
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.
@@ -80,7 +88,7 @@
 - activation function?
 - How do the inputs get weighted?
 
-### HFFNN
+## HFFNN
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.
@@ -91,7 +99,7 @@
 - Some way of measuring the "volume" of the search space such we can reasonably
   say we've searched each model's search space to the same density.
 
-### SVM
+## SVM
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.
@@ -102,32 +110,199 @@
 - Some way of measuring the "volume" of the search space such we can reasonably
   say we've searched each model's search space to the same density.
 
-## How is hyperparameter optimisation done?
+# How is hyperparameter optimisation done?
 
 - Random search for each model type over their search space.
 - Repeated 5 times per model+hyperparameter combination
 
-## Evaluation metrics
+# Evaluation metrics
 
-- How accuracy falls flat
-- precision, specificity, recall, $F_{\beta}$, $F_1$, confusion matrices,
-  macro/micro/weighted average.
-- For this unbalanced dataset, macro-precision and macro-recall are roughly
-  equivalent to high precision/recall on just the non-gesture class
-- Justify why macro-f1 score is used as the primary evaluation metric
-- How exactly do we convert predictions into evaluation metrics?
+Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
+observations $n$, multi-class classifiers can be evaluated against one another
+when comparing the ground truth labels $\bm{t}: t_i \in C \forall i \in {1,
+\ldots, n}$ against the labels predicted by that classifier $\bm{p}: p_i \in C
+\forall i \in {1, \ldots, n}$.
 
-## How will the models be ranked?
+## Confusion Matrices
+
+Confusion matrices provide the most complete picture of a model's performance.
+For a $|C|$-class classification problem, a confusion matrix is a $|C| \times
+|C|$ square matrix of values, where the element in the $i$-th row and the
+$j$-th column of the confusion matrix is the number of times a classifier
+predicted an observation that belongs to class $i$ as belonging to class $j$.
+That is, that the ground truth label is $i$ and the predicted label is $j$. The
+element-wise definition of a confusion matrix is
+
+$$
+    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} t_k = j \land p_k = i.
+$$
+
+An example confusion matrix is given in the top-left plot of Figure
+\ref{fig:04_example_conf_mat}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/04_example_conf_mat}
+    \caption{An example confusion matrix, visualised under four different
+    normalisation schemes.}
+    \label{fig:04_example_conf_mat}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+In practice, confusion matrices are often normalised before visualisation as
+this aids in the interpretation of the model's performance. The unnormalised
+confusion matrix (as has been defined above) is shown in the top-left plot of
+Figure \ref{fig:04_example_conf_mat}. Confusion matrices can also be column- or
+row-normalised (shown in the top-right and bottom-left plots respectively).
+Column normalisation divides each element by the sum of its column, such that
+each column sums to one. Row normalisation is similar, and ensures each row
+sums to one.
+
+In a confusion matrix, each row corresponds to a specific ground truth label,
+while each column corresponds to a predicted label. Row-normalization and
+column-normalization are processes that ensure each element in the matrix
+represents the proportion of ground truth or predicted labels concerning the
+total number of ground truth or predicted labels for the associated class,
+respectively.
+
+Confusion matrices can also be sum-normalised (as seen in the bottom-right
+plot) in which case every element is divided by the sum over the entire
+confusion matrix. This allows the elements to be interpreted as a fraction of
+the total number of observations.
+
+## Precision, Recall, and $F_1$-score
+
+Confusion matrices aid in the interpretation of large numbers of predictions,
+but do not have a total ordering. To this end, we will define first the
+per-class precision, recall, and $F_1$-score. These per-class metrics depend on
+four summary statistics:
+
+- $\text{TP}_i$ (The number of True Positives for class $c_i$): This is the
+  number of labels for which both the ground truth and the predicted class are
+  $c_i$:
+
+  $$
+       \text{TP}_i = \sum_{j=1}^n [t_j = p_j = c_i]
+  $$
+
+- $\text{TN}_i$ (The number of True Negatives for class $c_i$): This is the
+  number of labels for which both the ground truth and the predicted class are
+  _not_ $c_i$:
+
+  $$
+       \text{TN}_i = \sum_{j=1}^n [t_j \neq c_i \land p_j \neq c_i]
+  $$
+
+- $\text{FP}_i$ (The number of False Positives for class $c_i$): This is the
+  number of labels for which the predicted class is $c_i$ but the true label
+  is _not_ $c_i$:
+
+  $$
+       \text{FP}_i = \sum_{j=1}^n [p_j = c_i \land t_j \neq c_i]
+  $$
+
+- $\text{FN}_i$ (The number of False Negatives for class $c_i$): This is the
+  number of labels for which the predicted label is not $c_i$ but the true
+  label is $c_i$:
+
+  $$
+       \text{FN}_i = \sum_{j=1}^n [p_j \neq c_i \land t_j = c_i]
+  $$
+
+The precision for some class $c_i$ can be intuitively understood as a metric that
+penalises classifiers which too frequently predict class $c_i$. It is defined as
+
+$$
+    \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
+$$
+
+Likewise, the recall for some class $c_i$ can be understood as a metric that
+penalises classifiers which too infrequently predict class $c_i$. It is defined
+as
+
+$$
+    \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}.
+$$
+
+The $F_1$-score for some class $c_i$ ($F_{1,i}$) is defined as the harmonic
+mean From the precision and recall for that class:
+
+$$
+    F_{1,i} = 2 \cdot \frac{
+            \text{precision} \cdot \text{recall}
+        }{
+            \text{precision} + \text{recall}
+        }
+$$
+
+The fact that the harmonic mean is used to calculate the $F_1$-score ensures
+that _both_ a high precision and high recall are required to obtain a high
+$F_1$-score. Figure \ref{fig:04_precision_recall_f1} shows a plot of precision
+and recall values, and the corresponding $F_1$-score.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/04_precision_recall_f1}
+    \caption{Precision and recall with the calculated $F_1$-score plotted as
+    contours. Both a high recall and a high precision are required for a high
+    $F_1$-score.}
+    \label{fig:04_precision_recall_f1}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Given the definitions for per-class precision, recall, and $F_1$-score, we can
+calculate and plot those metrics for the same data as is displayed in the
+confusion matrices in Figure \ref{fig:04_example_conf_mat}, but as a heatmap
+with one row for each of precision, recall, and $F_1$-score, and one column for
+each class. This plot is shown in Figure \ref{fig:04_prec_rec_f1_example}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/04_prec_rec_f1_example}
+    \caption{Precision, recall, and $F_1$ score for the confusion matrix in
+    Figure \ref{fig:04_example_conf_mat}.}
+    \label{fig:04_prec_rec_f1_example}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+It is apparent that the classes with perfect precision (classes 0, 1, and 3)
+have columns in the confusion matrix which are zero except for the element on
+the principle diagonal. Likewise, classes with perfect recall (class 2) have
+rows in the confusion matrix which are zero except for the element on the
+principle diagonal. Precision can therefore be gleaned from a confusion matrix
+by observing the columns of the appropriate confusion matrix, and \textbf{r}ecall
+the \textbf{r}ows.
+
+## Weighted and unweighted averages
+
+While precision, recall, and $F_1$-score provide a much more concise
+representation of a classifier's performance than a confusion matrix, they
+still do not provide a single number through which all classifiers might be
+given a total ordering. To this end, we will calculate the unweighted
+arithmetic mean of the per-class precision, recall, and $F_1$-scores.
+
+The unweighted mean is desirable for the task at hand as the _Ergo_ dataset is
+highly imbalanced, with one class being assigned to 97% of the observations. If
+the weighted mean was used instead, then a classifier would be able to achieve
+very high performance by ignoring the minority classes and only focusing on
+predicting the majority class correctly. For these reasons, the unqualified
+terms "precision", "recall", and "$F_1$-score" will be taken to mean the
+unweighted mean over the per-class precisions, recalls, and $F_1$-scores.
+
+# How will the models be ranked?
 
 - ranked based on the performance of the lower bound of the 90% percentile
   - Maybe we need to prove that 90% is reasonable, and the results don't
     really change if we pick 95% nor 99% nor 100%
 
-## How are predictions turned into keystrokes?
+# How are predictions turned into keystrokes?
 
 ---
 
-## Hardware Description
+# (old) Hardware Description
 
 _Ergo_ consists of ten ADXL335 tri-axis linear accelerometers, each one of
 which is mounted to the back of the user's fingertips (see Figure
