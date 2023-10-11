@@ -1,5 +1,3 @@
-# Results
-
 <!--
 TODO or open questions:
 
@@ -9,11 +7,20 @@ TODO or open questions:
 
 - NOTE: have an explanation that precision/validation/f1 is always on the
   validation set unless otherwise noted.
+
+TODO: NB very important for entire chapter. All text in images have to be as
+big as the caption text. NB there are many figures in this chapter that do not
+adhere to this. Please rectify....
+
+TODO: add tSNE to appendix
+
+TODO: Export large PCA plot as PNG
+
 -->
 
 This chapter will discuss the results obtained from the experiments described
-the Methodology chapter. The dataset will be described and some preliminary
-analysis done in in Section \ref{dataset-description}. Section
+in the Methodology chapter. The dataset will be described and some preliminary
+analysis done in Section \ref{dataset-description}. Section
 \ref{comparison-of-hypothetical-models} will compare some hypothetical models
 and explore their performance characteristics, so as to better understand
 common failure cases for the dataset at hand. Section \ref{model-justification}
@@ -25,12 +32,12 @@ performance of each model is described in subsections \ref{in-depth-ffnn},
 Section \ref{best-model} looks at all trained models on the full dataset and
 evaluates their performance. As _Ergo_ requires real-time inference, Section
 \ref{time-comparison} compares the inference and training times of each model.
-Section \ref{ratio-comparison} examines the training and validation performance
-of each model as a heuristic for that model's probability to overfit on the
-training data and therefore perform poorly on unseen observations. Section
-\ref{real-world-data} evaluates each model on a real-world dataset of
-English-language typing data. Finally, Section \ref{test-set-eval} evaluates
-the most performant model on the unseen test set.
+Section \ref{ratio-comparison} assesses the training and validation performance
+of each model as an indicator of the model's susceptibility to overfitting on
+the training data, which, in turn, could lead to subpar performance on unseen
+observations. Section \ref{real-world-data} evaluates each model on a
+real-world dataset of English-language typing data. Finally, Section
+\ref{test-set-eval} evaluates the best performing model on the unseen test set.
 
 ## (Some things I'll cover in the Methodology chapter)
 
@@ -41,10 +48,32 @@ some things which I'll write up in the methodology chapter, but which I thought
 would be confusing to not acknowledge at all:
 
 1. How do HMMs/CuSUM/SVMs go from binary classifiers to multi-class classifiers
+<!--
+One thing an examiner will look at is if your methodology is correct. Did you
+split training/test and validation. Was there leakage. How big is each set...
+How did you do hyperparameter tuning. None of this is clear.... Please make
+sure it is. Remember an examiner is looking for different things than what you
+are interested in. You want to show how each mode is doing on 51 classes. The
+examiner is checking;
+
+
+1. Did you use a correct trianing methodology
+1. Is the results showing working models for each model type. Check no
+   programming bugs.
+1. Under what circumstances do the models stop working
+1. Does the candiadte understand why the model is perfroming badly in some
+   cases
+1. Are the results clear or presented in some onorthodox way can I make sense
+   of the results as an examiner....
+
+I think the chapter falls short on a number of these points and I think you
+need to rework it quite a bit.
+-->
+
 1. How is hyperparameter optimisation done?
 1. How are the models evaluated based on recall/precision/f1-score?
 1. What is macro/micro/weighted f1 score and why is macro f1-score used?
-1. What does _Ergo_ look like? Where are the sensors places?
+1. What does _Ergo_ look like? Where are the sensors placed?
 1. Discussion about why the HMMs couldn't be trained on every training
    observation but could be evaluated on every validation observation.
 1. Each set of hyperparameters has 5 repetitions
@@ -94,8 +123,8 @@ user's hands as a single gesture is being performed.
 
 _Ergo_ can recognise 50 gesture classes and one non-gesture class. The
 non-gesture class is used to represent the empty durations in-between gestures
-during which the user's hands may be still, or may be moving from the end of
-one gesture to the start of the next gesture. The 50 gesture classes are
+during which the user's hands may be still, the transitioning period which
+occurs after one gesture ends and another begins. The 50 gesture classes are
 numbered from 0 to 49, and the software powering _Ergo_ takes care of
 converting a predicted gesture class into a keystroke via a user-configurable
 gesture-to-keystroke mapping. The non-gesture class is numbered as gesture 50.
@@ -222,8 +251,8 @@ training, the number of gestures performed per second is never greater than 2.
 Given a data capture frequency of 40 times per second, this means that there
 are at least 19 non-gesture labels for every gesture label, and that gesture
 label is one of 50 possible gesture labels. This leads to a class balance of
-about 97.6% the non-gesture class, with the remaining 2.4% divided
-approximately evenly between the 50 gesture classes.
+about 97.6% of the data belonging to the non-gesture class, with the remaining
+2.4% of the data divided approximately evenly between the 50 gesture classes.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -274,11 +303,13 @@ gesture classes from the non-gesture class.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+<!-- TODO It is more standard to use t-sne here.-->
+
 ## Comparison of hypothetical models
 
-In this section, several hypothetical models are be defined and their performance
-examined. These hypothetical models have been chosen so as to provide
-some intuition about common pitfalls encountered by real models.
+In this section, several hypothetical models are defined and their performance
+examined. These hypothetical models have been chosen so as to provide some
+intuition about common pitfalls encountered by real models.
 
 Figure \ref{fig:05_pr_conf_mat_random_preds} shows the precision-recall graph
 and confusion matrix of a classifier that predicts every observation according
@@ -363,10 +394,11 @@ other fingers on that hand). The mean $F_1$-score for these classifiers is
 ## Evaluated Classification Algorithms \label{model-justification}
 
 Several different classification algorithms were evaluated. The chosen
-classification algorithms were selected based on how well suited they are to a
-high dimensional multi-class classification problem, as well as their
-prevalence in the gesture classification literature (such that comparisons may
-be made between prior work and the current work).
+classification algorithms were selected if they are often used in the general
+literature on high dimensionality, multi-class, classification data.
+Additionally, we took into account their prevalence in gesture classification
+studies to facilitate meaningful comparisons between our research and prior
+work in the field.
 
 Feed-forward Neural Networks (FFNNs) scale well as the number of classes
 increases (see Figure \ref{fig:05_inf_time_vs_num_classes}). To scale a FFNN to
@@ -375,8 +407,8 @@ number of output neurons and retrain the entire network. This is favourable
 when compared to an algorithms that requires one classifier to be trained per
 class, in which case both the inference time and the training time increases
 approximately linearly with the number of classes. While one-vs-rest
-classification is suitable for few classes, it quickly becomes unwieldy for as
-the number of classes increases.
+classification is suitable for few classes, it quickly becomes unwieldy as the
+number of classes increases.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -391,10 +423,12 @@ the number of classes increases.
 <!-- prettier-ignore-end -->
 
 Hidden Markov Models (HMMs) have frequently been used in the literature for
-gesture detection and classification. While training and inference times
-scale approximately linearly with the number of classes, they do explicitly
-model time and have shown promise in previous works. Their implementation will
-allow for a better comparison between the current and prior work.
+gesture detection and classification. Multi-class classification with HMMs
+require a one-vs-rest approach. This causes training and inference times to
+scale approximately linearly with the number of classes. HMMs explicitly model
+the progression of time via state transitions, and have shown promise in
+previous works. Their implementation will allow for a better comparison between
+the current and prior work.
 
 Cumulative Sum (CuSUM) is a simple statistical technique that will provide a
 lower bound on the speed with which predictions can be made. While it is
@@ -463,6 +497,21 @@ recall of these FFNN models, centred around a recall of about 0.8.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+<!---
+TODO: Analyze FFNNs hyperparameters more thoroughly, investigate the clusters
+
+To explore:
+
+- nodes \lt 50 -> not enough capacity to learn?
+- LR too small / too large -> difficulty learning
+
+Plot pairwise comparisons between the hyperparameters
+
+Plot #nodes vs lr vs f1 score
+
+Must thoroughly explain why some models learnt well but others did not.
+-->
+
 To investigate this cluster, Figure \ref{fig:05_in_depth_ffnn_hpars_vs_recall}
 shows the recall of all models trained on the full dataset of 51 classes
 against the hyperparameters for the FFNNs: the dropout rate, the L2
@@ -484,7 +533,7 @@ $10^{-4.5}$ and $10^{-3}$ often leads to a higher recall.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-Figure\ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
+Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
 all FFNNs trained on 5, 50, and 51 classes, weighted by that model's $F_1$
 score and normalized across the entire matrix so the maximum value is 1.
 
@@ -527,19 +576,31 @@ a gesture.
 
 ### Hidden Markov Models \label{in-depth-hmm}
 
-Figure \ref{fig:05_in_depth_hmm_p_vs_r_covar_type} shows the precision and
+Figure \ref{fig:05_in_depth_hmm_51_p_vs_r_covar_type} shows the precision and
 recall of all HMM models trained on all 51 classes.
+
+<!--
+TODO: Explain 5, then 50, and then finally 51 gesture classes, in that order.
+- Show the model performing well for 5, then 50, then 51 classes
+-->
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.75\textwidth]{src/imgs/graphs/05_in_depth_hmm_p_vs_r_covar_type.pdf}
+    \includegraphics[width=0.75\textwidth]{src/imgs/graphs/05_in_depth_hmm_51_p_vs_r_covar_type}
     \caption{Precision-recall plot for all HMMs trained on 51 classes, with
     the models' $F_1$-scores as contours in grey. Note that the scales of the
     axes have been adjusted to better show the distribution of the data.}
-    \label{fig:05_in_depth_hmm_p_vs_r_covar_type}
+    \label{fig:05_in_depth_hmm_51_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+<!--
+TODO: Does this 51 class precision-recall plot align with what you would expect
+from literature? To my mind a full covariance matrix should outperform a
+diagonal. All instances in which one contradicts intuition one needs to explain
+why?
+-->
 
 Since the HMMs only have one hyperparameter (the type of covariance matrix to
 use for each state\footnote{
@@ -605,6 +666,23 @@ precision, recall, and $F_1$-scores for the four covariance types.
     \label{fig:05_in_depth_hmm_prf1_plots_conv_type}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+<!--
+As I have said it is hard to follow as what I am looking for as an examiner is
+not here:
+
+1. First show your good results, showing that the model is doing well for some
+   subset of the problem.
+
+2. Now change the parameters of the problem, example add 51 gesture. Now the
+   model either fails or still performs well if it fails explain why.
+
+3. Going into detail as to the effect of the hyperparameters on a model which
+   is failing, precision so low, is not really useful. Rather do a
+   hyperparameter exploration on the 50 gesture case when it is working well.
+   Then just check if the same trend is visible in 51 case and then report on
+   it.
+-->
 
 From Figure \ref{fig:05_in_depth_hmm_prf1_plots_conv_type} we can see that the
 per-class recall of the Full HMMs is substantially lower than all other
@@ -720,6 +798,10 @@ in the observation) will be discussed sequentially. Figure
 majority classifier. There are no clear patterns between the hyperparameters of
 the majority classifier and the HFFNN's $F_1$-score.
 
+<!--
+TODO: Do a proper analysis of the hyperparameters for majority and minority HFFNN
+-->
+
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
@@ -769,19 +851,19 @@ tendency to mispredict the orientation of a gesture.
 
 ### Support Vector Machines \label{in-depth-svm}
 
-Figure \ref{fig:05_in_depth_svm_p_vs_r_class_weight_C} shows how the
+Figure \ref{fig:05_in_depth_svm_51_p_vs_r_class_weight_C} shows how the
 hyperparameters of the SVMs affect their precision, recall, and $F_1$-score.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_p_vs_r_class_weight_C}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_51_p_vs_r_class_weight_C}
     \caption{Left: precision and recall of all SVMs, with the regularization
     parameter C and class weighting mapped to the colour and marker type
     respectively. Right: The regularization parameter C plotted against the
     $F_1$-score of each SVM, with the class weight indicated by the marker
     shape.}
-    \label{fig:05_in_depth_svm_p_vs_r_class_weight_C}
+    \label{fig:05_in_depth_svm_51_p_vs_r_class_weight_C}
 \end{figure}
 <!-- prettier-ignore-end -->
 
@@ -952,6 +1034,14 @@ class even though only timestep $t$ actually belonged to that minority class.
 This asymmetry between minority/majority classes and precision/recall is a
 consequence of the macro weighting used for calculating $F_1$, recall, and
 precision.
+
+<!--
+> This would happen if a model "extended" its predictions such that
+> timesteps $t, t+1, t+2$ are all predicted as belonging to the same minority
+> class even though only timestep $t$ actually belonged to that minority class.
+
+TODO: This needs to be highlighted with an experiment or with results....
+-->
 
 Each set of hyperparameters for each model type was trained and evaluated on
 five different subsets of the data, resulting in five different validation sets
@@ -1149,6 +1239,16 @@ overfit on the data, and therefore is unlikely to perform well on unseen data.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+<!--
+TODO: High training f1 : low validation f1 does not imply overfitting.
+
+Only if the validation loss starts to increase can we say that a model has
+started to overfit
+
+What the f1-ratio does indicate is that a change in the distribution (ie
+validation set -> testing set) will likely cause a change in performance.
+-->
+
 The plots in the first column of Figure \ref{fig:05_f1_vs_f1_ratio} (plots a
 and c) show the full range of the data, while the plots in the second column of
 Figure \ref{fig:05_f1_vs_f1_ratio} (plots b and d) show a subset of the data
@@ -1206,6 +1306,10 @@ shown in Figure \ref{fig:05_tqbfjotld}.
 
 <!-- TODO ## Evaluation of autocorrect -->
 <!-- TODO ## Evaluation of end-to-end process -->
+
+<!--
+TODO: Clarify test set vs English dataset
+-->
 
 ## Evaluation of Models on the test set \label{test-set-eval}
 
