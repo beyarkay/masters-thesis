@@ -1,4 +1,7 @@
+# LaTeX things
 *.aux
+*.lof
+*.lot
 *.log
 *.nav
 *.out
