@@ -1,5 +1,3 @@
-# Conclusions and Future Work
-
 This report has presented a suite of sensors which are worn on the user's hands
 and connect to a classifier hosted on the user's computer. This classifier is
 capable of distinguishing 50 unique gestures and using those classifications to
@@ -26,4 +24,3 @@ physical device and making it completely wireless such that it can connect to
 any Bluetooth capable computer or smartphone. This will require the difficult
 task of compressing the model such that it can perform inference on the
 resource constrained microcontrollers.
-

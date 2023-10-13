@@ -1,4 +1,4 @@
-# Background
+<!-- TODO: Explain how SVMs work -->
 
 This chapter describes various concepts which _Ergo_ utilizes. The relevant
 background information includes different machine learning methods and autocorrect

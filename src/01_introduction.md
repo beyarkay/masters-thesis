@@ -1,5 +1,3 @@
-# Introduction
-
 Note: What you bring to the table is _fidelity_. There has been oodles of work
 trying to classify big obvious gestures, but nothing that comes close to
 replacing the keyboard. Nobody wants to wave their hands around just to type

@@ -6,6 +6,41 @@ their optimisation) is also discussed. The evaluation metrics used to rank the
 models is discussed, and the method for turning gesture predictions into
 keystrokes is described
 
+<!--
+TODO: Ensure this is fully integrated
+
+## (Some things I'll cover in the Methodology chapter)
+
+Hi Professor, this section will be removed, but I found there were a few times
+where I needed to mention something but that thing was better mentioned in the
+methodology chapter rather than the results chapter. So this section just has
+some things which I'll write up in the methodology chapter, but which I thought
+would be confusing to not acknowledge at all:
+
+1. How do HMMs/CuSUM/SVMs go from binary classifiers to multi-class classifiers
+
+TODO:
+One thing an examiner will look at is if your methodology is correct. Did you
+split training/test and validation. Was there leakage. How big is each set...
+How did you do hyperparameter tuning. None of this is clear.... Please make
+sure it is. Remember an examiner is looking for different things than what you
+are interested in. You want to show how each mode is doing on 51 classes. The
+examiner is checking;
+
+
+1. Did you use a correct trianing methodology
+1. Is the results showing working models for each model type. Check no
+   programming bugs.
+1. Under what circumstances do the models stop working
+1. Does the candiadte understand why the model is perfroming badly in some
+   cases
+1. Are the results clear or presented in some onorthodox way can I make sense
+   of the results as an examiner....
+
+I think the chapter falls short on a number of these points and I think you
+need to rework it quite a bit.
+-->
+
 # Construction of Ergo (?)
 
 - What does _Ergo_ look like?
@@ -24,18 +59,63 @@ keystrokes is described
 - Data was collected over multiple sessions, performing the same ~5 gestures
   repeatedly and then manually labelling the data
 
-# How the data was labelled
+# Splitting the data into train, test, validation \label{sec:trn_tst_val}
 
-- Each model gets the same data
-- Data is a time-series window of observations
-- One label per time window
+The measurements recorded from _Ergo_ are stored on disk as several files
+listing the time stamp, the 30 sensor values, and the associated gesture with
+that particular time stamp. There are 37MB and 241 762 lines of data.
+Preliminary testing showed that models trained on just a single instant of time
+did not perform as well as models provided with a historical window of data.
+This allows the model to recognise the rate of change of acceleration, and not
+only the raw acceleration.
 
-# Splitting the data into train, test, validation
+The entire dataset is combined together and then windowed so as to produce a
+dataset of shape $(\text{number of observations}, 20, 30)$. 25% of this dataset
+is split off and saved as the testing dataset. It is saved as a single binary
+file, separated from the training and validation data. The splitting procedure
+ensures that the frequency of the different classes is approximately
+maintained, but otherwise chooses a random subset of the full dataset.
 
-- Data split into training, validation, testing (elaborate on the purpose of
-  these datasets, how they were kept separate, and how "leakage" was prevented)
+The remaining 75% of the full dataset is saved to disc as a single binary file.
+This training+validation dataset is only split into separate training and
+validation datasets at training time, just before each model is fit to the
+training subset. This allows the exact observations which are sorted into the
+training and validation dataset to depend on the random seed assigned to each
+hyperparameter combination, which in turn allows for arbitrary-repetition cross
+validation.
 
-# How is cross validation performed?
+The exact procedure is given in Algorithm \ref{alg:04_hyperparam_search}.
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption{Hyperparameter Search and Model Evaluation}
+    \label{alg:04_hyperparam_search}
+    \begin{algorithmic}
+    \Procedure{HyperparameterSearch}{}
+        \State Load the training+validation dataset from disc
+        \State $dataset \gets$ \Call{LoadData}{}
+        \While{Not all hyperparameters are exhausted or computational budget not reached}
+            \State Select a model type
+            \State $hyperparameters \gets$ new set of hyperparameters
+            \For{$repetition$ in 1 to 5}
+                \State $seed \gets$ \Call{GetSeed}{$hyperparameters$, $repetition$}
+                \State Split the training+validation dataset based on $seed$
+                \State Train the model on the training dataset
+                \State Evaluate the model on the validation dataset
+                \State Store the results to disc
+            \EndFor
+        \EndWhile
+    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+As each set of hyperparameters is trained and evaluated multiple times on a
+random subset of the training+validation dataset, an approximate confidence
+interval can be obtained for the performance of each model. This allows
+statistical bounds to be placed on the performance of each model on the test
+set and other unseen data which might have a different underlying distribution
+to the training+validation dataset.
 
 # What experiments will be conducted?
 
@@ -112,8 +192,115 @@ keystrokes is described
 
 # How is hyperparameter optimisation done?
 
-- Random search for each model type over their search space.
-- Repeated 5 times per model+hyperparameter combination
+Random search as recommended by James Bergstra and Yoshua Bengio, Random Search
+for Hyper-Parameter Optimization
+
+Hyperparameter optimisation was performed per model type via random search over
+the model type's hyperparameter space. A value for each hyperparameter was
+randomly selected (hyperparameters, ranges, and distributions are specified in
+Table \ref{tab:04_hpar_dists}) and then five models were trained with those
+hyperparameters.
+
+<!-- prettier-ignore-start -->
+\begin{table}
+    \centering
+    \caption{Hyperparameters and the associated range and distributions for
+    each model type.}
+    \label{tab:04_hpar_dists}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Model Type  & Hyperparameter & Range & Distribution \\
+        \hline
+        CuSUM            & Threshold            & $\{5, 10, 20, 40, 60, 80, 100\}$            & Categorical \\
+        \hline
+        HMM              & Number of Iterations & 20                                          & Fixed \\
+                         & Covariance Type      & $\{ \text{Spherical}, \text{Diagonal}, \text{Full}, \text{Tied} \}$ & Categorical \\
+        \hline
+        SVM              & $C$                  & $[10^{-6}, 1]$                              & Logarithmic \\
+                         & Class Weights        & $\{ \text{Balanced}, \text{Unbalanced} \}$  & Categorical \\
+                         & Maximum Iterations   & 200                                         & Fixed \\
+        \hline
+        FFNN             & Epochs               & 40                                          & Fixed \\
+                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
+                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
+                         & Optimizer            & Adam                                        & Fixed \\
+                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
+                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
+                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
+                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
+        \hline
+        HFFNN (Majority) & Epochs               & $[5, 40]$                                   & Linear \\
+                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
+                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
+                         & Optimizer            & Adam                                        & Fixed \\
+                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
+                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
+                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
+                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
+        \hline
+        HFFNN (Minority) & Epochs               & $[5, 40]$                                   & Linear \\
+                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
+                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
+                         & Optimizer            & Adam                                        & Fixed \\
+                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
+                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
+                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
+                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
+        \hline
+    \end{tabular}
+\end{table}
+<!-- prettier-ignore-end -->
+
+Each model was trained on a different subset of the training
+data, using the cross-validation procedure described in Section
+\ref{sec:trn_tst_val}. Summary statistics of each model's performance on the
+training and the validation sets are saved to disc.
+
+If a model has random elements, the PRNG\footnote{elaborate} is seeded with a
+seed unique to that model, to ensure reproducibility.
+
+Each model has a different validation set, determined by that model's seed.
+
+The ground truth labels for each model's validation set are saved to disc, as
+well as the predictions the model made for the observations in that validation
+set. This allows for arbitrary performance metrics to be calculated after
+training, as the ground truth and predicted labels are available for
+comparison.
+
+Different model types had differing numbers of evaluated hyperparameters
+across. This stemmed from discrepancies in the quantity of hyperparameters and
+distinct training and evaluation durations for each model.
+
+<!-- TODO: histogram of distances to evaluated hpars
+To ensure each model got sufficient coverage over the hyperparameter space,
+Figure \ref{fig:04_todo} shows the mean manhatten distance from 10 000 randomly
+chosen points in each model's hyperparameter space to the nearest evaluated
+hyperparameter.
+-->
+
+The number of unique hyperparameter evaluations for each model are available in
+Table \ref{tab:04_uniq_hpar_evals}.
+
+<!-- prettier-ignore-start -->
+\begin{table}
+    \centering
+    \begin{tabular}{|c|p{0.23\textwidth}|p{0.19\textwidth}|p{0.19\textwidth}|p{0.19\textwidth}|}
+    \hline
+        Model Type & Hyperparameter Combinations & Models evaluated & Mean Fit Time & Mean Inference Time \\
+    \hline
+    CuSUM 	& 7 	& 398 	&  2m 23s    &  0m 47.343s \\
+    FFNN 	& 79 	& 486 	&  5m 30s    &  0m  0.373s \\
+    HFFNN 	& 88 	& 440 	&  6m 39s    &  0m  0.734s \\
+    HMM 	& 4 	& 104 	&  1m 19s    & 29m 35.772s \\
+    SVM 	& 57 	& 285 	& 12m  3s  	 &  0m  0.122s \\
+    \hline
+    \end{tabular}
+    \caption{Hyperparameter Combinations for different model types. Note that
+    HMM and CuSUM have only discrete hyperparameters, so there is a maximum
+    number of hyperparameter combinations that can be tested.}
+    \label{tab:04_uniq_hpar_evals}
+\end{table}
+<!-- prettier-ignore-end -->
 
 # Evaluation metrics
 
@@ -134,11 +321,15 @@ That is, that the ground truth label is $i$ and the predicted label is $j$. The
 element-wise definition of a confusion matrix is
 
 $$
-    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} t_k = j \land p_k = i.
+    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [t_k = j \land p_k = i].
 $$
 
 An example confusion matrix is given in the top-left plot of Figure
-\ref{fig:04_example_conf_mat}.
+\ref{fig:04_example_conf_mat}. Note that elements in the confusion matrix which
+are zero are left uncoloured and are not annotated with a 0. This is done for
+consistency with the $51 \times 51$ confusion matrices used to compare models
+trained on the \emph{Ergo} dataset, in which the difference between one
+misprediction and zero mispredictions is often important so visualise.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -226,20 +417,20 @@ $$
 $$
 
 The $F_1$-score for some class $c_i$ ($F_{1,i}$) is defined as the harmonic
-mean From the precision and recall for that class:
+mean of the precision and recall of that class:
 
 $$
     F_{1,i} = 2 \cdot \frac{
-            \text{precision} \cdot \text{recall}
+            \text{Precision}_i \cdot \text{Recall}_i
         }{
-            \text{precision} + \text{recall}
+            \text{Precision}_i + \text{Recall}_I
         }
 $$
 
 The fact that the harmonic mean is used to calculate the $F_1$-score ensures
 that _both_ a high precision and high recall are required to obtain a high
-$F_1$-score. Figure \ref{fig:04_precision_recall_f1} shows a plot of precision
-and recall values, and the corresponding $F_1$-score.
+$F_1$-score. This is visible when plotting the $F_1$-scores for various
+precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -273,8 +464,8 @@ have columns in the confusion matrix which are zero except for the element on
 the principle diagonal. Likewise, classes with perfect recall (class 2) have
 rows in the confusion matrix which are zero except for the element on the
 principle diagonal. Precision can therefore be gleaned from a confusion matrix
-by observing the columns of the appropriate confusion matrix, and \textbf{r}ecall
-the \textbf{r}ows.
+by observing the columns of the appropriate confusion matrix, and
+\textbf{r}ecall by observing the \textbf{r}ows.
 
 ## Weighted and unweighted averages
 

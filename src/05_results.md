@@ -16,6 +16,10 @@ TODO: add tSNE to appendix
 
 TODO: Export large PCA plot as PNG
 
+TODO: go through src/imgs/graphs/ and order by size, replacing the large PDFs
+with pngs files
+
+TODO remove figures that haven't been referenced.
 -->
 
 This chapter will discuss the results obtained from the experiments described
@@ -39,46 +43,7 @@ observations. Section \ref{real-world-data} evaluates each model on a
 real-world dataset of English-language typing data. Finally, Section
 \ref{test-set-eval} evaluates the best performing model on the unseen test set.
 
-## (Some things I'll cover in the Methodology chapter)
-
-Hi Professor, this section will be removed, but I found there were a few times
-where I needed to mention something but that thing was better mentioned in the
-methodology chapter rather than the results chapter. So this section just has
-some things which I'll write up in the methodology chapter, but which I thought
-would be confusing to not acknowledge at all:
-
-1. How do HMMs/CuSUM/SVMs go from binary classifiers to multi-class classifiers
-<!--
-One thing an examiner will look at is if your methodology is correct. Did you
-split training/test and validation. Was there leakage. How big is each set...
-How did you do hyperparameter tuning. None of this is clear.... Please make
-sure it is. Remember an examiner is looking for different things than what you
-are interested in. You want to show how each mode is doing on 51 classes. The
-examiner is checking;
-
-
-1. Did you use a correct trianing methodology
-1. Is the results showing working models for each model type. Check no
-   programming bugs.
-1. Under what circumstances do the models stop working
-1. Does the candiadte understand why the model is perfroming badly in some
-   cases
-1. Are the results clear or presented in some onorthodox way can I make sense
-   of the results as an examiner....
-
-I think the chapter falls short on a number of these points and I think you
-need to rework it quite a bit.
--->
-
-1. How is hyperparameter optimisation done?
-1. How are the models evaluated based on recall/precision/f1-score?
-1. What is macro/micro/weighted f1 score and why is macro f1-score used?
-1. What does _Ergo_ look like? Where are the sensors placed?
-1. Discussion about why the HMMs couldn't be trained on every training
-   observation but could be evaluated on every validation observation.
-1. Each set of hyperparameters has 5 repetitions
-
-## Dataset Description
+# Dataset Description
 
 The core goal of _Ergo_ is to convert hand motion to keyboard input. To this
 end, there are 10 acceleration sensors mounted on the user's fingertips. Each
@@ -270,6 +235,7 @@ clearly showing significant accelerations, but many other fingers are also
 measuring accelerations. Note how the right hand is largely static, except the
 orientation of the hand is varied.
 
+<!-- TODO: Make this plot have properly sized plot titles -->
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
@@ -305,7 +271,7 @@ gesture classes from the non-gesture class.
 
 <!-- TODO It is more standard to use t-sne here.-->
 
-## Comparison of hypothetical models
+# Comparison of hypothetical models
 
 In this section, several hypothetical models are defined and their performance
 examined. These hypothetical models have been chosen so as to provide some
@@ -391,7 +357,7 @@ other fingers on that hand). The mean $F_1$-score for these classifiers is
 \end{figure}
 <!-- prettier-ignore-end -->
 
-## Evaluated Classification Algorithms \label{model-justification}
+# Evaluated Classification Algorithms \label{model-justification}
 
 Several different classification algorithms were evaluated. The chosen
 classification algorithms were selected if they are often used in the general
@@ -468,7 +434,7 @@ one-vs-rest classification. Due to the large number of observations and the
 poor scaling characteristics of SVMs as the number of observations increases,
 only a linear kernel is considered.
 
-## Discussion of each model
+# Discussion of each model
 
 This section will explore each of the models in depth, but will not make
 comparisons between different model types. Characteristics specific to each
@@ -481,7 +447,71 @@ FFNNs are be discussed in section \ref{in-depth-ffnn}, HMMs in section
 \ref{in-depth-hmm}, CuSUMs in section \ref{in-depth-cusum}, HFFNNs in section
 \ref{in-depth-hffnn}, and SVMs in section \ref{in-depth-svm}.
 
-### Feed-forward Neural Networks \label{in-depth-ffnn}
+## Feed-forward Neural Networks \label{in-depth-ffnn}
+
+<!--
+TODO
+- Model type
+  - 3x confusion matrices
+  - Discussion of the 5-class classifier performance:
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 50-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 51-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+-->
+
+Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
+all FFNNs trained on 5, 50, and 51 classes, weighted by that model's
+$F_1$-score.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_ffnn}
+    \caption{The weighted confusion matrices of three FFNN classifiers, trained
+    on 5, 50, and 51 classes. The confusion matrices are weighted by the
+    $F_1$-score of each model, such that better performing models have a
+    greater impact on the weighted confusion matrix. The bottom right plot
+    shows the precision-recall plot for the FFNNs, with each colour
+    representing the FFNNs trained on different numbers of classes.}
+    \label{fig:05_mean_conf_mat_ffnn}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The weighted confusion matrix for FFNNs trained to classify only 5 classes
+shows very good performance with little bias in its mispredictions.
+
+The weighted confusion matrix for 50 classes also shows very good performance,
+however there is a bias in it's mispredictions as shown by the two diagonals
+adjacent to the principle diagonal. These two diagonals are offset from the
+principle diagonal by exactly 10 classes, indicating they are gestures where
+the models mispredicted the orientation of the gesture but correctly predicted
+the finger of the gesture. For example, predicting a gesture made with the
+right hand's index finger at $0^\circ$ (gesture index 6) when the actual
+gesture was made with the right hand's index finger at $45^\circ$ (gesture
+index 16).
+
+The confusion matrix for the FFNNs trained on 51 classes shows a strong
+principle diagonal. It also shows mispredictions where class 50 was classified
+as one of the other classes $0, \ldots, 49$ as represented by the row at the
+bottom of the confusion matrix. There are also a number of mispredictions where
+on of thee classes $0, \ldots, 49$ were classified as class 50, represented by
+the column at the right of the confusion matrix. There are relatively few
+mispredictions where one gesture class was mispredict as another gesture class.
+
+The precision-recall plot for these FFNNs shows that all FFNNs have a large
+variance in their performance. The 5- and 50-class FFNNs were able to achieve
+$F_1$-scores exceeding 0.95.
+
+### Hyperparameter analysis 5-class FFNNs
+
+### Hyperparameter analysis 50-classes FFNNs
+
+### Hyperparameter analysis 51-classes FFNNs
 
 Figure \ref{fig:05_in_depth_ffnn_p_vs_r} depicts the precision and recall of
 all FFNN models trained on 51 classes. A clear cluster is visible in in the
@@ -512,69 +542,43 @@ Plot #nodes vs lr vs f1 score
 Must thoroughly explain why some models learnt well but others did not.
 -->
 
-To investigate this cluster, Figure \ref{fig:05_in_depth_ffnn_hpars_vs_recall}
+To investigate this cluster, Figure \ref{fig:05_hpar_analysis_ffnn_51class_recall}
 shows the recall of all models trained on the full dataset of 51 classes
 against the hyperparameters for the FFNNs: the dropout rate, the L2
 coefficient, the batch size, the learning rate, the number of layers, and the
 nodes in each layer. Several FFNNs had a validation loss much larger than the
 training loss. These models have been omitted from the analysis. Figure
-\ref{fig:05_in_depth_ffnn_hpars_vs_recall} shows that a learning rate between
+\ref{fig:05_hpar_analysis_ffnn_51class_recall} shows that a learning rate between
 $10^{-4.5}$ and $10^{-3}$ often leads to a higher recall.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_ffnn_hpars_vs_recall.pdf}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_51class_recall}
     \caption{Hyperparameters for FFNNs trained on 51 classes, compared against
     their recall. Note that some hyperparameters were sampled from a
     $\log_{10}$ distribution and are therefore plotted over that same
     distribution.}
-    \label{fig:05_in_depth_ffnn_hpars_vs_recall}
+    \label{fig:05_hpar_analysis_ffnn_51class_recall}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
-all FFNNs trained on 5, 50, and 51 classes, weighted by that model's $F_1$
-score and normalized across the entire matrix so the maximum value is 1.
+## Hidden Markov Models \label{in-depth-hmm}
 
-<!-- prettier-ignore-start -->
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_ffnn}
-    \caption{The weighted confusion matrices of FFNNs, weighted by the model's
-    $F_1$-score and normalized to make the maximum value in the confusion
-    matrix be 1. Note that the bottom right cell of the 51-class confusion
-    matrix has to be set to zero, as class 50 has such a significant majority
-    so as to make the confusion matrix uninformative.}
-    \label{fig:05_mean_conf_mat_ffnn}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-Looking at the mean confidence matrix for 5 and 50 gesture classes, one can see
-that FFNNs do not struggle when distinguishing the different gesture classes.
-When there are 50 gesture classes, FFNNs will occasionally incorrectly predict
-the orientation of a gesture (as can be seen by the weak off-centre diagonals
-in the confusion matrix for 50 gesture classes). Beyond that, mispredictions
-are evenly distributed.
-
-The rightmost plot of Figure \ref{fig:05_mean_conf_mat_ffnn} shows the weighted
-mean of all confusion matrices for FFNNs trained on 51 classes. This includes
-the non-gesture class, class 50.
-
-There are three types of mistakes made by these FFNNs: predicting that an
-observation of a gesture class belongs to class 50 (as seen by the strong
-column on the far right of the plot). The second mistake is predicting that an
-observation which does not contain a gesture actually contains a gesture (as
-seen by the strong row at the bottom of the plot). The final mistake is
-predicting one gesture as being another gesture (as seen by the various other
-cells in the plot).
-
-It is clear from these plots that while distinguishing the different gestures
-is an achievable task, distinguishing gestures from non-gestures is much
-trickier. The FFNNs show a small bias in how they mispredict the orientation of
-a gesture.
-
-### Hidden Markov Models \label{in-depth-hmm}
+<!--
+TODO
+- Model type
+  - 3x confusion matrices
+  - Discussion of the 5-class classifier performance:
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 50-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 51-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+-->
 
 Figure \ref{fig:05_in_depth_hmm_51_p_vs_r_covar_type} shows the precision and
 recall of all HMM models trained on all 51 classes.
@@ -668,6 +672,7 @@ precision, recall, and $F_1$-scores for the four covariance types.
 <!-- prettier-ignore-end -->
 
 <!--
+TODO
 As I have said it is hard to follow as what I am looking for as an examiner is
 not here:
 
@@ -728,7 +733,22 @@ With 51 classes, the HMMs struggle to correctly predict class 50, frequently
 predicting that it belongs to some other class as can be seen by the row at the
 bottom of the rightmost confusion matrix.
 
-### Cumulative Sum \label{in-depth-cusum}
+## Cumulative Sum \label{in-depth-cusum}
+
+<!--
+TODO
+- Model type
+  - 3x confusion matrices
+  - Discussion of the 5-class classifier performance:
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 50-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 51-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+-->
 
 Figure \ref{fig:05_in_depth_cusum_p_vs_r_thresh} shows the precision and recall
 for all CuSUM models trained on 51 classes, as well as the relationship between
@@ -772,7 +792,22 @@ originates from the formulation of the CuSUM model: it has little knowledge of
 the orientation of the gestures, and largely distinguishes observations based
 on the finger that is moving.
 
-### Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
+## Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
+
+<!--
+TODO
+- Model type
+  - 3x confusion matrices
+  - Discussion of the 5-class classifier performance:
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 50-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 51-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+-->
 
 Figure \ref{fig:05_in_depth_hffnn_p_vs_r} shows the precision and recall for
 all HFFNN models trained on the full 51 class dataset. Both precision and
@@ -849,7 +884,22 @@ of each HFFNN.
 HFFNNs perform well, however there are feint offset diagonals showing a
 tendency to mispredict the orientation of a gesture.
 
-### Support Vector Machines \label{in-depth-svm}
+## Support Vector Machines \label{in-depth-svm}
+
+<!--
+TODO
+- Model type
+  - 3x confusion matrices
+  - Discussion of the 5-class classifier performance:
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 50-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+  - Discussion of the 51-class classifier performance
+    - What hpars work well?
+    - Is the model learning the data?
+-->
 
 Figure \ref{fig:05_in_depth_svm_51_p_vs_r_class_weight_C} shows how the
 hyperparameters of the SVMs affect their precision, recall, and $F_1$-score.
@@ -982,7 +1032,7 @@ below the main diagonal.
 The 51-class SVMs also performed well, however many mispredictions were made
 between class 50 and the gesture classes.
 
-## Which model performs the best with 51 classes? \label{best-model}
+# Which model performs the best with 51 classes? \label{best-model}
 
 The performance of each of the five classification algorithms can be seen in
 Figure \ref{fig:05_precision_recall_51_classes} (for those models trained on
@@ -1032,8 +1082,8 @@ class. This would happen if a model "extended" its predictions such that
 timesteps $t, t+1, t+2$ are all predicted as belonging to the same minority
 class even though only timestep $t$ actually belonged to that minority class.
 This asymmetry between minority/majority classes and precision/recall is a
-consequence of the macro weighting used for calculating $F_1$, recall, and
-precision.
+consequence of the uniform class weighting used for calculating $F_1$, recall,
+and precision.
 
 <!--
 > This would happen if a model "extended" its predictions such that
@@ -1127,7 +1177,7 @@ in tables
 
 \input{src/tables/05_best_cusum_hpars.generated.tex}
 
-## Comparison of the inference and training times for each model \label{time-comparison}
+# Comparison of the inference and training times for each model \label{time-comparison}
 
 Raw performance is not the only metric of interest, as _Ergo_ requires
 real-time prediction at a rate of 40 predictions per second. The inference and
@@ -1218,7 +1268,7 @@ real-time predictions, however a compromise might be made by only attempting
 inference on every other timestep, thereby reducing the performance required at
 the cost of a less responsive system.
 
-## Comparison of the validation to training ratios for each model \label{ratio-comparison}
+# Comparison of the validation to training ratios for each model \label{ratio-comparison}
 
 Figure \ref{fig:05_f1_vs_f1_ratio} shows the validation and training $F_1$
 scores for every model trained all 51 classes. The ratio of a model's training
@@ -1286,7 +1336,7 @@ properly convert to good performance on the validation dataset.
 
 <!-- TODO: ## Residual analysis of the best performing models -->
 
-## English-language test data \label{real-world-data}
+# English-language test data \label{real-world-data}
 
 To evaluate the model on English-language typing data, the sensor measurements
 were stored as the phrase "The quick brown fox jumped over the lazy dog" was
@@ -1311,7 +1361,7 @@ shown in Figure \ref{fig:05_tqbfjotld}.
 TODO: Clarify test set vs English dataset
 -->
 
-## Evaluation of Models on the test set \label{test-set-eval}
+# Evaluation of Models on the test set \label{test-set-eval}
 
 Figure \ref{fig:05_tst_set_conf_mat} shows confusion matrix and the per-class
 $F_1$-score, precision, and recall for the best performing hyperparameters

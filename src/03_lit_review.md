@@ -1,5 +1,3 @@
-# Literature Review
-
 This chapter reviews the literature as related to human hand gesture
 recognition. There are three primary methods of sensing the movement of a user's
 hands: glove-based, vision-based, and (most recently) WiFi-based.
