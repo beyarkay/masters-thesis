@@ -1,0 +1,244 @@
+% !TeX encoding = UTF-8
+% !TeX program  = xelatex
+
+\documentclass[12pt,a4paper,openany,
+               afrikaans,UKenglish,
+               masters-t,goldenblock
+              ]{stb-thesis}
+
+%==== Language setup =================================================
+\usepackage{babel}
+\usepackage[utf8]{inputenc}%...................... Unicode input file format
+
+%==== Math setup =====================================================
+\usepackage{amsmath}%............................. Advanced math (before fonts)
+%\usepackage{amssymb}%............................ AMS Symbol fonts
+
+%==== Font setup (default is Computer Modern) ========================
+\usepackage{iftex}
+\ifxetex
+    \usepackage[math-style=TeX,
+                bold-style=TeX,
+               ]{unicode-math}
+    \setmainfont{Cambria}%........................ Unicode fonts  (Win)
+    \setsansfont[Scale=MatchLowercase]{Calibri}
+    \setmonofont[Scale=MatchLowercase]{Consolas}
+    \setmathfont{Cambria Math}
+    \defaultfontfeatures{Ligatures=TeX}
+    \let\bm\symbfit
+\else
+    \usepackage[utf8]{inputenc}%.................. Unicode file format
+    \usepackage{textcomp}%........................ Additional text symbols
+    \usepackage[T1]{fontenc}%..................... Type 1 outline fonts
+    \usepackage{bm}%.............................. Bold math fonts
+\fi
+\normalfont
+
+%==== Units and numbers ==============================================
+\usepackage{siunitx}%............................. Unit, number and angle output
+    \sisetup{detect-all = true, detect-family = true}
+    \sisetup{%output-decimal-marker = {.} ,
+             group-separator = {\,},
+             number-unit-product = {\,},
+             inter-unit-product = \mathord{\cdot},
+             exponent-product = \mathord{\times},
+             separate-uncertainty = true}
+
+
+%==== Ref's, Bib's and Nomencl =======================================
+\usepackage{stb-nomencl}%......................... List of symbols
+    \renewcommand*{\UnitLabel}[1]{~[\,$\unit{#1}$\,]}
+\usepackage{stb-bib}%............................. Bibliography (natbib internally)
+    \bibliographystyle{stb-bib-eng-a}
+    \renewcommand\bibfont{\small}
+    \renewcommand\bibsection{\chapter{\bibname}}
+
+%==== Tables + Graphics + Color =====================================
+\usepackage{array}%............................... Extended table defs
+    \setlength{\extrarowheight}{2pt}
+\usepackage{longtable}%........................... Tables can break over pages
+\usepackage{graphicx}%............................ Included graphics
+\usepackage[font=small]{caption}%................. Customize captions
+\usepackage[table]{xcolor}%....................... Color setup + colortbl
+
+\iftrue
+    \usepackage[backref=page]{hyperref}%.... Hyperlinks & backreferences
+\else
+    \usepackage[pageref]{backref} %........... Citation backreferences
+\fi
+\renewcommand*{\backrefalt}[4]{%
+    \ifcase #1 (Not cited.)%
+    \or (Cited on page~#2.)%
+    \else (Cited on pages~#2.)%
+\fi}
+
+%==== Extra defs for template ========================================
+\makeatletter
+%---- TOC entries and case
+    \addto{\captionsafrikaans}{\renewcommand\bibname{Lys van verwysings}}
+    \addto{\captionsafrikaans}{\renewcommand\contentsname{Inhoudsopgawe}}
+    \addto{\captionsafrikaans}{\renewcommand\listfigurename{Lys van figure}}
+    \addto{\captionsafrikaans}{\renewcommand\listtablename{Lys van tabelle}}
+
+    \addto{\captionsUKenglish}{\renewcommand{\bibname}{List of references}}
+    \addto{\captionsUKenglish}{\renewcommand\contentsname{Table of contents}}
+    \addto{\captionsUKenglish}{\renewcommand\listfigurename{List of figures}}
+    \addto{\captionsUKenglish}{\renewcommand\listtablename{List of tables}}
+
+%==== User Defs ======================================================
+%
+% Please insert user defined commands here
+% and NOT in the document itself!
+%
+\setlength{\tabcolsep}{2pt}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\indep}{\perp\!\!\!\!\perp}
+\newcommand{\pr}{\mathbb{P}}
+
+\usepackage{adjustbox}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{flafter}
+\usepackage{graphicx}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{marginfix}
+\usepackage{multirow}
+\usepackage{pdfpages}
+\usepackage{pgfplots}
+\usepackage{rotating}
+\usepackage{rotating}
+\usepackage{sidenotes}
+\usepackage{siunitx}
+\usepackage{soul}
+\usepackage{subcaption}
+\usepackage{tabularray}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{xcolor}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\makeatother
+
+%==== Title Page =====================================================
+\title{\bfseries
+       \AorE{%-- Afrikaans ------------------------------------------
+             Afrikaans title here\\[1ex]
+             \normalfont\small\itshape
+             (``Ergo: A Gesture-Based Computer Interaction Device'')
+            }{%-- English -------------------------------------------
+             Ergo: A Gesture-Based Computer Interaction Device}}
+
+\author{B.R.\ Kane}{Boyd Robert Kane}
+
+\degree{\AorE{MIng (Meg)}{MSc CS}}
+       {\AorE{Magister in Ingenieurswese (Meganiese)}
+             {Master of Science in Computer Science}}
+
+\address{\AorE{%-- Afrikaans ----------------------------------------
+        Rekenaar Wetenskap Afdeling,\\
+        Departement Wiskundige Wetenskappe,\\
+        Stellenbosch Universiteit,\\
+        Privaatsak X1, Matieland 7602, Suid Afrika.%
+             }{%-- English ------------------------------------------
+        Computer Science Division,\\
+        Department of Mathematical Sciences,\\
+        Stellenbosch University,\\
+        Private Bag X1, Matieland 7602, South Africa.}}
+
+\faculty{\AorE{Fakulteit Wetenskap}%
+              {Faculty of Science}}
+
+\supervisor{Dr.\ T.L.\ Grobler}
+
+\setdate{12}{2023}
+
+%\SetSponsor{The financial assistance of the National Research Foundation (NRF)
+%    towards this research is hereby acknowledged. Opinions expressed and
+%    conclusions arrived at, are those of the author and are not necessarily to
+%    be attributed to the NRF.}
+
+
+%==== Main Document ==================================================
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\raggedbottom
+\begin{document}
+
+\frontmatter%---------------------------------------------------------
+\TitlePage
+
+\DeclarationDate{2023/12/01}
+\DeclarationPage
+
+\include{tex/00_abstract}
+% \include{tex/00_acknowledgements}
+\chapter*{Acknowledgements}
+
+% TODO
+Acknowledgements chapter has not been written % TODO
+
+% \include{tex/00_dedication}
+\chapter*{Dedication}
+Dedication chapter has not been written % TODO
+% TODO
+% \include{chaps-front/chap-acknowledge}
+% \include{chaps-front/chap-dedication}
+
+% Use \chapter*{} before TOC
+\tableofcontents
+% Use \chapter{} after TOC
+
+\listoffigures
+\listoftables
+% List of symbols has been excluded
+% \include{chaps-front/chap-symbols}
+
+\mainmatter%----------------------------------------------------------
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
+
+\chapter{Introduction}
+% src/01_introduction.md
+% \include{tex/01_introduction}
+
+% src/02_background.md
+\chapter{Background}
+% \include{tex/02_background}
+
+% src/03_lit_review.md
+\chapter{Literature Review}
+% \include{tex/03_lit_review}
+
+% src/04_methodology.md
+\chapter{Methodology}
+% \include{tex/04_methodology}
+
+% src/05_results.md
+\chapter{Results}
+\include{tex/05_results}
+
+% src/06_conclusion.md
+\chapter{Conclusion}
+% \include{tex/06_conclusion}
+
+\appendix%------------------------------------------------------------
+% src/07_appendix.md
+\include{tex/07_appendix}
+
+\backmatter%----------------------------------------------------------
+\bibliography{bib/bib-sample}
+
+\end{document}
+
