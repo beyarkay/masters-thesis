@@ -20,6 +20,30 @@ TODO: go through src/imgs/graphs/ and order by size, replacing the large PDFs
 with pngs files
 
 TODO remove figures that haven't been referenced.
+
+TODO make sure you remove all references of g255, gesture 255, gesture 50, and
+use class to mean 0..=50 and gesture to mean 0..=49.
+
+
+FIXME: the calculation of the F_1 score contours is wrong for some reason.
+I think it has to do with the weighting of each class. It's only really visible
+near precision ~= 0 or recall ~= 0. Maybe this would be fixed if we used micro
+avg instead of macro avg? Regardless, the macro avg f1-score _cannot_ be
+calculated from the macro avg precision and macro avg recall.
+
+```py
+sns.scatterplot(
+    data=df.assign(**{
+        'calc_f1-score': lambda ddf: 2 * (ddf['val.macro avg.precision'] * ddf['val.macro avg.precision']) / (ddf['val.macro avg.recall'] + ddf['val.macro avg.recall'])
+    }),
+    x='val.macro avg.f1-score',
+    y='calc_f1-score',
+    hue='preprocessing.num_gesture_classes',
+    size=.5,
+    alpha=0.5,
+    edgecolor=None,
+)
+```
 -->
 
 This chapter will discuss the results obtained from the experiments described
@@ -615,203 +639,271 @@ trained on 5, 50, and 51 classes.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-One can see that for 5 and 50 classes, the HMMs make incorrect predictions but
-are largely able to predict the correct class. The predictions for gestures
-that flex the left or right thumb (gestures 4, 5, 14, 15, 24, 25, 34, 35, 44, 45)
-are consistently better than other gesture classes for the 5- and 50-class
-HMMs. This can be attributed to the sensors on the thumbs being oriented
-differently to the sensors on the other fingers (since the sensor is designed
-to lie flat on the user's fingernail). This has the effect of changing which
-one of the three axes is dominated by gravity, leading to gestures which are
-easier to distinguish.
+The 5-class HMMs are mostly strong classifiers, with a median validation
+$F_1$-score of $0.694$ and a maximum of 1. It is clear from the 5-class
+confusion matrix that gesture 4 was predicted correctly much more frequently
+than the other gesture classes. Gesture 4 flexes the left hand's thumb (as does
+every gesture which ends in the digit 4). This can be attributed to the sensors
+on the thumbs being oriented differently to the sensors on the other fingers
+(since the sensor is designed to lie flat on the user's fingernail). This has
+the effect of changing which one of the three axes is dominated by gravity,
+leading to gestures which are easier to distinguish.
 
-The 50-class HMMs are also slightly more likely to incorrectly infer the
-orientation of a gesture. This can be seen by the diagonal lines of cells
-adjacent to the principle diagonal.
+The 5-class confusion matrix also makes apparent that adjacent gestures (for
+example, gestures 0 and 1, or 1 and 2) are slightly more likely to be
+confounded by the 5-class HMM. This can be seen in how the cells directly
+adjacent to the principle diagonal contain larger values than the cells further
+from the principle diagonal. This can be attributed to how the movement of ones
+fingers is not completely independent, and moving one finger is likely to
+subtly move the fingers adjacent to it. This effect is less apparent between
+gestures 3 and 4 as the movement of the thumb is largely independent from the
+movement of other fingers.
 
-The 51-class HMMs frequently predict that class 50 as belonging to another
-class. This can be seen by the strong row at the bottom of the 51-class HMM
-confusion matrix.
+The 50-class HMMs generally show good performance, with a median $F_1$-score of
+$0.699$ and a maximum of $0.968$. A chequerboard pattern (similar to that seen
+on the 50-class CuSUM models) can be seen, although it is not very pronounced.
+Diagonals adjacent to the principle diagonal can also be seen, indicating that
+the 50-class HMMs occasionally mistake the orientation of the gesture. One can
+also see that gestures involving the thumb (gestures 4, 5, 14, 15, 24, 25, 34,
+35, 44, 45) are more accurately classified than other gestures. This is the
+natural extension of what was seen in the 5-class HMMs where the orientation of
+the thumb allowed the HMMs to be more certain of its predictions of the thumb.
 
-The precision-recall plot largely concurs with the information in the confusion
-matrices: The 5- and 50-class HMMs have no problem learning the dataset and
-accurately classifying the gestures. However, the 51-class HMMs are unable to
-learn the dataset.
+The 51-class HMMs shows poor performance, with a median $F_1$-score of $0.034$
+and a maximum of $0.047$. This is caused by the inability of the 51-class HMMs
+to correctly classify class 50. The vast majority of observations belonging to
+class 50 are incorrectly classified as belonging to one of the other gesture
+classes. This causes the 51-class HMMs have a greatly reduced precision. This
+behaviour is similar to the 51-class CuSUM models.
 
 ### 5-class HMM Hyperparameter Analysis
 
 As HMMs only have one hyperparameter (the covariance type), Figure
 \ref{fig:05_in_depth_hmm_5_p_vs_r_covar_type} shows the precision-recall plot
-for all 5-class HMMs, with the colour of each point indicating the covariance
-type.
+for all 5-class HMMs as well as the $F_1$-score of each covariance type.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_5_p_vs_r_covar_type}
-    \caption{Precision-recall plot for all HMMs trained on 5 classes, with
-    the models' $F_1$-scores as contours in grey. Note that the scales of the
+    \caption{Left: Precision-recall plot for all HMMs trained on 5 classes, with
+    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
+    $F_1$-score for each covariance matrix type. Note that the scales of the
     axes have been adjusted to better show the distribution of the data.}
     \label{fig:05_in_depth_hmm_5_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
 
+The tied covariance matrix HMMs performed the best, with a median
+$F_1$-score of $0.967$ and a maximum of $1$. The full covariance matrix HMMs
+had a very large range $[0.227, 0.968]$ when compared to the tied $[0.827,
+1]$, spherical $[0.475, 0.895]$, and diagonal $[0.199, 0.817]$ covariance
+matrix HMMs. This is likely due to the full covariance matrix HMMs having the
+least constraints on the covariance matrix of the emission probability
+distributions, therefore having the greatest number of values which can
+influence the performance of the HMM.
+
+The full covariance matrix HMMs have the next best performance after the tied
+covariance matrix HMMs, however the variance of the full covariance matrix HMMs
+is so large as to make them unreliable. The spherical and then the diagonal
+covariance matrix HMMs have the next best median $F_1$-score, with $0.724$ and
+$0.599$ respectively.
+
+The spherical covariance matrix HMMs performed better than the diagonal
+covariance matrix HMMs. The need for more parameters in expressing the diagonal
+covariance matrix ($\bm{\lambda} \mathbb{I}$, where $\bm{\lambda}$ is a vector
+of parameters and $\mathbb{I}$ is the identity matrix) compared to the
+spherical covariance matrix ($\lambda \mathbb{I}$, where $\lambda$ is a scalar
+parameter) can lead to diagonal covariance matrix HMMs requiring additional
+training iterations on the same data.
+
+The tied covariance matrix HMMs likely perform so well because each state of
+the HMM (and therefore the distribution of each Gaussian emission) comes from
+the same distribution: the space of acceleration values which can be reached by
+the _Ergo_ hardware. This means that fitting a single covariance matrix which
+is shared by all states is an efficient means of describing the overall
+distribution of the data. Each timestep is sampled from approximately the same
+distribution, and so is well represented by one covariance matrix.
+
+Figure \ref{fig:05_in_depth_hmm_inf_trn_time_classes5} depicts the time taken
+per observation for both fitting the HMM and making a prediction with that HMM.
+The spherical and diagonal covariance types take an order of magnitude less
+time to perform inference on a give observation compared to the tied and full
+covariance types. The spherical and diagonal covariance types also take
+approximately an order of magnitude less time to be trained on the dataset when
+compared to the tied and full covariance types. This is due to the increased
+number of parameters in the tied and full covariance types.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_in_depth_hmm_inf_trn_time_classes5}
+    \caption{Duration in seconds per observation required to fit and to train
+    the different covariance types for 5-class HMMs.}
+    \label{fig:05_in_depth_hmm_inf_trn_time_classes5}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- TODO: This theory about the full HMMs having the largest variance because
+it's got the most unconstrained dimensions is true, but doesn't hold up.
+
+Looking at the covariance type, the number of free dimensions, and the
+variance:
+
+Full: 22 x 30 x 30 = 19 800     std = 0.210
+Tied:      30 x 30 =    900     std = 0.033
+Sphe: 22           =     22     std = 0.091
+Diag: 22 x 30      =    660     std = 0.116
+
+So The number of free dimensions implies that the Tied HMMs would have the
+second largest variance, but actually it has the lowest variance.
+-->
+
+<!-- TODO probably also want to analyse the per-covariance type confusion
+matrices and precision-recall-f1 heatmaps
+-->
+
 ### 50-class HMM Hyperparameter Analysis
 
 Figure \ref{fig:05_in_depth_hmm_50_p_vs_r_covar_type} shows the
-precision-recall plot for all 50-class HMMs, with the colour of each point
-indicating the covariance type.
+precision-recall plot for all 50-class HMMs, as well as the $F_1$-score
+of each covariance type.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_50_p_vs_r_covar_type}
-    \caption{Precision-recall plot for all HMMs trained on 50 classes, with
-    the models' $F_1$-scores as contours in grey. Note that the scales of the
+    \caption{Left: Precision-recall plot for all HMMs trained on 50 classes, with
+    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
+    $F_1$-score for each covariance matrix type. Note that the scales of the
     axes have been adjusted to better show the distribution of the data.}
     \label{fig:05_in_depth_hmm_50_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
 
+The tied covariance matrix HMMs perform well with 50 classes, with a median
+$F_1$-score of 0.952 and a maximum of 0.968. This lends credence to the
+hypothesis that the tied covariance matrix HMMs perform well because each state
+emits a value from a distribution with the same covariance matrix, allowing for
+a sufficient number of parameters to describe that distribution, but not too
+many that they cannot be trained within the computational bounds of the
+training procedure.
+
+The other covariance types perform poorly, and once again the full covariance
+matrix HMMs have a very large variance. Like with the 5-class HMMs, the
+spherical covariance matrix HMMs performed better than the diagonal covariance
+matrix HMMs. The performance of each covariance matrix type is relatively
+similar when comparing the 5- and 50-class HMMs. In this context, the tied HMMs
+are the top performers, followed by the full HMMs, and then the spherical HMMs,
+with diagonal HMMs having the least favourable performance. The full HMMs have
+a very high variance.
+
+Figure \ref{fig:05_in_depth_hmm_inf_trn_time_classes50} depicts the time taken
+per observation for both fitting the HMM and making a prediction with that HMM.
+Similar to the 5-class HMMs, the spherical and diagonal covariance types are
+faster than the tied and full covariance types, both when training and when
+performing inference. By comparing Figure
+\ref{fig:05_in_depth_hmm_inf_trn_time_classes50} and Figure
+\ref{fig:05_in_depth_hmm_inf_trn_time_classes5}, one can see that the inference
+times take longer for the 50-class HMMs than for the 5-class HMMs. This is to
+be expected, given the one-vs-rest multi-class classification strategy that
+needs to be employed for the HMMs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_in_depth_hmm_inf_trn_time_classes50}
+    \caption{Duration in seconds per observation required to fit and to train
+    the different covariance types for 50-class HMMs.}
+    \label{fig:05_in_depth_hmm_inf_trn_time_classes50}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Figure \ref{fig:05_in_depth_hmm_conf_mats_cov_type_classes50} shows the
+weighted confusion matrices for each of the four covariance types: spherical,
+diagonal, tied, and full. <!-- TODO flesh this out -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_conf_mats_cov_type_classes50}
+    \caption{todo}
+    \label{fig:05_in_depth_hmm_conf_mats_cov_type_classes50}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Figure \ref{fig:05_in_depth_hmm_prf1_plots_conv_type_classes50} shows the
+per-class precision, recall, and $F_1$-score for each of the four covariance
+types: spherical, diagonal, tied, and full. <!-- TODO flesh this out -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_prf1_plots_conv_type_classes50}
+    \caption{todo}
+    \label{fig:05_in_depth_hmm_prf1_plots_conv_type_classes50}
+\end{figure}
+<!-- prettier-ignore-end -->
+
 ### 51-class HMM Hyperparameter Analysis
 
-<!--
-TODO
-- Model type
-  - Discussion of the 5-class classifier performance:
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 50-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 51-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
--->
-
 Figure \ref{fig:05_in_depth_hmm_51_p_vs_r_covar_type} shows the precision and
-recall of all HMM models trained on all 51 classes.
-
-<!--
-TODO: Explain 5, then 50, and then finally 51 gesture classes, in that order.
-- Show the model performing well for 5, then 50, then 51 classes
--->
+recall of all HMM models trained on all 51 classes, as well as the $F_1$-score
+of each covariance type.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_51_p_vs_r_covar_type}
-    \caption{Precision-recall plot for all HMMs trained on 51 classes, with
-    the models' $F_1$-scores as contours in grey. Note that the scales of the
+    \caption{Left: Precision-recall plot for all HMMs trained on 51 classes, with
+    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
+    $F_1$-score for each covariance matrix type. Note that the scales of the
     axes have been adjusted to better show the distribution of the data.}
     \label{fig:05_in_depth_hmm_51_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-<!--
-TODO: Does this 51 class precision-recall plot align with what you would expect
-from literature? To my mind a full covariance matrix should outperform a
-diagonal. All instances in which one contradicts intuition one needs to explain
-why?
--->
+The 51-class HMMs were unable to learn the dataset due to the addition of the
+majority class, class 50. This addition drastically reduced the precision of
+all HMMs, regardless of covariance type. This is similar to what was seen in
+the CuSUM models, where hyperparameter combinations performing adequately with
+50 classes perform poorly with the addition of the majority class.
 
-Since the HMMs only have one hyperparameter (the type of covariance matrix to
-use for each state). Each covariance type is strongly clustered together, with
-tied covariance matrices having the best recall and precision.
+The performance of each covariance matrix type has changed when compared to the
+5- and 50-class HMMs. The full HMMs have a lower mean than all other covariance
+classes. This results in the tied covariance matrix HMMs still being the top
+performers for 51-classes, followed by the spherical, diagonal, and then the
+full HMMs.
 
-While there is a positive correlation between the recall and precision for the
-HMMs, note that the range of precision values covered is very small and each
-HMM achieves approximately the same precision.
+This drop in relative performance experienced by the full HMMs with respect to
+the other covariance matrix types can be explained by increased number of
+observations. It is likely that the full HMMs (which have the largest number of
+parameters) were simply unable to converge on good parameter values within the
+number of iterations. The other covariance matrix types do not have as many
+parameters and so are able to converge on a good enough solution within the
+computation limit.
 
-Figure \ref{fig:05_in_depth_hmm_inf_trn_time} depicts the time taken per
-observation for inference and training, for all HMMs trained on the full 51
-class dataset.
+While there is a positive correlation between the recall and precision for all
+the 51-class HMMs, note that the range of precision values covered is very
+small and each covariance matrix type achieves approximately the same
+precision.
 
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_inf_trn_time}
-    \caption{Seconds per observation for training and inference for HMMs
-    trained on the full 51 classes. Plots a and c show the full dataset, while
-    plots b and d are magnified so that the Spherical and Diagonal covariance
-    types can be better inspected.}
-    \label{fig:05_in_depth_hmm_inf_trn_time}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-It is clear that the covariance type has a strong impact on both the training
-times and the inference times of the HMMs, with the full and tied covariance
-types being nearly ten times slower both when training and predicting. This
-means that the tied covariance type (which achieved the best performance) is
-both one of the longest to train and the slowest to perform inference.
-
-Figure \ref{fig:05_in_depth_hmm_conf_mats_cov_type} plots four confusion
-matrices, one for each covariance type.
+Figure \ref{fig:05_in_depth_hmm_inf_trn_time_classes51} depicts the time taken
+per observation for both fitting the HMM and making a prediction with that HMM.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_conf_mats_cov_type}
-    \caption{Mean covariance matrices of all HMMs trained on 51 classes, split
-    by the four covariance types: spherical, diagonal, full, and tied.}
-    \label{fig:05_in_depth_hmm_conf_mats_cov_type}
+    \includegraphics{src/imgs/graphs/05_in_depth_hmm_inf_trn_time_classes51}
+    \caption{Duration in seconds per observation required to fit and to train
+    the different covariance types.}
+    \label{fig:05_in_depth_hmm_inf_trn_time_classes51}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-From the confusion matrices alone, it might look like the full HMM outperformed
-all others as it has a very strong diagonal and very few off-diagonal
-mispredictions when compared to the other covariance types. However, Figure
-\ref{fig:05_in_depth_hmm_p_vs_r_covar_type} has already shown that the full
-HMMs perform the worst in terms of both precision and recall. To investigate
-this, Figure \ref{fig:05_in_depth_hmm_prf1_plots_conv_type} shows the per-class
-precision, recall, and $F_1$-scores for the four covariance types.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_prf1_plots_conv_type}
-    \caption{Per-class precision, recall, and $F_1$-score for each of the HMM
-    covariance types.}
-    \label{fig:05_in_depth_hmm_prf1_plots_conv_type}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!--
-TODO
-As I have said it is hard to follow as what I am looking for as an examiner is
-not here:
-
-1. First show your good results, showing that the model is doing well for some
-   subset of the problem.
-
-2. Now change the parameters of the problem, example add 51 gesture. Now the
-   model either fails or still performs well if it fails explain why.
-
-3. Going into detail as to the effect of the hyperparameters on a model which
-   is failing, precision so low, is not really useful. Rather do a
-   hyperparameter exploration on the 50 gesture case when it is working well.
-   Then just check if the same trend is visible in 51 case and then report on
-   it.
--->
-
-From Figure \ref{fig:05_in_depth_hmm_prf1_plots_conv_type} we can see that the
-per-class recall of the Full HMMs is substantially lower than all other
-covariance types. This fact is not apparent on the confusion matrices because
-the majority class 50 makes the colour scale difficult to interpret. Figure
-\ref{fig:05_in_depth_hmm_prf1_plots_conv_type} also clearly shows the superior
-recall of the tied HMMs.
-
-The superior recall of the tied covariance type is also apparent from the
-strong diagonal in the tied confusion matrix in Figure
-\ref{fig:05_in_depth_hmm_conf_mats_cov_type}. However, the tied HMMs had a
-greater tendency than the full HMMs to mispredict the orientation of the
-gesture (shown by the two diagonals adjacent to the major diagonal in the tied
-HMMs' confusion matrix).
-
-The spherical and diagonal HMMs have many mispredictions. The very low
-precision of all HMMs is also apparent, and can be seen by the row of incorrect
-predictions at the bottom of each confusion matrix where the HMM incorrectly
-predicted class 50 as one of the other classes.
+As with the 5- and 50-class HMMs, the spherical and diagonal covariance types
+are approximately an order of magnitude faster than the tied and full
+covariance types, in terms of both the inference time and the training time.
 
 ## Support Vector Machines \label{in-depth-svm}
 
@@ -849,68 +941,94 @@ between class 50 and the gesture classes.
 
 ### 5-class SVM Hyperparameter Analysis
 
-### 50-class SVM Hyperparameter Analysis
-
-### 51-class SVM Hyperparameter Analysis
-
-<!--
-TODO
-- Model type
-  - 3x confusion matrices
-  - Discussion of the 5-class classifier performance:
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 50-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 51-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
--->
-
-Figure \ref{fig:05_in_depth_svm_51_p_vs_r_class_weight_C} shows how the
-hyperparameters of the SVMs affect their precision, recall, and $F_1$-score.
+The 5-class SVM had no problem whatsoever in classifying the different classes:
+the lowest $F_1$-score was 0.909, the median was 1, and the maximum was 1.
+There are a few outliers, but the vast majority of 5-class SVMs were easily
+able to separate the classes. The weighted confusion matrices can be seen in
+Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes5}. The
+precision-recall plot can be seen in the appendix (Figure
+\ref{fig:appendix_in_depth_svm_classes5}) as it does not convey much useful
+information due to the good performance of the SVMs.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_51_p_vs_r_class_weight_C}
-    \caption{Left: precision and recall of all SVMs, with the regularization
-    parameter C and class weighting mapped to the colour and marker type
-    respectively. Right: The regularization parameter C plotted against the
-    $F_1$-score of each SVM, with the class weight indicated by the marker
-    shape.}
-    \label{fig:05_in_depth_svm_51_p_vs_r_class_weight_C}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes5}
+    \caption{Weighted confusion matrices of the balanced and unbalanced 5-class
+    SVMs.}
+    \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes5}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-There are two clear clusters formed by the class weighting hyperparameter. This
-hyperparameter determines whether or not each observation is weighted by how
-frequent its class is. Both unbalanced and balanced class weights lead to
+### 50-class SVM Hyperparameter Analysis
+
+Similarly to the 5-class SVMs, the 50-class SVMs performed very well with a
+minimum $F_1$-score of 0.955, a median of 0.974, and a maximum of 0.989.
+
+The precision-recall plot can be seen in the appendix (Figure
+\ref{fig:appendix_in_depth_svm_classes50}) as it does not convey much useful
+information due to the good performance of the SVMs. The regularisation
+coefficient C has minimal impact on the $F_1$-score and whether or not the
+influence of each class was balanced has little impact on the $F_1$-score.
+
+The weighted confusion matrices for the 50-class SVMs can be seen in Figure
+\ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes50}. Both the balanced and
+unbalanced SVMs have a slight bias towards mispredicting the orientation of a
+gestures (as can be seen by the diagonals adjacent to the principle diagonal)
+but otherwise show very good performance.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes50}
+    \caption{Weighted confusion matrices of the balanced and unbalanced 50-class
+    SVMs.}
+    \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes50}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+### 51-class SVM Hyperparameter Analysis
+
+Figure \ref{fig:05_in_depth_svm_classes51} shows how the regularisation
+parameter C and whether or not the observations were weighted by their classes
+frequency impacts the precision, recall, and $F_1$-score of the 51-class SVMs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_classes51}
+    \caption{Left: precision and recall of all 51-class SVMs, with the
+    regularisation parameter C and class weighting mapped to the colour and
+    marker type respectively. Right: The regularisation parameter C plotted
+    against the $F_1$-score of each SVM, with the class weight indicated by the
+    marker shape.}
+    \label{fig:05_in_depth_svm_classes51}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+There are two clear clusters caused by the class weight hyperparameter. This
+hyperparameter determines whether or not each observation is weighted based on
+the frequency of its class. Both unbalanced and balanced class weights lead to
 approximately the same $F_1$-score, but dramatically different precision and
 recall values. Balanced class weights (where the minority classes have greater
 weighting than the majority class) have higher recall but lower precision than
 unbalanced class weights (where all observations are equally weighted).
 
-The regularization parameter C has only a small effect on the $F_1$-score, with
+The regularisation parameter C has only a small effect on the $F_1$-score, with
 values below $10^{-4}$ consistently resulting in a decreased $F_1$-score. This
 effect is independent of class weighting.
 
 To investigate these clusters relating to the class weight hyperparameter,
-Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced} shows the mean confusion
-matrix for both balanced and unbalanced SVMs.
+Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes51} shows the mean
+confusion matrix for both balanced and unbalanced SVMs.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced}
+    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes51}
     \caption{Confusion matrices for SVMs with unbalanced (left) and balanced
-    (right) class weights. Note that the confusion matrices are \emph{not}
-    normalised, which means that the cell in the bottom right corner
-    (corresponding to the ground-truth and predicted class being class 50) is
-    left blank. The value in this cell is so much larger than any other cell
-    that it renders the plot uninformative.}
-    \label{fig:05_in_depth_svm_conf_mats_unbalanced}
+    (right) class weights.}
+    \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes51}
 \end{figure}
 <!-- prettier-ignore-end -->
 
@@ -935,7 +1053,7 @@ SVMs have higher precision.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_prf1_plots_unbalanced}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_prf1_plots_unbalanced}
     \caption{Per-class precision, recall, and $F_1$-score for balanced and
     unbalanced class weight SVMs.}
     \label{fig:05_in_depth_svm_prf1_plots_unbalanced}
@@ -947,43 +1065,39 @@ their mistakes: the balanced SVMs predict too many observations as belonging to
 class 50, and the unbalanced SVMs predict too _few_ observations as belonging
 to class 50.
 
-Figure \ref{fig:05_svm_hpars_vs_fit_time} depicts the time it takes to fit an
-SVM against the hyperparameters Class Weight and C for all SVMs trained on the
-full 51 classes.
+Figure \ref{fig:05_svm_hpars_vs_fit_time} depicts the training and the
+inference time for 51-class SVMs against the hyperparameters C and the class
+weight.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_svm_hpars_vs_fit_time}
-    \caption{Fit times against regularization parameter C for all SVMs trained
-    on 51 classes. Whether or not the observation weights were adjusted is
+    \includegraphics{src/imgs/graphs/05_svm_hpars_vs_fit_time}
+    \caption{Left: Fit times against regularisation parameter C for all SVMs
+    trained on 51 classes. Right: Inference time against regularisation
+    parameter C. Whether or not the observation weights were adjusted is
     indicated by the marker type.}
     \label{fig:05_svm_hpars_vs_fit_time}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-As the regularization parameter C increases, the amount of time required to fit
+As the regularisation parameter C increases, the amount of time required to fit
 the SVM increases to a plateau and then remains constant. The rate of increase
 and the fit time at the plateau are both higher for balanced SVMs than for
 unbalanced SVMs. This follows from the extra computation required to calculate
 and apply a weight to every observation.
 
+There is no relationship between the inference time and the class weight nor
+the inference time and the regularisation coefficient C. This is to be
+expected, as neither hyperparameter is used to perform inference.
+
 ## Feed-forward Neural Networks \label{in-depth-ffnn}
 
-<!--
-TODO
-- Model type
-  - 3x confusion matrices
-  - Discussion of the 5-class classifier performance:
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 50-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 51-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
--->
+Due to the large number of hyperparameters for FFNNs, plots which show no
+relationship between hyperparameters and evaluation metrics will be excluded
+from this chapter. Unabridged figures with all hyperparameters have been placed
+in the Appendix and will be mentioned should the interested reader wish to view
+them, although they will not be necessary for the discussion.
 
 Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
 all FFNNs trained on 5, 50, and 51 classes, weighted by that model's
@@ -1018,10 +1132,10 @@ index 16).
 
 The confusion matrix for the FFNNs trained on 51 classes shows a strong
 principle diagonal. It also shows mispredictions where class 50 was classified
-as one of the other classes $0, \ldots, 49$ as represented by the row at the
+as one of the other classes $0, 1, \ldots, 49$ as represented by the row at the
 bottom of the confusion matrix. There are also a number of mispredictions where
-on of thee classes $0, \ldots, 49$ were classified as class 50, represented by
-the column at the right of the confusion matrix. There are relatively few
+on of the classes $0, 1, \ldots, 49$ were classified as class 50, represented
+by the column at the right of the confusion matrix. There are relatively few
 mispredictions where one gesture class was mispredict as another gesture class.
 
 The precision-recall plot for these FFNNs shows that all FFNNs have a large
@@ -1124,6 +1238,12 @@ higher recall.
 <!-- prettier-ignore-end -->
 
 ## Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
+
+As with the FFNNs, the HFFNNs have many hyperparameters. Plots which show no
+relationship between hyperparameters and evaluation metrics will be excluded
+from this chapter. Unabridged figures with all hyperparameters have been placed
+in the Appendix and will be mentioned should the interested reader wish to view
+them, although they will not be necessary for the discussion.
 
 Figure \ref{fig:05_mean_conf_mat_hffnn} shows the confusion matrices for HFFNN
 models trained on 51 classes. HFFNNs were not trained on 5 or 50 classes, as
