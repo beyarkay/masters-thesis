@@ -1,5 +1,3 @@
-<!-- TODO: Explain how SVMs work -->
-
 This chapter describes various concepts which _Ergo_ utilizes. The relevant
 background information includes different machine learning methods and autocorrect
 techniques.
@@ -21,7 +19,7 @@ Autocorrect is a valuable aid to users operating a virtual keyboard where
 mistakes are common due to the nature of the interface, and so it is integrated
 into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
 
-## Artificial Neural Networks
+# Artificial Neural Networks
 
 Artificial Neural Networks (ANNs) are a form of machine learning that started
 with the development of the perceptron [@Rosenblatt1963PRINCIPLESON], which
@@ -37,7 +35,7 @@ gradients within a neural network is described in subsection
 multi-class classification problems, cross entropy loss, are described in
 subsection \ref{cross-entropy-loss}.
 
-### Perceptrons
+## Perceptrons
 
 A perceptron takes in a finite-dimensional vector of real-valued inputs,
 applies some function, and produces a single real-valued output. Rosenblatt
@@ -118,7 +116,7 @@ The sigmoid activation function can easily be differentiated, a property that
 will become useful when discussing backpropogation in subsection
 \ref{backpropogation}.
 
-### Neural Networks
+## Neural Networks
 
 Individual perceptrons can be combined to form a network of perceptrons where
 the outputs of some perceptrons become the inputs for other perceptrons (see
@@ -210,7 +208,7 @@ sometimes applied to this layer (depending on the problem being solved). The
 intermediate layers between the input and the output are collectively called
 the hidden layers.
 
-### Gradient descent
+## Gradient descent
 
 Given a neural network with the correct number of input, hidden, and output
 neurons for a problem, how does one find the correct values for the many
@@ -272,7 +270,7 @@ machine learning: AdaGrad [@Duchi2011AdaptiveSM] is performant on sparse
 gradients, RMSProp [@RMSProp] works well in non-stationary settings, and Adam
 [@Kingma2014AdamAM] provides good performance with little tuning.
 
-### Backpropogation
+## Backpropogation
 
 Backpropogation is the process of efficiently calculating the gradient of the
 cost function $C(w, b)$ with respect to any weight or bias in the network. It
@@ -461,7 +459,7 @@ This completes one iteration of the gradient descent algorithm. Multiple
 iterations over a large dataset of observations are required in practice for an
 ANN to accurately match some target function.
 
-#### The vanishing gradient problem
+### The vanishing gradient problem
 
 The above equations provide some insight into how an ANN learns. Specifically,
 note that the rate of change of the cost function with respect to any given
@@ -493,7 +491,7 @@ such as using a different activation function like ReLU
 [@Hahnloser2000DigitalSA] or re-centering and re-scaling each layer's inputs
 through a process called Batch Normalization [@Ioffe2015BatchNA].
 
-### Cross entropy loss
+## Cross entropy loss
 
 For multi-class classification problems such as _Ergo_, categorical
 cross-entropy is commonly used as the loss function [@Neal2007PatternRA]:
@@ -520,7 +518,7 @@ infinity.
 
 Note that if the true class is 0, the loss is zero.
 
-## Hidden Markov Models
+# Hidden Markov Models
 
 Hidden Markov Models (HMMs) are a form of machine learning often used to model
 a series of observations over time. HMMs were initially proposed by
@@ -539,7 +537,7 @@ First Markov Models will be discussed in section \ref{markov-models} to provide
 a foundation, and then HMMs will be discussed in section
 \ref{introduction-to-hmms}.
 
-### Markov Models
+## Markov Models
 
 Many problems can be simplified to a sequence of events happening over time.
 Let us simplify further, and require that
@@ -616,7 +614,7 @@ transitioned out of the state of No knowledge, there is no way to go back to
 the state of No knowledge (as represented by the 0.00s in the No knowledge
 column).
 
-#### From transition matrix to state sequence
+### From transition matrix to state sequence
 
 Given a transition matrix $A$ and a Markov Model, one might ask what the
 probability of a specific sequence of states is. We will prove that it is
@@ -673,7 +671,7 @@ then being competent, and finally achieving mastery:
 
 Which should approximately align with intuition.
 
-#### From state sequence to transition matrix
+### From state sequence to transition matrix
 
 Another question one might ask of a Markov model is: given a sequence of states
 ($\bm{z} = \{z_0, z_1, z_2, \ldots, z_t\}$) which we know to have occurred,
@@ -801,7 +799,7 @@ $$
     \text{Intuitively: } \quad \hat{A}_{ij}  = \frac{\text{\# $i\to j$}}{\text{\# $\to i$}}
 $$
 
-### Introduction to HMMs
+## Introduction to HMMs
 
 With the formalism of Markov models understood, we can motivate _hidden_ markov
 models and the additional power they provide.
@@ -862,7 +860,7 @@ a function of our hidden state $\bm{z}$. For this, we make another assumption:
   $B_{a, b} = \pr(b | a)$ given that $b$ is some output value and $a$ is some
   hidden state).
 
-#### What's the probability of observing a certain sequence?
+### What's the probability of observing a certain sequence?
 
 One natural question to ask, given an HMM, is what is the probability that a
 certain sequence of observations was emitted by that HMM. If we assume there
@@ -948,7 +946,7 @@ given in Algorithm \ref{alg:betai}.
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-#### The Viterbi algorithm: What's the most likely series of states for some output?
+### The Viterbi algorithm: What's the most likely series of states for some output?
 
 If we observed a series of outputs from a HMM $x_1, x_2, \ldots, x_T \forall
 x_i \in V$, then what is the sequence of hidden states $z_1, z_2, \ldots, z_T
@@ -1012,7 +1010,7 @@ records the corresponding state sequence. See the procedure in Algorithm
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-#### Most likely parameters for an HMM
+### Most likely parameters for an HMM
 
 Another question we might ask of our HMM is, given a set of observations, what
 values do the transition probabilities $A$ and the emission probabilities $B$
@@ -1094,11 +1092,377 @@ We can now update the parameters of the HMM:
 The above steps can now be repeated until a convergence within some threshold
 is reached.
 
-## CuSum
+# Support Vector Machines
 
-CuSum [@page_continuous_1954] is a sequential method used for change detection.
-Given a time series from an initial distribution, it can alert when the time
-series deviates from the initial distribution by some threshold amount.
+Support Vector Machines (SVMs) are a form of supervised learning that can be
+used for classification and regression. As _Ergo_ is a classification problem,
+only SVM classifiers will be discussed here. SVMs work well in high dimensions
+and perform classifications using a small subset of the training observations,
+so are fast and memory efficient. SVMs do not natively support multi-class
+classification, however this can be implemented via one-vs-rest classification
+which will be discussed in the Methodology chapter, Section
+\ref{models-specifics-svm}. The remainder of this section will describe SVMs as
+used for binary classification tasks.
+
+SVMs learn to distinguish two classes in a dataset by finding a hyperplane
+which will completely separate the two classes. Intuitively, an SVM attempts to
+find a hyperplane which splits the dataset, such that 1) the hyperplane
+maximises the distance to the nearest observation (regardless of the class of
+that observation) and 2) all observations from the same class are on the same
+side of the hyperplane. In the case where the data is not linearly separable
+and thus no hyperplane exists which can separate the classes, a kernel function
+is used to transform the data into a new space in which the classes can be
+linearly separated. Kernel functions will be discussed in section \ref{todo}.
+
+Given a dataset with input vectors (features) $x_i$ and corresponding labels
+$y_i$, where $y_i$ is either -1 or 1, we want to find a hyperplane represented
+by $\bm{w} x + b = 0$. $\bm{w}$ is the weight vector, $x$ is the input
+vector, and $b$ is the bias.
+
+Given an observation $x_i$, the sign of $\bm{w} x_i + b$ will indicate which
+class it belongs to, according to the SVM classifier.
+
+The _margin_ of a SVM is defined as the distance between the hyperplane and the
+nearest data points. In maximising the margin, an SVM is better able to
+generalise to unseen data because it creates a better separation between the
+classes and a greater chance that an unseen data point will be far from the
+hyperplane.
+
+To calculate the value of the margin, recognise first that the margin is equal
+to the distance between the two hyperplanes
+
+$$
+    \bm{w} x - b = -1 \quad \text{(called the negative hyperplane)}
+$$
+
+and
+
+$$
+    \bm{w} x - b = +1 \quad \text{(called the negative hyperplane)}
+$$
+
+If we define $x_0$ as a point in the negative hyperplane such that
+
+$$
+    \bm{w} x_0 - b = -1
+$$
+
+then finding the distance between the parallel
+hyperplanes is the same as finding the distance between $x_0$ and the positive
+hyperplane. We will name this distance $d$.
+
+The unit normal vector of the positive hyperplane is
+
+$$
+    \frac{w}{\|w\|}
+$$
+
+The point in the positive hyperplane closest to the point $x_0$ can be
+calculated as
+
+$$
+    x_0 + d \frac{w}{\|w\|}
+$$
+
+since $d$ is the distance between the hyperplanes
+and $\frac{w}{\|w\|}$ is the direction from the negative hyperplane to the
+positive hyperplane.
+
+We then known that this point in the positive hyperplane satisfies the equation
+
+$$
+    \bm{w} (x_0 + d \frac{w}{\|w\|}) - b = 1
+$$
+
+Expanding and simplifying this equation allows us to calculate the value of $d$
+in terms of $\bm{w}$:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+     \bm{w} (x_0 + d \frac{\bm{w}}{\|\bm{w}\|}) - b  &= 1 \\
+     \bm{w} x_0 - b + d\frac{\bm{ww}}{\|\bm{w}\|}  &= 1 \\
+     -1 + d\frac{\|\bm{w}\|^2}{\|\bm{w}\|} &= 1 \\
+     -1 + d\|\bm{w}\| - b  &= 1 \\
+     -1 &= 1 - d\|\bm{w}\| \\
+     d  &= \frac{2}{\|\bm{w}\|}
+\end{align*}
+<!-- prettier-ignore-end -->
+
+Fitting an SVM is therefore a process of finding $\bm{w}$ and $b$ which
+maximise the margin $\frac{2}{\|\bm{w}\|}$, while ensuring that all
+observations are correctly classified. This can be expressed as an optimisation
+problem like:
+
+$$
+    \min_{\bm{w}, b} ||\bm{w}||^2
+$$
+
+subject to the constraints
+
+$$
+    y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
+$$
+
+However, it often is impossible to perfectly separate the two classes, and it
+is desirable to allow for some misclassifications in the pursuit of a
+separating hyperplane which will generalise better. For these situations, a
+soft margin is introduced which shall allow some misclassification.
+
+For each observation $x_i$, a slack variable $\xi_i$ is defined, which is
+zero if $x_i$ is correctly classified, greater than 1 if it is misclassified,
+and between 0 and 1 if it is correctly classified but is within the SVMs
+margin:
+
+$$
+    \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b))
+$$
+
+The objective function using a soft margin can then be defined with a
+regularisation parameter $C$:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \text{minimize }
+        & \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
+    \text{subject to }
+        &y_i(\mathbf{w}^T x_i + b) \ge 1 - \xi_i \\
+    \text{ and } &\, \xi_i \ge 0, \text{ for all } i.
+\end{align*}
+<!-- prettier-ignore-end -->
+
+<!-- TODO: why is \frac{1}{2} included? -->
+
+$C$ controls the influence misclassifications should have on the hyperplane.
+Larger values for $C$ result in less generalisation but fewer
+misclassifications. Smaller values for $C$ encourage a wider margin (with more
+generalisation) but with more misclassifications.
+
+To solve this constrained optimisation problem, Lagrange multipliers $\alpha_i
+\ge 0$ and $\beta_i \ge 0$ are introduced for the constraints
+$y_i(\mathbf{w}^T x_i + b) \ge 1 - \xi_i$ and $\xi_i \ge 0$ respectively. The
+Lagrangian $\mathcal{L}(\bm{w}, b, \xi, \alpha, \beta)$ is then defined as
+
+<!-- prettier-ignore-start -->
+$$
+\mathcal{L}(\bm{w}, b, \xi, \alpha, \beta) = \frac{1}{2} \|\bm{w}\|^2
+    + C\sum_{i=1}^{n} \xi_i
+    - \sum_{i=1}^{n} \alpha_i[y_i(\bm{w} \cdot \bm{x}_i + b) - 1 + \xi_i]
+    - \sum_{i=1}^{n} \beta_i \xi_i
+$$
+<!-- prettier-ignore-end -->
+
+The corresponding set of Karush-Kuhn-Tucker (KKT) conditions are given by
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \alpha_i & \ge 0 \\
+    y_i(\bm{w} \cdot \bm{x}_i + b) - 1 + \xi_i & \ge 0 \\
+    \alpha_i (y_i (\bm{w} x_i + b) - 1 + \xi_i) & = 0 \\
+    \beta_i & \ge 0 \\
+    \xi_i & \ge 0 \\
+    \beta_i \xi_i & = 0
+\end{align*}
+<!-- prettier-ignore-end -->
+
+Taking the partial derivative with respect to $\bm{w}$, $b$, and $\xi_i$ and
+setting equal to zero, we obtain:
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \frac{\partial \mathcal{L}}{\partial \bm{w}} = 0 \implies &
+        \bm{w} = \sum_{i=1}^n \alpha_i y_i x_i \\
+    \frac{\partial \mathcal{L}}{\partial b} = 0 \implies &
+        0 = \sum_{i=1}^n \alpha_i y_i \\
+    \frac{\partial \mathcal{L}}{\partial \xi_i} = 0 \implies &
+        \alpha_i = C - \beta_i
+\end{align*}
+<!-- prettier-ignore-end -->
+
+We can then obtain the dual Lagrangian in the form
+
+$$
+    \widetilde{\mathcal{L}}(\bm{\alpha}) = \sum_{i=1}^n \alpha_i
+        - \frac{1}{2} \sum_{i=1}^n\sum_{j=1}^n \alpha_i \alpha_j y_i y_j \bm{x}_i^T \bm{x}_j
+$$
+
+---
+
+We will use the following definitions: a dataset of $n$ $p$-dimensional
+feature-vectors $\bm{x} = x_1, \ldots, x_n$ where $x_i \in \Re^p$, and $n$
+corresponding target values $\bm{t} = t_1, \ldots, t_n$ where $t_i \in {-1,
+1}$. $y(\bm{x})$ shall be the output of the SVM, and new data points are
+classified based on the sign of $y(\bm{x})$. Note that with this formulation, a
+correctly classified observation $x_i$ and corresponding label $t_i$ will
+satisfy $t_i y(x_i) > 0$
+
+We can define our hyperplane by the set of points such that a weight vector
+$\bm{w}$ perpendicular to the hyperplane and a bias $b$:
+
+$$
+    \bm{w}^T \bm{x} - b = 0
+$$
+
+The decision function for the SVM, $y(\bm{x})$, is then defined as
+
+$$
+    y(\bm{x}) = \bm{w}^T\bm{x} + b.
+$$
+
+Note that the value $\frac{b}{||\bm{w}||}$ defines the offset of the hyperplane
+from the origin, in the direction along the normal vector $\bm{w}$.
+
+## Hard-margin SVMs
+
+If the data is linearly separable, then there exist two parallel hyperplanes
+that separate the data and contain no observations between them. The usage of
+two parallel hyperplanes (as opposed to one hyperplane which is the maximum
+distance from all points and separates the classes) allows the efficacy of an
+SVM to be judged based on the distance between the two hyperplanes. The
+intuition being that an SVM with hyperplanes that maximally separate the data
+will generalise to unseen data better than one which does not.
+
+We can define these two hyperplanes by the equations
+
+$$
+    \bm{w}^T \bm{x} - b = +1
+$$
+
+and
+
+$$
+    \bm{w}^T \bm{x} - b = -1
+$$
+
+The margin is then defined as the region bounded by these two hyperplanes, and
+the maximum-margin hyperplane is defined as the hyperplane that lies halfway
+between them.
+
+To prevent an observation from being inside the margin, we have to require
+that for each observation $x_i$ either
+
+$$
+    \bm{w}^T x_i - b \ge 1, if t_i = 1
+$$
+
+or
+
+$$
+    \bm{w}^T x_i - b \le -1, if t_i = -1
+$$
+
+which can be simplified as
+
+$$
+    t_i (\bm{w}^T x_i - b) \ge 1.
+$$
+
+Given these constraints, we can construct the optimisation problem as
+
+$$
+    \min_{\bm{w}, b} ||\bm{w}||^2
+$$
+
+subject to the constraints
+
+$$
+    t_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
+$$
+
+The values for $\bm{w}$ and $b$ will fully define the SVM, with a
+classification of an unseen feature vector $x$ as belonging to either class -1
+or class 1 made as:
+
+$$
+    \text{sign}(\bm{w}^T x + b).
+$$
+
+## Soft-margin SVMs
+
+Hard-margin SVMs have the constraint that the classes be linearly separable.
+Soft-margin SVMs remove this constraint by introducing a loss function which
+penalises the amount and number of observations which are on the incorrect side
+of the decision boundary.
+
+Note that $t_i (\bm{w}^T x_i - b)$ is negative when the observation $x_i$ is
+incorrectly classified. The _hinge loss_ function is given by
+
+$$
+    \text{loss}(x_i | \bm{w}, b) = \max(0, 1 - t_i (\bm{w}^T x_i - b))
+$$
+
+And is therefore zero if the observation in question is correctly classified.
+It will be negative if the observation in question is incorrectly classified.
+
+## Solving for the SVM parameters
+
+The method for solving for the parameters $\bm{w}$ and $b$ for a soft-margin
+SVM will be discussed here, as a hard-margin SVM is equivalent to a soft-margin
+SVM with a sufficiently large regularisation parameter $C$.
+
+We seek to minimise the expression
+
+$$
+    \frac{1}{n} \sum_{i=1}^n \max\left(0, 1 - t_i(\bm{w}^T x_i - b)\right)
+    + \frac{1}{C} \|\bm{w}\|^2.
+$$
+
+To rewrite this in a differentiable form, we introduce a _slack variable_
+$\xi_i$ for each observation $x_i$ such that
+
+$$
+    \xi_i = \max(0, 1 - t_i (\bm{w}^T x_i - b))
+$$
+
+This ensures that $\xi_i$ is the smallest non-negative number such that
+$t_i(\bm{w}^T x_i - b) \ge 1 - \xi_i$. The optimisation problem can then be
+rewritten as minimising
+
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \text{minimize }
+        &\frac{1}{n} \sum_{i=1}^n \xi_i + \frac{1}{C} \|\mathbf{w}\|^2 \\
+    \text{subject to }
+        &t_i(\mathbf{w}^T x_i - b) \ge 1 - \xi_i \\
+    \text{ and } &\, \xi_i \ge 0, \text{ for all } i.
+\end{align*}
+<!-- prettier-ignore-end -->
+
+---
+
+The objective of SVMs is to find the hyperplane which maximises the distance to
+the nearest observation while minimising the classification error.
+
+We define a _slack variable_ $\xi_i \ge 0$ for each observation $x_i$. $\xi_i$
+is zero if the observation is on the correct side of the hyperplane, and is the
+perpendicular distance from the observation to the hyperplane otherwise:
+
+$$
+    \xi_i = |t_i - y(x_i)|.
+$$
+
+When the slack variables are incorporated to the loss function, they allow some
+observations to be misclassified if there is an improvement in the decision
+boundary.
+
+We therefore seek to minimise the sum of the slack variables (multiplied by
+some regularization hyperparameter $C > 0$) and the length of the weights $\bm{w}$
+
+$$
+    \frac{1}{2} ||w||^2 + C \sum_{i=1}^n \xi_i.
+$$
+
+Note that as $C \to \infty$ the penalisation for misclassifications increases.
+
+The vector $\bm{w}$ then has the same number of elements as an observation
+$x_i$. Separating the weights $\bm{w}$ from the bias $b$ allows us to interpret
+$\bm{w}$ as a
+
+# Cumulative Sum
+
+Cumulative Sum (CuSUM, @page_continuous_1954) is a sequential method used for
+change detection. Given a time series from an initial distribution, it can
+alert when the time series deviates from the initial distribution by some
+threshold amount.
 
 The method works by keeping track of a cumulative sum and alerting if that
 cumulative sum passes above some threshold value. The threshold value is
@@ -1122,7 +1486,7 @@ The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
 so will be described in detail in the Methodology chapter.
 
-## Support Vector Machines
+# Support Vector Machines
 
 High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
 library for large linear classification.”, Journal of machine learning research
@@ -1140,7 +1504,7 @@ NOTE: I didn't scale the data... It's recommended to scale the data
 
 Different class weights were attempted
 
-## Autocorrect
+# Autocorrect
 
 Autocorrect is a tool used when the nature of the interface means that small
 user errors are common. This is ideal for _Ergo_, as new users may not be
@@ -1196,7 +1560,7 @@ This procedure is given in Algorithm \ref{alg:autocorrect}.
     \Function{SingleEdits}{word}
         \State $\text{letters} \gets \text{`abcdefghijklmnopqrstuvwxyz'}$
         \State $\text{splits} \gets [(word[:i], word[i:]) \mid i \text{ in 0..}(word.length + 1)]$
-        \State $\text{deletions} \gets [L + R[1:] \mid L, R \text{ in } \text{splits} \text{ if } R]$
+        \State $\text{deletions} \gets [L + d[1:] \mid L, R \text{ in } \text{splits} \text{ if } R]$
         \State $\text{transpositions} \gets [L + R[1] + R[0] + R[2:] \mid L, R \text{ in } \text{splits} \text{ if } \text{length}(R) > 1]$
         \State $\text{replacements} \gets [L + c + R[1:] \mid L, R \text{ in } \text{splits} \text{ if } R \text{ for } c \text{ in } \text{letters}]$
         \State $\text{insertions} \gets [L + c + R \mid L, R \text{ in } \text{splits} \text{ for } c \text{ in } \text{letters}]$
@@ -1235,5 +1599,3 @@ This procedure is given in Algorithm \ref{alg:autocorrect}.
     \end{algorithmic}
 
 \end{algorithm}
-
-# References
