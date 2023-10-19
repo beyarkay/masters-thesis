@@ -1,3 +1,9 @@
+<!--
+
+TODO Discuss the difficulties of segmentation and how most of the literature
+does not attempt this.
+-->
+
 This report has presented a suite of sensors which are worn on the user's hands
 and connect to a classifier hosted on the user's computer. This classifier is
 capable of distinguishing 50 unique gestures and using those classifications to

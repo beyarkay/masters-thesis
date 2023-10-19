@@ -9,6 +9,9 @@ keystrokes is described
 <!--
 TODO: Ensure this is fully integrated
 
+TODO: have an explanation that precision/validation/f1 is always on the
+validation set unless otherwise noted.
+
 ## (Some things I'll cover in the Methodology chapter)
 
 Hi Professor, this section will be removed, but I found there were a few times
@@ -51,7 +54,7 @@ need to rework it quite a bit.
 - Gravity is included
 - 10 sensors, 3 axes per sensor
 - 30 dimensional time series, recorded at ~40Hz, about 100 examples per
-  class, 50 classes, 1 majority class (g255), around 230k observations.
+  class, 50 classes, 1 majority class (class 50), around 230k observations.
 - Data segmentation is "implicit": There's no nice labels marking the start
   and end of each gesture, the model has to learn 1. how to extract
   gestures from background and 2. how to differentiate between the
@@ -130,6 +133,7 @@ to the training+validation dataset.
   - Do they just return binary predictions? Log-likelihood predictions?
     Probability prediction? soft-max predictions?
 - Which hyperparameters were tested? (and over what range of values?)
+  - Describe what covariance type is
 - Is this a multi-class classification model? How was it converted into one?
 - Some way of measuring the "volume" of the search space such we can reasonably
   say we've searched each model's search space to the same density.
@@ -137,6 +141,24 @@ to the training+validation dataset.
   observation but could be evaluated on every validation observation.
 - Probably also need to acknowledge those mad lads with the 5000-class HMM
   classifier
+
+The HMM has 30-dimensional Gaussian emissions, such that each state emits a
+30-dimensional vector with a mean vector and covariance matrix which is learnt
+from the data. The mean vector is learnt completely, but the covariance matrix
+for each state can optionally be constrained so as to reduce training times.
+
+[docs](https://hmmlearn.readthedocs.io/en/latest/api.html#gaussianhmm)
+
+From least to most constrained:
+
+- Full covariance matrix: every state uses its own full, unrestricted,
+  covariance matrix.
+- Tied covariance matrix: every state use the same shared, full covariance
+  matrix.
+- Diagonal covariance matrix: each state uses a diagonal covariance matrix.
+  $\bm{\lambda} I$
+- Spherical covariance matrix: each state uses a single variance value that
+  applies to all features (default) $\lambda I$
 
 ## CuSUM
 
@@ -179,7 +201,7 @@ to the training+validation dataset.
 - Some way of measuring the "volume" of the search space such we can reasonably
   say we've searched each model's search space to the same density.
 
-## SVM
+## SVM \label{models-specifics-svm}
 
 - Describe in obscene detail the exact architecture of the HMMs and how they
   ingest observations to finally return predictions.

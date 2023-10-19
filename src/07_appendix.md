@@ -35,3 +35,42 @@ Look at additional Figure \ref{fig:appendix_todo}
     \label{fig:appendix_in_depth_svm_classes50}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_yval_macro_avg_f1_score_hueval_loss_log10}
+    \caption{The $F_1$-score for all 5-class FFNNs plotted against the various
+    hyperparameters.}
+    \label{fig:appendix_ffnn_hpar_analyis_classes5}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_yval_macro_avg_f1_score_hueval_loss_log10}
+    \caption{The $F_1$-score for all 50-class FFNNs plotted against the various
+    hyperparameters.}
+    \label{fig:appendix_ffnn_hpar_analyis_classes50}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes51_yval_macro_avg_f1_score_hueval_loss_log10}
+    \caption{The $F_1$-score for all 51-class FFNNs plotted against the various
+    hyperparameters.}
+    \label{fig:appendix_ffnn_hpar_analyis_classes51}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}
+    \caption{Pairplot of all hyperparameters for 51-class FFNNs.}
+    \label{fig:appendix_hpar_analysis_ffnn_pairplot}
+\end{figure}
+<!-- prettier-ignore-end -->
