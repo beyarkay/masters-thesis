@@ -9,6 +9,13 @@ keystrokes is described
 <!--
 TODO: Ensure this is fully integrated
 
+TODO: Explain how dropout works:
+- it reduces the training loss
+- it is only applied during training
+- during validation, the output is normalised so the output of each layer is
+  the same
+- dropout is applied to the output of each layer
+
 TODO: have an explanation that precision/validation/f1 is always on the
 validation set unless otherwise noted.
 
@@ -222,6 +229,13 @@ the model type's hyperparameter space. A value for each hyperparameter was
 randomly selected (hyperparameters, ranges, and distributions are specified in
 Table \ref{tab:04_hpar_dists}) and then five models were trained with those
 hyperparameters.
+
+<!--
+TODO: need to justify this thoroughly, and explain why grid search wasn't
+feasible. Ideally do some comparison of how "thoroughly" the search space was
+explored with random search, and show how sparse a grid search with the
+equivalent computational budget would have been.
+-->
 
 <!-- prettier-ignore-start -->
 \begin{table}
