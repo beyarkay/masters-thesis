@@ -1,29 +1,7 @@
 <!--
-TODO or open questions:
-
-- Note: report the accuracy when excluding class 50, as most of the literature
-  does this. Discuss the difficulties of segmentation and how most of the
-  literature does not attempt this.
-
-- NOTE: have an explanation that precision/validation/f1 is always on the
-  validation set unless otherwise noted.
-
-TODO: NB very important for entire chapter. All text in images have to be as
-big as the caption text. NB there are many figures in this chapter that do not
-adhere to this. Please rectify....
-
 TODO: add tSNE to appendix
 
-TODO: Export large PCA plot as PNG
-
-TODO: go through src/imgs/graphs/ and order by size, replacing the large PDFs
-with pngs files
-
 TODO remove figures that haven't been referenced.
-
-TODO make sure you remove all references of g255, gesture 255, gesture 50, and
-use class to mean 0..=50 and gesture to mean 0..=49.
-
 
 FIXME: the calculation of the F_1 score contours is wrong for some reason.
 I think it has to do with the weighting of each class. It's only really visible
@@ -1121,7 +1099,7 @@ The weighted confusion matrix for FFNNs trained to classify only 5 classes
 shows very good performance with little bias in its mispredictions.
 
 The weighted confusion matrix for 50 classes also shows very good performance,
-however there is a bias in it's mispredictions as shown by the two diagonals
+however there is a bias in its mispredictions as shown by the two diagonals
 adjacent to the principle diagonal. These two diagonals are offset from the
 principle diagonal by exactly 10 classes, indicating they are gestures where
 the models mispredicted the orientation of the gesture but correctly predicted
@@ -1134,110 +1112,416 @@ The confusion matrix for the FFNNs trained on 51 classes shows a strong
 principle diagonal. It also shows mispredictions where class 50 was classified
 as one of the other classes $0, 1, \ldots, 49$ as represented by the row at the
 bottom of the confusion matrix. There are also a number of mispredictions where
-on of the classes $0, 1, \ldots, 49$ were classified as class 50, represented
+one of the classes $0, 1, \ldots, 49$ were classified as class 50, represented
 by the column at the right of the confusion matrix. There are relatively few
 mispredictions where one gesture class was mispredict as another gesture class.
 
 The precision-recall plot for these FFNNs shows that all FFNNs have a large
-variance in their performance. The 5- and 50-class FFNNs were able to achieve
-$F_1$-scores exceeding 0.95.
+variance in their performance with standard deviations of the $F_1$-score of
+0.395, 0.411, and 0.306 for the 5-, 50-, and 51-class models respectively. The
+maximum performance of the models was 1, 0.997, and 0.772 for the 5-, 50-, and
+51-class models respectively.
 
 ### 5-class FFNN Hyperparameter Analysis
 
-Figure \ref{fig:05_hpar_analysis_ffnn_5_f1_loss} shows the hyperparameters for
-the 5-class FFNNs plotted against their $F_1$-score, with the validation loss
-assigned to the colour of the points. Even models with a moderately low loss
-achieve a high $F_1$-score, indicating the ease with which the FFNNs manage to
-learn the (relatively simple) dataset with only five gestures. A learning rate
-between $10^{-4}$ and $10^{-2}$ appears to be best, with models outside of this
-range performing poorly. Additionally, models with either one or two layers in
-their neural network more frequently performed better than models with three
-layers.
+For 5-class FFNN, the following hyperparameters showed no significant
+relationship with the model's $F_1$-score: dropout rate, L2 coefficient, batch
+size, number of layers, and the number of nodes in any layer. Interested
+readers are referred to Figure \ref{fig:appendix_ffnn_hpar_analyis_classes5}
+for unabridged plot of these hyperparameters.
 
-<!-- TODO there are weird correlations in the data which don't really get
-explained and just ask more questions than they answer -->
+Figure \ref{fig:05_hpar_analysis_ffnn_classes5_lr} shows the learning rate of the
+5-class FFNNs against the model's validation loss and $F_1$-score.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!ht]
+\begin{figure}[!h]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_yval_macro_avg_f1_score_hueval_loss_log10}
-    \caption{The $F_1$-score for all 5-class FFNNs plotted against the various
-    hyperparameters.}
-    \label{fig:05_hpar_analysis_ffnn_5_f1_loss}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_lr}
+    \caption{The learning rate of the 5-class FFNNs against their $F_1$-score
+    (left) and validation loss (right).}
+    \label{fig:05_hpar_analysis_ffnn_classes5_lr}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+It is clear that a learning rate outside of the range $[10^{-4}, 10^{-1.5}]$ is
+either too large or too small for the FFNN to learn the data at all, as models
+with learning rates outside of this range resulted in very high validation loss
+and very low $F_1$-scores. The validation-loss vs learning rate plot makes it
+clear that while being outside of the range $[10^{-4}, 10^{-1.5}]$ makes
+learning the dataset extremely unlikely, being within the aforementioned range
+does not guarantee that the model will learn. The range $[10^{-4}, 10^{-1.5}]$
+is necessary but not sufficient for a 5-class FFNN to perform well on the
+validation dataset.
 
 ### 50-class FFNN Hyperparameter Analysis
 
-Figure \ref{fig:05_hpar_analysis_ffnn_50_f1_loss} shows the $F_1$-score for the
-FFNNs trained on 50 classes against the various hyperparameters for the FFNNs.
-A learning rate outside of the range $[10^{-3.5}, 10^{-2}]$ results in reduced
-$F_1$-score. FFNNs with 3 layers also experienced a reduced $F_1$-score.
+For 50-class FFNN, the following hyperparameters showed no significant
+relationship with the model's $F_1$-score: dropout rate, L2 coefficient, batch
+size, and the number of nodes per layer. Interested readers are referred to
+Figure \ref{fig:appendix_ffnn_hpar_analyis_classes50} for unabridged plot of
+these hyperparameters.
+
+Figure \ref{fig:05_hpar_analysis_ffnn_classes50_lr} shows the learning rate of the
+50-class FFNNs against the model's validation loss and $F_1$-score.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!ht]
+\begin{figure}[!h]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_yval_macro_avg_f1_score_hueval_loss_log10}
-    \caption{todo}
-    \label{fig:05_hpar_analysis_ffnn_50_f1_loss}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_lr}
+    \caption{The learning rate of the 50-class FFNNs against their $F_1$-score
+    (left) and validation loss (right).}
+    \label{fig:05_hpar_analysis_ffnn_classes50_lr}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+As with the 5-class FFNNs, there is a clear range of learning rates
+$[10^{-3.5}, 10^{-1.5}]$ with improved $F_1$-scores and validation losses. This
+range is approximately the same for the 50-class FFNNs as it was for the
+5-class FFNNs, indicating that it is dependant on the dataset as opposed to the
+model architecture. Once again, it's important to note that models with
+learning rates outside of this range were unlikely to fit the data, but even
+models within this range didn't have a guarantee of fitting the data
+successfully. Having a learning rate within the range of $[10^{-3.5},
+10^{-1.5}]$ is necessary but not by itself sufficient for achieving good
+performance in a 50-class model.
+
+In addition to the learning rate, the number of layers in the 50-class network
+has an impact on the performance of the respective FFNN. Figure
+\ref{fig:05_hpar_analysis_ffnn_classes50_nlayers} shows the number of layers in
+the 50-class FFNNs against the model's validation loss and $F_1$-score.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_nlayers}
+    \caption{The number of layers in the 50-class FFNNs against their
+    $F_1$-score (left) and validation loss (right).}
+    \label{fig:05_hpar_analysis_ffnn_classes50_nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Models with one, two, or three layers were all able to learn the data and
+achieve a high $F_1$-score, however this was more frequent with models with one
+or two layers. Models with three layers were also unable to achieve a
+validation loss as low as some of the models with one or two layers. This is
+likely due to the increased complexity of the additional layer.
 
 ### 51-class FFNN Hyperparameter Analysis
 
-Figure \ref{fig:05_in_depth_ffnn_p_vs_r} depicts the precision and recall of
-all FFNN models trained on 51 classes. A cluster is visible in in the recall of
-these FFNN models, centred around a recall of about 0.8.
+<!---                       precision-recall density per nlayers           --->
+
+Figure \ref{fig:05_51ffnn,x=p,y=r,c=nlayers,histplot} shows three
+precision-recall plots, one for each of the 1-, 2-, and 3-layer FFNNs, where
+the colour of each cell represents the number of FFNNs with that combination of
+precision and recall.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_ffnn_p_vs_r}
-    \caption{Precision-recall plot for all FFNNs trained on 51 classes, with
-    the models' $F_1$-scores as contours in grey.}
-    \label{fig:05_in_depth_ffnn_p_vs_r}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=p,y=r,c=nlayers,histplot}}
+    \caption{Caption here}
+    \label{fig:05_51ffnn,x=p,y=r,c=nlayers,histplot}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-<!---
-TODO: Analyze FFNNs hyperparameters more thoroughly, investigate the clusters
+The 1-layer FFNNs have the greatest number of high-performing FFNNs, followed
+by the 2- and then the 3-layer FFNNs. The vast majority of 3-layer FFNNs did
+not manage to fit to the data, achieving nearly zero precision and recall.
 
-To explore:
+<!---                       Number of layers                           --->
 
-- nodes \lt 50 -> not enough capacity to learn?
-- LR too small / too large -> difficulty learning
+Figure \ref{fig:05_51ffnn,x=p,y=r,h=nlayers} shows the precision-recall plot
+for all 51-class FFNNs, coloured based on the number of layers of each FFNN.
 
-Plot pairwise comparisons between the hyperparameters
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=nlayers}
+    \caption{Precision recall plot for all 51-class FFNNs, with the colour of
+    the markers based on the number of layers in that FFNN.}
+    \label{fig:05_51ffnn,x=p,y=r,h=nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
 
-Plot #nodes vs lr vs f1 score
+There are many 1- and 2-layer FFNNs which achieve (or nearly achieve) the
+maximum $F_1$-score. As the best $F_1$-score (0.772) is not significantly
+better than the second-best $F_1$-score (0.767), it is unlikely that further
+exploration of the hyperparameter space would result in significantly better
+performance. If the best $F_1$-score were significantly better than the
+second-best $F_1$-score, then it might be possible to explore the
+hyperparameter space around the best $F_1$-score to find a slightly better
+combination of hyperparameters. However, this is not the case, and the
+proximity of the best and runner up $F_1$-scores indicates that the search
+space around the best found $F_1$-score has been well-searched.
 
-Must thoroughly explain why some models learnt well but others did not.
--->
+There is a cluster of high-performing FFNNs around a recall of 0.8 and a
+precision of 0.6. It might be assumed that this cluster is a result of one
+hyperparameter being in the correct range of values, however this is not the
+case.
 
-To investigate this cluster, Figure
-\ref{fig:05_hpar_analysis_ffnn_classes50_yval_macro_avg_recall_hueval_loss_log10}
-shows the recall of all models trained on the full dataset of 51 classes
-against the hyperparameters for the FFNNs: the dropout rate, the L2
-coefficient, the batch size, the learning rate, the number of layers, and the
-nodes in each layer. Several FFNNs had a validation loss much larger than the
-training loss. These models have been omitted from the analysis. Figure
-\ref{fig:05_hpar_analysis_ffnn_classes50_yval_macro_avg_recall_hueval_loss_log10}
-shows that a learning rate between $10^{-4.5}$ and $10^{-3}$ often leads to a
-higher recall.
+Figure \ref{fig:05_51ffnn,c=hpar,x=hpar,y=recall>70} shows a set of
+plots, with one plot for each hyperparameter for 51-class FFNNs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,c=hpar,x=hpar,y=recall>70}
+    \caption{Set of violin/strip plots with hyperparameter value on the x,
+    recall>0.7 on the y. It shows that there is no hyperparameter range which
+    causes good performance, only those which are necessary but not
+    sufficient.}
+    \label{fig:05_51ffnn,c=hpar,x=hpar,y=recall>70}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The colour of each point informs whether it's recall is greater than 0.7. If
+there were a hyperparameter which could result in a FFNN with a recall greater
+than 0.7, then one would expect the plot for that hyperparameter to contain a
+range where the vast majority of FFNNs have a recall greater than 0.7 and very
+few FFNNs with a recall less than 0.7. However this is not the case. There do
+appear to be a few hyperparameters which are necessary for a FFNN to achieve a
+recall greater than 0.7 (learning rate, number of nodes in the first layer, the
+number of layers). However there are no hyperparameters which are _sufficient_
+for a FFNN to achieve a recall greater than 0.7.
+
+<!---                       LR vs npl1                           --->
+
+Figure \ref{fig:05_51ffnn_x=lr,y=npl1,h=f1} shows the learning rate of all
+51-class FFNNs against the number of nodes in layer 1, with the colour of each
+point indicating the validation $F_1$-score of that FFNN.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn_x=lr,y=npl1,h=f1}
+    \caption{The learning rate against the number of nodes in the first layer
+    of all 51-class FFNNs. Note that a small amount of random noise has been
+    applied to the hyperparameters (but not the $F_1$-score). As each set of
+    hyperparameters was trained five times, this prevents five points (which
+    have identical hyperparameters) being plotted directly on top of one
+    another.}
+    \label{fig:05_51ffnn_x=lr,y=npl1,h=f1}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+One can see a "V" shape of high-$F_1$-scoring FFNNs. This indicates that FFNNs
+with a smaller number of nodes in their first layer require the learning rate
+to be in a more precise range of values when compared to FFNNs with a larger
+number of nodes in the first layer.
+
+It can also be seen that FFNNs with more nodes in their first layer were more
+likely to have a higher recall than FFNNs with fewer nodes, so long as the
+learning rate was in the required range. FFNNs with a recall greater than 0.74
+generally had more than 31 ($10^{1.5}$) nodes in their first layer and had a
+learning rate in the range $[10^{-4}, 10^{-3}]$.
+
+<!---                    precision-recall hue=nlayers                      --->
+
+Figure \ref{fig:05_51ffnn,x=p,y=r,h=nlayers} showed that the cluster of
+performant FFNNs with a recall greater than 0.7 contains FFNNs with 1-, 2-, and
+3-layers. To analyse this cluster of performant FFNNs, Figure
+\ref{fig:05_51ffnn,x=p,y=r,h=lr,c=nlayers} plots the precision and recall for
+1-, 2-, and 3-layer FFNNs, with the colour of the point indicating the learning
+rate.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=lr,c=nlayers}
+    \caption{todo}
+    \label{fig:05_51ffnn,x=p,y=r,h=lr,c=nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+For FFNNs with the same number of layers, the precision-recall plots generally
+form tight clusters of similarly performant FFNNs.
+
+The 1-layer FFNNs generally required a learning rate in the range $[10^{-2.5},
+10^{-4.5}]$ in order to achieve a high $F_1$-score, although a learning rate
+in this range did not guarantee a high $F_1$-score.
+
+Looking at the 2-layer FFNNs with a recall greater than 0.7, there are two
+clusters in the precision-recall plot. The one cluster has a learning rate in
+the narrow range of $[10^{-4.75}, 10^{-3.75}]$, and the other cluster has a
+learning rate either significantly greater (around $10^{-5}$) or significantly
+lower (around $10^{-2.75}$) than the first. The learning rate of the 2-layer
+FFNNs has a large impact on the $F_1$-score of the 2-layer FFNNs, and a
+learning rate outside of the range $[10^{-4.75}, 10^{-3.75}]$ is likely to
+result in poor performance.
+
+The 3-layer FFNNs have a similar range of values for the learning rate which
+result in good performance: $[10^{-4}, 10^{-3}]$. There is no bimodality as was
+seen in the 2-layer FFNNs. The 3-layer FFNNs achieve a higher recall (0.933)
+than the 1-layer (0.865) and the 2-layer (0.921) FFNNs, although their
+$F_1$-score is worse (0.742 for the 3-layer FFNNs, compared against 0.772 for
+the 1-layer FFNNs and 0.739 for the 2-layer FFNNs). It should be noted that as
+the number of layers increased, the median $F_1$-score decreased substantially
+(0.593 for 1-layer, 0.197 for 2-layer, and 0.019 for 3-layer FFNNs) due to an
+increasing number of FFNNs which were failing to learn as the number of layers
+increased.
+
+It is possible that the ranges of hyperparameters for which 2- and 3-layer
+FFNNs can successfully learn the data is outside of the ranges selected for
+experimentation. If the optimal hyperparameter values are close enough to the
+existing bounds for the hyperparameter ranges, then one would expect to see
+optimal performance when the hyperparameters are on this bound. However, this
+is not the case, <!-- TODO: Figures to back this point up --> and it is
+therefore likely that the FFNNs with 2 and 3 layers are less efficient at using
+the fixed computational budget to learn the dataset.
+
+<!---       learning rate vs f1-score and number of nodes in last layer               --->
+
+Figure \ref{fig:05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers} shows the learning rate
+and the number of nodes in the last layer of the 1-, 2-, and 3-layer FFNNs,
+with the point's colour indicating the $F_1$-score of the FFNN.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers}
+    \caption{todo}
+    \label{fig:05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+From this figure the impact of the learning rate and the number of nodes in the
+last layer is clear. If the learning rate is in the correct range, then
+increasing the number of nodes in the last layer of the FFNN very frequently
+resulted in an improvement in the $F_1$-score. Indeed, there are very few
+instances where the best performing model for a given learning rate is not also
+the model with the greatest number of nodes in its last layer.
+
+<!---                       Nodes per layer 1/2/3 vs F_1                      --->
+
+Figure \ref{fig:05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers} shows the number of
+nodes in each layer against the $F_1$-score of the 51-class FFNNs with 1, 2,
+and 3 layers.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers}
+    \caption{caption todo}
+    \label{fig:05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+For the 1-layer FFNNs, one can see that increasing the number of nodes in the
+singular layer generally improves performance, although the number of nodes in
+the singular layer is not the sole cause of good performance.
+
+This trend is largely continued with the 2-layer FFNNs. One can see that the
+majority of performant FFNNs had many nodes in both layer one and in layer two.
+There are several instances of FFNNs with many nodes in layer 1 but few in
+layer 2, or many nodes in layer 2 but few nodes in layer 1; these FFNNs mostly
+did not perform well.
+
+It is likely that this trend of more nodes resulting in better performance
+would not continue without bound. The range for the number of nodes in layers
+one and two were likely too stringent, and a higher bound should have been
+imposed, allowing for FFNNs with more nodes in their first and second layers.
+
+The 3-layer FFNNs are trickier to analyse due to the number of layers. Overall,
+there are fewer performant FFNNs with three layers than there were with one or
+two layers. Looking at the plot of the number of nodes in layer 1 against the
+number of nodes in layer 2, there is a negatively-sloped region from the top
+left to the bottom right of the plot which contains a disproportionate number
+of the high-$F_1$-score FFNNs. This indicates that 3-layer FFNNs with too many
+or too few nodes in _either_ their first or second layer do not perform well.
+An increase in the number of nodes in the first layer will reduce the
+performance of a 3-layer model if there is not a commensurate decrease in the
+number of nodes in the second layer. There is a similar pattern in the plot
+describing the number of nodes in the second and third layer for 3-layer FFNNs,
+where the number of nodes in layer three can only be high if the nodes in layer
+2 is low, and vice versa.
+
+This would imply that the performant 3-layer FFNNs trace a line through the
+3-dimensional hyperparameter space that has the number of nodes per layer as
+it's dimensions. This line would go from the point of many nodes in layers 1
+and 3 with few nodes in layer 2 to the point of few nodes in layers 1 and 3
+with many nodes in layer 2.
+
+This hypothesis is backed up by the 3 dimensional plot in Figure
+\ref{fig:05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1} which shows all the 3-layer
+FFNNs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1}
+    \caption{All 51-class 3-layer FFNNs with the number of nodes in each layer
+    assigned to the x, y, and z axis. The colour of each point represent the
+    $F_1$-score of that FFNN.}
+    \label{fig:05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The plot has been oriented so that the line of performant FFNNs is
+orthogonal to the camera viewport. One can see that the performant FFNNs are
+clustered in the centre of the 3D plot, with the low-$F_1$-score FFNNs
+surrounding them.
+
+This narrow line of performant 3-layer FFNNs is in contrast to what was seen
+with the 1- and 2-layer FFNNs where so long as the number of nodes was above
+some threshold, the performance would be good. This reinforces the hypothesis
+that the upper bound chosen for the number of nodes in each layer was too low,
+and that increasing this bound would have seen the performance possibly
+increase before reducing as the number of nodes became too great.
+
+<!---                       Regularisation                      --->
+
+Figure \ref{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers} shows the dropout rate
+against the $F_1$-score for the 1-, 2-, and 3-layer FFNNs, with the colour of
+each point indicating the L2 coefficient.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_yval_macro_avg_recall_hueval_loss_log10}
-    \caption{Hyperparameters for FFNNs trained on 51 classes, compared against
-    their recall. Note that some hyperparameters were sampled from a
-    $\log_{10}$ distribution and are therefore plotted over that same
-    distribution.}
-    \label{fig:05_hpar_analysis_ffnn_classes50_yval_macro_avg_recall_hueval_loss_log10}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}}
+    \caption{Caption here}
+    \label{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+The dropout rate has little to no effect on the 1-layer FFNNs, while the 2- and
+3-layer FFNNs generally benefit from a low dropout rate. For the 2- and 3-layer
+FFNNs, a low dropout rate was not the sole factor which resulted in a high
+$F_1$-score, however having a high dropout rate rarely resulted in high
+$F_1$-scores. The L2 coefficient had little impact on the $F_1$-scores of any
+of the FFNNs, with no range of L2 coefficient showing superior performance.
+
+Figure \ref{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers} shows the
+dropout rate against the number of nodes in the last layer for the 1-, 2-, and
+3-layer FFNNs, with the colour of each point indicating the $F_1$-score.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}}
+    \caption{Caption here}
+    \label{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Since increasing the dropout rate has the effect of suppressing the output of a
+random subset of nodes in each layer, one might expect that FFNNs with a high
+dropout rate would require a large number of nodes in order to achieve good
+performance. This can be seen to some extent in the plot for 1-layer FFNNs, in
+which FFNNs with a low dropout rate only achieve a high $F_1$-score if they
+also have a low number of nodes in their singular layer. There are no 1-layer
+FFNNs which simultaneously have a high dropout rate, few nodes in their
+singular layer, and a high $F_1$-score. One can see that an increase in the
+dropout rate usually requires an increase in the number of nodes in the
+singular layer for the FFNN to maintain a high $F_1$-score.
+
+The 2- and 3-layer FFNNs both show behaviour whereby a FFNN performs well if it
+has a low dropout rate and a high number of nodes in its final layer. This
+behaviour is less distinct for the 3-layer FFNNs, which is to be expected as
+the extra layer introduces more complexity into its performance characteristics.
 
 ## Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
+
+<!-- TODO do a proper hpar analysis here -->
 
 As with the FFNNs, the HFFNNs have many hyperparameters. Plots which show no
 relationship between hyperparameters and evaluation metrics will be excluded
@@ -1265,84 +1549,33 @@ of each HFFNN.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-HFFNNs perform well, however there are feint offset diagonals showing a
-tendency to mispredict the orientation of a gesture.
+HFFNNs perform well, however there are faint offset diagonals showing a
+tendency to mispredict the orientation of a gesture. There are also a large
+number of misclassifications where class 50 was predicted as one of the other
+gesture classes. This type of misclassification lowers the precision of the
+models, as can be seen on the precision-recall plot in Figure
+\ref{fig:05_mean_conf_mat_hffnn}.
 
-### 5-class HFFNN Hyperparameter Analysis
-
-### 50-class HFFNN Hyperparameter Analysis
+The HFFNN is made up of two FFNNs. The first FFNN, which is a binary classifier
+that detects if a gesture is present in an observation, is called the majority
+classifier as it detects the majority class, class 50. The other classifier is
+called the minority classifier, as it distinguishes between the remaining
+minority classes.
 
 ### 51-class HFFNN Hyperparameter Analysis
 
-<!--
-TODO
-- Model type
-  - 3x confusion matrices
-  - Discussion of the 5-class classifier performance:
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 50-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
-  - Discussion of the 51-class classifier performance
-    - What hpars work well?
-    - Is the model learning the data?
+<!--- TODO
+Currently the "perfect" decision rules first achieve perfect recall and then
+try achieve perfect precision.
+
+- Try make a perfect set of decision rules which first achieve perfect
+  precision and then achieve perfect recall.
+
+Also look at a decision rule that first splits by number of layers and then
+splits by other values.
 -->
 
-Figure \ref{fig:05_in_depth_hffnn_p_vs_r} shows the precision and recall for
-all HFFNN models trained on the full 51 class dataset. Both precision and
-recall have a large variance, which is likely due to the volume of the
-hyperparameter search space.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_p_vs_r}
-    \caption{Precision-recall plot for all HFFNN models trained on 51
-    classes, with the models' $F_1$-scores as contours in grey. Note that the
-    scales of the axes have been adjusted to better show the data.}
-    \label{fig:05_in_depth_hffnn_p_vs_r}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-As an HFFNN is made of two classifiers, the hyperparameters for the majority
-classifier (which detects if there is a gesture in the observation) and the
-minority classifier (which classifies gestures, given that there is a gesture
-in the observation) will be discussed sequentially. Figure
-\ref{fig:05_in_depth_hffnn_majority_hpars} shows the hyperparameters for the
-majority classifier. There are no clear patterns between the hyperparameters of
-the majority classifier and the HFFNN's $F_1$-score.
-
-<!--
-TODO: Do a proper analysis of the hyperparameters for majority and minority HFFNN
--->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_majority_hpars}
-    \caption{$F_1$-score against all hyperparameters for the majority
-    classifier in every HFFNN.}
-    \label{fig:05_in_depth_hffnn_majority_hpars}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-Figure \ref{fig:05_in_depth_hffnn_minority_hpars} shows the hyperparameters for
-the minority classifier against the $F_1$-score for each HFFNN.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hffnn_minority_hpars}
-    \caption{$F_1$-score against all hyperparameters for the minority
-    classifier in every HFFNN.}
-    \label{fig:05_in_depth_hffnn_minority_hpars}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-The learning rate of the minority classifier reveals that the $F_1$-score is
-higher in the range between $10^{-4}$ and $10^{-3}$ compared to the surrounding
-regions.
+<!-- TODO: Distribution of the hyperparameters [plots thereof] -->
 
 # Which model performs the best with 51 classes? \label{best-model}
 
@@ -1417,7 +1650,7 @@ five times.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_comparison_per_model_type}
+    \includegraphics{src/imgs/graphs/05_hpar_comparison_per_model_type}
     \caption{$F_1$-score for each model type on each set of hyperparameters
     that were tested. The hyperparameter index is a unique number assigned to
     each set of hyperparameter-model type combinations. The black horizontal
@@ -1440,18 +1673,15 @@ testing data.
 
 One can clearly see from Figure \ref{fig:05_hpar_comparison_per_model_type}
 that the FFNNs, the HFFNNs, and the SVMs all perform well. Figure
-\ref{fig:05_best_hpar_comparison} shows only those models where the lower bound
-of the 90% confidence interval for the $F_1$-score is above 0.6, making it
-clear which hyperparameter combinations performed the best.
+\ref{fig:05_best_hpar_comparison} shows the best performing 41 hyperparameters.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_best_hpar_comparison}
-    \caption{Performance of hyperparameter combinations where the lower bound
-    of the 90\% confidence interval of the $F_1$-score is above 0.6. The black
-    horizontal markers indicate the mean performance, and each dot indicates
-    the performance on run.}
+    \includegraphics{src/imgs/graphs/05_best_hpar_comparison}
+    \caption{Performance of hyperparameter combinations for the best performing
+    41 hyperparameters. The black horizontal markers indicate the mean
+    performance, and each dot indicates the performance on run.}
     \label{fig:05_best_hpar_comparison}
 \end{figure}
 <!-- prettier-ignore-end -->
