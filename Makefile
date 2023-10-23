@@ -18,8 +18,8 @@ md_to_tex:
 
 combine: md_to_tex
 	trash main.aux main.lof main.log main.lot main.out main.toc
-	pdflatex -draftmode tex/main.tex # First compile all the labels and references
-	pdflatex tex/main.tex -o main.pdf # Then compile the document to be linked
+	pdflatex -halt-on-error -draftmode tex/main.tex # First compile all the labels and references
+	pdflatex -halt-on-error tex/main.tex -o main.pdf # Then compile the document to be linked
 	echo "file://$$(pwd)/main.pdf"
 
 report:
