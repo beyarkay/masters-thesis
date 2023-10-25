@@ -1,27 +1,20 @@
 <!--
-TODO: add tSNE to appendix
 
-TODO remove figures that haven't been referenced.
+TODO: lots of the models achieve near-zero but not actually zero $F_1$-score.
+This is probably because they're just predicting everything is class 50
 
-FIXME: the calculation of the F_1 score contours is wrong for some reason.
-I think it has to do with the weighting of each class. It's only really visible
-near precision ~= 0 or recall ~= 0. Maybe this would be fixed if we used micro
-avg instead of macro avg? Regardless, the macro avg f1-score _cannot_ be
-calculated from the macro avg precision and macro avg recall.
+TODO: Residual analysis of the best performing models
 
-```py
-sns.scatterplot(
-    data=df.assign(**{
-        'calc_f1-score': lambda ddf: 2 * (ddf['val.macro avg.precision'] * ddf['val.macro avg.precision']) / (ddf['val.macro avg.recall'] + ddf['val.macro avg.recall'])
-    }),
-    x='val.macro avg.f1-score',
-    y='calc_f1-score',
-    hue='preprocessing.num_gesture_classes',
-    size=.5,
-    alpha=0.5,
-    edgecolor=None,
-)
-```
+TODO: Evaluation of autocorrect
+
+TODO: Add tSNE to appendix
+
+TODO Remove figures that haven't been referenced.
+
+TODO: emphasise that "50-class classification" is a very different beast to
+"51-class classification", and that the former shows performance comparable to
+other methods in the literature, while the later represents state of the art,
+in terms of gesture detection _and_ classification.
 -->
 
 This chapter will discuss the results obtained from the experiments described
@@ -31,9 +24,12 @@ analysis done in Section \ref{dataset-description}. Section
 and explore their performance characteristics, so as to better understand
 common failure cases for the dataset at hand. Section \ref{model-justification}
 will justify the choice of models which were evaluated in this thesis. The
-performance of each model is described in subsections \ref{in-depth-ffnn},
-\ref{in-depth-hmm}, \ref{in-depth-cusum}, \ref{in-depth-hffnn}, and
-\ref{in-depth-svm}.
+performance of each model is described in subsections
+\ref{in-depth-cusum} (CuSUM),
+\ref{in-depth-hmm} (HMMs),
+\ref{in-depth-svm} (SVMs),
+\ref{in-depth-hffnn} (HFFNNs), and
+\ref{in-depth-ffnn} (FFNNs).
 
 Section \ref{best-model} looks at all trained models on the full dataset and
 evaluates their performance. As _Ergo_ requires real-time inference, Section
@@ -41,9 +37,9 @@ evaluates their performance. As _Ergo_ requires real-time inference, Section
 Section \ref{ratio-comparison} assesses the training and validation performance
 of each model as an indicator of the model's susceptibility to overfitting on
 the training data, which, in turn, could lead to subpar performance on unseen
-observations. Section \ref{real-world-data} evaluates each model on a
-real-world dataset of English-language typing data. Finally, Section
-\ref{test-set-eval} evaluates the best performing model on the unseen test set.
+observations. Section \ref{test-set-eval} evaluates the best performing model
+on the unseen test set. Finally, Section \ref{real-world-data} evaluates each
+model on a real-world dataset of English-language typing data.
 
 # Dataset Description
 
@@ -81,27 +77,27 @@ user's hands as a single gesture is being performed.
         \end{subfigure} \\
         \hline
     \end{tabular}
-    \caption{Video frames showing gesture number 16 being performed, in which
-    both hands are oriented at $45^\circ$ and the right hand's index finger
-    flexes.}
+    \caption{Video frames showing gesture 16 being performed, in which both
+    hands are oriented at $45^\circ$ and the right hand's index finger flexes.}
     \label{tab:05_gesture0016}
 \end{table}
 <!-- prettier-ignore-end -->
 
 _Ergo_ can recognise 50 gesture classes and one non-gesture class. The
 non-gesture class is used to represent the empty durations in-between gestures
-during which the user's hands may be still, the transitioning period which
-occurs after one gesture ends and another begins. The 50 gesture classes are
-numbered from 0 to 49, and the software powering _Ergo_ takes care of
-converting a predicted gesture class into a keystroke via a user-configurable
-gesture-to-keystroke mapping. The non-gesture class is numbered as gesture 50.
+during which the user's hands may be still: the transitioning period from the
+end of one gesture to the start of the next. The 50 gesture classes are
+numbered from 0 to 49. The non-gesture class is numbered as class 50 The
+software powering _Ergo_ takes care of converting a class prediction in the
+range $[0, \ldots 50]$ into a keystroke (any UTF8 character) via a
+user-configurable gesture-to-keystroke mapping.
 
 The motion for each gesture is defined as the Cartesian product of a finger
-motion and a hand orientation. There are 10 finger motions, one for each finger
-flexing towards the palm of the user's hand. There are five orientations, which
-define the angle both hands make with the horizon: $0^\circ, 45^\circ,
-90^\circ, 135^\circ, 180^\circ$. The way in which these 10 fingers and 5
-gestures combine to make 50 gestures is described in Table
+motion and a hand orientation. There are 10 finger motions: each motion defines
+one finger flexing towards the palm of the user's hand. There are five
+orientations: each defines the angle both hands make with the horizon, and are
+$0^\circ, 45^\circ, 90^\circ, 135^\circ, 180^\circ$. The way in which these 10
+fingers and 5 gestures combine to make 50 gestures is described in Table
 \ref{tab:05_gestures}.
 
 <!-- prettier-ignore-start -->
@@ -109,7 +105,7 @@ gestures combine to make 50 gestures is described in Table
     \centering
     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
         \hline
-        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
+        & \multicolumn{5}{|c|}{Left Hand} & \multicolumn{5}{c|}{Right Hand} \\
         \hline
         & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
         \hline
@@ -138,10 +134,15 @@ gestures combine to make 50 gestures is described in Table
 As previously mentioned, these 50 gestures are mapped to keystrokes via a
 gesture-to-keystroke mapping. The default mapping is shown in Table
 \ref{tab:05_keystrokes}, which has the same layout as Table
-\ref{tab:05_keystrokes} to allow for easy comparison. The similarity in the
-layout of the gestures to the English QWERTY keyboard allows for a new user to
-easily learn which gestures map to which keystrokes. A hand orientation of
-$90^\circ$ corresponds to the "home row" of a QWERTY keyboard.
+\ref{tab:05_gestures} to allow for easy comparison.
+
+The gestures are defined in a manner that is similar to the English QWERTY
+keyboard. For example, the gestures with an orientation of $90^\circ$ are
+ordered in the same way as the keys on the home row of the QWERTY keyboard.
+Flexing one's left little finger with an orientation of $90^\circ$ is the same
+as using ones left little finger on the home row of the QWERTY keyboard: both
+result in the keystroke "a". This allows new users to easily learn which
+gestures map to which keystrokes.
 
 <!-- prettier-ignore-start -->
 \begin{table}[h]
@@ -173,16 +174,17 @@ $90^\circ$ corresponds to the "home row" of a QWERTY keyboard.
 
 As the user performs gestures with _Ergo_, the sensor data is recorded and
 stored to disk. A snapshot of these recordings is visible in Figure
-\ref{fig:05_sensors_over_time_3230_30} which shows $\frac{3}{4}$ of a second during
-which gesture 8 (right ring finger flexion with the hands at $0^\circ$,
-\texttt{\`}) was made. During this period, the orientation of the hands
-remained relatively stable as can be seen by how the majority of the sensors
-recorded relatively stable values.
+\ref{fig:05_sensors_over_time_3230_30}, which shows 0.75 seconds of sensor
+data, during which gesture 8 was made. During this period, the orientation of
+the hands remained relatively stable as can be seen by how the majority of the
+sensors recorded relatively stable values.
+
+<!-- TODO: re-create this graphic to be the correct size -->
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_sensors_over_time_3230_30}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_sensors_over_time_3230_30}
     \caption{A snapshot of the sensor values as gesture 8 was being performed.
     The line plot and heatmap show the same data. The lines on the line plot
     are coloured based on the axis of the sensor: X-axis in red, Y-axis in
@@ -198,10 +200,11 @@ Figure \ref{fig:05_sensors_over_time_3230_3200} shows a greater period of time,
 hands changed multiple times. This can be seen by the long-term changes in
 the majority of the sensor values.
 
+<!-- TODO: re-create this graphic to be the correct size -->
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_sensors_over_time_3230_3200}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_sensors_over_time_3230_3200}
     \caption{This plot shows the sensor values over a longer period of time,
     similar to Figure \ref{fig:05_sensors_over_time_3230_30}. Note that there
     are very brief spikes of acceleration interspersed with long periods of
@@ -212,19 +215,20 @@ the majority of the sensor values.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-_Ergo_ can be defined as a 51-class classification problem with a highly
-imbalanced class distribution (see Figure \ref{fig:05_class_imbalance}). During
-training, the number of gestures performed per second is never greater than 2.
-Given a data capture frequency of 40 times per second, this means that there
-are at least 19 non-gesture labels for every gesture label, and that gesture
-label is one of 50 possible gesture labels. This leads to a class balance of
-about 97.6% of the data belonging to the non-gesture class, with the remaining
-2.4% of the data divided approximately evenly between the 50 gesture classes.
+The classification problem encountered by _Ergo_ can be described as a 51-class
+classification problem with a highly imbalanced class distribution (see Figure
+\ref{fig:05_class_imbalance}). There are never more than 2 gestures performed
+per second. Given a data capture frequency of 40 times per second, this means
+that there are at least 19 non-gesture labels for every gesture label, and that
+gesture label is one of 50 possible gesture labels. This leads to a class
+balance of about 97.6% of the data belonging to the non-gesture class, with the
+remaining 2.4% of the data divided approximately evenly between the 50 gesture
+classes.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_class_imbalance}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_class_imbalance}
     \caption{Bar plots showing class imbalance. Class 50 occupies about 97\% of
     the data}
     \label{fig:05_class_imbalance}
@@ -237,47 +241,45 @@ clearly showing significant accelerations, but many other fingers are also
 measuring accelerations. Note how the right hand is largely static, except the
 orientation of the hand is varied.
 
-<!-- TODO: Make this plot have properly sized plot titles -->
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_example_g0011_plot}
-    \caption{All observations for gesture 11, laid on top of one another with
-    one plot per sensor.}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_example_g0011_plot}}
+    \caption{All observations for gesture 11, laid on top of one another. Each
+    plot represents the sensor values over time for one sensor.}
     \label{fig:05_example_g0011_plot}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-Figure \ref{fig:05_pca_plot} shows two PCA plots of the training data. The left
-plot does not include the non-gesture class, while the bottom plot does. There
-is reasonable separation between the gestures (as can be seen from the diagonal
-streaks of colour). However, the bottom plot shows that the non-gesture class
-has significant overlap with every other gesture, making it likely that a model
-will easily distinguish the different gestures but struggle to distinguish the
-gesture classes from the non-gesture class.
+Figure \ref{fig:05_pca_plot} shows a Principal Component plot of the training
+data. There is reasonable separation between the gestures (as can be seen from
+the diagonal streaks of colour). However, gesture 50 (in black) is less
+distinct, making it likely that a model will easily distinguish the different
+gestures but struggle to distinguish the gesture classes from the non-gesture
+class. While this two-dimensional analysis is not a very sophisticated
+technique, it does show that separating the gesture classes from one another is
+easier than separating the gestures classes from the non-gesture class is much
+trickier.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_pca_plot}
-    \caption{Plot of the Principal Components of the training data. Left: All
-    gesture observations, with the orientation of the gesture mapped to the
-    colour and the finger used for the gesture mapped to the marker. L5 and R5
-    are the left and right little fingers, L1 and R1 are the left and right
-    thumbs. Right: The same observations, but with class 50 plotted in black.
-    Note how the gesture classes are easily separated, but the non-gesture
-    class is not easily separated from the gesture classes.}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_pca_plot}}
+    \caption{Principal Components of the training data, with the orientation of
+    the observation mapped to the colour and the finger used for the gesture
+    mapped to the marker. Class 50 is plotted in black. Note how the gesture
+    classes are easily separated, but class 50 is not easily separated from the
+    gesture classes.}
     \label{fig:05_pca_plot}
 \end{figure}
 <!-- prettier-ignore-end -->
-
-<!-- TODO It is more standard to use t-sne here.-->
 
 # Comparison of hypothetical models
 
 In this section, several hypothetical models are defined and their performance
 examined. These hypothetical models have been chosen so as to provide some
-intuition about common pitfalls encountered by real models.
+intuition about common pitfalls encountered by real models. All confusion
+matrices (in all sections) are normalised such that their columns sum to one.
 
 Figure \ref{fig:05_pr_conf_mat_random_preds} shows the precision-recall graph
 and confusion matrix of a classifier that predicts every observation according
@@ -286,7 +288,7 @@ to a uniform random distribution.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_random_preds}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_random_preds}
     \caption{Precision-recall graph and confusion matrix of a classifier that
     predicts completely randomly.}
     \label{fig:05_pr_conf_mat_random_preds}
@@ -304,12 +306,14 @@ The highly imbalanced nature of the dataset permits a naïve classifier to
 achieve 97.6% accuracy by always predicting the non-gesture class. Figure
 \ref{fig:05_pr_conf_mat_only_50} shows the confusion matrix and
 precision-recall graph of such a classifier, which has an $F_1$-score of
-0.00164.
+0.00164. Note the column on the far right of the confusion matrix, indicating
+that every class was predicted as being class 50. It is a common mistake for
+real models to predict that a gesture class belongs to class 50.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_only_50}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_only_50}
     \caption{Precision-recall graph and confusion matrix of a classifier that
     only predicts the non-gesture class, class 50.}
     \label{fig:05_pr_conf_mat_only_50}
@@ -323,16 +327,18 @@ but uniformly random in all other aspects.
 
 Figure \ref{fig:05_pr_conf_mat_wrong_orientation} shows the precision-recall
 plot and confusion matrix for 30 classifiers that correctly predict the finger
-and which hand is being used, but incorrectly predicts the orientation of the
-hand. The non-gesture class is always predicted perfectly. Note the
-characteristic diagonals, representing how any given gesture might be predicted
-by these classifiers as one of five gestures, corresponding to the five
-orientations. The mean $F_1$-score for these classifiers is 0.212.
+and hand being used, but incorrectly predicts the orientation of the hand. The
+non-gesture class is always predicted perfectly. Note the characteristic
+diagonals, representing how any given gesture might be predicted by these
+classifiers as one of five gestures, corresponding to the five orientations.
+The mean $F_1$-score for these classifiers is 0.212. It is common for real
+models to mispredict the orientation of a gesture (resulting in similar
+diagonal patterns) but correctly predict the finger being used.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_orientation}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_wrong_orientation}
     \caption{Precision-recall graph and confusion matrix of a classifier that
     is perfect at predicting the finger being used, but always errs when
     predicting the orientation of the hand.}
@@ -351,7 +357,7 @@ other fingers on that hand). The mean $F_1$-score for these classifiers is
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_pr_conf_mat_wrong_finger_correct_hand}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_pr_conf_mat_wrong_finger_correct_hand}
     \caption{Precision-recall graph and confusion matrix of a classifier that
     correctly predicts the orientation and hand being used for a gesture, but
     incorrectly predicts the finger being used.}
@@ -364,9 +370,9 @@ other fingers on that hand). The mean $F_1$-score for these classifiers is
 Several different classification algorithms were evaluated. The chosen
 classification algorithms were selected if they are often used in the general
 literature on high dimensionality, multi-class, classification data.
-Additionally, we took into account their prevalence in gesture classification
-studies to facilitate meaningful comparisons between our research and prior
-work in the field.
+Additionally, the prevalence of a classification algorithm in the gesture
+classification literature was considered, so as to facilitate meaningful
+comparisons between this and prior work.
 
 Feed-forward Neural Networks (FFNNs) scale well as the number of classes
 increases (see Figure \ref{fig:05_inf_time_vs_num_classes}). To scale a FFNN to
@@ -381,53 +387,64 @@ number of classes increases.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_inf_time_vs_num_classes}
-    \caption{Inference times for each observation increases as the number of
-    classes increase for HMMs and CuSUM, but that is not the case for SVMs and
-    FFNNs. HFFNNs are not shown as they are not trained on fewer than 51
-    classes.}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_inf_time_vs_num_classes}
+    \caption{Inference times per observation plotted against the number of
+    classes in the classification task, with one plot per model type. Note that
+    the scale of the y-axis is not constant due to the large range of inference
+    times. Inference times per observation increases as the number of classes
+    increase for HMMs and CuSUM, but that is not the case for SVMs and FFNNs.
+    HFFNNs are not shown as they are not trained on fewer than 51 classes.}
     \label{fig:05_inf_time_vs_num_classes}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-Hidden Markov Models (HMMs) have frequently been used in the literature for
-gesture detection and classification. Multi-class classification with HMMs
-require a one-vs-rest approach. This causes training and inference times to
-scale approximately linearly with the number of classes. HMMs explicitly model
-the progression of time via state transitions, and have shown promise in
-previous works. Their implementation will allow for a better comparison between
-the current and prior work.
+As noted in the literature review, Hidden Markov Models (HMMs) have frequently
+been used for gesture detection and classification. Multi-class classification
+with HMMs require a one-vs-rest approach. This causes training and inference
+times to increase with the number of classes. HMMs explicitly model the
+progression of time via state transitions, and have shown promise in previous
+works. Their evaluation on the _Ergo_ dataset will allow for a better
+comparison between the current and prior work.
 
 Cumulative Sum (CuSUM) is a simple statistical technique that will provide a
 lower bound on the speed with which predictions can be made. While it is
-unlikely to outperform other, more sophisticated models, it will be useful as a
-baseline against which the inference speed of other models can be compared.
+unlikely to outperform other models, it will be useful as a baseline against
+which the inference speed of other models can be compared.
 
-Some works in the literature do not attempt the detection of gestures in
-observations, and instead only attempt the classification of a gesture
-conditional on the event that there is a gesture present in the observation.
-That is to say, that every observation is assumed to contain one of a set of
-gestures. This does not reflect real-world usage, in which the vast majority of
-the observations do _not_ contain any gesture.
+It should be noted that some works in the literature do not attempt the
+detection of gestures in observations, and instead only attempt the
+classification of a gesture conditional on the event that there is a gesture
+present in the observation. That is to say, that every observation is assumed
+to contain one of a set of gestures. This is a simplification of real-world
+usage, in which the majority of the observations do _not_ contain any gesture.
+This simplification greatly reduces the complexity of the task, as will be
+shown through comparisons of classifiers trained to predict 50 classes (which
+excludes the interstitial class 50) and classifiers trained to predict 51
+classes (thereby including the interstitial class 50).
 
 One technique in the literature which has shown promise in dealing with both
-detection and classification is that of a hierarchical setup in which there are
-two models trained. The first model (the detector) is a binary classifier
+detection and classification is that of a hierarchy of classifiers. In this
+setup, there are two models trained. The first model is a binary classifier
 simply trained to detect if there is any gesture present in an observation. The
-second model (the classifier) is trained on only the observations containing a
-gesture, and is trained to classify which gesture is present.
+second model is trained on only the observations containing a gesture, and is
+trained to classify which gesture is present.
 
-To make a prediction with a hierarchical model, the detector is first queried
-with an observation. If the detector indicates that there is no gesture
-present, then the no-gesture class is returned as the model's prediction. If
-the detector indicates that there is a gesture present, then the observation is
-forwarded to the classifier. The classifier then predicts which gesture is
-present and this predicted class is returned as the model's prediction.
+The first classifier will be referred to as the majority classifier, as it
+classifiers the majority class. The second model will be referred to as the
+minority classifier, as it distinguishes the minority classes.
+
+To make a prediction with a hierarchical model, the majority classifier is
+first queried with an observation. If the majority classifier indicates that
+there is no gesture present, then the no-gesture class is returned as the
+model's prediction. If the majority classifier indicates that there is a
+gesture present, then the observation is forwarded to the minority classifier.
+The minority classifier then predicts which gesture is present and this
+predicted class is returned as the model's prediction.
 
 A Hierarchical Feed Forward Neural Network (HFFNN) architecture is tested,
 following the above procedure. Two neural networks are trained: one to detect
-if a gesture is present and another to classify which gesture is present (given
-that there is indeed a gesture present).
+if a gesture is present (the majority classifier) and another to classify which
+gesture is present (the minority classifier).
 
 Support Vector Machines (SVMs) have been used in the literature for glove-based
 gesture classification and so are evaluated here. SVMs do not natively support
@@ -438,12 +455,15 @@ only a linear kernel is considered.
 
 # Discussion of each model
 
-This section will explore each of the models in depth, but will not make
+This section will evaluate each of the models in depth, but will not make
 comparisons between different model types. Characteristics specific to each
 model type are discussed, relating to $F_1$-score, precision, recall, inference
 times, and training times. Where appropriate, confusion matrices of different
 models are visualised to aid with the analysis of these models. For inter-model
 comparisons, please see sections \ref{best-model} and \ref{time-comparison}.
+All evaluation metrics ($F_1$-score, precision, recall, confusion matrices) are
+calculated using the validation set unless otherwise specified. The models are
+evaluated on the unseen test set in Section \ref{test-set-eval}.
 
 FFNNs are be discussed in section \ref{in-depth-ffnn}, HMMs in section
 \ref{in-depth-hmm}, CuSUMs in section \ref{in-depth-cusum}, HFFNNs in section
@@ -453,13 +473,13 @@ FFNNs are be discussed in section \ref{in-depth-ffnn}, HMMs in section
 
 Figure \ref{fig:05_mean_conf_mat_cusum} shows the confusion matrices for CuSUM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
-are the weighted mean of all CuSUM models, based on the $F_1$-score of each
-CuSUM model.
+are the weighted mean of all CuSUM models, with weights based on the
+$F_1$-score of each CuSUM model.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_mean_conf_mat_cusum}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_cusum}}
     \caption{The weighted confusion matrices of three CuSUM classifiers, trained
     on 5, 50, and 51 classes. The confusion matrices are weighted by the
     $F_1$-score of each model, such that better performing models have a
@@ -474,24 +494,26 @@ It can be seen that the 5-class CuSUM models performed well: The weighted
 confusion matrix has large values along the principle diagonal. The median
 $F_1$-score was 0.813, with a maximum of 0.989. A slight bias can be seen in
 the weighted confusion matrix, where gesture 1 (left hand ring finger) is
-sometimes predicted as gestures 0 (left hand little finger) and 2 (left hand
-middle finger). These mispredictions can be explained by the natural movement
-of the human hand: it is difficult to move one's ring finger in isolation. When
-performing gesture 1, the user's little finger and middle finger move by some
-amount, in addition to the expected movement of the user's ring finger. CuSUM
-is not able to learn that this additional movement is expected, and only knows
-that acceleration of the user's ring finger should result in a gesture 1, 11,
-21, 31, or 41 prediction.
+sometimes predicted as gesture 0 (left hand little finger) or as gesture 2
+(left hand middle finger). These mispredictions can be explained by the natural
+movement of the human hand: it is difficult to move one's ring finger in
+isolation. When performing gesture 1, the user's little finger and middle
+finger move by some amount, in addition to the expected movement of the user's
+ring finger. CuSUM is not able to learn that this additional movement is
+expected, and only knows that acceleration of the user's ring finger should
+result in a prediction of gesture 1. Therefore, movements
+of the user's ring finger occasionally result in gesture 1 predictions
 
 The 50- and 51-class CuSUM models both display a "chequerboard" pattern. This
 pattern also originates from the formulation of the CuSUM model. Each of the
 blocks on this chequerboard are $5 \times 5$, similar to what was shown in the
 hypothetical model in Figure
 \ref{fig:05_pr_conf_mat_wrong_finger_correct_hand}. This patten occurs when two
-model biases occur simultaneously: The model must often confound gestures using
-fingers on the same hand (this causes blocks along the principle diagonal), and
-the model must often confound the orientation of the gesture (this causes
-whatever pattern was along the principle diagonal to be repeated orthogonally).
+model biases occur simultaneously: The model must confuse gestures using
+fingers on the same hand (this causes "blocks" of mispredictions along the
+principle diagonal), and the model must confuse the orientation of the gesture
+(this causes the pattern along the principle diagonal to be repeated
+orthogonally).
 
 These two biases cause the chequerboard pattern seen in the 50- and 51-class
 CuSUM models. Note that the values inside each block are not uniform: there is
@@ -506,9 +528,9 @@ Figure \ref{fig:05_hpar_analysis_cusum_classes5} shows the performance of all
 threshold value.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_cusum_classes5}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_cusum_classes5}
     \caption{Left: precision-recall plot for all 5-class CuSUM models, with the
     value of the threshold hyperparameter indicated by the colour of the point. Right: a direct
     plot of the model's $F_1$-score against the threshold parameter.}
@@ -518,20 +540,19 @@ threshold value.
 
 One can see that that increasing the value of the threshold hyperparameter
 improves the performance of the model, although there are diminishing returns
-with an inflexion point around a threshold value of 40. With the maximum
-threshold value tested, the maximum $F_1$-score achieved is 0.989, with a
-median of 0.937.
+with an inflexion point around a threshold value of 40. The maximum $F_1$-score
+of 0.989 is achieved with a threshold of 100, and the median $F_1$-score for
+CuSUM models with a threshold of 100 is 0.937.
 
 ### 50-class CuSUM Hyperparameter Analysis
 
 Figure \ref{fig:05_hpar_analysis_cusum_classes50} shows the performance of all
-50-class CuSUM models over varying values for its single hyperparameter, the
-threshold value.
+50-class CuSUM models over varying values for the threshold hyperparameter.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_cusum_classes50}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_cusum_classes50}
     \caption{Left: precision-recall plot for all 5-class CuSUM models, with the
     value of the threshold hyperparameter indicated by the colour of the point.
     Right: a direct plot of the model's $F_1$-score against the threshold
@@ -544,22 +565,25 @@ The relationship between precision, recall, and the CuSUM threshold value is
 not as clear for the 50-class CuSUM models as it was for the 5-class CuSUM
 models. The 50-class CuSUM models have a precision of $\mu=0.222, \sigma=0.043$
 and a recall of $\mu=0.252, \sigma=0.025$. The CuSUM models are clearly unable
-to distinguish this many classes from each other.
+to distinguish this many classes from each other. As seen in the confusion
+matrices in Figure \ref{fig:05_mean_conf_mat_cusum}, this is due to frequent
+mispredictions where the correct hand is predicted, but the incorrect
+orientation or finger is predicted.
 
 ### 51-class CuSUM Hyperparameter Analysis
 
 While the 51-class CuSUM models are no better at learning the data than the
-50-class CuSUM models, it is instructive to examine _how_ these models fail as
-the only difference between the 50- and 51-class datasets is introduction of a
-class imbalance via a majority class. Figure
+50-class CuSUM models, it is instructive to examine _how_ these models fail.
+The only difference between the 50- and 51-class datasets is addition of a
+class imbalance via a majority class: class 50. Figure
 \ref{fig:05_hpar_analysis_cusum_classes51} shows the performance of all
 51-class CuSUM models over varying values for its single hyperparameter, the
 threshold value.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_hpar_analysis_cusum_classes51}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_cusum_classes51}
     \caption{Left: precision-recall plot for all 5-class CuSUM models, with the
     value of the threshold hyperparameter indicated by the colour of the point.
     Right: a direct plot of the model's $F_1$-score against the threshold
@@ -580,23 +604,25 @@ As the only difference between the 50- and 51-class CuSUM models is the
 addition of the non-gesture majority class (class 50), we can infer that this
 additional class reduces the precision of CuSUM but not the recall.
 
-The cause of this is clear when looking at the confusion matrices for the 50-
-and 51-class CuSUM models (Figure \ref{fig:05_mean_conf_mat_cusum}). There is a
-row at the bottom of the 51-class confusion matrix indicating that CuSUM often
-predicts class 50 as belonging to one of the other classes. If gesture 50 is
-predicted as belonging to class $c_i$, then that is a False Positive prediction
-for class $c_i$. The definition for precision contains the number of False
-Positives in the denominator:
+The cause of this reduction is clear when looking at the confusion matrices for
+the 50- and 51-class CuSUM models (Figure \ref{fig:05_mean_conf_mat_cusum}).
+There is a row at the bottom of the 51-class confusion matrix, indicating that
+the 51-class CuSUM model often predicts class 50 as belonging to one of the
+other classes. If gesture 50 is predicted as belonging to some class $c_i$, then
+that is a False Positive prediction for class $c_i$. The definition for
+precision contains the number of False Positives in the denominator:
 
 $$
     \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
 $$
 
-Increasing the number of False Positives will decrease the precision of a
-model, all else being equal. As there are many instances where class 50 is
-being predicted as belonging to class for the 51-class CuSUM models, this
+Therefore, increasing the number of False Positives will decrease the precision
+of a model (all else being equal). As there are many instances where class 50
+is being predicted as belonging to class for the 51-class CuSUM models, this
 increases the False Positive rate and correspondingly decreases the precision
-of the model, while leaving the recall approximately the same.
+of the model, while leaving the recall approximately the same. This explains
+the drastic reduction in precision when comparing the 50-class CuSUM models to
+the 51-class CuSUM models.
 
 ## Hidden Markov Models \label{in-depth-hmm}
 
@@ -606,7 +632,7 @@ trained on 5, 50, and 51 classes.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_mean_conf_mat_hmm}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_hmm}}
     \caption{The weighted confusion matrices of three HMM classifiers, trained
     on 5, 50, and 51 classes. The confusion matrices are weighted by the
     $F_1$-score of each model, such that better performing models have a
@@ -617,22 +643,23 @@ trained on 5, 50, and 51 classes.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-The 5-class HMMs are mostly strong classifiers, with a median validation
-$F_1$-score of $0.694$ and a maximum of 1. It is clear from the 5-class
-confusion matrix that gesture 4 was predicted correctly much more frequently
-than the other gesture classes. Gesture 4 flexes the left hand's thumb (as does
-every gesture which ends in the digit 4). This can be attributed to the sensors
-on the thumbs being oriented differently to the sensors on the other fingers
-(since the sensor is designed to lie flat on the user's fingernail). This has
-the effect of changing which one of the three axes is dominated by gravity,
-leading to gestures which are easier to distinguish.
+The 5-class HMMs are mostly strong classifiers, with a median $F_1$-score of
+$0.694$ and a maximum of 1. It is clear from the 5-class confusion matrix that
+gesture 4 was correctly predicted much more frequently than the other gesture
+classes. Gesture 4 flexes the left hand's thumb (as does every gesture which
+ends in the digit 4). This improvement in the predictions for gesture 4 can be
+attributed to the acceleration sensors on the thumbs being oriented differently
+to the sensors on the other fingers. This is because the sensor is designed to
+lie flat on the user's fingernail. This change in orientation of the sensor the
+effect of changing which one of the three axes is dominated by gravity, leading
+to gestures which are easier to distinguish.
 
 The 5-class confusion matrix also makes apparent that adjacent gestures (for
 example, gestures 0 and 1, or 1 and 2) are slightly more likely to be
 confounded by the 5-class HMM. This can be seen in how the cells directly
 adjacent to the principle diagonal contain larger values than the cells further
-from the principle diagonal. This can be attributed to how the movement of ones
-fingers is not completely independent, and moving one finger is likely to
+from the principle diagonal. This can be attributed to how the movement of
+one's fingers is not completely independent, and moving one finger is likely to
 subtly move the fingers adjacent to it. This effect is less apparent between
 gestures 3 and 4 as the movement of the thumb is largely independent from the
 movement of other fingers.
@@ -649,7 +676,7 @@ the thumb allowed the HMMs to be more certain of its predictions of the thumb.
 
 The 51-class HMMs shows poor performance, with a median $F_1$-score of $0.034$
 and a maximum of $0.047$. This is caused by the inability of the 51-class HMMs
-to correctly classify class 50. The vast majority of observations belonging to
+to correctly classify class 50. The majority of observations belonging to
 class 50 are incorrectly classified as belonging to one of the other gesture
 classes. This causes the 51-class HMMs have a greatly reduced precision. This
 behaviour is similar to the 51-class CuSUM models.
@@ -661,13 +688,13 @@ As HMMs only have one hyperparameter (the covariance type), Figure
 for all 5-class HMMs as well as the $F_1$-score of each covariance type.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_5_p_vs_r_covar_type}
-    \caption{Left: Precision-recall plot for all HMMs trained on 5 classes, with
-    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
-    $F_1$-score for each covariance matrix type. Note that the scales of the
-    axes have been adjusted to better show the distribution of the data.}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_5_p_vs_r_covar_type}
+    \caption{Left: Precision-recall plot for all HMMs trained on 5 classes.
+    Right: Plot of the model's $F_1$-score for each covariance matrix type.
+    Note that the scales of the axes have been adjusted to better show the
+    distribution of the data.}
     \label{fig:05_in_depth_hmm_5_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -677,8 +704,8 @@ $F_1$-score of $0.967$ and a maximum of $1$. The full covariance matrix HMMs
 had a very large range $[0.227, 0.968]$ when compared to the tied $[0.827,
 1]$, spherical $[0.475, 0.895]$, and diagonal $[0.199, 0.817]$ covariance
 matrix HMMs. This is likely due to the full covariance matrix HMMs having the
-least constraints on the covariance matrix of the emission probability
-distributions, therefore having the greatest number of values which can
+fewest constraints on the covariance matrix of the emission probability
+distributions, therefore having the greatest number of parameters which can
 influence the performance of the HMM.
 
 The full covariance matrix HMMs have the next best performance after the tied
@@ -695,13 +722,12 @@ spherical covariance matrix ($\lambda \mathbb{I}$, where $\lambda$ is a scalar
 parameter) can lead to diagonal covariance matrix HMMs requiring additional
 training iterations on the same data.
 
-The tied covariance matrix HMMs likely perform so well because each state of
-the HMM (and therefore the distribution of each Gaussian emission) comes from
-the same distribution: the space of acceleration values which can be reached by
-the _Ergo_ hardware. This means that fitting a single covariance matrix which
-is shared by all states is an efficient means of describing the overall
-distribution of the data. Each timestep is sampled from approximately the same
-distribution, and so is well represented by one covariance matrix.
+The tied covariance matrix HMMs likely perform so well because each timestep in
+the dataset is sampled from approximately the same distribution (the
+distribution of acceleration values which can be reached by the _Ergo_
+hardware), and so is well represented by one covariance matrix. Fitting a
+single covariance matrix which is shared by all states is an efficient means of
+describing the overall distribution of the data.
 
 Figure \ref{fig:05_in_depth_hmm_inf_trn_time_classes5} depicts the time taken
 per observation for both fitting the HMM and making a prediction with that HMM.
@@ -737,10 +763,6 @@ So The number of free dimensions implies that the Tied HMMs would have the
 second largest variance, but actually it has the lowest variance.
 -->
 
-<!-- TODO probably also want to analyse the per-covariance type confusion
-matrices and precision-recall-f1 heatmaps
--->
-
 ### 50-class HMM Hyperparameter Analysis
 
 Figure \ref{fig:05_in_depth_hmm_50_p_vs_r_covar_type} shows the
@@ -748,13 +770,13 @@ precision-recall plot for all 50-class HMMs, as well as the $F_1$-score
 of each covariance type.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_50_p_vs_r_covar_type}
-    \caption{Left: Precision-recall plot for all HMMs trained on 50 classes, with
-    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
-    $F_1$-score for each covariance matrix type. Note that the scales of the
-    axes have been adjusted to better show the distribution of the data.}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_50_p_vs_r_covar_type}
+    \caption{Left: Precision-recall plot for all HMMs trained on 50 classes.
+    Right: Plot of the model's $F_1$-score for each covariance matrix type.
+    Note that the scales of the axes have been adjusted to better show the
+    distribution of the data.}
     \label{fig:05_in_depth_hmm_50_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -773,8 +795,7 @@ spherical covariance matrix HMMs performed better than the diagonal covariance
 matrix HMMs. The performance of each covariance matrix type is relatively
 similar when comparing the 5- and 50-class HMMs. In this context, the tied HMMs
 are the top performers, followed by the full HMMs, and then the spherical HMMs,
-with diagonal HMMs having the least favourable performance. The full HMMs have
-a very high variance.
+with diagonal HMMs having the least favourable performance.
 
 Figure \ref{fig:05_in_depth_hmm_inf_trn_time_classes50} depicts the time taken
 per observation for both fitting the HMM and making a prediction with that HMM.
@@ -798,30 +819,51 @@ needs to be employed for the HMMs.
 <!-- prettier-ignore-end -->
 
 Figure \ref{fig:05_in_depth_hmm_conf_mats_cov_type_classes50} shows the
-weighted confusion matrices for each of the four covariance types: spherical,
-diagonal, tied, and full. <!-- TODO flesh this out -->
+weighted confusion matrices for 50-class HMMs for each of the four covariance
+types: spherical, diagonal, tied, and full.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_conf_mats_cov_type_classes50}
-    \caption{todo}
+    \caption{Weighted confusion matrices of all 50-class HMMs, with one
+    confusion matrix per covariance type. The confusion matrices are normalised
+    such that each column sums to one.}
     \label{fig:05_in_depth_hmm_conf_mats_cov_type_classes50}
 \end{figure}
 <!-- prettier-ignore-end -->
 
+The spherical and diagonal covariance types show an interesting bias in their
+predictions. The gestures made with the thumbs (4, 5, 14, 15, 2, 25, 34, 35,
+44, 45) are largely better predicted than the gestures using other fingers.
+Gestures using other fingers are more likely to be confused, and are generally
+confused with gestures that use the correct orientation and the correct hand,
+but the wrong finger. This can be explained by observing that the orientation
+of the acceleration sensor on the thumbs is different to the orientation of the
+acceleration sensor on the other fingers, and so is possibly more distinct than
+the other gestures.
+
 Figure \ref{fig:05_in_depth_hmm_prf1_plots_conv_type_classes50} shows the
 per-class precision, recall, and $F_1$-score for each of the four covariance
-types: spherical, diagonal, tied, and full. <!-- TODO flesh this out -->
+types: spherical, diagonal, tied, and full.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_prf1_plots_conv_type_classes50}
-    \caption{todo}
+    \caption{The precision, recall, and $F_1$-scores of all 50-class HMMs, with
+    one plot per covariance type. The colour scale is the same as used in
+    Figure \ref{fig:05_in_depth_hmm_conf_mats_cov_type_classes50}. One can see
+    that the spherical and diagonal covariance types are able to achieve a
+    high precision on the gestures involving the thumbs: 4, 5, 14, 15, 24, 25,
+    34, 35, 44, and 45.}
     \label{fig:05_in_depth_hmm_prf1_plots_conv_type_classes50}
 \end{figure}
 <!-- prettier-ignore-end -->
+
+This makes the bias of the spherical and diagonal HMMs clear: the precision of
+these HMMs is very obviously higher for gestures involving the thumbs. The tied
+covariance HMM generally performed the best, making very few mispredictions.
 
 ### 51-class HMM Hyperparameter Analysis
 
@@ -832,11 +874,11 @@ of each covariance type.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_hmm_51_p_vs_r_covar_type}
-    \caption{Left: Precision-recall plot for all HMMs trained on 51 classes, with
-    the models' $F_1$-scores as contours in grey. Right: Plot of the model's
-    $F_1$-score for each covariance matrix type. Note that the scales of the
-    axes have been adjusted to better show the distribution of the data.}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_51_p_vs_r_covar_type}
+    \caption{Left: Precision-recall plot for all HMMs trained on 51 classes.
+    Right: Plot of the model's $F_1$-score for each covariance matrix type.
+    Note that the scales of the axes have been adjusted to better show the
+    distribution of the data.}
     \label{fig:05_in_depth_hmm_51_p_vs_r_covar_type}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -887,13 +929,13 @@ covariance types, in terms of both the inference time and the training time.
 
 Figure \ref{fig:05_mean_conf_mat_svm} shows the confusion matrices for SVM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
-are the weighted mean of all SVM, based on the $F_1$-score of each
-SVM.
+are the weighted mean of all SVMs, with the weighting proportional to the
+$F_1$-score of each SVM.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_mean_conf_mat_svm}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_svm}}
     \caption{The weighted confusion matrices of three SVM classifiers,
     trained on 5, 50, and 51 classes. The confusion matrices are weighted by
     the $F_1$-score of each model, such that better performing models have a
@@ -904,7 +946,7 @@ SVM.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-The 5- and 50-class SVMs performed well, with the vast majority of predictions
+The 5- and 50-class SVMs performed well, with the majority of predictions
 being accurate. On the 5-class confusion matrix, one can see that class 3 (the
 ring finger) gets more consistently confused with other classes; this can
 likely be attributed to how it is difficult to move one's ring finger
@@ -921,17 +963,19 @@ between class 50 and the gesture classes.
 
 The 5-class SVM had no problem whatsoever in classifying the different classes:
 the lowest $F_1$-score was 0.909, the median was 1, and the maximum was 1.
-There are a few outliers, but the vast majority of 5-class SVMs were easily
+There are a few outliers, but the majority of 5-class SVMs were easily
 able to separate the classes. The weighted confusion matrices can be seen in
-Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes5}. The
-precision-recall plot can be seen in the appendix (Figure
+Figure \ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes5}. Both the
+balanced and unbalanced SVMs performed well.
+
+The precision-recall plot can be seen in the appendix (Figure
 \ref{fig:appendix_in_depth_svm_classes5}) as it does not convey much useful
 information due to the good performance of the SVMs.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes5}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes5}
     \caption{Weighted confusion matrices of the balanced and unbalanced 5-class
     SVMs.}
     \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes5}
@@ -943,22 +987,22 @@ information due to the good performance of the SVMs.
 Similarly to the 5-class SVMs, the 50-class SVMs performed very well with a
 minimum $F_1$-score of 0.955, a median of 0.974, and a maximum of 0.989.
 
-The precision-recall plot can be seen in the appendix (Figure
-\ref{fig:appendix_in_depth_svm_classes50}) as it does not convey much useful
-information due to the good performance of the SVMs. The regularisation
-coefficient C has minimal impact on the $F_1$-score and whether or not the
-influence of each class was balanced has little impact on the $F_1$-score.
-
 The weighted confusion matrices for the 50-class SVMs can be seen in Figure
 \ref{fig:05_in_depth_svm_conf_mats_unbalanced_classes50}. Both the balanced and
 unbalanced SVMs have a slight bias towards mispredicting the orientation of a
 gestures (as can be seen by the diagonals adjacent to the principle diagonal)
 but otherwise show very good performance.
 
+The precision-recall plot can be seen in the appendix (Figure
+\ref{fig:appendix_in_depth_svm_classes50}) as it does not convey much useful
+information due to the good performance of the SVMs. The regularisation
+coefficient C has minimal impact on the $F_1$-score and whether or not the
+influence of each class was balanced has little impact on the $F_1$-score.
+
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes50}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes50}
     \caption{Weighted confusion matrices of the balanced and unbalanced 50-class
     SVMs.}
     \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes50}
@@ -967,14 +1011,14 @@ but otherwise show very good performance.
 
 ### 51-class SVM Hyperparameter Analysis
 
-Figure \ref{fig:05_in_depth_svm_classes51} shows how the regularisation
-parameter C and whether or not the observations were weighted by their classes
-frequency impacts the precision, recall, and $F_1$-score of the 51-class SVMs.
+Figure \ref{fig:05_in_depth_svm_classes51} shows the regularisation parameter
+C, as well as the balanced/unbalanced hyperparameter which dictates whether or
+not the observations were weighted by their classes frequency.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_classes51}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_classes51}
     \caption{Left: precision and recall of all 51-class SVMs, with the
     regularisation parameter C and class weighting mapped to the colour and
     marker type respectively. Right: The regularisation parameter C plotted
@@ -1003,7 +1047,7 @@ confusion matrix for both balanced and unbalanced SVMs.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes51}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_svm_conf_mats_unbalanced_classes51}
     \caption{Confusion matrices for SVMs with unbalanced (left) and balanced
     (right) class weights.}
     \label{fig:05_in_depth_svm_conf_mats_unbalanced_classes51}
@@ -1011,21 +1055,20 @@ confusion matrix for both balanced and unbalanced SVMs.
 <!-- prettier-ignore-end -->
 
 One can see that both the balanced and unbalanced SVMs do fairly well by the
-strong diagonal through the plots. However, note that the balanced class weight
-SVMs generally predict many non-50 classes as belonging to class 50 (as can be
-seen by the column on the far right of the plot). This type of
-misclassification leads to low precision, as the model is over-predicting for
-all of the gesture classes.
+strong diagonal through the plots. However, note that the SVMs with unbalanced
+class weights frequently mispredict observations belonging to class 50 as
+belonging to one of the other gesture classes (as can be seen by the strong row
+at the bottom of the plot). This type of misclassification leads to low recall,
+as the model is frequently failing to correctly predict correctly for class 50.
 
-In a complementary manner, the SVMs with unbalanced class weights frequently
-mispredict observations belonging to class 50 as belonging to one of the other
-gesture classes (as can be seen by the strong row at the bottom of the plot).
-This type of misclassification leads to low recall, as the model is frequently
-failing to correctly predict correctly for class 50.
+In a complementary manner, note that the balanced class weight SVMs generally
+predict many non-50 classes as belonging to class 50 (as can be seen by the
+column on the far right of the plot). This type of misclassification leads to
+low precision, as the model is over-predicting for all of the gesture classes.
 
 Figure \ref{fig:05_in_depth_svm_prf1_plots_unbalanced} shows the per-class
 precision, recall, and $F_1$-score for balanced and unbalanced class weight
-SVMs. It is clear that the balanced SVMs have higher recall and that unbalanced
+SVMs. It is clear that the balanced SVMs have higher recall and unbalanced
 SVMs have higher precision.
 
 <!-- prettier-ignore-start -->
@@ -1065,6 +1108,9 @@ and the fit time at the plateau are both higher for balanced SVMs than for
 unbalanced SVMs. This follows from the extra computation required to calculate
 and apply a weight to every observation.
 
+TODO: why is the plateau for fit time at the same C value as the plateau for
+f1-score?
+
 There is no relationship between the inference time and the class weight nor
 the inference time and the regularisation coefficient C. This is to be
 expected, as neither hyperparameter is used to perform inference.
@@ -1074,17 +1120,18 @@ expected, as neither hyperparameter is used to perform inference.
 Due to the large number of hyperparameters for FFNNs, plots which show no
 relationship between hyperparameters and evaluation metrics will be excluded
 from this chapter. Unabridged figures with all hyperparameters have been placed
-in the Appendix and will be mentioned should the interested reader wish to view
-them, although they will not be necessary for the discussion.
+in the Appendix and will be mentioned at the appropriate point, should the
+interested reader wish to view them. Note that they will not be necessary for
+the discussion.
 
-Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confidence matrices for
+Figure \ref{fig:05_mean_conf_mat_ffnn} shows the mean confusion matrices for
 all FFNNs trained on 5, 50, and 51 classes, weighted by that model's
 $F_1$-score.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_mean_conf_mat_ffnn}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_ffnn}}
     \caption{The weighted confusion matrices of three FFNN classifiers, trained
     on 5, 50, and 51 classes. The confusion matrices are weighted by the
     $F_1$-score of each model, such that better performing models have a
@@ -1095,8 +1142,8 @@ $F_1$-score.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-The weighted confusion matrix for FFNNs trained to classify only 5 classes
-shows very good performance with little bias in its mispredictions.
+The weighted confusion matrix for 5-class FFNNs shows good performance,
+with little bias in its mispredictions.
 
 The weighted confusion matrix for 50 classes also shows very good performance,
 however there is a bias in its mispredictions as shown by the two diagonals
@@ -1110,14 +1157,15 @@ index 16).
 
 The confusion matrix for the FFNNs trained on 51 classes shows a strong
 principle diagonal. It also shows mispredictions where class 50 was classified
-as one of the other classes $0, 1, \ldots, 49$ as represented by the row at the
-bottom of the confusion matrix. There are also a number of mispredictions where
-one of the classes $0, 1, \ldots, 49$ were classified as class 50, represented
-by the column at the right of the confusion matrix. There are relatively few
-mispredictions where one gesture class was mispredict as another gesture class.
+as one of the other classes $0, 1, \ldots, 49$. This is indicated by the row at
+the bottom of the confusion matrix. There are also a number of mispredictions
+where one of the classes $0, 1, \ldots, 49$ were classified as class 50. This
+is indicated by the column at the right of the confusion matrix. There are
+relatively few mispredictions where one gesture class is mispredict as another
+gesture class.
 
 The precision-recall plot for these FFNNs shows that all FFNNs have a large
-variance in their performance with standard deviations of the $F_1$-score of
+variance in their performance, with standard deviations of the $F_1$-score of
 0.395, 0.411, and 0.306 for the 5-, 50-, and 51-class models respectively. The
 maximum performance of the models was 1, 0.997, and 0.772 for the 5-, 50-, and
 51-class models respectively.
@@ -1130,11 +1178,13 @@ size, number of layers, and the number of nodes in any layer. Interested
 readers are referred to Figure \ref{fig:appendix_ffnn_hpar_analyis_classes5}
 for unabridged plot of these hyperparameters.
 
+TODO: double check Figure \ref{fig:appendix_ffnn_hpar_analyis_classes5}.
+
 Figure \ref{fig:05_hpar_analysis_ffnn_classes5_lr} shows the learning rate of the
 5-class FFNNs against the model's validation loss and $F_1$-score.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_lr}
     \caption{The learning rate of the 5-class FFNNs against their $F_1$-score
@@ -1165,7 +1215,7 @@ Figure \ref{fig:05_hpar_analysis_ffnn_classes50_lr} shows the learning rate of t
 50-class FFNNs against the model's validation loss and $F_1$-score.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_lr}
     \caption{The learning rate of the 50-class FFNNs against their $F_1$-score
@@ -1191,7 +1241,7 @@ has an impact on the performance of the respective FFNN. Figure
 the 50-class FFNNs against the model's validation loss and $F_1$-score.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_nlayers}
     \caption{The number of layers in the 50-class FFNNs against their
@@ -1206,6 +1256,8 @@ or two layers. Models with three layers were also unable to achieve a
 validation loss as low as some of the models with one or two layers. This is
 likely due to the increased complexity of the additional layer.
 
+<!-- TODO: need to mention possible interactions between LR and number of layers -->
+
 ### 51-class FFNN Hyperparameter Analysis
 
 <!---                       precision-recall density per nlayers           --->
@@ -1219,13 +1271,15 @@ precision and recall.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=p,y=r,c=nlayers,histplot}}
-    \caption{Caption here}
+    \caption{Precision-recall heatmap for the 1-, 2-, and 3-layer 51-class
+    FFNNs. The colour of each cell indicates the number of observations in that
+    region, according to the shared colourbar on the right of the plot.}
     \label{fig:05_51ffnn,x=p,y=r,c=nlayers,histplot}
 \end{figure}
 <!-- prettier-ignore-end -->
 
 The 1-layer FFNNs have the greatest number of high-performing FFNNs, followed
-by the 2- and then the 3-layer FFNNs. The vast majority of 3-layer FFNNs did
+by the 2- and then the 3-layer FFNNs. The majority of 3-layer FFNNs did
 not manage to fit to the data, achieving nearly zero precision and recall.
 
 <!---                       Number of layers                           --->
@@ -1234,11 +1288,12 @@ Figure \ref{fig:05_51ffnn,x=p,y=r,h=nlayers} shows the precision-recall plot
 for all 51-class FFNNs, coloured based on the number of layers of each FFNN.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=nlayers}
-    \caption{Precision recall plot for all 51-class FFNNs, with the colour of
-    the markers based on the number of layers in that FFNN.}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=nlayers}
+    \caption{$F_1$ plot and precision-recall scatter plot for all 51-class
+    FFNNs, with the colour of the markers based on the number of layers in that
+    FFNN.}
     \label{fig:05_51ffnn,x=p,y=r,h=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1252,32 +1307,138 @@ second-best $F_1$-score, then it might be possible to explore the
 hyperparameter space around the best $F_1$-score to find a slightly better
 combination of hyperparameters. However, this is not the case, and the
 proximity of the best and runner up $F_1$-scores indicates that the search
-space around the best found $F_1$-score has been well-searched.
+space around the best found $F_1$-score has been well searched.
 
 There is a cluster of high-performing FFNNs around a recall of 0.8 and a
-precision of 0.6. It might be assumed that this cluster is a result of one
+precision of 0.6. It might be assumed that this cluster is a result of just one
 hyperparameter being in the correct range of values, however this is not the
-case.
+case. To explore the relationship between the hyperparameters and the
+$F_1$-score, it is informative to look at the 1-, 2-, and 3-layer FFNNs
+individually.
 
-Figure \ref{fig:05_51ffnn,c=hpar,x=hpar,y=recall>70} shows a set of
+When looking at the best performing 1-, 2-, and 3-layer FFNNs, it appears that
+increasing the number of layers has the effect of improving the recall but
+reducing the precision. Overall, the precision decreases faster than the recall
+improves, leading to a decrease in $F_1$-score as the number of layers is
+increased.
+
+<!---- Hyperparameter-f1 scatter plot for nlayers == 1 --->
+
+#### Performance for 1-layer FFNNs
+
+Figure \ref{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=1} shows the $F_1$-score
+of each 1-layer FFNN against all hyperparameters, where each plot describes a
+different hyperparameter.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=1}}
+    \caption{$F_1$-score against all hyperparameters for all 51-class FFNNs
+    with 1 layer. Each plot represents a different hyperparameter.}
+    \label{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=1}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Generally the 1-layer FFNNs are able to achieve a high $F_1$-score with a wide
+range of hyperparameter values, with notable exceptions being the learning rate
+and the number of nodes in layer 1. This will be discussed in more detail in
+the coming subsections. The batch size, L2 coefficient, and dropout rate all
+had very little effect on the performance of the FFNNs. The maximum recall,
+precision, and $F_1$-score achieved by the 1-layer FFNNs is 0.865, 0.736, and
+0.772 respectively.
+
+<!---- Hyperparameter-f1 scatter plot for nlayers == 2 --->
+
+#### Performance for 2-layer FFNNs
+
+Figure \ref{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=2} shows the
+$F_1$-score of each 2-layer FFNN against all hyperparameters, where each plot
+describes a different hyperparameter.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=2}}
+    \caption{$F_1$-score against all hyperparameters for all 51-class FFNNs
+    with 2 layers. Each plot represents a different hyperparameter.}
+    \label{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=2}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The 2-layer FFNNs performed slightly worse than the 1-layer FFNNs. The learning
+rate of the 2-layer FFNNs appears to have a wide range of values for which a
+good $F_1$-score was achieved, and then a smaller subset for which the best
+2-layer FFNN $F_1$-score was achieved. This effect will be better explored in
+Figure \ref{fig:05_51ffnn,x=p,y=r,h=lr,c=nlayers} by looking at the
+precision-recall scatter plot for 1-, 2-, and 3-layer FFNNs. Having sufficient
+nodes in both layers of the 2-layer FFNN was also necessary for a good
+$F_1$-score. The batch size, L2 coefficient, and dropout rate all had a
+negligible effect on the $F_1$-score. The maximum recall, precision, and
+$F_1$-score achieved by the 2-layer FFNNs is 0.921, 0.678, and 0.745
+respectively.
+
+<!---- Hyperparameter-f1 scatter plot for nlayers == 3 --->
+
+#### Performance for 3-layer FFNNs
+
+Figure \ref{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=3} shows the
+$F_1$-score of each 3-layer FFNN against all hyperparameters, where each plot
+describes a different hyperparameter.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=3}}
+    \caption{$F_1$-score against all hyperparameters for all 51-class FFNNs
+    with 3 layers. Each plot represents a different hyperparameter.}
+    \label{fig:05_51ffnn,x=hpar,y=f1,c=hpar,nlayers=3}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The 3-layer FFNNs generally performed worse than the 1- and 2-layer FFNNs. The
+learning rate of the 3-layer FFNNs appears to have a very precise range of
+values for which a good $F_1$-score was achieved. This effect will be better
+explored in Figure \ref{fig:05_51ffnn,x=p,y=r,h=lr,c=nlayers} by looking at the
+precision-recall scatter plot for 1-, 2-, and 3-layer FFNNs.
+
+The number of nodes in each of the layers had less of an impact in the 3-layer
+FFNNs compared to the 1- and 2-layer FFNN, so long as there was a sufficient
+number of nodes in the first layer.
+
+The dropout rate has a large impact on the $F_1$-score, and the majority of
+well-performing 3-layer FFNNs had a dropout rate below 0.2. This will be
+discussed in more detail.
+
+The batch size, and L2 coefficient had a negligible effect on the $F_1$-score.
+The maximum recall, precision, and $F_1$-score achieved by the 3-layer FFNNs is
+0.933, 0.685, 0.742 respectively.
+
+<!---- Split violin plots of recall > 0.7--->
+
+#### Hyperparameters causing the cluster around recall > 0.7
+
+Figure \ref{fig:05_51ffnn,c=hpar,x=hpar,y=recall>70} shows a set of scatter
 plots, with one plot for each hyperparameter for 51-class FFNNs.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,c=hpar,x=hpar,y=recall>70}
-    \caption{Set of violin/strip plots with hyperparameter value on the x,
-    recall>0.7 on the y. It shows that there is no hyperparameter range which
-    causes good performance, only those which are necessary but not
-    sufficient.}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,c=hpar,x=hpar,y=recall>70}}
+    \caption{Scatter plots of each of the hyperparameters for
+    the 51-class FFNNs, where blue shows the points for FFNNs with a recall
+    greater than 0.7, and orange shows the points for FFNNs with a recall
+    less than 0.7. While one can see ranges of hyperparameter values which
+    often result in a recall greater than 0.7, there are no hyperparameter
+    ranges which entirely explain good performance.}
     \label{fig:05_51ffnn,c=hpar,x=hpar,y=recall>70}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-The colour of each point informs whether it's recall is greater than 0.7. If
+The colour of each area informs whether it's recall is greater than 0.7. If
 there were a hyperparameter which could result in a FFNN with a recall greater
 than 0.7, then one would expect the plot for that hyperparameter to contain a
-range where the vast majority of FFNNs have a recall greater than 0.7 and very
+range where the majority of FFNNs have a recall greater than 0.7 and very
 few FFNNs with a recall less than 0.7. However this is not the case. There do
 appear to be a few hyperparameters which are necessary for a FFNN to achieve a
 recall greater than 0.7 (learning rate, number of nodes in the first layer, the
@@ -1286,17 +1447,20 @@ for a FFNN to achieve a recall greater than 0.7.
 
 <!---                       LR vs npl1                           --->
 
+#### Performance vs Learning rate and Nodes in layer 1
+
 Figure \ref{fig:05_51ffnn_x=lr,y=npl1,h=f1} shows the learning rate of all
 51-class FFNNs against the number of nodes in layer 1, with the colour of each
 point indicating the validation $F_1$-score of that FFNN.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn_x=lr,y=npl1,h=f1}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn_x=lr,y=npl1,h=f1}}
     \caption{The learning rate against the number of nodes in the first layer
-    of all 51-class FFNNs. Note that a small amount of random noise has been
-    applied to the hyperparameters (but not the $F_1$-score). As each set of
+    of all 51-class FFNNs, with the colour of each point indicating the
+    $F_1$-score. Note that a small amount of random noise has been applied to
+    the hyperparameters (but not the $F_1$-score). As each set of
     hyperparameters was trained five times, this prevents five points (which
     have identical hyperparameters) being plotted directly on top of one
     another.}
@@ -1312,10 +1476,12 @@ number of nodes in the first layer.
 It can also be seen that FFNNs with more nodes in their first layer were more
 likely to have a higher recall than FFNNs with fewer nodes, so long as the
 learning rate was in the required range. FFNNs with a recall greater than 0.74
-generally had more than 31 ($10^{1.5}$) nodes in their first layer and had a
+generally had more than 31 ($\approx 10^{1.5}$) nodes in their first layer and had a
 learning rate in the range $[10^{-4}, 10^{-3}]$.
 
 <!---                    precision-recall hue=nlayers                      --->
+
+#### Performance vs Number of Layers
 
 Figure \ref{fig:05_51ffnn,x=p,y=r,h=nlayers} showed that the cluster of
 performant FFNNs with a recall greater than 0.7 contains FFNNs with 1-, 2-, and
@@ -1325,10 +1491,14 @@ performant FFNNs with a recall greater than 0.7 contains FFNNs with 1-, 2-, and
 rate.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=lr,c=nlayers}
-    \caption{todo}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=p,y=r,h=lr,c=nlayers}}
+    \caption{Precision-recall scatterplots with the colour indicating the
+    learning rate according to the shared colour bar on the right. Each plot
+    represents all 51-class FFNNs with 1-, 2-, or 3-layers. Note the clustering
+    that happens with the 1- and 2-layer FFNNs. Too few 3-layer FFNNs achieve
+    good performance for clustering to be readily visible.}
     \label{fig:05_51ffnn,x=p,y=r,h=lr,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1369,17 +1539,24 @@ is not the case, <!-- TODO: Figures to back this point up --> and it is
 therefore likely that the FFNNs with 2 and 3 layers are less efficient at using
 the fixed computational budget to learn the dataset.
 
-<!---       learning rate vs f1-score and number of nodes in last layer               --->
+<!---       learning rate vs f1-score and number of nodes in last layer  --->
+
+#### Performance vs learning rate and nodes in the last layer
 
 Figure \ref{fig:05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers} shows the learning rate
 and the number of nodes in the last layer of the 1-, 2-, and 3-layer FFNNs,
 with the point's colour indicating the $F_1$-score of the FFNN.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers}
-    \caption{todo}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers}}
+    \caption{The number of nodes in the last layer against the learning rate of
+    all 51-class FFNNs, with one plot for each of the 1-, 2-, and 3-layer
+    FFNNs. Colour of a point indicates the $F_1$-score of the FFNN, as
+    indicated by the shared colour bar on the right. Note the relatively narrow
+    band of learning rates which resulted in performant FFNNs. A small amount of
+    random noise is applied to each point such that they do not overlap.}
     \label{fig:05_51ffnn,x=lr,y=npl-1,h=f1,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1393,15 +1570,24 @@ the model with the greatest number of nodes in its last layer.
 
 <!---                       Nodes per layer 1/2/3 vs F_1                      --->
 
+#### Performance vs nodes in layers 1, 2, and 3
+
 Figure \ref{fig:05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers} shows the number of
 nodes in each layer against the $F_1$-score of the 51-class FFNNs with 1, 2,
 and 3 layers.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers}
-    \caption{caption todo}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers}}
+    \caption{The number of nodes in layer $i$ against the number of nodes in
+    layer $j$, for $i, j \in [1,2,3]$ and where $i,j$ is not greater than the
+    number of layers of the FFNN. The colour represents the $F_1$-score, as
+    indicated by the shared colour bars on the right. Note that since 1-layer
+    FFNNs only have 1 layer, there is no variable mapped to the y-axis.
+    Instead, some noise is added in the vertical direction so that the points
+    do not overlap. A small amount of random noise is applied to each point
+    such that they do not overlap.}
     \label{fig:05_51ffnn,x=npl1,y=npl2,h=f1,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1446,12 +1632,13 @@ This hypothesis is backed up by the 3 dimensional plot in Figure
 FFNNs.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1}}
     \caption{All 51-class 3-layer FFNNs with the number of nodes in each layer
     assigned to the x, y, and z axis. The colour of each point represent the
-    $F_1$-score of that FFNN.}
+    $F_1$-score of that FFNN. A small amount of random noise is applied to each
+    point such that they do not overlap.}
     \label{fig:05_51ffnn,x=npl1,y=npl2,z=npl3,h=f1}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1470,6 +1657,8 @@ increase before reducing as the number of nodes became too great.
 
 <!---                       Regularisation                      --->
 
+#### Performance vs dropout rate and L2 coefficient
+
 Figure \ref{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers} shows the dropout rate
 against the $F_1$-score for the 1-, 2-, and 3-layer FFNNs, with the colour of
 each point indicating the L2 coefficient.
@@ -1477,8 +1666,12 @@ each point indicating the L2 coefficient.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}}
-    \caption{Caption here}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}}
+    \caption{The dropout rate of each of the 51-class FFNNs against the
+    $F_1$-score and with the L2 coefficient indicated by the colour of each
+    point and the shared colour bar on the right. One plot each is assigned to
+    the 1-, 2-, and 3-layer FFNNs. A small amount of random noise is applied to
+    each point such that they do not overlap.}
     \label{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1488,7 +1681,9 @@ The dropout rate has little to no effect on the 1-layer FFNNs, while the 2- and
 FFNNs, a low dropout rate was not the sole factor which resulted in a high
 $F_1$-score, however having a high dropout rate rarely resulted in high
 $F_1$-scores. The L2 coefficient had little impact on the $F_1$-scores of any
-of the FFNNs, with no range of L2 coefficient showing superior performance.
+of the FFNNs, with no range of Lo coefficient showing superior performance.
+Because dropout has the effect of setting a subset of nodes' output to zero,
+it is not surprising that dropout worked best for models with more layers.
 
 Figure \ref{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers} shows the
 dropout rate against the number of nodes in the last layer for the 1-, 2-, and
@@ -1497,8 +1692,12 @@ dropout rate against the number of nodes in the last layer for the 1-, 2-, and
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}}
-    \caption{Caption here}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}}
+    \caption{The dropout rate of each of the 51-class FFNNs against the number
+    of nodes in the last layer of the FFNN, with the $F_1$-score indicated by
+    the colour of each point and the shared colour bar on the right. One plot
+    each is assigned to the 1-, 2-, and 3-layer FFNNs. A small amount of random
+    noise is applied to each point such that they do not overlap.}
     \label{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1521,11 +1720,9 @@ the extra layer introduces more complexity into its performance characteristics.
 
 ## Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
 
-<!-- TODO do a proper hpar analysis here -->
-
 As with the FFNNs, the HFFNNs have many hyperparameters. Plots which show no
 relationship between hyperparameters and evaluation metrics will be excluded
-from this chapter. Unabridged figures with all hyperparameters have been placed
+from this section. Unabridged figures with all hyperparameters have been placed
 in the Appendix and will be mentioned should the interested reader wish to view
 them, although they will not be necessary for the discussion.
 
@@ -1538,13 +1735,11 @@ of each HFFNN.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_mean_conf_mat_hffnn}
-    \caption{The weighted confusion matrices of three HFFNN classifiers,
-    trained on 5, 50, and 51 classes. The confusion matrices are weighted by
-    the $F_1$-score of each model, such that better performing models have a
-    greater impact on the weighted confusion matrix. The bottom right plot
-    shows the precision-recall plot for the CuSUM, with each colour
-    representing the CuSUM trained on different numbers of classes.}
+    \makebox[\textwidth][c]{\includegraphics[width=\textwidth]{src/imgs/graphs/05_mean_conf_mat_hffnn}}
+    \caption{The weighted confusion matrices of 51-class HFFNN classifier. The
+    confusion matrix is weighted by the $F_1$-score of each model, such that
+    better performing models have a greater impact on the weighted confusion
+    matrix.}
     \label{fig:05_mean_conf_mat_hffnn}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1564,20 +1759,156 @@ minority classes.
 
 ### 51-class HFFNN Hyperparameter Analysis
 
-<!--- TODO
-Currently the "perfect" decision rules first achieve perfect recall and then
-try achieve perfect precision.
+<!--------------------------Maj nlayers vs Min nlayers----------------------------->
 
-- Try make a perfect set of decision rules which first achieve perfect
-  precision and then achieve perfect recall.
+Figure \ref{fig:05_51hffnn,x=nlayers,y=f1,h=nlayers,c=majmin} shows the
+$F_1$-score of all 51-class HFFNNs, grouped by the number of layers of the
+majority classifier and of the minority classifier, with the colour of each
+point describing the number of layers in the minority classifier and
+majority classifier respectively.
 
-Also look at a decision rule that first splits by number of layers and then
-splits by other values.
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51hffnn,x=nlayers,y=f1,h=nlayers,c=majmin}}
+    \caption{The number of layer of the majority and minority classifiers for
+    all 51-class HFFNNs against performance metrics. The top row shows the
+    $F_1$-score organised based on the number of layers in the majority (left)
+    and minority (right) classifiers. In these plots, the colour of each point
+    represents the number of layers in the other classifier. The bottom plot
+    shows the precision-recall scatterplot for all 51-class HFFNNs, with the
+    colour of each point representing the number of layers in the majority
+    classifier and the marker shape indicating the number of layers in the
+    minority classifier.}
+    \label{fig:05_51hffnn,x=nlayers,y=f1,h=nlayers,c=majmin}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Looking at the left plot which splits the HFFNNs by the number of layers in the
+majority classifier, we can see that the 1-layer classifiers are generally more
+likely to have a higher $F_1$-score than the 2- and 3-layer classifiers. The
+well-performing HFFNNs with 1-layer majority classifiers are also more likely
+to have 1-layer minority classifiers. A similar observation can be made for the
+well-performing HFFNNs with 2-layer majority classifiers: they too are more
+likely to have 1-layer minority classifiers. There are very few high
+$F_1$-score HFFNNs with a majority classifier with 3 layers. The performance of
+the HFFNN generally decreased as the number of layers in the majority
+classifier increased.
+
+Looking at the plot on the right which splits the HFFNNs by the number of
+layers in the minority classifier, we can see that while the 1-layer minority
+classifiers more frequently achieve a better $F_1$-score than the 3-layer
+minority classifiers; the performance of the HFFNN generally improved as the
+number of layers in the minority classifier increased. This is the opposite of
+the trend observed for the number of layers in the majority classifier. The
+best HFFNN had a majority classifier with 1 layer and a minority classifier
+with 3 layers.
+
+This can be understood by observing that the majority classifier is a binary
+classifier, and needs to only distinguish class 50 from all the gesture classes
+$0 \ldots 49$. The minority classifier is a multi-class classifier and has to
+distinguish between all 50 gesture classes $0 \ldots 49$. The minority
+classifier is more able to make use of additional layers because of the number
+of classes required to be classified, while the majority classifier is able to
+accomplish the binary classification task with only one layer.
+
+<!--------------------------Nodes in last layer----------------------------->
+
+Figure \ref{fig:05_51hffnn,x=npl-1,y=f1,h=majmin,c=majmin} shows the number of
+nodes in the last layer of the majority and minority classifiers for all
+51-class HFFNNs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51hffnn,x=npl-1,y=f1,h=majmin,c=majmin}}
+    \caption{The top row shows the $F_1$-scores on the y-axis plotted against
+    the number of nodes in the last layer of the majority/minority classifier
+    (x-axis), and with the colour of each point indicating the number of nodes
+    in the last layer of the minority/majority classifier. The bottom plot
+    shows the interactions between the number of nodes in the last layer of the
+    majority (x-axis) and minority (y-axis) classifiers, with the $F_1$-score
+    indicated by the colour of each point.}
+    \label{fig:05_51hffnn,x=npl-1,y=f1,h=majmin,c=majmin}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+Overall there is very little connection between the number of nodes in the last
+layer of either the majority or minority classifier and the performance of the
+overall FFNN. It is possible that there is a positive relationship between the
+number of nodes in the last layer of the minority classifier and the
+$F_1$-score, however this effect is slight. It also appears that the
+$F_1$-score is reduced for HFFNNs with a large ($>10^2$) number of nodes in
+the last layer of the majority classifier. It is possible that the increased
+number of nodes but constant number of epochs assigned to training the
+classifier meant that the majority classifier was less able to learn the
+dataset within the computational budget. <!-- TODO: this is a poor
+explanation-->
+
+Of interest is how relatively well performing HFFNNs can have very few (less
+than 10) nodes in the last layer of either the majority or minority classifier.
+The rightmost plot of Figure
+\ref{fig:05_51hffnn,x=npl-1,y=f1,h=majmin,c=majmin} shows the number of nodes
+in the last layer of the majority and minority classifiers plotted against each
+other, with the colour of each point indicating the $F_1$-score of the HFFNN.
+There are no well-performing HFFNNs with few nodes in the last layer of both
+the majority and minority classifiers (as seen in the bottom left of the plot).
+This is to be expected, as some amount of capacity is required for the
+classifiers to be able to learn the data. HFFNNs with very few ($<10$) nodes in
+the last layer of the majority classifier are still able to perform well if the
+number of nodes in the last layer of the minority classifier is sufficiently
+high ($>10^{1.5}$).
+
+<!--------------------------Maj LR vs Min LR----------------------------->
+
+Figure \ref{fig:05_51hffnn,x=lr,y=f1,h=lr,c=majmin} shows the learning rates of
+the majority and minority classifiers against the $F_1$-scores of the 51-class
+HFFNNs.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51hffnn,x=lr,y=f1,h=lr,c=majmin}}
+    \caption{The top row shows the $F_1$-scores on the y-axis plotted against
+    the learning rate of the majority/minority classifier (x-axis), and with
+    the colour of each point indicating the learning rate of the
+    minority/majority classifier. The bottom plot shows the interactions
+    between the learning rate of the majority (x-axis) and minority (y-axis)
+    classifiers, with the $F_1$-score indicated by the colour of each point.}
+    \label{fig:05_51hffnn,x=lr,y=f1,h=lr,c=majmin}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+For the majority classifier, there is a wide range of learning rates
+(in the range $[10^{-4.5}, 10^{-2.5}]$ for which the HFFNN will learn the
+dataset. While all high-performing HFFNNs did have a majority learning rate in
+this range, this condition is not sufficient for a HFFNN to perform well. There
+are many HFFNNs with majority learning rates in this range which failed to
+learn the dataset.
+
+HFFNNs with majority learning rates just beyond the range specified above
+($[10^{-5}, 10^{-4.5}]$ or $[10^{-2.5}, 10^{-1.5}$) do still manage to learn
+the dataset, but do so at a performance level that reduces as the majority
+learning rate gets further from the optimal range of $[10^{-4.5}, 10^{-2.5}]$.
+
+For the minority classifier, the range of optimal learning rates is similar
+($[10^{-4}, 10^{-2}]$) however learning rates outside of this range generally
+fare very poorly and fail to learn the data. The performance the minority
+classifier is a lot more sensitive to sub-optimal learning rates than that of
+the majority classifier. As with the majority classifier, having a minority
+learning rate in the optimal range did not guarantee good performance, as it is
+a necessary but not sufficient condition for a high $F_1$-score.
+
+The best performing HFFNNs generally had both the minority and majority
+learning rates in their respective optimal ranges.
+
+<!--
+TODO: there's not a whole lot of in-depth analysis going on here. Maybe you
+need to add some plots just to show nothing's going on?
+Make some plots of f1 vs hpar
 -->
 
-<!-- TODO: Distribution of the hyperparameters [plots thereof] -->
-
-# Which model performs the best with 51 classes? \label{best-model}
+# Best performing 51-class classifier \label{best-model}
 
 The performance of each of the five classification algorithms can be seen in
 Figure \ref{fig:05_precision_recall_51_classes} (for those models trained on
@@ -1586,11 +1917,10 @@ all 51 classes).
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_precision_recall_51_classes}
-    \caption{ Left: precision and recall for all model types trained on the
-    full 51 classes, with the contours depicting the $F_1$-scores for those
-    models. Right: The $F_1$-scores for the same models, shown side-by-side for
-    easier comparison. }
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_precision_recall_51_classes}}
+    \caption{Left: precision and recall for all model types trained on the full
+    51 classes. Right: The $F_1$-scores for the same models, shown side-by-side
+    for easier comparison.}
     \label{fig:05_precision_recall_51_classes}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -1638,6 +1968,22 @@ and precision.
 TODO: This needs to be highlighted with an experiment or with results....
 -->
 
+Figure \ref{fig:05_all_f1_scores} shows all models grouped by those which had
+the same hyperparameters, ordered by the lower bound of the 90% $F_1$-score.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_all_f1_scores}}
+    \caption{All models and their $F_1$-scores. Each point is a model, and
+    points sharing the same x-value had identical sets of hyperparameters. The
+    black horizontal bars show the mean $F_1$-score of each set of models with
+    identical hyperparameters. Sets of hyperparameters are ordered based on the
+    lower bound of the 90\% confidence interval for the $F_1$-score.}
+    \label{fig:05_all_f1_scores}
+\end{figure}
+<!-- prettier-ignore-end -->
+
 Each set of hyperparameters for each model type was trained and evaluated on
 five different subsets of the data, resulting in five different validation sets
 and five different training sets for each hyperparameter combination. The
@@ -1650,7 +1996,7 @@ five times.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics{src/imgs/graphs/05_hpar_comparison_per_model_type}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_hpar_comparison_per_model_type}}
     \caption{$F_1$-score for each model type on each set of hyperparameters
     that were tested. The hyperparameter index is a unique number assigned to
     each set of hyperparameter-model type combinations. The black horizontal
@@ -1673,14 +2019,14 @@ testing data.
 
 One can clearly see from Figure \ref{fig:05_hpar_comparison_per_model_type}
 that the FFNNs, the HFFNNs, and the SVMs all perform well. Figure
-\ref{fig:05_best_hpar_comparison} shows the best performing 41 hyperparameters.
+\ref{fig:05_best_hpar_comparison} shows the best performing 60 hyperparameters.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics{src/imgs/graphs/05_best_hpar_comparison}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_best_hpar_comparison}}
     \caption{Performance of hyperparameter combinations for the best performing
-    41 hyperparameters. The black horizontal markers indicate the mean
+    60 hyperparameters. The black horizontal markers indicate the mean
     performance, and each dot indicates the performance on run.}
     \label{fig:05_best_hpar_comparison}
 \end{figure}
@@ -1688,13 +2034,13 @@ that the FFNNs, the HFFNNs, and the SVMs all perform well. Figure
 
 It can be seen that the FFNNs are very prevalent amongst the best-performing
 models. There are a few HFFNNs achieving good performance, and all SVMs
-achieved approximately the same level of performance. The SVMs generally
-performed worse than the neural network based models.
+achieved approximately the same level of performance. The best SVMs generally
+performed worse than the best neural network based models.
 
-Given that the best 17 performing models are all FFNNs, it can be concluded
+Given that the best 20 performing models are all FFNNs, it can be concluded
 that well-tuned FFNNs perform the best on this dataset. It should be noted that
 SVMs perform relatively well on the dataset, regardless of the hyperparameters
-used. This is in start contrast to neural network based methods which
+used. This is in stark contrast to neural network based methods which
 outperform SVMs, but only after extensive hyperparameter tuning has been
 performed.
 
@@ -1740,7 +2086,7 @@ training and validation dataset.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_inf_trn_times_per_obs}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_inf_trn_times_per_obs}
     \caption{Inference and fitting times for the validation and training
     datasets. Due to the range of the data, all axes are $\log_{10}$}
     \label{fig:05_inf_trn_times_per_obs}
@@ -1785,7 +2131,7 @@ very apparent.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_inference_time_per_obs_vs_f1}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_inference_time_per_obs_vs_f1}}
     \caption{Inference time per observation for each model plotted against each
     models' $F_1$-score.}
     \label{fig:05_inference_time_per_obs_vs_f1}
@@ -1814,15 +2160,16 @@ the cost of a less responsive system.
 
 Figure \ref{fig:05_f1_vs_f1_ratio} shows the validation and training $F_1$
 scores for every model trained all 51 classes. The ratio of a model's training
-$F_1$-score to its validation $F_1$-score can be used as a heuristic for how much a model
-is overfitting to the training data, as a model that performs very well on the
-training dataset but very poorly on the validation dataset is likely to have
-overfit on the data, and therefore is unlikely to perform well on unseen data.
+$F_1$-score to its validation $F_1$-score can be used to indicate whether a
+change in the distribution of the dataset (as seen when comparing the training
+and validation dataset) is likely to cause a change in performance. A model
+that performs very well on the training dataset but very poorly on the
+validation dataset is unlikely to perform well on unseen data.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_f1_vs_f1_ratio}
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_f1_vs_f1_ratio}}
     \caption{$F_1$ ratio (training $F_1$ over validation $F_1$) for each model,
     coloured by the model type. Plots a and c show the full range of their
     data, while plots b and d show the same data but magnified on a subset of
@@ -1830,16 +2177,6 @@ overfit on the data, and therefore is unlikely to perform well on unseen data.
     \label{fig:05_f1_vs_f1_ratio}
 \end{figure}
 <!-- prettier-ignore-end -->
-
-<!--
-TODO: High training f1 : low validation f1 does not imply overfitting.
-
-Only if the validation loss starts to increase can we say that a model has
-started to overfit
-
-What the f1-ratio does indicate is that a change in the distribution (ie
-validation set -> testing set) will likely cause a change in performance.
--->
 
 The plots in the first column of Figure \ref{fig:05_f1_vs_f1_ratio} (plots a
 and c) show the full range of the data, while the plots in the second column of
@@ -1862,57 +2199,29 @@ validation $F_1$-score of 0.0307 and is obscured on the plots by other models.
 Plots b and d highlights the region where $F_1 > 0.5$, showing several clusters
 for SVM models and regions occupied by the two neural network based models:
 FFNN and HFFNN. One can see that the training $F_1$-score is almost always higher
-than the validation $F_1$, as would be expected from models with a capacity to
-overfit to data that has been seen before.
+than the validation $F_1$, indicating that these models are likely to perform
+poorly on completely unseen datasets.
 
-The higher the $F_1$ ratio, the more probable it is that the model has overfit
-to the training data (as it was unable to generalise its performance to the
-validation data). In plots b and d, it can be seen that the SVMs tend to have a
-higher $F_1$ ratio. However, plot b shows that (within certain clusters of
-models) the training $F_1$-score of SVMs is largely uncorrelated with the
-validation $F_1$-score.
+The higher the $F_1$ ratio, the more probable it is that the model would
+perform well on completely unseen data. In plots b and d, it can be seen that
+the SVMs tend to have a higher $F_1$ ratio. However, plot b shows that (within
+certain clusters of models) the training $F_1$-score of SVMs is largely
+uncorrelated with the validation $F_1$-score.
 
 A possible explanation is that the SVMs are easily finding local maxima of
 performance on the training dataset. However, these local maxima do not
 properly convert to good performance on the validation dataset.
 
-<!-- TODO: ## Residual analysis of the best performing models -->
-
-# English-language test data \label{real-world-data}
-
-To evaluate the model on English-language typing data, the sensor measurements
-were stored as the phrase "The quick brown fox jumped over the lazy dog" was
-gestured. This stored phrase can then be fed to any model and that model's
-predictions can be analysed. The predictions from the best-performing model are
-shown in Figure \ref{fig:05_tqbfjotld}.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_tqbfjotld.png}
-    \caption{Time series plot of the phrase "the quick brown fox jumped over
-    the lazy dog" is typed.}
-    \label{fig:05_tqbfjotld}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- TODO ## Evaluation of autocorrect -->
-<!-- TODO ## Evaluation of end-to-end process -->
-
-<!--
-TODO: Clarify test set vs English dataset
--->
-
-# Evaluation of Models on the test set \label{test-set-eval}
+# Evaluation of models on the test set \label{test-set-eval}
 
 Figure \ref{fig:05_tst_set_conf_mat} shows confusion matrix and the per-class
 $F_1$-score, precision, and recall for the best performing hyperparameters
-(hyperparameter index 44).
+(hyperparameter index 73).
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_tst_set_conf_mat}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_tst_set_conf_mat}
     \caption{Confusion matrix and per-class $F_1$-score, precision, and recall
     for the best-performing model on the unseen test data.}
     \label{fig:05_tst_set_conf_mat}
@@ -1930,7 +2239,7 @@ for each gesture.
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics[height=5cm]{src/imgs/graphs/05_p_r_best_model}
+    \includegraphics[width=\textwidth]{src/imgs/graphs/05_p_r_best_model}
     \caption{Precision and recall for all 51 classes, as classified on the test
     set by the most performant model.}
     \label{fig:05_p_r_best_model}
@@ -1940,3 +2249,132 @@ for each gesture.
 It is clear that there is no systematic bias in the model against any gestures
 and that the gestures for which the model performs poorly is due to the data,
 not some bias inherent in the model.
+
+# English-language test data \label{real-world-data}
+
+In addition to evaluating _Ergo_ on the unseen test data, the best found model
+was run live as an example English-language sentence was gestured using the
+device. Note that this is completely separate from the training, validation,
+and testing datasets. This English-language example serves primarily as an
+evaluation of the end-to-end process, and is therefore less thorough than the
+datasets used for training, validation, and testing.
+
+To accomplish this, _Ergo_ was worn by the user as they gestured the phrase
+"The quick brown fox jumped over the lazy dog". This phrase has no particular
+meaning besides containing a wide variety of English letters. The raw sensor
+data is streamed back to the user's computer where the The best found model is
+run in real time and emitting gesture predictions based on the incoming sensor
+values. These gesture predictions are converted to keystrokes using the gesture
+to keystroke mapping and the resultant keystrokes emitted as though they were
+regular keyboard input to the operating system.
+
+For reproducibility, the raw sensor values are saved to disc. This allows
+another (possibly different) model to later make predictions on the saved data
+as though it were live data.
+
+The full phrase is visible in the Appendix, (Figure
+\ref{fig:appendix_pred_plot_0000_to_9420_full_text}) although due to the
+duration of time covered and the speed with which any one gesture is made,
+inspecting individual predictions is tricky. For this purpose, Figure
+\ref{fig:05_pred_plot_0900_to_1800_quick} shows the prediction probabilities for
+each of the 50 classes as well as the sensor values over the period when the
+word "quick " (with a space at the end) was gestured. The prediction
+probabilities look like vertical lines because due to the prediction frequency,
+which results in 900 predictions over the course of the word "quick". Each
+gesture only lasts for one time step, so the predictions spike from 0% to 100%
+for just that time step.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_pred_plot_0900_to_1800_quick}}
+    \caption{Time series plot of the sensor values and model predictions while
+    gesturing the word "quick ". Spaces are shown with quotes. Top: each
+    box shows the predicted keystroke and it's probability. Boxes are green if
+    the probability is above 50\% and the prediction is correct and it is at
+    the correct timestamp. Predictions which are either of too low probability,
+    at the incorrect time, or plainly wrong have a red box. Bottom: Each box
+    shows the ground truth keystroke and the class number in brackets.}
+    \label{fig:05_pred_plot_0900_to_1800_quick}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The FFNN correctly predicted the different keystrokes and did not often get
+confused. Looking at the predictions for the letters "u" and "c", one can see
+that immediately before or after a model predicts a class with high confidence,
+it predicts that same class with low confidence. This is to be expected, as the
+model input in sequential time steps is likely to be very similar.
+
+Looking at the letters "q", "u", and "i", one can see that the baseline sensor
+values do not change too much. This is because those three classes all have the
+same orientation (they all start with the digit 3) and so the orientation of
+the hands does not change from letter to letter. One can see the orientation of
+the hands changing in between the letter "i" (class 37) and the letter "c"
+(class 12), and then again from the letter "c" to the letter "k". The
+orientation does change from the letter "k" to the space, but it quickly
+changes back again.
+
+Figure \ref{fig:05_pred_plot_7400_to_8500_lazy} shows the prediction
+probabilities and sensor values for the word "lazy ". There are several points
+to note here.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_pred_plot_7400_to_8500_lazy}}
+    \caption{Time series plot of the sensor values and model predictions while
+    gesturing the word "lazy ". Spaces are shown with quotes. Top: each
+    box shows the predicted keystroke and it's probability. Boxes are green if
+    the probability is above 50\% and the prediction is correct and it is at
+    the correct timestamp. Predictions which are either of too low probability,
+    at the incorrect time, or plainly wrong have a red box. Bottom: Each box
+    shows the ground truth keystroke and the class number in brackets.}
+    \label{fig:05_pred_plot_7400_to_8500_lazy}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+The first prediction, that of the letter "l", predicted "l" with 76% and "o"
+with 17%. When multiple prediction probabilities for a given time step are
+greater than 10% (and are not class 50), they are all drawn within the same
+box.
+
+The classes for "l" and "o" are 28 and 38 respectively, meaning that the same
+finger is used, and only the orientation of the hand differs between them. As
+the two classes are similar to one another, it is not unexpected that the model
+emits a low probability for "o" when "l" is gestured. It is also entirely
+possible that the actual performed gesture was slightly more similar to the
+gesture for "o" than usual.
+
+The letter "a" is predicted with 61% probability at one time step and then is
+predicted with 97% probability at another time step. The fact that there are
+two boxes indicate that the predictions are done at different time steps. Only
+the one prediction is marked as "correct", because that is the timestep which
+aligned with the ground truth label. As _Ergo_ does not emit keystrokes for
+repeated predictions, the end user would be completely unaware of this double
+prediction. A similar situation happens for the keystroke "z", where there is a
+high probability and low probability of the same keystroke in quick succession.
+Predictions made with a probability of less than 50% are marked as incorrect.
+
+Figure \ref{fig:05_eng_lang_phrase_conf_mat} shows the confusion matrix of the
+English-language predictions.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_eng_lang_phrase_conf_mat}}
+    \caption{Confusion matrix of the best performing model predicting the
+    gesture on the example English-language phrase "the quick brown fox jumped
+    over the lazy dog". Note that the confusion matrix does not have a value in
+    every row as the chosen phrase does not contain every single gesture that
+    can be performed.}
+    \label{fig:05_eng_lang_phrase_conf_mat}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+While not every gesture was tested, the mistakes made on those gestures which
+were tested are informative. For this particular dataset, mispredictions where
+gesture 50 is predicted occurred for the classes 6 (a space) and 33 ("r" from
+the word "brown"). All other classes had perfect recall. The bottommost row
+represents time steps where the model predicted there was a gesture when there
+was no gesture. This occurred for the classes 20 ("a" from "lazy"), 24 ("g"
+from "dog"), 31 ("w" from "brown"), 32 ("e").

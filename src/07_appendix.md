@@ -1,14 +1,4 @@
 \chapter{Additional Figures}
-Look at additional Figure \ref{fig:appendix_todo}
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/05_tqbfjotld}
-    \caption{todo}
-    \label{fig:appendix_todo}
-\end{figure}
-<!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
@@ -69,8 +59,18 @@ Look at additional Figure \ref{fig:appendix_todo}
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
-    \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}}
     \caption{Pairplot of all hyperparameters for 51-class FFNNs.}
     \label{fig:appendix_hpar_analysis_ffnn_pairplot}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_pred_plot_0000_to_9420_full_text}}
+    \caption{Predictions and raw sensor values for the full phrase "the
+    quick brown fox jumped over the lazy dog".}
+    \label{fig:appendix_pred_plot_0000_to_9420_full_text}
 \end{figure}
 <!-- prettier-ignore-end -->

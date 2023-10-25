@@ -9,6 +9,8 @@ keystrokes is described
 <!--
 TODO: Ensure this is fully integrated
 
+TODO explain how the 51-class HMMs ran into computation limits
+
 TODO: Explain how dropout works:
 - it reduces the training loss
 - it is only applied during training

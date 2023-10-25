@@ -2,6 +2,21 @@
 
 TODO Discuss the difficulties of segmentation and how most of the literature
 does not attempt this.
+
+
+Notes on writing a conclusion from TG:
+
+1. "summary of thesis": a bit like the introduction has a summary, but this
+   should give the key results from each chapter
+2. "Answering RQ": answer the research questions one by one
+3. Recommendations: Used to convince the reader that I know what's what. What
+   are the take-home messages? What would I want to know if I were doing this
+   again? How can I prove that I'm not a question-answering parrot and that I
+   actually did gain something from this MSc
+4. Future work. Because there's always more to do.
+
+
+TODO: Get a friend to do the afrikaans translations for you.
 -->
 
 This report has presented a suite of sensors which are worn on the user's hands
