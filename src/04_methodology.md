@@ -7,43 +7,51 @@ models is discussed, and the method for turning gesture predictions into
 keystrokes is described
 
 <!--
+TODO give details about the size of the training, validation, testing sets and
+the number of gesture observations in each
 
-Explain that "class" shall refer to any class 0..=50, gesture class to any
-class 0..=49, and non-gesture class to class 50
-
-TODO: Ensure this is fully integrated
-
-TODO explain how the 51-class HMMs ran into computation limits
-
-TODO: Explain how dropout works:
-- it reduces the training loss
-- it is only applied during training
-- during validation, the output is normalised so the output of each layer is
-  the same
-- dropout is applied to the output of each layer
-
-TODO: have an explanation that precision/validation/f1 is always on the
-validation set unless otherwise noted.
-
- ## (Some things I'll cover in the Methodology chapter)
-
-Hi Professor, this section will be removed, but I found there were a few times
-where I needed to mention something but that thing was better mentioned in the
-methodology chapter rather than the results chapter. So this section just has
-some things which I'll write up in the methodology chapter, but which I thought
-would be confusing to not acknowledge at all:
-
-1. How do HMMs/CuSUM/SVMs go from binary classifiers to multi-class classifiers
-
-TODO:
-One thing an examiner will look at is if your methodology is correct. Did you
-split training/test and validation. Was there leakage. How big is each set...
-How did you do hyperparameter tuning. None of this is clear.... Please make
-sure it is. Remember an examiner is looking for different things than what you
-are interested in. You want to show how each mode is doing on 51 classes. The
-examiner is checking;
-
+TODO: Lots of these section headings aren't really in any proper order and
+should be in some order.
 -->
+
+# One-vs-rest multi-class classification
+
+Some classification algorithms have support for multi-class classification
+built-in to the classification procedure. The training and classification
+procedure for these algorithms does not depend on whether the task is binary or
+multi-class classification. Examples would be Feed Forward Neural Networks or
+Decision trees. Other classification algorithms only support binary
+classification and cannot natively perform multi-class classification. Examples
+would be Hidden Markov Models or Support Vector Machines. However, binary
+classification algorithms can be converted into $n$-class classification
+algorithms by creating an ensemble of $n$ binary classifiers. In this setup,
+the $i$-th binary classifier would be trained to predict if a given observation
+belongs to class $i$. These $n$ classifiers can then be polled sequentially,
+and a well trained ensemble will have one binary classifier predicting YES and
+all other classifiers predicting NO. This procedure for using an ensemble of
+binary classifiers as a multi-class classifier is called one-vs-rest
+classification.
+
+It is possible to construct an ensemble such that fewer than $n$ binary
+classifiers are required. This is done in a means similar to binary search: the
+first binary classifier is trained to differentiate the classes $[0,
+\lfloor\frac{n}{2}\rfloor]$ from the classes $[\lfloor\frac{n}{2}\rfloor+1,
+n]$. The second classifier is then trained to recognise the classes $[0,
+\lfloor\frac{n}{4}\rfloor]$ from the classes $[\lfloor\frac{n}{4}\rfloor+1,
+\lfloor\frac{n}{2}\rfloor]$ and the third classifier to recognise the classes
+$[\lfloor\frac{n}{2}\rfloor+1, \lfloor\frac{3 n}{4}\rfloor]$ from the classes
+$[\lfloor\frac{3 n}{4}\rfloor+1, n]$. This procedure of iteratively halving the
+classes each binary classifier predicts is continued recursively until each
+binary classifier is distinguishing between only two classes. This method
+requires only $log(n)$ binary classifiers compared to one-vs-rest's $n$.
+However, problems can arise in training the classifiers if the groups of
+classes which are predicted are dissimilar. There is no guarantee that the
+first $\lfloor\frac{n}{2}\rfloor$ classes are all similar to each other and are
+all dissimilar to the last $\lfloor\frac{n}{2}\rfloor$ classes, yet this is the
+task which the first binary classifier must learn to do. Without guarantees
+about the similarities between classes, a binary-tree style ensemble of binary
+classifiers will have to trade off classification performance for efficiency of
+computation.
 
 # Construction of Ergo
 
@@ -57,7 +65,7 @@ fingertips (see Figure \ref{fig:04_accelerometers}).
     \caption{\emph{Ergo} consists of ten ADXL335 tri-axis linear
     accelerometers, each one of which is mounted to the back of the user's
     fingertips (highlighted in red)}
-    \label{fig:accelerometers}
+    \label{fig:04_accelerometers}
 \end{figure}
 <!-- prettier-ignore-end -->
 
@@ -91,7 +99,7 @@ On the user's computer, it is associated with a time stamp. What happens next
 is dependant on whether the software is configured to capture the data or to
 feed the data to a classification model in real time.
 
-# Data collection and Cleaning
+# Data Collection and Cleaning
 
 To collect training data, the author wore the device and performed the gestures
 for a sufficient amount of time to get enough data. As the gestures were being
@@ -130,32 +138,37 @@ gestures were performed, resulting in a dataset of 241762 observations of 30
 different sensor readings. On average 115 observations were recorded per
 gesture class.
 
-# Splitting the data into train, test, validation \label{sec:trn_tst_val}
+# Splitting the Data into Train, Test, Validation \label{sec:trn_tst_val}
 
 The measurements recorded from _Ergo_ are stored on disk as several files
 listing the time stamp, the 30 sensor values, and the associated gesture with
-that particular time stamp. There are 37MB and 241 762 lines of data.
+that particular time stamp. There are 37MB and 241 762 observations, 235 995 of
+which belong to class 50 and the remaining 5 767 are the gesture classes.
 Preliminary testing showed that models trained on just a single instant of time
 did not perform as well as models provided with a historical window of data.
 For this reason, the entire dataset is combined together and then windowed to a
 size of 20 timesteps, so as to produce a dataset of shape $(\text{number of
 observations}, 20, 30)$.
 
-25% of this dataset is split off and saved as the testing dataset. It is saved
-as a single binary file, completely separate from the training and validation
-data. The test-set-splitting procedure is designed to ensure that the frequency of the
-different classes is maintained, but otherwise chooses a random subset of the
-full dataset.
+25% of this dataset is split off and saved as the testing dataset, resulting in
+60440 observations (14 417 gesture class observations) in the testing dataset.
+It is saved as a single binary file, completely separate from the training and
+validation data. The test-set-splitting procedure is designed to ensure that
+the frequency of the different classes is maintained, but otherwise chooses a
+random subset of the full dataset.
 
-The remaining 75% of the dataset is saved to disc as a single binary file. The
-training-validation dataset is only split into separate training and validation
-datasets at training time, just before each model is fit to the training
-subset. This split is random, but the pseudo-random number generator (PRNG) is
-initialised with a seed based on the model type, hyperparameter set, and
-repetition number, such that each training-validation split is different but
-reproducible. Splitting the dataset into training and validation datasets based
-on a PRNG also allows for an arbitrary number of repetitions to be made for
-cross validation.
+The remaining 75% of the dataset (181 321 total observations, 4 325 gesture class
+observations) is saved to disc as a single binary file. The training-validation
+dataset is only split into separate training and validation datasets at
+training time, just before each model is fit to the training subset. This split
+is random, but the pseudo-random number generator (PRNG) is initialised with a
+seed based on the model type, hyperparameter set, and repetition number, such
+that each training-validation split is different but reproducible. Splitting
+the dataset into training and validation datasets based on a PRNG also allows
+for an arbitrary number of repetitions to be made for cross validation. Of the
+75% of the dataset set aside for training/validation, 75% (135 990
+observations, 3 243 gesture class observations) is used for training leaving
+25% (45 330 observations, 1 078 gesture class observations) for validation.
 
 The exact procedure is given in Algorithm \ref{alg:04_hyperparam_search}.
 
@@ -195,7 +208,7 @@ observation data: a 600 dimension vector that originated from a $20 \times 30$
 matrix that had been flattened. The 20 comes from 20 timesteps of history, and
 the 30 from the 30 sensors.
 
-# Explicit vs implicit segmentation
+# Explicit and Implicit Segmentation
 
 In the _Ergo_ dataset, gestures are not explicitly segmented from the
 surrounding background noise. That is, there are no markers which inform any
@@ -204,19 +217,30 @@ work provides impressive results
 
 Data segmentation is "implicit": There's no nice labels marking the start
 and end of each gesture, the model has to learn 1. how to extract
-gestures from background and 2. how to differentiate between the
+gestures from background and 2. How to differentiate between the
 different gestures.
 
 # Experimental Procedure
 
 Experiments will be conducted so as to answer the research questions posed in
-the Introduction. The following experiments will be performed
+the Introduction. The following experiments will be performed.
 
-- Evaluate multiple {hmm|cusum|hffnn|ffnn|svm} models on the
-  training-validation set
-- Then what?
+Multiple random search evaluations of the various models.
 
-<!--- TODO
+Recording the fitting and inference times so we can determine how long each
+model takes
+
+Multiple repetitions for statistical validity
+
+Performance on 5, 50, and 51 class problem sets to see what's what.
+
+Evaluating the best performing model on the test set
+
+Evaluating the best performing model on the English-language live dataset to
+see how it would perform IRL.
+
+<!---
+TODO: Need to actually expand this out
 (These should tie into the "research questions" asked in the introduction, so
 probably need to come up with those first)
 -->
@@ -330,39 +354,9 @@ taken to see, on average, which sensors are alerted for which gestures.
 Then to classify an observation, we run CuSUM on the given observation and
 compare the sensors which did alert with the reference values. We take the
 difference between them, and figure out which one is closest to the recorded
-ood values for each sensor.
+OoD values for each sensor.
 
-<!-- prettier-ignore-start -->
-\begin{algorithm}
-\caption{CuSUM Classifier Fitting with Sensor Averages}
-\label{alg:cusum-clf}
-\begin{algorithmic}
-\Require Threshold: $threshold$
-\Require Dataset: $dataset$ of shape $(\text{num\_observations}, \text{num\_timesteps}, \text{num\_sensors})$
-\Require Labels: $labels$ of shape $(\text{num\_observations},)$ in the range $0$ to $50$
-\Require Sensor Averages: $sensor\_averages$ of shape $(\text{num\_sensors},)$
-\For{$gesture = 0$ to $50$}
-    \For{$sensor = 1$ to $\text{num\_sensors}$}
-        \State Initialize $sensor\_count$ as an array of zeros with length $\text{num\_sensors}$
-    \EndFor
-    \For{$obs = 1$ to $\text{num\_observations}$}
-        \If{$\text{label of observation} = \text{gesture}$}
-            \For{$sensor = 1$ to $\text{num\_sensors}$}
-                \State Perform CuSUM on sensor's time series for the observation
-                \If{lowest Cumulative Sum is below $threshold$ or highest Cumulative Sum is above $threshold$}
-                    \State Increment $sensor\_count[sensor]$ by $1$
-                \EndIf
-            \EndFor
-        \EndIf
-    \EndFor
-    \For{$sensor = 1$ to $\text{num\_sensors}$}
-        \State Calculate the average as $sensor\_averages[sensor] = \frac{sensor\_count[sensor]}{\text{num\_observations}}$
-    \EndFor
-\EndFor
-\end{algorithmic}
-\end{algorithm}
-<!-- prettier-ignore-end -->
-
+<!-- TODO:
 - Describe in obscene detail the exact architecture of the CuSUM and how they
   ingest observations to finally return predictions.
   - Do they just return binary predictions? Log-likelihood predictions?
@@ -373,6 +367,7 @@ ood values for each sensor.
   say we've searched each model's search space to the same density.
 - How does CuSUM perform one-vs-rest classification, how does "passing a
   threshold" get transformed into a gesture detection?
+-->
 
 The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
 
@@ -407,39 +402,37 @@ The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-## Feed-forward Neural Networks
+## Feed-Forward Neural Networks
 
-The Feed-forward Neural Networks had several hyperparameters, but there were
-some constants:
+The Feed-Forward Neural Networks (FFNNs) were implemented using the Neural
+Network library TensorFlow for the Python3 programming language. Each FFNN is
+modelled as a sequence layers, where each layer performs a transformation on
+its input and provides output to the next layer.
 
-- All observations are normalised on the training set to have zero mean and
-  unit variance
-- All layers use the ReLU activation function
-- All layers have dropout after the dense layer (TODO: convert this away from
-  tensorflow speak)
-- All layers have L2 regularisation
-- The input of 20 x 30 is flattened before being passed through the network (no
-  convolution layers)
-- The last layer has 51, 50, or 5 output neurons
-- The optimiser is Adam
-- SparseCategoricalCrossentropy is used as the loss function
-- Class weights are used such that the weight of a class is proportional to $\log_10(1/count)$
-- Predictions are done by looking at the largest value of the output neurons
-- Prediction probabilities are calculated using softmax
-- There are always 40 epochs completed
+While the input data represents 20 time steps and 30 sensor measurements per
+time step, this $20 \times 30$ matrix is flattened into a 600 dimensional
+vector before being passed to the FFNN.
 
-The ReLU activation function is used for all FFNNs:
+FFNNs are sensitive to the scale of the input data, and so the input data is
+normalised before being passed to the FFNN. For each of the 600 dimensions, the
+mean and standard deviation of the training data is calculated. These
+statistics are not calculated using the validation data, as that would leak
+information about the validation data to the model. These means and standard
+deviations are then stored. Call the vector of means $\bm{\mu}$ and the vector
+of standard deviations $\bm{\sigma}$.
 
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \text{ReLU}(x) = \begin{cases}
-        x, & \text{if } x > 0 \\
-        0, & \text{if } x \leq 0
-    \end{cases}
-\end{align*}
-<!-- prettier-ignore-end -->
+To normalise an unseen observation $\bm{x}$, each element $x_i$ in $\bm{x}$ has
+the $i$-th mean subtracted from it and is then divided by the $i$-th standard
+deviation:
 
-Categorical Cross Entropy Loss is used as the loss function for all FFNNs:
+$$
+    \frac{x_i - \mu_i}{\sigma_i}
+$$
+
+This ensures that the mean of each element in $\bm{x}$ is approximately zero an
+the standard deviation is approximately 1 across all dimensions.
+
+The loss function of every FFNN is Categorical Cross Entropy Loss, defined as:
 
 $$
     L(\bm{y}, \hat{\bm{y}}) = -\sum_{i=1}^n y_i \cdot \log(\hat{y}_i) \cdot \text{weight}_i
@@ -459,24 +452,52 @@ $$
     \text{weight}_i = -\log_{10}\left( {\text{count}_i} \right)
 $$
 
-L2 normalisation is applied
+The activation function of each fully connected layer is the ReLU activation
+function:
 
-The L2 regularization penalty is computed as: $loss = l2 * reduce_sum(square(x))$
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \text{ReLU}(x) = \begin{cases}
+        x, & \text{if } x > 0 \\
+        0, & \text{if } x \leq 0
+    \end{cases}
+\end{align*}
+<!-- prettier-ignore-end -->
 
-Cost added is proportional to the square of the value of the weights
-coefficients
+Each activation has a certain probability of being set to zero during training,
+where that probability is controlled by the dropout rate hyperparameter. To
+compensate for the lower sum of activations being passed to the next layer, the
+neurons which were not set to zero have their output scaled up by $(1 -
+\text{dropout rate})^{-1}$. This ensures the sum of the output of all neurons
+remains the same regardless of exactly how many neurons were dropped out.
+Dropout is only applied during training, as it is a regularisation technique to
+decrease overfitting; no neurons have their output dropped during inference.
 
-L2 regularisation is only applied to the weights of the FFNN, and not the
-biases
+L2 normalisation is applied to the loss function such that the model is
+penalised for weights which are too large. The strength of regularisation is
+controlled by the L2 coefficient hyperparameter. A regularisation term is added
+to the loss function:
 
-Dropout is applied after each layer of neurons, such that a random number of
-the output of the neurons is set to zero. The neurons which were not set to
-zero have their output scaled up by $(1 - \text{dropout rate})^{-1}$. This
-ensures the sum of the output of all neurons remains the same regardless of
-exactly how many neurons were dropped out.
+$$
+    \text{L2} \cdot \sum_w w^2
+$$
 
-As it is a regularisation technique to decrease overfitting, dropout is only
-applied during training; no neurons have their output dropped during inference.
+Where L2 is the L2 coefficient hyperparameter and the sum iterates over every
+weight in the network.
+
+The number of neurons in the last layer of the FFNN depends on the number of
+classes being predicted, but was either 5, 50, or 51.
+
+The optimiser used is the Adam optimiser [@kingmaAdamMethodStochastic2014] with
+a constant learning rate that is determined by the learning rate
+hyperparameter. Constant values of $\beta_1=0.9$, $\beta_2=0.999$, and
+$\hat{epsilon}=1e-07$ are used for the Adam hyperparameters mentioned by Kingma
+and Ba.
+
+Every FFNN completes 40 epochs, at which point it is evaluated on the
+validation dataset. Summary statistics are stored to disc, as well as the full
+vectors of ground truth labels and predicted labels for that particular
+training-validation split.
 
 ## Hierarchical Feed-forward Neural Networks
 
@@ -523,8 +544,12 @@ have to be fit to the data, where the $i$-th SVM is trained to predict whether
 an observation belongs to class $i$ or not. Each of these SVMs can then be
 polled in order to decide whether a given observation belongs to each class.
 
+While the input data represents 20 time steps and 30 sensor measurements per
+time step, this $20 \times 30$ matrix is flattened into a 600 dimensional
+vector before being passed to the FFNN.
+
 All SVMs were trained for 200 iterations with a linear kernel. One
-hyperparameter, the class weight was iterated to weight the influence of each
+hyperparameter, the class weight, was iterated to weight the influence of each
 class based on it's prevalence in the training dataset. The regularisation
 hyperparameter $C$ is used as by @bishopPatternRecognitionMachine2007.
 
@@ -765,6 +790,59 @@ plot) in which case every element is divided by the sum over the entire
 confusion matrix. This allows the elements to be interpreted as a fraction of
 the total number of observations.
 
+Unless otherwise specified, all presented confusion matrices are
+column-normalised.
+
+It is also useful to compare the confusion matrices for all instances of a
+model across two or more values of a discrete hyperparameter. For example,
+comparing the confusion matrices for FFNNs with one, two, and three layers. In
+these cases, the weighted confusion matrix shall be shown. The weighted
+confusion matrix of a subset of models is calculated by taking the unnormalised
+confusion matrix for a model, multiplying each value in that confusion matrix
+by the model's $F_1$-score, and then adding all confusion matrices together
+element-wise. The resulting sum of weighted confusion matrices is then divided
+by the sum of all $F_1$-scores and finally column-normalised. This procedure is
+given in Algorithm \ref{alg:04_weighted_cm}.
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+\caption{Comparison of Weighted conf mats}
+\label{alg:04_weighted_cm}
+\begin{algorithmic}[1]
+\Require A set of models
+\Require A method for computing the confusion matrix for a model
+\Require A method for computing the $F_1$-score for a model
+
+\Function{WeightedConfusionMatrix}{models}
+    \State $\bm{C}_{weighted} \gets \mathbf{0}_{n\times n}$
+    \State $\Sigma F_1 \gets 0$
+
+    \For{$model$ in $models$}
+        \State $\bm{C} \gets$ ComputeConfMat($model$)
+        \State $F_1 \gets$ ComputeF1Score($model$)
+        \State $\bm{C}_{weighted} \gets \bm{C}_{weighted} + (F_1 \cdot \bm{C})$
+        \State $\Sigma F_1 \gets \Sigma F_1 + F_1$
+    \EndFor
+
+    \State $C_{weighted} \gets \frac{\bm{C}_{weighted}}{\Sigma F_1}$
+    \State $C_{weighted} \gets$ ColNormalize($C_{weighted}$)
+
+    \State \Return $C_{weighted}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+## Accuracy
+
+The accuracy of a classifier is defined as the number of correct predictions
+over the total number of predictions. This metric does not take into account
+the distribution of predictions and does not work well when there is a class
+imbalance. If 99% of the data belongs to a class YES while 1% of the data
+belongs to the class NO, then a naïve classifier can achieve 99% accuracy by
+always predicting YES. As the _Ergo_ dataset has a large class imbalance,
+accuracy will not be used as a metric for comparing models.
+
 ## Precision, Recall, and $F_1$-score
 
 Confusion matrices aid in the interpretation of large numbers of predictions,
@@ -838,7 +916,7 @@ precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/04_precision_recall_f1}
+    \includegraphics{src/imgs/graphs/04_precision_recall_f1}
     \caption{Precision and recall with the calculated $F_1$-score plotted as
     contours. Both a high recall and a high precision are required for a high
     $F_1$-score.}
@@ -882,9 +960,11 @@ The unweighted mean is desirable for the task at hand as the _Ergo_ dataset is
 highly imbalanced, with one class being assigned to 97% of the observations. If
 the weighted mean was used instead, then a classifier would be able to achieve
 very high performance by ignoring the minority classes and only focusing on
-predicting the majority class correctly. For these reasons, the unqualified
-terms "precision", "recall", and "$F_1$-score" will be taken to mean the
-unweighted mean over the per-class precisions, recalls, and $F_1$-scores.
+predicting the majority class correctly.
+
+For these reasons, the unqualified terms "precision", "recall", and
+"$F_1$-score" will be taken to mean the unweighted mean over the per-class
+precisions, recalls, and $F_1$-scores.
 
 It is important to note that one cannot calculate the unweighted $F_1$-score
 using the unweighted precision and recall due to the non-linear relationship
@@ -893,7 +973,7 @@ implication that a plot showing the unweighted precision and unweighted recall
 of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
 $F_1$-score must be shown in another plot of mentioned explicitly.
 
-# An ordering over multi-class classifiers
+# An Ordering Over Multi-class Classifiers
 
 In order that the best model can be chosen, an ordering must be defined. This
 ordering should work given solely the list of predictions and the list of
@@ -913,10 +993,10 @@ but rather consistently achieved a high $F_1$-score across all validation sets
 and all random initialisations. This means that the resulting model is more
 likely to generalise to unseen data.
 
-TODO: Probably need something here describing student's t-Distribution and how
-confidence intervals are calculated.
+<!-- TODO: Probably need something here describing student's t-Distribution and
+how confidence intervals are calculated. -->
 
-# The conversion of class predictions into keystrokes
+# The Conversion of Class Predictions into Keystrokes
 
 Given a time-series of predictions, it still takes some work to convert those
 predictions into keystrokes. There are a few ambiguities to clear up in order
@@ -1006,7 +1086,9 @@ indicate that shift has no effect.
         $180^\circ$ & \texttt{!} & \texttt{@} & \texttt{\#} & \texttt{\$} & \texttt{\%} & \texttt{\^} & \texttt{\&} & \texttt{$\ast$} & \texttt{(} & \texttt{)} \\
         \hline
     \end{tabular}
-    \caption{todo}
+    \caption{The keystrokes emitted by the \emph{Ergo} software when certain
+    each gesture is made after the \texttt{shift} control-character has been
+    given.}
     \label{tab:04_shift_keystrokes}
 \end{table}
 <!-- prettier-ignore-end -->
@@ -1014,38 +1096,5 @@ indicate that shift has no effect.
 The "control" character also allows for some other keystrokes to be made, such
 as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
 (\texttt{ctrl+h}), or escape (\texttt{ctrl+[}). These key combinations are the
-same as in Vim's insert mode (see \texttt{:h ins-special-keys} in vim's
-built-in help menu).
-
----
-
-# (old) Hardware Description
-
-These accelerometers can measure linear acceleration in three
-orthogonal directions, but cannot measure rotational acceleration. Due to how
-the accelerometers are built, the measurements they provide _do_ include
-gravity. For example, an accelerometer at rest will register a large
-acceleration towards the centre of the earth. This makes distinguishing
-acceleration due to finger movement and acceleration due to gravity impossible
-based off of the linear acceleration alone. Appendix
-\ref{the-adxl335-accelerometers} contains more information about the
-accelerometers.
-
-\end{figure}
-
-The fifteen measurements provided by the five accelerometers on the left hand
-are collected by an Arduino Nano 3.3v BLE microcontroller which is mounted to
-the back of the user's left hand. Similarly, the fifteen measurements provided
-by the accelerometers on the right hand are collected by another Arduino Nano
-3.3v BLE microcontroller, this one mounted on the back of the user's right
-hand. Appendix \ref{the-arduino-nano-33-ble} describes these microcontrollers
-in greater detail.
-
-The 15 sensor readings from the microcontroller on the left hand are
-transmitted to the microcontroller on the right hand by a wired serial
-connection. These thirty measurements are then sent by a wired serial
-connection to the host computer.
-
-A full description of the hardware used is
-given in Appendix \ref{app:hardware} and a circuit diagram in Appendix
-\ref{app:circuit-diagram}.
+same as in the text editor Vim\footnote{https://vim.org}. See vim's built-in
+help \texttt{:h ins-special-keys} for more details.
