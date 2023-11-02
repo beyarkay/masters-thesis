@@ -1,20 +1,196 @@
-This chapter will describe the construction of the hardware that powers _Ergo_,
-how the training data was collected and processed, what experiments were
-conducted, and how different model architectures were applied to the task of
-predicting gestures given an observation. Hyperparameters of those models (and
-their optimisation) is also discussed. The evaluation metrics used to rank the
-models is discussed, and the method for turning gesture predictions into
-keystrokes is described
+The construction of \emph{Ergo} is discussed in Section
+\ref{construction-of-ergo}. The procedure for collecting, labelling, and
+cleaning the dataset is discussed in Section
+\ref{data-collection-and-cleaning}. The method for splitting the dataset into
+training, validation, and testing datasets is discussed in Section
+\ref{sec:trn_tst_val}. The procedure for converting binary classifiers into
+multi-class classifiers is discussed in Section
+\ref{binary-and-multi-class-classifiers}, the differences between explicit and
+implicit segmentation, and difficulties associated with the latter are
+discussed in Section \ref{explicit-and-implicit-segmentation}. The procedure
+followed for conducting the experiments is discussed in Section
+\ref{experimental-procedure}. The implementation details for each model type is
+discussed in Section \ref{design-and-implementation-of-the-different-models},
+The procure followed for optimising the hyperparameters of each model type is
+discussed in Section \ref{procedure-for-hyperparameter-optimisation}. The exact
+search space for each model is tabulated in Section
+\ref{hyperparameter-search-space}. The evaluation metrics by which multi-class
+classifiers can be compared is discussed in Section \ref{evaluation-metrics}. A
+means of ordering those classifiers is discussed in Section
+\ref{an-ordering-over-multi-class-classifiers}. Finally, the method by which
+gestures are converted into keystrokes via class predictions is discussed in
+Section \ref{the-conversion-of-class-predictions-into-keystrokes}.
 
-<!--
-TODO give details about the size of the training, validation, testing sets and
-the number of gesture observations in each
+# Construction of Ergo
 
-TODO: Lots of these section headings aren't really in any proper order and
-should be in some order.
--->
+_Ergo_, at its core, is a set of acceleration sensors mounted onto the user's
+fingertips, paired with a software suite for reading that data (see Figure
+\ref{fig:04_accelerometers}).
 
-# One-vs-rest multi-class classification
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.33\textwidth]{src/imgs/accelerometers.jpg}
+    \caption{\emph{Ergo} consists of ten ADXL335 tri-axis linear
+    accelerometers, each one of which is mounted to the back of the user's
+    fingertips (highlighted in red)}
+    \label{fig:04_accelerometers}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+These sensors measure acceleration in three orthogonal axes. Acceleration due
+to gravity is included in these measurements. The measured values are collected
+together using two Arduino Nano microcontrollers (one on each hand) and then
+sent to the user's computer via a serial wire. Each sensor has three signal
+lines for output, describing the acceleration measured by the X, Y, and Z axes
+(see Figure \ref{fig:04_adxl335_xyz}).
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.33\textwidth]{src/imgs/accel_xyz.jpg}
+    \caption{The user's left hand while wearing \emph{Ergo} with the
+    accelerometer directions indicated. The X direction is in red, the Y
+    direction is in green, and the Z direction is in blue. Note that the sensor
+    on the thumb is rotated relative to the sensors on the fingers.}
+    \label{fig:04_adxl335_xyz}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+These accelerometer provide in 15 signals per hand. Because each Arduino Nano
+microcontroller only has 8 analogue signal inputs, a 16-to-1 multiplexer is
+introduced such that the microcontroller (using four selection control wires)
+can choose which of the 15 analogue signals it would like to read data from.
+The microcontroller repeatedly polls each of the analogue signals until it has
+read one measurement from each accelerometer sensor. This packet of data is
+sent to the user's computer.
+
+On the user's computer, the packet of accelerometer measurements is associated
+with a time stamp. What happens next is dependant on whether the software is
+configured to capture the data or to feed the data to a classification model in
+real time. If configured to capture data, then all the accelerometer
+measurements and time stamps will be stored to disc as one file, each newline
+being one set of sensor readings. If configured to perform classification, then
+the sensor readings will be streamed to a provided classifier and the
+predictions will be surfaced to the user.
+
+# Data Collection and Cleaning
+
+To collect training data, the author wore _Ergo_ and performed each of the
+pre-specified gestures sequentially, repeating each gesture until there was
+approximately 100 observations of each gesture. The sensor measurements were
+stored to disc as the gestures were being performed, along with a timestamp of
+when the measurements were received from the hardware.
+
+Real-time data labelling of the data with the gesture being performed is not
+possible due to the author's hands being required to perform the data.
+
+One gesture was performed approximately every half a second, with error due to
+the human difficulty of timing a hand gesture within 0.025 seconds. In order to
+facilitate the labelling of this data, annotations were made every half second,
+and each gesture was performed such that they were aligned with the annotation.
+These annotations serves no purpose other than to indicate that a gesture was
+performed close to it.
+
+After recording the data, labels are manually assigned to a single time step.
+Each gesture gets a different label, and the labels for each gesture are
+positioned such that they are all aligned to the same part of a gesture. For
+example, each label might represent the peak of a gesture, in which case
+_every_ label is positioned such that all observations of the same gesture are
+maximally similar to one another.
+
+The labelling process has to be done with care, as preliminary model training
+showed that poorly aligned labels lead to very poor performance. If one label
+is aligned with the start of a gesture and the other with the middle of the
+gesture, all models struggle to generalise.
+
+To enable the collection and labelling of a large dataset, gestures were
+performed in batches of 5 unique classes at a time. For example, one data
+recording session might record data for gestures 0, 1, 2, 3, 4. Then the next
+session for gestures 5, 6, 7, 8, 9. And the next for gestures 10, 11, 12, 13, 14.
+And so on, for all gestures from 0 through to 49. The data from each session
+was saved in a separate file. Reducing the number of gestures present in a file
+allowed for easier labelling. The sensor data immediately before and after an
+annotation could be manually analysed and compared against the known five
+gesture classes which are present in that file. The annotation can then be replaced
+with a label for that gesture class, and the position in time of that label can
+be adjusted such that the new observation and all previous observations are
+aligned as close as possible to one another.
+
+The measurements recorded from _Ergo_ are stored on disk as several files which
+lists the time stamp, the 30 sensor values recorded at that time stamp, and the
+gesture associated with that time stamp. There are 37MB and 241 762
+observations, 235 995 of which belong to class 50 and the remaining 5 767 are
+the gesture classes.
+
+# Splitting the Data into Train, Test, Validation \label{sec:trn_tst_val}
+
+Preliminary testing showed that models trained on just a single instant of time
+did not perform as well as models provided with a historical window of data.
+For this reason, the entire dataset is combined together and then windowed to a
+size of 20 timesteps, so as to produce a dataset of shape $(\text{number of
+observations}, 20, 30)$.
+
+25% of this dataset is split off and saved as the testing dataset, resulting in
+60440 observations (14 417 gesture class observations) in the testing dataset.
+It is saved as a single binary file, completely separate from the training and
+validation data. The test-set-splitting procedure is designed to ensure that
+the frequency of the different classes is maintained, but otherwise chooses a
+random subset of the full dataset.
+
+The remaining 75% of the dataset (181 321 total observations, 4 325 gesture
+class observations) is saved to disc as a single binary file. This dataset will
+be referred to as the training-validation dataset. The training-validation
+dataset is only split into separate training and validation datasets at
+training time, just before each model is fit to the training subset. This split
+is random, but the pseudo-random number generator (PRNG) is initialised with a
+seed based on the model type, hyperparameter set, and repetition number, such
+that each training-validation split is different but reproducible. Splitting
+the dataset into training and validation datasets based on a PRNG also allows
+for an arbitrary number of repetitions to be made for cross validation. Of the
+75% of the dataset set aside for training/validation, 75% (135 990
+observations, 3 243 gesture class observations) is used for training leaving
+25% (45 330 observations, 1 078 gesture class observations) for validation.
+
+The exact procedure is given in Algorithm \ref{alg:04_hyperparam_search}.
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption{Hyperparameter Search and Model Evaluation}
+    \label{alg:04_hyperparam_search}
+    \begin{algorithmic}
+    \Procedure{HyperparameterSearch}{}
+        \State Load the training-validation dataset from disc
+        \State $dataset \gets$ \Call{LoadData}{}
+        \While{Not all hyperparameters are exhausted or computational budget not reached}
+            \State Select a model type
+            \State $hyperparameters \gets$ new set of hyperparameters
+            \For{$repetition$ in 1 to 5}
+                \State $seed \gets$ \Call{GetSeed}{$hyperparameters$, $repetition$}
+                \State Split the training-validation dataset based on $seed$
+                \State Train the model on the training dataset
+                \State Evaluate the model on the validation dataset
+                \State Store the results to disc
+            \EndFor
+        \EndWhile
+    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+As each set of hyperparameters is trained and evaluated multiple times on a
+random subset of the training-validation dataset, an approximate confidence
+interval can be obtained for the performance of each model. This allows
+statistical bounds to be placed on the performance of each model on the test
+set and other unseen data which might have a different underlying distribution
+to the training-validation dataset.
+
+It should be noted that every model was provided with the same format for the
+observation data: a 600 dimension vector that originated from a $20 \times 30$
+matrix that had been flattened. The 20 comes from 20 timesteps of history, and
+the 30 from the 30 sensors.
+
+# Binary and Multi-class Classifiers
 
 Some classification algorithms have support for multi-class classification
 built-in to the classification procedure. The training and classification
@@ -53,161 +229,6 @@ about the similarities between classes, a binary-tree style ensemble of binary
 classifiers will have to trade off classification performance for efficiency of
 computation.
 
-# Construction of Ergo
-
-_Ergo_ is, at its core, a set of acceleration sensors mounted onto the user's
-fingertips (see Figure \ref{fig:04_accelerometers}).
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.33\textwidth]{src/imgs/accelerometers.jpg}
-    \caption{\emph{Ergo} consists of ten ADXL335 tri-axis linear
-    accelerometers, each one of which is mounted to the back of the user's
-    fingertips (highlighted in red)}
-    \label{fig:04_accelerometers}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-These sensors measure acceleration in three orthogonal axes. Acceleration due
-to gravity is included in these measurements. The measured values are collected
-together using two microcontrollers (one on each hand) and then sent to the
-user's computer via a serial wire. Each sensor has three signal lines for
-output (describing the acceleration measured by the X, Y, and Z axes, see
-Figure \ref{fig:04_adxl335_xyz}).
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.33\textwidth]{src/imgs/accel_xyz.jpg}
-    \caption{The user's left hand while wearing \emph{Ergo} with the
-    accelerometer directions indicated. The X direction is in red, the Y
-    direction is in green, and the Z direction is in blue. Note that the sensor
-    on the thumb is rotated relative to the sensors on the fingers.}
-    \label{fig:04_adxl335_xyz}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-This results in 15 signals per hand, which is too many for one microcontroller
-to accept as input. To solve this problem, a 16-to-1 multiplexer is introduced
-such that the microcontroller (using four selection control wires) can choose
-which of the 15 inputs it would like to read data from. The microcontroller
-repeatedly polls each of the inputs until it has one set of data readings, and
-then this packet of data is sent via the serial port to the user's computer.
-
-On the user's computer, it is associated with a time stamp. What happens next
-is dependant on whether the software is configured to capture the data or to
-feed the data to a classification model in real time.
-
-# Data Collection and Cleaning
-
-To collect training data, the author wore the device and performed the gestures
-for a sufficient amount of time to get enough data. As the gestures were being
-performed, the data were stored to disc along with a timestamp of when the
-measurements were received.
-
-In order to facilitate the labelling of this data, a marker was placed in the
-stored data approximately every half second, and a gesture was performed every
-half second such that the marker and the gesture were approximately aligned.
-
-Accurate real-time data labelling is not possible due to the authors hands
-being occupied in performing the data as well as due to the speed at which each
-gesture is performed.
-
-Preliminary model training showed that these markers are not well-aligned
-enough with the actual gestures for accurate predictions to be made. One marker
-might be aligned with the start of a gesture, and the other with the end of the
-gesture. This hampered performance in the preliminary models.
-
-To remedy this, all markers are manually aligned such that they all coincide
-with the same portion of each gesture. This ensures that the observations
-labelled as one gesture all represent the same portion of that gesture.
-
-To enable the collection and labelling of a large dataset, gestures were
-performed in batches of 5 unique classes at a time. The data from each batch
-was saved in a separate file. The reduction in the number of gestures which
-could be present in a file allowed the sensor data immediately before and after
-a marker to be manually analysed and compared against the known five gesture
-classes which are present in that file. The marker can then be replaced with a
-label for that gesture class, and the position in time of that label can be
-adjusted such that the new observation and all previous observations are
-aligned as close as possible to one another.
-
-This process is repeated for all observations of all gesture classes. 5767
-gestures were performed, resulting in a dataset of 241762 observations of 30
-different sensor readings. On average 115 observations were recorded per
-gesture class.
-
-# Splitting the Data into Train, Test, Validation \label{sec:trn_tst_val}
-
-The measurements recorded from _Ergo_ are stored on disk as several files
-listing the time stamp, the 30 sensor values, and the associated gesture with
-that particular time stamp. There are 37MB and 241 762 observations, 235 995 of
-which belong to class 50 and the remaining 5 767 are the gesture classes.
-Preliminary testing showed that models trained on just a single instant of time
-did not perform as well as models provided with a historical window of data.
-For this reason, the entire dataset is combined together and then windowed to a
-size of 20 timesteps, so as to produce a dataset of shape $(\text{number of
-observations}, 20, 30)$.
-
-25% of this dataset is split off and saved as the testing dataset, resulting in
-60440 observations (14 417 gesture class observations) in the testing dataset.
-It is saved as a single binary file, completely separate from the training and
-validation data. The test-set-splitting procedure is designed to ensure that
-the frequency of the different classes is maintained, but otherwise chooses a
-random subset of the full dataset.
-
-The remaining 75% of the dataset (181 321 total observations, 4 325 gesture class
-observations) is saved to disc as a single binary file. The training-validation
-dataset is only split into separate training and validation datasets at
-training time, just before each model is fit to the training subset. This split
-is random, but the pseudo-random number generator (PRNG) is initialised with a
-seed based on the model type, hyperparameter set, and repetition number, such
-that each training-validation split is different but reproducible. Splitting
-the dataset into training and validation datasets based on a PRNG also allows
-for an arbitrary number of repetitions to be made for cross validation. Of the
-75% of the dataset set aside for training/validation, 75% (135 990
-observations, 3 243 gesture class observations) is used for training leaving
-25% (45 330 observations, 1 078 gesture class observations) for validation.
-
-The exact procedure is given in Algorithm \ref{alg:04_hyperparam_search}.
-
-<!-- prettier-ignore-start -->
-\begin{algorithm}
-    \caption{Hyperparameter Search and Model Evaluation}
-    \label{alg:04_hyperparam_search}
-    \begin{algorithmic}
-    \Procedure{HyperparameterSearch}{}
-        \State Load the training+validation dataset from disc
-        \State $dataset \gets$ \Call{LoadData}{}
-        \While{Not all hyperparameters are exhausted or computational budget not reached}
-            \State Select a model type
-            \State $hyperparameters \gets$ new set of hyperparameters
-            \For{$repetition$ in 1 to 5}
-                \State $seed \gets$ \Call{GetSeed}{$hyperparameters$, $repetition$}
-                \State Split the training+validation dataset based on $seed$
-                \State Train the model on the training dataset
-                \State Evaluate the model on the validation dataset
-                \State Store the results to disc
-            \EndFor
-        \EndWhile
-    \EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-<!-- prettier-ignore-end -->
-
-As each set of hyperparameters is trained and evaluated multiple times on a
-random subset of the training+validation dataset, an approximate confidence
-interval can be obtained for the performance of each model. This allows
-statistical bounds to be placed on the performance of each model on the test
-set and other unseen data which might have a different underlying distribution
-to the training+validation dataset.
-
-It should be noted that every model was provided with the same format for the
-observation data: a 600 dimension vector that originated from a $20 \times 30$
-matrix that had been flattened. The 20 comes from 20 timesteps of history, and
-the 30 from the 30 sensors.
-
 # Explicit and Implicit Segmentation
 
 In the _Ergo_ dataset, gestures are not explicitly segmented from the
@@ -225,29 +246,80 @@ different gestures.
 Experiments will be conducted so as to answer the research questions posed in
 the Introduction. The following experiments will be performed.
 
-Multiple random search evaluations of the various models.
+As each model type has a different hyperparameter space, the experiments for
+each model type will be performed separately. Additionally, there will be
+experiments for 5-, 50-, and 51-class datasets.
 
-Recording the fitting and inference times so we can determine how long each
-model takes
+The 5-class dataset is constructed by taking the full training-validation
+dataset, and including only classes 0, 1, 2, 3, 4. These are just those
+gestures performed by the left hand parallel to the ground. Note that this
+excludes the non-gesture class, class 50. The 50-class dataset is constructed
+by taking the full training-validation dataset, and excluding the non-gesture
+class 50. The 51-class dataset is equivalent to the full training-validation
+dataset.
 
-Multiple repetitions for statistical validity
+Each model type will have at least 100 iterations of random search
+hyperparameter exploration performed, during which a random set of
+hyperparameters is selected. For each random set of hyperparameters, five
+models will be trained using different randomly selected partitions of the
+training-validation dataset.
 
-Performance on 5, 50, and 51 class problem sets to see what's what.
+For each repetition the predictions the model makes on the training and
+validation data is stored to disc, along with the ground truth labels for that
+data. For ease of analysis, some summary metrics are calculated and recorded,
+such as training and validation $F_1$-score, recall, and precision. The time
+taken to fit each model is stored, along with the time taken to perform
+inference. This procedure is described in Algorithm \ref{alg:04_model_evaluation}
 
-Evaluating the best performing model on the test set
+The FFNNs also have their final training and validation loss stored to disc.
 
-Evaluating the best performing model on the English-language live dataset to
-see how it would perform IRL.
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+\caption{Model Evaluation Procedure}
+\label{alg:04_model_evaluation}
+\begin{algorithmic}
+\State $\bm{C} \gets \{5, 50, 51\}$
+\State $\bm{M} \gets \{$FFNN, HFFNN, CuSUM, HMM, SVM$\}$
+\For{$C$ in $\bm{C}$} \Comment{Iterate over number of classes}
+    \For{$M$ in $\bm{M}$} \Comment{Iterate over model types}
+        \For{$n$ in $1..100$} \Comment{At least 100 hyperparameter combinations}
+            \State Select a random hyperparameter combination
+            \For{$R$ in $1..5$} \Comment{Five repetitions}
+                \State Split the training-validation dataset
+                \State Train model $M$ on the training dataset
+                \State Evaluate model $M$ on the validation dataset
+                \State Save model performance
+            \EndFor
+        \EndFor
+    \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
 
-<!---
-TODO: Need to actually expand this out
-(These should tie into the "research questions" asked in the introduction, so
-probably need to come up with those first)
--->
+After this procedure, all the data has been collected to evaluated which model
+performed the best on the validation dataset. When a best-performing model has
+been identified, the test dataset is used to confirm or deny how well that
+model is able to generalise to unseen data.
+
+In addition to evaluating the best-performing model on the unseen test dataset,
+the model will be evaluated on an English language dataset. This dataset is
+small but contains the sensor measurements while the user performed the
+gestures for an English language sentence in real time. This will be used to
+gauge the "real-world" performance of the model and to provide an intuition for
+what the model's performance feels like for an end-user.
 
 # Design and Implementation of the Different Models
 
-## Hidden Markov Models
+This section goes through each of the model types and explains how they are
+implemented.
+Hidden Markov Models will be described in Section \ref{model-specifics-hmm},
+Cumulative Sum in Section \ref{model-specifics-cusum},
+Feed-Forward Neural Networks in Section \ref{model-specifics-ffnn},
+Hierarchical Feed-forward Neural Networks in Section \ref{model-specifics-hffnn},
+and Support Vector Machines in Section \ref{models-specifics-svm}.
+
+## Hidden Markov Models \label{model-specifics-hmm}
 
 For Hidden Markov Models (HMMs), the data was interpreted such that there is a
 start state, an end state, and one additional state for each time step. Each
@@ -318,7 +390,7 @@ While some prior research has used 5000 HMMs for a 5000-class classification
 task, that required several complicated wrappers and that was not done for this
 project.
 
-## Cumulative Sum
+## Cumulative Sum \label{model-specifics-cusum}
 
 Cumulative Sum (CuSUM) is designed for real-time univariate time series out of
 distribution detection. It requires adjustments before it can be used
@@ -402,7 +474,7 @@ The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-## Feed-Forward Neural Networks
+## Feed-Forward Neural Networks \label{model-specifics-ffnn}
 
 The Feed-Forward Neural Networks (FFNNs) were implemented using the Neural
 Network library TensorFlow for the Python3 programming language. Each FFNN is
@@ -499,7 +571,7 @@ validation dataset. Summary statistics are stored to disc, as well as the full
 vectors of ground truth labels and predicted labels for that particular
 training-validation split.
 
-## Hierarchical Feed-forward Neural Networks
+## Hierarchical Feed-forward Neural Networks \label{model-specifics-hffnn}
 
 Hierarchical Feed-forward Neural Networks are an extended version of the FFNN
 and operate in nearly the same manner.
@@ -730,7 +802,7 @@ The mean inference time for the HMMs is much larger because of the in
 
 <!-- TODO: explain why the HMM  mean inference time is such an outlier -->
 
-# Evaluation metrics
+# Evaluation Metrics
 
 Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
 observations $n$, multi-class classifiers can be evaluated against one another
@@ -948,7 +1020,7 @@ principle diagonal. Precision can therefore be gleaned from a confusion matrix
 by observing the columns of the appropriate confusion matrix, and
 \textbf{r}ecall by observing the \textbf{r}ows.
 
-## Weighted and unweighted averages
+## Weighted and Unweighted Averages
 
 While precision, recall, and $F_1$-score provide a much more concise
 representation of a classifier's performance than a confusion matrix, they
