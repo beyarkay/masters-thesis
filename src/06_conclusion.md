@@ -45,3 +45,17 @@ physical device and making it completely wireless such that it can connect to
 any Bluetooth capable computer or smartphone. This will require the difficult
 task of compressing the model such that it can perform inference on the
 resource constrained microcontrollers.
+
+---
+
+# Explicit and Implicit Segmentation
+
+In the _Ergo_ dataset, gestures are not explicitly segmented from the
+surrounding background noise. That is, there are no markers which inform any
+machine learning algorithm when a gesture begins and when it ends. Much prior
+work provides impressive results
+
+Data segmentation is "implicit": There's no nice labels marking the start
+and end of each gesture, the model has to learn 1. how to extract
+gestures from background and 2. How to differentiate between the
+different gestures.

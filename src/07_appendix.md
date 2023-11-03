@@ -24,10 +24,10 @@ Figure \ref{fig:05_hpar_analysis_cusum_classes50} shows the performance of all
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_cusum_classes50}
-    \caption[short caption todo]{Left: precision-recall plot for all 50-class CuSUM models, with the
-    value of the threshold hyperparameter indicated by the colour of the point.
-    Right: a direct plot of the model's $F_1$-score against the threshold
-    parameter.}
+    \caption[CuSUM 50-class precision-recall plot]{Left: precision-recall plot
+    for all 50-class CuSUM models, with the value of the threshold
+    hyperparameter indicated by the colour of the point. Right: a direct plot
+    of the model's $F_1$-score against the threshold parameter.}
     \label{fig:05_hpar_analysis_cusum_classes50}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -55,10 +55,10 @@ threshold value.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_hpar_analysis_cusum_classes51}
-    \caption[short caption todo]{Left: precision-recall plot for all 51-class CuSUM models, with the
-    value of the threshold hyperparameter indicated by the colour of the point.
-    Right: a direct plot of the model's $F_1$-score against the threshold
-    parameter.}
+    \caption[CuSUM 51-class precision-recall plot]{Left: precision-recall plot
+    for all 51-class CuSUM models, with the value of the threshold
+    hyperparameter indicated by the colour of the point. Right: a direct plot
+    of the model's $F_1$-score against the threshold parameter.}
     \label{fig:05_hpar_analysis_cusum_classes51}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -124,7 +124,7 @@ for all 5-class HMMs as well as the $F_1$-score of each covariance type.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_5_p_vs_r_covar_type}
-    \caption[short caption todo]{Left: Precision-recall plot for all HMMs trained on 5 classes.
+    \caption[HMM 5-class precision-recall plot]{Left: Precision-recall plot for all HMMs trained on 5 classes.
     Right: Plot of the model's $F_1$-score for each covariance matrix type.
     Note that the scales of the axes have been adjusted to better show the
     distribution of the data.}
@@ -175,7 +175,8 @@ number of parameters in the tied and full covariance types.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_in_depth_hmm_inf_trn_time_classes5}
-    \caption[short caption todo]{Duration in seconds per observation required to fit and to train
+    \caption[HMM 5-class seconds per observation: training and inference
+    times]{Duration in seconds per observation required to fit and to train
     the different covariance types for 5-class HMMs.}
     \label{fig:05_in_depth_hmm_inf_trn_time_classes5}
 \end{figure}
@@ -206,7 +207,7 @@ of each covariance type.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/05_in_depth_hmm_51_p_vs_r_covar_type}
-    \caption[short caption todo]{Left: Precision-recall plot for all HMMs trained on 51 classes.
+    \caption[HMM 51-class precision-recall plot]{Left: Precision-recall plot for all HMMs trained on 51 classes.
     Right: Plot of the model's $F_1$-score for each covariance matrix type.
     Note that the scales of the axes have been adjusted to better show the
     distribution of the data.}
@@ -255,8 +256,9 @@ per observation for both fitting the HMM and making a prediction with that HMM.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_in_depth_hmm_inf_trn_time_classes51}
-    \caption[short caption todo]{Duration in seconds per observation required to fit and to train
-    the different covariance types.}
+    \caption[HMM 51-class seconds per observation: training and inference
+    times]{Duration in seconds per observation required to fit and to train the
+    different covariance types.}
     \label{fig:05_in_depth_hmm_inf_trn_time_classes51}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -277,7 +279,7 @@ each point indicating the L2 coefficient.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}}
-    \caption[short caption todo]{The dropout rate of each of the 51-class FFNNs against the
+    \caption[FFNN 51-class dropout rate vs $F_1$ and L2]{The dropout rate of each of the 51-class FFNNs against the
     $F_1$-score and with the L2 coefficient indicated by the colour of each
     point and the shared colour bar on the right. One plot each is assigned to
     the 1-, 2-, and 3-layer FFNNs. A small amount of random noise is applied to
@@ -303,10 +305,11 @@ dropout rate against the number of nodes in the last layer for the 1-, 2-, and
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}}
-    \caption[short caption todo]{The dropout rate of each of the 51-class FFNNs against the number
-    of nodes in the last layer of the FFNN, with the $F_1$-score indicated by
-    the colour of each point and the shared colour bar on the right. One plot
-    each is assigned to the 1-, 2-, and 3-layer FFNNs. A small amount of random
+    \caption[FFNN 51-class dropout rate vs $F_1$ and number of nodes per
+    layer]{The dropout rate of each of the 51-class FFNNs against the number of
+    nodes in the last layer of the FFNN, with the $F_1$-score indicated by the
+    colour of each point and the shared colour bar on the right. One plot each
+    is assigned to the 1-, 2-, and 3-layer FFNNs. A small amount of random
     noise is applied to each point such that they do not overlap.}
     \label{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}
 \end{figure}
@@ -338,7 +341,7 @@ to note here.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_pred_plot_7400_to_8500_lazy}}
-    \caption[short caption todo]{Time series plot of the sensor values and model predictions while
+    \caption[Best model predictions and probabilities for "lazy"]{Time series plot of the sensor values and model predictions while
     gesturing the word "lazy ". Spaces are shown with quotes. Top: each
     box shows the predicted keystroke and it's probability. Boxes are green if
     the probability is above 50\% and the prediction is correct and it is at
@@ -385,7 +388,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_classes5}
-    \caption{Left: precision and recall of all 5-class SVMs, with the
+    \caption[svm 5-class precision and recall]{Left: precision and recall of all 5-class SVMs, with the
     regularization parameter C and class weighting mapped to the colour and
     marker type respectively. Right: The regularization parameter C plotted
     against the $F_1$-score of each SVM, with the class weight indicated by the
@@ -398,7 +401,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \includegraphics[height=5cm]{src/imgs/graphs/05_in_depth_svm_classes50}
-    \caption{Left: precision and recall of all 50-class SVMs, with the
+    \caption[SVM 50-class precision and recall]{Left: precision and recall of all 50-class SVMs, with the
     regularization parameter C and class weighting mapped to the colour and
     marker type respectively. Right: The regularization parameter C plotted
     against the $F_1$-score of each SVM, with the class weight indicated by the
@@ -411,7 +414,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_yval_macro_avg_f1_score_hueNone}
-    \caption{The $F_1$-score for all 5-class FFNNs plotted against the various
+    \caption[FFNN 5-class $F_1$ vs all hyperparameters]{The $F_1$-score for all 5-class FFNNs plotted against the various
     hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes5}
 \end{figure}
@@ -421,7 +424,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_yval_macro_avg_f1_score_hueNone}
-    \caption{The $F_1$-score for all 50-class FFNNs plotted against the various
+    \caption[FFNN 50-class $F_1$ vs all hyperparameters]{The $F_1$-score for all 50-class FFNNs plotted against the various
     hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes50}
 \end{figure}
@@ -431,7 +434,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes51_yval_macro_avg_f1_score_hueNone}
-    \caption{The $F_1$-score for all 51-class FFNNs plotted against the various
+    \caption[FFNN 51-class $F_1$ vs all hyperparameters]{The $F_1$-score for all 51-class FFNNs plotted against the various
     hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes51}
 \end{figure}
@@ -441,7 +444,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}}
-    \caption{Pairplot of all hyperparameters for 51-class FFNNs.}
+    \caption[FFNN 51-class all hyperparameter pairplot]{Pairplot of all hyperparameters for 51-class FFNNs.}
     \label{fig:appendix_hpar_analysis_ffnn_pairplot}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -450,8 +453,9 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_pred_plot_0000_to_9420_full_text}}
-    \caption{Predictions and raw sensor values for the full phrase "the
-    quick brown fox jumped over the lazy dog".}
+    \caption[Best model full phrase predictions and probabilities]{Predictions
+    and raw sensor values for the full phrase "the quick brown fox jumped over
+    the lazy dog".}
     \label{fig:appendix_pred_plot_0000_to_9420_full_text}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -460,7 +464,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_all_f1_scores}}
-    \caption[short caption todo]{All models and their $F_1$-scores. Each point
+    \caption[All models and $F_1$-scores]{All models and their $F_1$-scores. Each point
     is a model, and points sharing the same x-value had identical sets of
     hyperparameters. The black horizontal bars show the mean $F_1$-score of
     each set of models with identical hyperparameters. Sets of hyperparameters
@@ -486,8 +490,8 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 
 \input{src/tables/05_best_minority_hffnn_hpars.tex}
 
-\input{src/tables/05_best_svm_hpars.generated.tex}
+\input{src/tables/05_best_svm_hpars.tex}
 
-\input{src/tables/05_best_hmm_hpars.generated.tex}
+\input{src/tables/05_best_hmm_hpars.tex}
 
-\input{src/tables/05_best_cusum_hpars.generated.tex}
+\input{src/tables/05_best_cusum_hpars.tex}
