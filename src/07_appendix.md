@@ -474,6 +474,16 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \end{figure}
 <!-- prettier-ignore-end -->
 
+<!-- prettier-ignore-start -->
+\begin{figure}[!ht]
+    \centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{src/imgs/ergo_schematic}}
+    \caption[Circuit Schematic]{Circuit schematic for the left and right hand
+    of Ergo.}
+    \label{fig:appendix_circuit_diagram}
+\end{figure}
+<!-- prettier-ignore-end -->
+
 <!--
 
 ===============================================================================

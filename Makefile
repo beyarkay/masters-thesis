@@ -1,8 +1,4 @@
-
-all: intro bg lit method results conc report
-
-
-md_to_tex:
+pandoc:
 	pandoc src/00_abstract.md          -o tex/00_abstract.tex
 	pandoc src/00_acknowledgements.md  -o tex/00_acknowledgements.tex
 	pandoc src/00_dedication.md        -o tex/00_dedication.tex
@@ -16,146 +12,25 @@ md_to_tex:
 	pandoc src/07_appendix.md          -o tex/07_appendix.tex
 	pandoc src/07_postmatter.md        -o tex/07_postmatter.tex
 
-combine: md_to_tex
-	trash main.aux main.lof main.log main.lot main.out main.toc
-	pdflatex -halt-on-error -draftmode tex/main.tex # First compile all the labels and references
-	pdflatex -halt-on-error tex/main.tex -o main.pdf # Then compile the document to be linked
+clean:
+	trash *.{aux,bbl,blg,brf,lof,log,lot,out,toc} **/*.{aux,bbl,blg,brf,lof,log,lot,out,toc} 2> /dev/null || true
+
+dev: pandoc clean
+	pdflatex -halt-on-error main.tex # Create the auxiliary pdflatex files
+	bibtex main # Create the auxiliary bib files
+	pdflatex -halt-on-error main.tex # Add the bibliography to the end of the pdf
+	pdflatex -halt-on-error main.tex # Provide links from inline citations to bibliography
+	$(MAKE) clean
 	echo "file://$$(pwd)/main.pdf"
 
-report:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	# Note: pandoc-mustache must be installed via:
-	# `pip install -U pandoc-mustache`
-	# Compile the entire project
-	pandoc \
-		--verbose \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/01_introduction.md \
-		src/02_background.md \
-		src/03_lit_review.md \
-		src/04_methodology.md \
-		src/05_results.md \
-		src/06_conclusion.md \
-		src/07_postmatter.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/Boyd Kane Master's Thesis.pdf"
-
-intro:
-	# Make the directory if it doesn't exist
-	# [[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/01_introduction.md \
-		-o "tex/01_introduction.tex"
-	# echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/01_introduction.pdf"
-
-bg:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/02_background.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/02_background.pdf"
-	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/02_background.pdf"
-
-lit:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/03_lit_review.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/03_lit_review.pdf"
-	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/03_lit_review.pdf"
-
-method:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/04_methodology.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/04_methodology.pdf"
-	echo "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/04_methodology.pdf"
-
-05_results:
-	# Make the directory if it doesn't exist
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/05_results.md \
-		--standalone \
-		-o "tex/05_results.tex"
-	pdflatex tex/05_results.tex
-	echo "file://$$(pwd)/05_results.pdf"
-
-results:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/05_results.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/05_results.pdf"
-	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/05_results.pdf"
-
-conc:
-	# Make the directory if it doesn't exist
-	[[ -d  "checkpoints/$$(/bin/date '+%Y-%m-%d')" ]] || mkdir "checkpoints/$$(/bin/date '+%Y-%m-%d')"
-	pandoc \
-		--filter pandoc-mustache \
-		--bibliography=src/cite.bib \
-		--citeproc \
-		--number-sections \
-		src/00_preface.md \
-		src/06_conclusion.md \
-		-o "checkpoints/$$(/bin/date '+%Y-%m-%d')/06_conclusion.pdf"
-	echo "file://$$(pwd)/checkpoints/$$(/bin/date '+%Y-%m-%d')/06_conclusion.pdf"
-
-ack:
-	pandoc \
-		src/00_acknowledgements.md \
-		-o "tex/00_acknowledgements.tex"
-
-dedication:
-	pandoc \
-		src/00_dedication.md \
-		-o "tex/00_dedication.tex"
-
-abstract:
-	pandoc \
-		src/00_abstract.md \
-		-o "tex/00_abstract.tex"
+release: pandoc clean
+	pdflatex -halt-on-error main.tex # 1. create the auxiliary pdflatex files
+	bibtex main # Create the auxiliary bib files
+	pdflatex main.tex # Add the bibliography to the end of the pdf
+	pdflatex main.tex # Provide links from inline citations to bibliography
+	pdflatex main.tex # Provide links from bibliography to inline citations
+	$(MAKE) clean
+	echo "file://$$(pwd)/main.pdf"
 
 watch:
-	# Install `entr` first: https://github.com/eradman/entr
-	echo 'src/01_introduction.md' | entr -s 'make intro' &
-	echo 'src/02_background.md' | entr -s 'make bg' &
-	echo 'src/03_lit_review.md' | entr -s 'make lit' &
-	echo 'src/04_methodology.md' | entr -s 'make method' &
-	echo 'src/05_results.md' | entr -s 'make results' &
-	echo 'src/06_conclusion.md' | entr -s 'make conc' &
+	exa src/0*.md src/cite.bib src/imgs/* main.tex | entr -s 'make dev'

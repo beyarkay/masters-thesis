@@ -222,8 +222,10 @@
   doi = {10.1109/INFOMAN.2018.8392660},
   url = {https://ieeexplore.ieee.org/document/8392660/},
   urldate = {2023-07-20},
+  abstract = {Hand gestures provide a natural way for humans to interact with computers to perform a variety of different applications. However, factors such as the complexity of hand gesture structures, differences in hand size, hand posture, and environmental illumination can influence the performance of hand gesture recognition algorithms. Recent advances in Deep Learning have significantly advanced the performance of image recognition systems. In particular, the Deep Convolutional Neural Network has demonstrated superior performance in image representation and classification, compared to conventional machine learning approaches. This paper proposes an Adapted Deep Convolutional Neural Network (ADCNN) suitable for hand gesture recognition tasks. Data augmentation is initially applied which shifts images both horizontally and vertically to an extent of 20\% of the original dimensions randomly, in order to numerically increase the size of the dataset and to add the robustness needed for a deep learning approach. These images are input into the proposed ADCNN model which is empowered by the presence of network initialization (ReLU and Softmax) and L2 Regularization to eliminate the problem of data overfitting. With these modifications, the experimental results using the ADCNN model demonstrate that it is an effective method of increasing the performance of CNN for hand gesture recognition. The model was trained and tested using 3750 static hand gesture images, which incorporate variations in features such as scale, rotation, translation, illumination and noise. The proposed ADCNN was compared to a baseline Convolutional Neural Network and the results show that the proposed ADCNN achieved a classification recognition accuracy of 99.73\%, and a 4\% improvement over the baseline Convolutional Neural Network model (95.73\%).},
   eventtitle = {2018 4th {{International Conference}} on {{Information Management}} ({{ICIM}})},
-  isbn = {978-1-5386-6147-5}
+  isbn = {978-1-5386-6147-5},
+  keywords = {model:cnn,model:nn,pdf:paywalled,untagged}
 }
 
 @article{alazraiDatasetWiFibasedHumantohuman2020,
@@ -371,8 +373,8 @@
   title = {{{ADXL335 Datasheet}} and {{Product Info}} | {{Analog Devices}}},
   author = {{AnalogDevices}},
   date = {2010},
-  publisher = {{www.analog.com}},
   url = {https://www.analog.com/en/products/adxl335.html#product-overview},
+  organization = {{www.analog.com}},
   keywords = {from:cite.bib,type:datasheet}
 }
 
@@ -398,8 +400,8 @@
   title = {Arduino - {{Home}}},
   author = {{Arduino}},
   date = {2005},
-  publisher = {{www.arduino.cc}},
   url = {https://www.arduino.cc/},
+  organization = {{www.arduino.cc}},
   keywords = {from:cite.bib,type:datasheet}
 }
 
@@ -408,8 +410,8 @@
   author = {{Arduino}},
   date = {2016},
   journaltitle = {Arduino Official Store},
-  publisher = {{store.arduino.cc}},
   url = {https://store.arduino.cc/products/arduino-nano-33-ble},
+  organization = {{store.arduino.cc}},
   keywords = {from:cite.bib,type:datasheet}
 }
 
@@ -596,7 +598,7 @@
   abstract = {This paper presents an application that uses hand gesture input to control a computer while giving a presentation. In order to develop a prototype of this application, we have defined an interaction model, a notation for gestures, and a set of guidelines to design gestural command sets. This works aims to define interaction styles that work in computerized reality environments. In our application, gestures are used for interacting with the computer as well as for communicating with other people or operating other devices.},
   langid = {english},
   keywords = {based-on:gloves,fidelity:finger,hardware:polhemus,hardware:vpl-dataglove,have-read,reference:doi.org/10.1109/2.84835,reference:doi.org/10.1136/BMJ.293.6546.517,reference:doi.org/10.1145/1125021.1125079,reference:doi.org/10.1145/142621.142646,reference:doi.org/10.1145/800250.807503,reference:doi.org/10.1162/pres.1992.1.1.1,reference:doi.org/10.1201/B15703-15,tech:flex,type:paper},
-  annotation = {582 citations (Semantic Scholar/DOI) [2023-07-02]},
+  annotation = {582 citations (Semantic Scholar/DOI) [2023-07-02] --- DOIs\_of\_references: ["10.1162/pres.1992.1.1.1","10.1136/BMJ.293.6546.517","10.1145/1125021.1125079"] ---},
   file = {/Users/brk/Zotero/storage/WRSWXDSK/Baudel and Beaudouin-Lafon - 1993 - Charade remote control of objects using free-hand.pdf}
 }
 
@@ -647,6 +649,17 @@
   issn = {1532-4435},
   issue = {null},
   keywords = {background,deep learning,from:cite.bib,global optimization,model selection,neural networks,response surface modeling}
+}
+
+@article{bergstraRandomSearchHyperParameter2012a,
+  title = {Random {{Search}} for {{Hyper-Parameter Optimization}}},
+  author = {Bergstra, James and Bengio, Y.},
+  date = {2012-03-01},
+  journaltitle = {The Journal of Machine Learning Research},
+  shortjournal = {The Journal of Machine Learning Research},
+  volume = {13},
+  pages = {281--305},
+  abstract = {Grid search and manual search are the most widely used strategies for hyper-parameter optimization. This paper shows empirically and theoretically that randomly chosen trials are more efficient for hyper-parameter optimization than trials on a grid. Empirical evidence comes from a comparison with a large previous study that used grid search and manual search to configure neural networks and deep belief networks. Compared with neural networks configured by a pure grid search, we find that random search over the same domain is able to find models that are as good or better within a small fraction of the computation time. Granting random search the same computational budget, random search finds better models by effectively searching a larger, less promising configuration space. Compared with deep belief networks configured by a thoughtful combination of manual search and grid search, purely random search over the same 32-dimensional configuration space found statistically equal performance on four of seven data sets, and superior performance on one of seven. A Gaussian process analysis of the function from hyper-parameters to validation set performance reveals that for most data sets only a few of the hyper-parameters really matter, but that different hyper-parameters are important on different data sets. This phenomenon makes grid search a poor choice for configuring algorithms for new data sets. Our analysis casts some light on why recent "High Throughput" methods achieve surprising success--they appear to search through a large number of hyper-parameters because most hyper-parameters do not matter much. We anticipate that growing interest in large hierarchical models will place an increasing burden on techniques for hyper-parameter optimization; this work shows that random search is a natural baseline against which to judge progress in the development of adaptive (sequential) hyper-parameter optimization algorithms.}
 }
 
 @article{berrarCaveatsPitfallsROC2012,
@@ -718,6 +731,14 @@
   keywords = {app:american-sl,app:sign-language,based-on:vision,classes:36,fidelity:finger,have-read,model:hmm,model:kalman-filter,tech:rgb,type:paper},
   annotation = {--- DOIs\_of\_references: ["10.1096/fj.201800173R","10.1038/nbt.2839","10.1136/annrheumdis-2022-eular.1677","10.1038/nbt.2839","10.1096/fj.201800173R"] ---},
   file = {/Users/brk/Zotero/storage/8BDC7ZZS/Binh et al. - 2005 - Real-Time Hand Tracking and Gesture Recognition Sy.pdf}
+}
+
+@book{bishopPatternRecognitionMachine2007,
+  title = {Pattern {{Recognition}} and {{Machine Learning}} ({{Information Science}} and {{Statistics}})},
+  author = {Bishop, Christopher},
+  date = {2007-10-01},
+  abstract = {The dramatic growth in practical applications for machine learning over the last ten years has been accompanied by many important developments in the underlying algorithms and techniques. For example, Bayesian methods have grown from a specialist niche to become mainstream, while graphical models have emerged as a general framework for describing and applying probabilistic techniques. The practical applicability of Bayesian methods has been greatly enhanced by the development of a range of approximate inference algorithms such as variational Bayes and expectation propagation, while new models based on kernels have had a significant impact on both algorithms and applications. This completely new textbook reflects these recent developments while providing a comprehensive introduction to the fields of pattern recognition and machine learning. It is aimed at advanced undergraduates or first-year PhD students, as well as researchers and practitioners. No previous knowledge of pattern recognition or machine learning concepts is assumed. Familiarity with multivariate calculus and basic linear algebra is required, and some experience in the use of probabilities would be helpful though not essential as the book includes a self-contained introduction to basic probability theory. The book is suitable for courses on machine learning, statistics, computer science, signal processing, computer vision, data mining, and bioinformatics. Extensive support is provided for course instructors, including more than 400 exercises, graded according to difficulty. Example solutions for a subset of the exercises are available from the book web site, while solutions for the remainder can be obtained by instructors from the publisher. The book is supported by a great deal of additional material, and the reader is encouraged to visit the book web site for the latest information. A forthcoming companion volume will deal with practical aspects of pattern recognition and machine learning, and will include free software implementations of the key algorithms along with example data sets and demonstration programs. Christopher Bishop is Assistant Director at Microsoft Research Cambridge, and also holds a Chair in Computer Science at the University of Edinburgh. He is a Fellow of Darwin College Cambridge, and was recently elected Fellow of the Royal Academy of Engineering. The author's previous textbook "Neural Networks for Pattern Recognition" has been widely adopted.},
+  isbn = {978-0-387-31073-2}
 }
 
 @article{bloitShorttimeViterbiOnline2008,
@@ -1260,8 +1281,8 @@
   url = {http://ieeexplore.ieee.org/document/4539650/},
   urldate = {2023-06-23},
   abstract = {Hand movement data acquisition is used in many engineering applications ranging from the analysis of gestures to the biomedical sciences. Glove-based systems represent one of the most important efforts aimed at acquiring hand movement data. While they have been around for over three decades, they keep attracting the interest of researchers from increasingly diverse fields. This paper surveys such glove systems and their applications. It also analyzes the characteristics of the devices, provides a road map of the evolution of the technology, and discusses limitations of current technology and trends at the frontiers of research. A foremost goal of this paper is to provide readers who are new to the area with a basis for understanding glove systems technology and how it can be applied, while offering specialists an updated picture of the breadth of applications in several engineering and biomedical sciences areas.},
-  keywords = {based-on:gloves,contains-more-references,have-read,type:survey},
-  annotation = {652 citations (Semantic Scholar/DOI) [2023-07-02]},
+  keywords = {based-on:gloves,contains-more-references,have-read,reference:doi.org/10.1002/SMJ.2706,reference:doi.org/10.1007/3-540-40063-X\_74,reference:doi.org/10.1007/3-540-46616-9\_25,reference:doi.org/10.1007/s00221-006-0840-9,reference:doi.org/10.1007/s00221-007-1136-4,reference:doi.org/10.1016/j.ijhcs.2005.08.004,reference:doi.org/10.1016/S0924-980X(97)00086-6,reference:doi.org/10.1017/S0263574702004708,reference:doi.org/10.1054/jhsb.1999.0360,reference:doi.org/10.1055/S-2001-12082,reference:doi.org/10.1089/109493103769710523,reference:doi.org/10.1097/00003086-199211000-00035,reference:doi.org/10.1109/2.84835,reference:doi.org/10.1109/3477.623236,reference:doi.org/10.1109/38.250916,reference:doi.org/10.1109/4233.826858,reference:doi.org/10.1109/5.662873,reference:doi.org/10.1109/5326.760563,reference:doi.org/10.1109/6.642965,reference:doi.org/10.1109/70.964669,reference:doi.org/10.1109/7333.948460,reference:doi.org/10.1109/ACCAI53970.2022.9752580,reference:doi.org/10.1109/AFGR.2002.1004188,reference:doi.org/10.1109/AFGR.2004.1301590,reference:doi.org/10.1109/AINA.2006.347,reference:doi.org/10.1109/BSN.2006.20,reference:doi.org/10.1109/CBMS.2007.6,reference:doi.org/10.1109/CCECE.1999.804914,reference:doi.org/10.1109/COMPSAC54236.2022.00033,reference:doi.org/10.1109/ICAT.2006.68,reference:doi.org/10.1109/ICKS.2007.10,reference:doi.org/10.1109/ICME.2006.262558,reference:doi.org/10.1109/ICMI.2002.1166990,reference:doi.org/10.1109/ICRA.2019.8794034,reference:doi.org/10.1109/ICSMC.1999.825357,reference:doi.org/10.1109/ICSMC.2006.384834,reference:doi.org/10.1109/IECON.1995.483940,reference:doi.org/10.1109/IEMBS.1998.747104,reference:doi.org/10.1109/IEMBS.2004.1403632,reference:doi.org/10.1109/IEMBS.2004.1403713,reference:doi.org/10.1109/IEMBS.2004.1404326,reference:doi.org/10.1109/IEMBS.2006.259307,reference:doi.org/10.1109/IEMBS.2006.260574,reference:doi.org/10.1109/IEMBS.2006.260947,reference:doi.org/10.1109/IMTC.1998.679825,reference:doi.org/10.1109/IMTC.2001.928844,reference:doi.org/10.1109/IRDS.2002.1043880,reference:doi.org/10.1109/IROS.1999.812786,reference:doi.org/10.1109/IROS.2003.1249694,reference:doi.org/10.1109/ISSMDBS.2006.360106,reference:doi.org/10.1109/ISWC.1998.729544,reference:doi.org/10.1109/ISWC.2001.962093,reference:doi.org/10.1109/ISWC.2002.1167217,reference:doi.org/10.1109/ISWC.2002.1167238,reference:doi.org/10.1109/ISWC.2003.1241392,reference:doi.org/10.1109/ISWC.2004.2,reference:doi.org/10.1109/IV.2006.55,reference:doi.org/10.1109/IV.2007.23,reference:doi.org/10.1109/IWVR.2006.1707518,reference:doi.org/10.1109/JSEN.2007.894132,reference:doi.org/10.1109/ROBOT.1989.100229,reference:doi.org/10.1109/ROBOT.1998.677377,reference:doi.org/10.1109/ROBOT.1998.681418,reference:doi.org/10.1109/ROBOT.2000.845252,reference:doi.org/10.1109/ROBOT.2001.932879,reference:doi.org/10.1109/ROBOT.2002.1014763,reference:doi.org/10.1109/ROBOT.2003.1241922,reference:doi.org/10.1109/SIBGRA.2002.1167207,reference:doi.org/10.1109/TC.2003.1223635,reference:doi.org/10.1109/TIE.2005.858736,reference:doi.org/10.1109/TITB.2005.854510,reference:doi.org/10.1109/TMM.2003.814795,reference:doi.org/10.1109/TNSRE.2007.891367,reference:doi.org/10.1109/TNSRE.2007.891393,reference:doi.org/10.1109/TPAMI.2005.112,reference:doi.org/10.1109/TRO.2004.833816,reference:doi.org/10.1109/TVCG.2007.37,reference:doi.org/10.1109/VECIMS.2006.250779,reference:doi.org/10.1109/VR.2001.913781,reference:doi.org/10.1109/VR.2016.7504682,reference:doi.org/10.1109/VSMM.1997.622351,reference:doi.org/10.1111/j.1467-8659.1995.cgf143\_0067.x,reference:doi.org/10.1115/1.1481363,reference:doi.org/10.1115/1.2829491,reference:doi.org/10.1145/1101616.1101635,reference:doi.org/10.1145/1242073.1242272,reference:doi.org/10.1145/223355.223695,reference:doi.org/10.1145/3304181.3304194,reference:doi.org/10.1145/354324.354340,reference:doi.org/10.1145/365024.365114,reference:doi.org/10.1145/67449.67495,reference:doi.org/10.1152/JN.1998.79.3.1307,reference:doi.org/10.1155/2016/8347478,reference:doi.org/10.1162/pres.1992.1.1.18,reference:doi.org/10.1201/9780203491409.CH16,reference:doi.org/10.1523/JNEUROSCI.18-23-10105.1998,reference:doi.org/10.1682/JRRD.2003.03.0181,reference:doi.org/10.2514/6.2001-4944,type:survey},
+  annotation = {652 citations (Semantic Scholar/DOI) [2023-07-02] --- DOIs\_of\_references: ["10.1109/ROBOT.2000.845252","10.1162/pres.1992.1.1.18","10.1109/TVCG.2007.37","10.1109/ISWC.2001.962093","10.1109/IMTC.1998.679825","10.1109/ISPASS55109.2022.00008","10.1109/70.964669","10.1109/ICAT.2006.68","10.1109/ISWC.2001.962130","10.1109/CCECE.1999.804914","10.1115/1.2829490","10.1109/MCG.1997.10010","10.1117/12.2638771","10.1109/AFGR.2004.1301590","10.1109/TIE.2003.814765","10.1109/MEMS46641.2020.9056118","10.1109/38.250916","10.1109/IEMBS.2004.1404364","10.1109/CBMS.2007.6","10.1109/ROBOT.2002.1014763","10.1109/2.84835","10.1115/1.2829491","10.1016/j.ijhcs.2005.08.004","10.1111/j.1467-8659.1995.cgf143\_0067.x","10.1109/ICME.2006.262558","10.1109/IROS.1999.812786","10.1109/ROBOT.1998.681418","10.1109/6.642965","10.1682/JRRD.2003.03.0181","10.1109/AFGR.2002.1004188","10.1007/s00221-006-0840-9","10.1109/VECIMS.2006.250779","10.1115/1.1481363","10.1109/ISWC.2002.1167238","10.1109/IRDS.2002.1043880","10.1109/COMPSAC54236.2022.00033","10.1109/TNSRE.2007.891367","10.1145/365024.365114","10.1152/JN.1998.79.3.1307","10.1109/ICRA.2019.8794034","10.1109/ICSMC.2006.384834","10.1145/122488.122499","10.1201/9780203491409.CH16","10.1109/TPAMI.2005.112","10.1109/JSEN.2007.894132","10.1109/IMTC.2001.928844","10.1109/AFGR.1998.671007","10.1109/ACCAI53970.2022.9752580","10.1016/S0924-980X(97)00086-6","10.1109/IWVR.2006.1707518","10.1109/ICSMC.1999.825357","10.1109/IEMBS.2004.1404326","10.1109/IEMBS.2006.260947","10.1109/VR.2016.7504682","10.1109/ROBOT.2001.932879","10.1109/IEMBS.2006.259307","10.1109/4233.826858","10.1109/IV.2006.55","10.1523/JNEUROSCI.18-23-10105.1998","10.1002/SMJ.2706","10.1109/IV.2006.55","10.1109/ISWC.2002.1167217","10.1007/s00221-007-1136-4","10.1109/BSN.2006.20","10.1109/WCICA.2000.859920","10.1109/IROS.2003.1249694","10.1109/ISWC.1999.806717","10.1054/jhsb.1999.0360","10.1109/VSMM.1997.622351","10.1109/IEMBS.2006.260574","10.1109/IEMBS.2004.1403632","10.1145/354324.354340","10.2514/6.2001-4944","10.1109/ISWC.1998.729544","10.1109/IECON.1995.483940","10.1109/5.662873","10.1109/AINA.2006.347","10.1109/TITB.2005.854510","10.1007/3-540-46616-9\_25","10.1109/ISWC.2004.2","10.1145/3304181.3304194","10.1109/7333.948460","10.1109/IEMBS.1998.747104","10.1109/ROBOT.1998.677377","10.1109/5326.760563","10.1109/ROBOT.1998.677377","10.1109/IEMBS.2004.1403713","10.1109/VR.2001.913781","10.1109/TIE.2005.858736","10.1177/14759217211021942","10.1155/2016/8347478","10.1055/S-2001-12082","10.1145/1101616.1101635","10.1109/TC.2003.1223635","10.1109/ISWC.2003.1241392"] ---},
   file = {/Users/brk/Zotero/storage/RWUPUG9F/Dipietro et al. - 2008 - A Survey of Glove-Based Systems and Their Applicat.pdf}
 }
 
@@ -1811,7 +1832,8 @@
   abstract = {We are pleased to announce the release of a tool that records detailed measurements of the wireless channel along with received 802.11 packet traces. It runs on a commodity 802.11n NIC, and records Channel State Information (CSI) based on the 802.11 standard. Unlike Receive Signal Strength Indicator (RSSI) values, which merely capture the total power received at the listener, the CSI contains information about the channel between sender and receiver at the level of individual data subcarriers, for each pair of transmit and receive antennas.             Our toolkit uses the Intel WiFi Link 5300 wireless NIC with 3 antennas. It works on up-to-date Linux operating systems: in our testbed we use Ubuntu 10.04 LTS with the 2.6.36 kernel. The measurement setup comprises our customized versions of Intel's close-source firmware and open-source iwlwifi wireless driver, userspace tools to enable these measurements, access point functionality for controlling both ends of the link, and Matlab (or Octave) scripts for data analysis. We are releasing the binary of the modified firmware, and the source code to all the other components.},
   langid = {english},
   keywords = {based-on:wifi,tech:wifi,type:seminal},
-  annotation = {1239 citations (Semantic Scholar/DOI) [2023-07-12]}
+  annotation = {1239 citations (Semantic Scholar/DOI) [2023-07-12]},
+  file = {/Users/brk/Zotero/storage/XSXCNE49/Halperin et al. - 2011 - Tool release gathering 802.11n traces with channe.pdf}
 }
 
 @inproceedings{hamdyaliComparativeStudyUser2014,
@@ -2357,8 +2379,8 @@
   author = {Karpathy, Andrej},
   date = {2019},
   journaltitle = {Andrej Karpathy Blog},
-  publisher = {{https://karpathy.github.io}},
   url = {https://karpathy.github.io/2019/04/25/recipe/},
+  organization = {{https://karpathy.github.io}},
   keywords = {background,from:cite.bib,model:nn,type:blog}
 }
 
@@ -2465,7 +2487,7 @@
   eventtitle = {Gesture {{Recognition}} ({{FG}})},
   isbn = {9781424421534},
   keywords = {app:german-sl,app:sign-language,based-on:gloves,classes:7,dataset:custom,fidelity:hand,model:knn,model:svm,participants:8,reference:doi.org/10.1007/3-540-40063-X\_74,reference:doi.org/10.1016/S0004-3702(97)00043-X,reference:doi.org/10.1109/34.598226,reference:doi.org/10.1109/34.735811,reference:doi.org/10.1109/AFGR.2004.1301590,reference:doi.org/10.1109/ICSMC.1997.625741,reference:doi.org/10.1109/IEMBS.2006.259428,reference:doi.org/10.1109/ISWC.2003.1241392,reference:doi.org/10.1109/ISWC.2007.4373769,reference:doi.org/10.1145/108844.108900,tech:accelerometer,tech:emg,untagged},
-  annotation = {49 citations (Semantic Scholar/DOI) [2023-07-30] --- DOIs\_of\_references: ["10.1109/ISWC.2007.4373769","10.1109/AFGR.2004.1301590","10.1109/IEMBS.2006.259428","10.1007/3-540-40063-X\_74","10.1145/122488.122499","10.1145/108844.108900","10.1016/S0004-3702(97)00043-X","10.3390/s22186878"] ---},
+  annotation = {49 citations (Semantic Scholar/DOI) [2023-07-30] --- DOIs\_of\_references: ["10.1109/ISWC.2007.4373769","10.1109/AFGR.2004.1301590","10.1109/IEMBS.2006.259428","10.1007/3-540-40063-X\_74","10.1145/122488.122499","10.1145/108844.108900","10.1016/S0004-3702(97)00043-X"] ---},
   file = {/Users/brk/Zotero/storage/Z44Z3IYN/Kim et al. - 2008 - Bi-channel sensor fusion for automatic sign langua.pdf}
 }
 
@@ -2487,13 +2509,24 @@
   annotation = {201 citations (Semantic Scholar/DOI) [2023-07-30]}
 }
 
+@article{einstein1905,
+    author = "Albert Einstein",
+    title = "On the Electrodynamics of Moving Bodies",
+    journal = "Annalen der Physik",
+    volume = "17",
+    number = "10",
+    pages = "891-921",
+    year = "1905",
+}
+
 @article{kingmaAdamMethodStochastic2014,
   title = {Adam: {{A Method}} for {{Stochastic Optimization}}},
   shorttitle = {Adam},
   author = {Kingma, Diederik P. and Ba, Jimmy},
+  year = {2014},
   date = {2014-12-22},
   journaltitle = {CoRR},
-  url = {https://www.semanticscholar.org/paper/Adam%3A-A-Method-for-Stochastic-Optimization-Kingma-Ba/a6cb366736791bcccc5c8639de5a8f9636bf87e8},
+  url = {https://www.semanticscholar.org/paper/Adam\%3A-A-Method-for-Stochastic-Optimization-Kingma-Ba/a6cb366736791bcccc5c8639de5a8f9636bf87e8},
   urldate = {2023-06-07},
   abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
   keywords = {background},
@@ -3416,8 +3449,8 @@
   url = {http://ieeexplore.ieee.org/document/4154947/},
   urldate = {2023-03-07},
   abstract = {Gesture recognition pertains to recognizing meaningful expressions of motion by a human, involving the hands, arms, face, head, and/or body. It is of utmost importance in designing an intelligent and efficient human-computer interface. The applications of gesture recognition are manifold, ranging from sign language through medical rehabilitation to virtual reality. In this paper, we provide a survey on gesture recognition with particular emphasis on hand gestures and facial expressions. Applications involving hidden Markov models, particle filtering and condensation, finite-state machines, optical flow, skin color, and connectionist models are discussed in detail. Existing challenges and future research possibilities are also highlighted},
-  keywords = {based-on:gloves,based-on:vision,contains-more-references,have-read,model:hmm,type:survey},
-  annotation = {1146 citations (Semantic Scholar/DOI) [2023-07-02]},
+  keywords = {based-on:gloves,based-on:vision,contains-more-references,have-read,model:hmm,reference:doi.org/10.1006/cviu.1998.0716,reference:doi.org/10.1007/3-540-60268-2\_326,reference:doi.org/10.1007/978-0-387-35973-1\_290,reference:doi.org/10.1007/978-3-540-24670-1\_30,reference:doi.org/10.1007/BF00133570,reference:doi.org/10.1007/BFb0015549,reference:doi.org/10.1007/BFb0055712,reference:doi.org/10.1007/s11356-020-10835-8,reference:doi.org/10.1016/0031-3203(92)90007-6,reference:doi.org/10.1016/0165-6074(93)90117-4,reference:doi.org/10.1016/0262-8856(94)90007-8,reference:doi.org/10.1016/S0031-3203(00)00096-0,reference:doi.org/10.1016/S0031-3203(02)00052-3,reference:doi.org/10.1016/S0031-3203(03)00042-6,reference:doi.org/10.1016/S0031-3203(96)00111-2,reference:doi.org/10.1016/S0031-3203(99)00175-2,reference:doi.org/10.1016/S0031-3203(99)00176-4,reference:doi.org/10.1023/B:VISI.0000029666.37597.d3,reference:doi.org/10.1109/34.254061,reference:doi.org/10.1109/34.506414,reference:doi.org/10.1109/34.598231,reference:doi.org/10.1109/34.598232,reference:doi.org/10.1109/34.643892,reference:doi.org/10.1109/34.735811,reference:doi.org/10.1109/34.895976,reference:doi.org/10.1109/34.908962,reference:doi.org/10.1109/5.18626,reference:doi.org/10.1109/5.381842,reference:doi.org/10.1109/72.536309,reference:doi.org/10.1109/AFGR.2000.840667,reference:doi.org/10.1109/CAC57257.2022.10055445,reference:doi.org/10.1109/CVPR.1992.223161,reference:doi.org/10.1109/CVPR.1996.517075,reference:doi.org/10.1109/CVPR.1999.786979,reference:doi.org/10.1109/CVPR.2004.201,reference:doi.org/10.1109/ICCV.1998.710707,reference:doi.org/10.1109/ICME.2001.1237789,reference:doi.org/10.1109/ISCV.1995.477012,reference:doi.org/10.1109/JPROC.2003.823144,reference:doi.org/10.1109/MMDBMS.1998.709526,reference:doi.org/10.1109/NAMW.1997.609859,reference:doi.org/10.1109/TIT.1967.1054010,reference:doi.org/10.1109/TPAMI.1987.4767964,reference:doi.org/10.1109/TPAMI.2004.1265861,reference:doi.org/10.1109/TPAMI.2004.77,reference:doi.org/10.1117/1.2179076,reference:doi.org/10.1117/12.965761,reference:doi.org/10.1162/jocn.1991.3.1.71,reference:doi.org/10.1201/9781420090741.ch2,reference:doi.org/10.1364/JOSAA.2.001160,reference:doi.org/10.2307/1573081,type:survey},
+  annotation = {1146 citations (Semantic Scholar/DOI) [2023-07-02] --- DOIs\_of\_references: ["10.1364/JOSAA.2.001160","10.1006/cviu.1998.0716","10.1109/TPAMI.2004.77","10.1007/978-3-540-24670-1\_30","10.1109/TIT.1967.1054010","10.1109/5.381842","10.1007/BFb0015549","10.1016/0031-3203(92)90007-6","10.1162/jocn.1991.3.1.71","10.1109/ICCV.1998.710707","10.1109/34.598231","10.1109/CVPR.1992.223161","10.1016/S0031-3203(99)00176-4","10.1109/CAC57257.2022.10055445","10.1109/5.18626","10.1117/1.2179076","10.2307/1573081","10.1109/34.598232","10.1016/0165-6074(93)90117-4","10.1109/CVPR.1996.517075","10.1109/JPROC.2003.823144","10.1109/34.643892","10.1007/BF00133570","10.1016/S0031-3203(96)00111-2","10.1109/ICME.2001.1237789","10.1016/S0031-3203(99)00175-2","10.1109/34.817413","10.1109/34.254061","10.1109/ISCV.1995.477012","10.1109/CVPR.2004.201","10.1109/34.895976","10.1109/AFGR.2000.840667","10.1109/NAMW.1997.609859","10.1109/MMDBMS.1998.709526","10.1007/BFb0055712","10.1007/s11356-020-10835-8","10.1109/34.908962","10.1023/B:VISI.0000029666.37597.d3","10.1109/72.536309","10.1117/12.965761","10.1201/9781420090741.ch2","10.1007/978-0-387-35973-1\_290","10.1007/3-540-60268-2\_326","10.1016/S0031-3203(02)00052-3","10.1109/TPAMI.1987.4767964","10.1109/34.506414","10.1016/0262-8856(94)90007-8","10.1109/TPAMI.2004.1265861"] ---},
   file = {/Users/brk/Zotero/storage/32EDNKX8/Mitra and Acharya - 2007 - Gesture Recognition A Survey.pdf}
 }
 
@@ -4945,8 +4978,8 @@
   title = {{{CD74HC4067}} Data Sheet, Product Information and Support | {{TI}}.Com},
   author = {{Texas Instruments}},
   date = {2003-07},
-  publisher = {{www.ti.com}},
   url = {https://www.ti.com/product/CD74HC4067},
+  organization = {{www.ti.com}},
   keywords = {from:cite.bib,type:datasheet}
 }
 
@@ -4984,7 +5017,7 @@
   title = {{{US NEA R60-34-163 FINAL PROJECT REPORT}}},
   author = {{Thomas A. DeFanti} and {Daniel J. Sandin}},
   date = {1977},
-  publisher = {{University of Illinois at Chicago Circle}},
+  organization = {{University of Illinois at Chicago Circle}},
   keywords = {based-on:gloves,hardware:sayre-glove,have-read,tech:optical-tubes,type:paper},
   file = {/Users/brk/Zotero/storage/V95YJFCN/Thomas A. DeFanti and Daniel J. Sandin - 1977 - US NEA R60-34-163 FINAL PROJECT REPORT.pdf}
 }
@@ -5132,6 +5165,7 @@
   abstract = {WiFi based gesture recognition systems have recently proliferated due to the ubiquitous availability of WiFi in almost every modern building. The key limitation of existing WiFi based gesture recognition systems is that they require the user to be in the same configuration (i.e., at the same position and in same orientation) when performing gestures at runtime as when providing training samples, which significantly restricts their practical usability. In this paper, we propose a WiFi based gesture recognition system, namely WiAG, which recognizes the gestures of the user irrespective of his/her configuration. The key idea behind WiAG is that it first requests the user to provide training samples for all gestures in only one configuration and then automatically generates virtual samples for all gestures in all possible configurations by applying our novel translation function on the training samples. Next, for each configuration, it generates a classification model using virtual samples corresponding to that configuration. To recognize gestures of a user at runtime, as soon as the user performs a gesture, WiAG first automatically estimates the configuration of the user and then evaluates the gesture against the classification model corresponding to that estimated configuration. Our evaluation results show that when user's configuration is not the same at runtime as at the time of providing training samples, WiAG significantly improves the gesture recognition accuracy from just 51.4\% to 91.4\%.},
   langid = {english},
   keywords = {app:activity-inference,based-on:wifi,classes:6,tech:wifi,type:paper},
+  annotation = {163 citations (Semantic Scholar/DOI) [2023-08-06] 144 citations (Crossref) [2023-08-06]},
   file = {/Users/brk/Zotero/storage/XLDUCJ4U/Virmani and Shahzad - 2017 - Position and Orientation Agnostic Gesture Recognit.pdf}
 }
 
@@ -6039,7 +6073,7 @@
   url = {http://ieeexplore.ieee.org/document/8067693/},
   urldate = {2023-07-12},
   abstract = {In this article, we present a survey of recent advances in passive human behavior recognition in indoor areas using the channel state information (CSI) of commercial WiFi systems. The movement of the human body parts cause changes in the wireless signal reflections, which result in variations in the CSI. By analyzing the data streams of CSIs for different activities and comparing them against stored models, human behavior can be recognized. This is done by extracting features from CSI data streams and using machine learning techniques to build models and classifiers. The techniques from the literature that are presented herein have great performance; however, instead of the machine learning techniques employed in these works, we propose to use deep learning techniques such as long-short term memory (LSTM) recurrent neural networking (RNN) and show the improved performance. We also discuss different challenges such as environment change, frame rate selection, and the multi-user scenario; and finally suggest possible directions for future work.},
-  keywords = {based-on:wifi,model:lstm,model:nn,model:rnn,tech:wifi,type:survey},
+  keywords = {based-on:wifi,model:lstm,model:nn,model:rnn,pdf:paywalled,tech:wifi,type:survey},
   annotation = {245 citations (Semantic Scholar/DOI) [2023-07-12]}
 }
 

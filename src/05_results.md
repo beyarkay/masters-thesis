@@ -40,13 +40,9 @@ in terms of gesture detection _and_ classification.
 > this will take you long to do though.... You are very close now...
 
 
-TODO:
 
-- Long and short captions for figures and tables
-- Fit figures into margins
-
-
-
+- TODO: Long and short captions for figures and tables
+- TODO: Fit figures into margins
 -->
 
 This chapter will discuss the results obtained from the experiments described
@@ -94,7 +90,7 @@ user's hands as a single gesture is being performed.
         \end{subfigure} &
         \begin{subfigure}[t]{0.19\linewidth}
             \includegraphics[width=\linewidth]{src/imgs/05_gesture0016_1}
-            \caption[short caption todo][short caption todo]{The finger starts flexing}
+            \caption[short caption todo]{The finger starts flexing}
         \end{subfigure} &
         \begin{subfigure}[t]{0.19\linewidth}
             \includegraphics[width=\linewidth]{src/imgs/05_gesture0016_2}
@@ -113,95 +109,6 @@ user's hands as a single gesture is being performed.
     \caption[short caption todo]{Video frames showing gesture 16 being performed, in which both
     hands are oriented at $45^\circ$ and the right hand's index finger flexes.}
     \label{tab:05_gesture0016}
-\end{table}
-<!-- prettier-ignore-end -->
-
-_Ergo_ can recognise 50 gesture classes and one non-gesture class. The
-non-gesture class is used to represent the empty durations in-between gestures
-during which the user's hands may be still: the transitioning period from the
-end of one gesture to the start of the next. The 50 gesture classes are
-numbered from 0 to 49. The non-gesture class is numbered as class 50 The
-software powering _Ergo_ takes care of converting a class prediction in the
-range $[0, \ldots 50]$ into a keystroke (any UTF8 character) via a
-user-configurable gesture-to-keystroke mapping.
-
-The motion for each gesture is defined as the Cartesian product of a finger
-motion and a hand orientation. There are 10 finger motions: each motion defines
-one finger flexing towards the palm of the user's hand. There are five
-orientations: each defines the angle both hands make with the horizon, and are
-$0^\circ, 45^\circ, 90^\circ, 135^\circ, 180^\circ$. The way in which these 10
-fingers and 5 gestures combine to make 50 gestures is described in Table
-\ref{tab:05_gestures}.
-
-<!-- prettier-ignore-start -->
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        & \multicolumn{5}{|c|}{Left Hand} & \multicolumn{5}{c|}{Right Hand} \\
-        \hline
-        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
-        \hline
-        $0^\circ$   &  0 &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 \\
-        \hline
-        $45^\circ$  & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 \\
-        \hline
-        $90^\circ$  & 20 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28 & 29 \\
-        \hline
-        $135^\circ$ & 30 & 31 & 32 & 33 & 34 & 35 & 36 & 37 & 38 & 39 \\
-        \hline
-        $180^\circ$ & 40 & 41 & 42 & 43 & 44 & 45 & 46 & 47 & 48 & 49 \\
-        \hline
-    \end{tabular}
-    \caption[short caption todo]{The cells of this table contain the different indices of the
-    gestures which \emph{Ergo} can recognise. The index of each gesture is
-    semantic: the units digit refers to the finger being flexed and the tens
-    digit refers to the orientation of the hands. Each column of the table
-    contains gestures where the finger being flexed is the same, and each row
-    of the table contains gesture indices where the orientation of the gesture
-    is the same.}
-    \label{tab:05_gestures}
-\end{table}
-<!-- prettier-ignore-end -->
-
-As previously mentioned, these 50 gestures are mapped to keystrokes via a
-gesture-to-keystroke mapping. The default mapping is shown in Table
-\ref{tab:05_keystrokes}, which has the same layout as Table
-\ref{tab:05_gestures} to allow for easy comparison.
-
-The gestures are defined in a manner that is similar to the English QWERTY
-keyboard. For example, the gestures with an orientation of $90^\circ$ are
-ordered in the same way as the keys on the home row of the QWERTY keyboard.
-Flexing one's left little finger with an orientation of $90^\circ$ is the same
-as using ones left little finger on the home row of the QWERTY keyboard: both
-result in the keystroke "a". This allows new users to easily learn which
-gestures map to which keystrokes.
-
-<!-- prettier-ignore-start -->
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
-        \hline
-        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
-        \hline
-        $0^\circ$   & \texttt{control} &  \texttt{=} &  \texttt{'} &  \texttt{-} &  \texttt{[} &  \texttt{]} &  \texttt{space} &  \texttt{\textbackslash} &  \texttt{\`} &  \texttt{shift} \\
-        \hline
-        $45^\circ$  & \texttt{z} & \texttt{x} & \texttt{c} & \texttt{v} & \texttt{b} & \texttt{n} & \texttt{m} & \texttt{,} & \texttt{.} & \texttt{/} \\
-        \hline
-        $90^\circ$  & \texttt{a} & \texttt{s} & \texttt{d} & \texttt{f} & \texttt{g} & \texttt{h} & \texttt{j} & \texttt{k} & \texttt{l} & \texttt{;} \\
-        \hline
-        $135^\circ$ & \texttt{q} & \texttt{w} & \texttt{e} & \texttt{r} & \texttt{t} & \texttt{y} & \texttt{u} & \texttt{i} & \texttt{o} & \texttt{p} \\
-        \hline
-        $180^\circ$ & \texttt{1} & \texttt{2} & \texttt{3} & \texttt{4} & \texttt{5} & \texttt{6} & \texttt{7} & \texttt{8} & \texttt{9} & \texttt{0} \\
-        \hline
-    \end{tabular}
-    \caption[short caption todo]{The default keystroke mappings for \emph{Ergo}. Note that the
-    layout is similar to the QWERTY. \emph{Ergo} recognises control keys like
-    \texttt{control} and \texttt{shift}, so the user can combine gestures to
-    get new keystrokes.}
-    \label{tab:05_keystrokes}
 \end{table}
 <!-- prettier-ignore-end -->
 

@@ -19,7 +19,7 @@ Autocorrect is a valuable aid to users operating a virtual keyboard where
 mistakes are common due to the nature of the interface, and so it is integrated
 into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
 
-# Artificial Neural Networks
+# Artificial Neural Networks \label{sec:02_ffnn}
 
 Artificial Neural Networks (ANNs) are a form of machine learning that started
 with the development of the perceptron [@Rosenblatt1963PRINCIPLESON], which
@@ -518,7 +518,7 @@ infinity.
 
 Note that if the true class is 0, the loss is zero.
 
-# Hidden Markov Models
+# Hidden Markov Models \label{sec:02_hmm}
 
 Hidden Markov Models (HMMs) are a form of machine learning often used to model
 a series of observations over time. HMMs were initially proposed by
@@ -1092,7 +1092,27 @@ We can now update the parameters of the HMM:
 The above steps can now be repeated until a convergence within some threshold
 is reached.
 
-# Support Vector Machines
+# Support Vector Machines \label{sec:02_svm}
+
+<!--
+Support Vector Machines \label{sec:02_cusum}
+
+High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
+library for large linear classification.”, Journal of machine learning research
+9.Aug (2008): 1871-1874.
+
+LibLinear used for implementation
+
+SKlearn details: https://scikit-learn.org/stable/modules/svm.html
+
+SVMs struggle with large numbers of observations
+
+SVCs use one-vs-rest classification
+
+NOTE: I didn't scale the data... It's recommended to scale the data
+
+Different class weights were attempted
+-->
 
 Support Vector Machines (SVMs) are a form of supervised learning that can be
 used for classification and regression. As _Ergo_ is a classification problem,
@@ -1457,7 +1477,7 @@ The vector $\bm{w}$ then has the same number of elements as an observation
 $x_i$. Separating the weights $\bm{w}$ from the bias $b$ allows us to interpret
 $\bm{w}$ as a
 
-# Cumulative Sum
+# Cumulative Sum \label{sec:02_cusum}
 
 Cumulative Sum (CuSUM, @page_continuous_1954) is a sequential method used for
 change detection. Given a time series from an initial distribution, it can
@@ -1485,24 +1505,6 @@ value then a change is said to have been found.
 The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
 so will be described in detail in the Methodology chapter.
-
-# Support Vector Machines
-
-High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
-library for large linear classification.”, Journal of machine learning research
-9.Aug (2008): 1871-1874.
-
-LibLinear used for implementation
-
-SKlearn details: https://scikit-learn.org/stable/modules/svm.html
-
-SVMs struggle with large numbers of observations
-
-SVCs use one-vs-rest classification
-
-NOTE: I didn't scale the data... It's recommended to scale the data
-
-Different class weights were attempted
 
 # Autocorrect
 

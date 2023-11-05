@@ -8,7 +8,7 @@ discussed in Section \ref{experimental-procedure}. The procedure for converting
 binary classifiers into multi-class classifiers is discussed in Section
 \ref{binary-and-multi-class-classifiers}. The implementation details for each
 model type is discussed in Section \ref{model-design-and-implementation}, The
-procure followed for optimising the hyperparameters of each model type is
+procedure followed for optimising the hyperparameters of each model type is
 discussed in Section \ref{procedure-for-hyperparameter-optimisation}. The exact
 search space for each model is tabulated in Section
 \ref{hyperparameter-search-space}. The evaluation metrics by which multi-class
@@ -20,62 +20,288 @@ Section \ref{the-conversion-of-class-predictions-into-keystrokes}.
 
 # Construction of Ergo
 
-_Ergo_, at its core, is a set of acceleration sensors mounted onto the user's
-fingertips, paired with a software suite for reading that data (see Figure
-\ref{fig:04_accelerometers}).
+\emph{Ergo} is a completely bespoke sensor suite, designed and constructed by
+the author. \emph{Ergo} uses a suite of acceleration sensors mounted on the
+user's fingernails to measure fingertip acceleration in real time (see Figure
+\ref{fig:04_glove}). A full circuit diagram is available in the Appendix,
+Figure \ref{fig:appendix_circuit_diagram}.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!ht]
+\begin{table}[!ht]
     \centering
-    \includegraphics[width=0.33\textwidth]{src/imgs/accelerometers.jpg}
-    \caption[Ergo with accelerometers highlighted]{\emph{Ergo} consists of ten ADXL335 tri-axis linear
-    accelerometers, each one of which is mounted to the back of the user's
-    fingertips (highlighted in red)}
-    \label{fig:04_accelerometers}
-\end{figure}
+    \begin{tabular}{cc}
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[height=4cm]{src/imgs/glove}
+            \caption[\emph{Ergo} from user's perspective]{The left and right
+            hands of \emph{Ergo}, showing the accelerometers mounted onto the
+            fingernails and the Nano microcontrollers on the back of the user's
+            hands.}
+            \label{fig:04_glove}
+        \end{subfigure} &
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[height=4cm]{src/imgs/ADXL335}
+            \caption[ADXL335 accelerometer]{The ADXL335 tri-axis accelerometer,
+            shown mounted on a breakout board.}
+            \label{fig:04_adxl335}
+        \end{subfigure} \\
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[height=4cm]{src/imgs/nano}
+            \caption[Arduino Nano 33 BLE]{The Arduino Nano 33 BLE, shown with
+            the header pins soldered onto the board.}
+            \label{fig:04_nano}
+        \end{subfigure} &
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[height=4cm]{src/imgs/CD74HC4067}
+            \caption[CD74HC4067 multiplexer]{The CD74HC4067 multiplexer, shown
+            mounted on a breakout board.}
+            \label{fig:04_cd74hc4067}
+        \end{subfigure}
+    \end{tabular}
+    \caption{The hardware components of \emph{Ergo}.}
+    \label{tab:04_hardware}
+\end{table}
 <!-- prettier-ignore-end -->
 
-These sensors measure acceleration in three orthogonal axes. Acceleration due
-to gravity is included in these measurements. The measured values are collected
-together using two Arduino Nano microcontrollers (one on each hand) and then
-sent to the user's computer via a serial wire. Each sensor has three signal
-lines for output, describing the acceleration measured by the X, Y, and Z axes
-(see Figure \ref{fig:04_adxl335_xyz}).
+The \textbf{ADXL335} tri-axis linear accelerometer by Analog Devices (Figure
+\ref{fig:04_adxl335}) is used for acceleration measurements. They have low
+power usage ($350 \mu$A typical), require 1.8V to 3.6V, and have an
+acceleration range of $\pm 3$g. They measure static acceleration due to
+gravity, making them useful in some applications for measuring the tilt of an
+object relative to gravity. Ten ADXL335s are used (one per finger) and are
+mounted onto the back of the user's fingernails to measure acceleration at the
+fingertips. Each ADXL335 provides 3 analogue signal lines (one for each of X,
+Y, and Z), resulting in 15 signal lines per hand.
+
+The \textbf{Nano 33 BLE} module by Arduino (Figure \ref{fig:04_nano}) is
+multi-purpose chip containing a 64MHz Arm Cortex-M4F with 1MB flash and 256KB
+RAM, a 12 Mbps USB serial connection, and eight 12-bit analogue inputs. One
+Nano is used per hand to read the input from that hand's ADXL335s, however as
+the Nano only has 8 analogue inputs but the ADXL335s provide 15 analogue
+signals per hand, a multiplexer is required.
+
+The \textbf{CD74HC4067} 16-channel analogue multiplexer/demultiplexer (Figure
+\ref{fig:04_cd74hc4067}) is a low-power digitally controlled integrated circuit
+which allow one of 16 signal lines to be selected by bringing each of the four
+control lines to a high or low voltage. The four control lines act as a binary
+selector: taking all four lines to a low voltage selects the first signal line,
+and taking all four lines to a high voltage selects the 16\textsuperscript{th}
+signal line.
+
+By multiplexing 15 signal lines from the ADXL335s via the CD74HC4067 and
+configuring the Nano to iterate through the signal lines, each of the 15
+signals from the ADXL335s can be read and packaged together using only one of
+the eight analogue input pins available on the Nano.
+
+Before the signals can be sent to the user's computer, the packages from the
+left and right hand must be combined. The Nano from the left hand is connected
+via a serial wire to the right hand using the I\textsuperscript{2}C serial
+communication protocol. When the left hand's Nano has read data from every
+left-hand ADXL335, it transmits this data to the right hand via this
+I\textsuperscript{2}C connection. The right hand then combines the data from
+the left hand with the data from the right hand into one complete packet.
+
+The Nano on the right hand then sends this complete packet to the user's
+computer via a wired serial connection from serial port on the Nano to the USB
+port on the user's computer.
+
+On the user's computer, a script listens to the serial port and records all
+incoming data. When a new packet of sensor measurements is received, the
+current time is recorded. What happens next is dependant on whether the
+software is configured to capture the data or to feed the data to a
+classification model in real time. If configured to capture data, then all the
+accelerometer measurements and time stamps will be stored to disc as one file,
+each newline being one set of sensor readings. If configured to perform
+classification, then the sensor readings will be streamed to a provided
+classifier and the predictions will be surfaced to the user.
+
+# Gestures and Class Labels
+
+_Ergo_ can recognise 50 gesture classes and one non-gesture class. The
+non-gesture class is used to represent the empty durations in-between gestures
+during which the user's hands may be still: the transitioning period from the
+end of one gesture to the start of the next. The 50 gesture classes are
+numbered from 0 to 49. The non-gesture class is numbered as class 50 The
+software powering _Ergo_ takes care of converting a class prediction in the
+range $[0, \ldots 50]$ into a keystroke (any UTF8 character) via a
+user-configurable gesture-to-keystroke mapping.
+
+The motion for each gesture is defined as the Cartesian product of a finger
+motion and a hand orientation. There are 10 finger motions: each motion defines
+one finger flexing towards the palm of the user's hand. There are five
+orientations: each defines the angle both hands make with the horizon, and are
+$0^\circ, 45^\circ, 90^\circ, 135^\circ, 180^\circ$. The way in which these 10
+fingers and 5 gestures combine to make 50 gestures is described in Table
+\ref{tab:05_gestures}.
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!ht]
+\begin{table}[h]
     \centering
-    \includegraphics[width=0.33\textwidth]{src/imgs/accel_xyz.jpg}
-    \caption[Ergo with accelerometer axes highlighted]{The user's left hand while wearing \emph{Ergo} with the
-    accelerometer directions indicated. The X direction is in red, the Y
-    direction is in green, and the Z direction is in blue. Note that the sensor
-    on the thumb is rotated relative to the sensors on the fingers.}
-    \label{fig:04_adxl335_xyz}
-\end{figure}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        & \multicolumn{5}{|c|}{Left Hand} & \multicolumn{5}{c|}{Right Hand} \\
+        \hline
+        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
+        \hline
+        $0^\circ$   &  0 &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 \\
+        \hline
+        $45^\circ$  & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 \\
+        \hline
+        $90^\circ$  & 20 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28 & 29 \\
+        \hline
+        $135^\circ$ & 30 & 31 & 32 & 33 & 34 & 35 & 36 & 37 & 38 & 39 \\
+        \hline
+        $180^\circ$ & 40 & 41 & 42 & 43 & 44 & 45 & 46 & 47 & 48 & 49 \\
+        \hline
+    \end{tabular}
+    \caption[Class labels $\to$ hand movements]{The cells of this table contain the different indices of the
+    gestures which \emph{Ergo} can recognise. The index of each gesture is
+    semantic: the units digit refers to the finger being flexed and the tens
+    digit refers to the orientation of the hands. Each column of the table
+    contains gestures where the finger being flexed is the same, and each row
+    of the table contains gesture indices where the orientation of the gesture
+    is the same.}
+    \label{tab:05_gestures}
+\end{table}
 <!-- prettier-ignore-end -->
 
-These accelerometer provide in 15 signals per hand. Because each Arduino Nano
-microcontroller only has 8 analogue signal inputs, a 16-to-1 multiplexer is
-introduced such that the microcontroller (using four selection control wires)
-can choose which of the 15 analogue signals it would like to read data from.
-The microcontroller repeatedly polls each of the analogue signals until it has
-read one measurement from each accelerometer sensor. This packet of data is
-sent to the user's computer.
+As previously mentioned, these 50 gestures are mapped to keystrokes via a
+gesture-to-keystroke mapping. The default mapping is shown in Table
+\ref{tab:05_keystrokes}, which has the same layout as Table
+\ref{tab:05_gestures} to allow for easy comparison.
 
-On the user's computer, the packet of accelerometer measurements is associated
-with a time stamp. What happens next is dependant on whether the software is
-configured to capture the data or to feed the data to a classification model in
-real time. If configured to capture data, then all the accelerometer
-measurements and time stamps will be stored to disc as one file, each newline
-being one set of sensor readings. If configured to perform classification, then
-the sensor readings will be streamed to a provided classifier and the
-predictions will be surfaced to the user.
+The gestures are defined in a manner that is similar to the English QWERTY
+keyboard. For example, the gestures with an orientation of $90^\circ$ are
+ordered in the same way as the keys on the home row of the QWERTY keyboard.
+Flexing one's left little finger with an orientation of $90^\circ$ is the same
+as using ones left little finger on the home row of the QWERTY keyboard: both
+result in the keystroke "a". This allows new users to easily learn which
+gestures map to which keystrokes.
 
----
+<!-- prettier-ignore-start -->
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
+        \hline
+        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
+        \hline
+        $0^\circ$   & \texttt{control} &  \texttt{=} &  \texttt{'} &  \texttt{-} &  \texttt{[} &  \texttt{]} &  \texttt{space} &  \texttt{\textbackslash} &  \texttt{\`} &  \texttt{shift} \\
+        \hline
+        $45^\circ$  & \texttt{z} & \texttt{x} & \texttt{c} & \texttt{v} & \texttt{b} & \texttt{n} & \texttt{m} & \texttt{,} & \texttt{.} & \texttt{/} \\
+        \hline
+        $90^\circ$  & \texttt{a} & \texttt{s} & \texttt{d} & \texttt{f} & \texttt{g} & \texttt{h} & \texttt{j} & \texttt{k} & \texttt{l} & \texttt{;} \\
+        \hline
+        $135^\circ$ & \texttt{q} & \texttt{w} & \texttt{e} & \texttt{r} & \texttt{t} & \texttt{y} & \texttt{u} & \texttt{i} & \texttt{o} & \texttt{p} \\
+        \hline
+        $180^\circ$ & \texttt{1} & \texttt{2} & \texttt{3} & \texttt{4} & \texttt{5} & \texttt{6} & \texttt{7} & \texttt{8} & \texttt{9} & \texttt{0} \\
+        \hline
+    \end{tabular}
+    \caption[Hand movements $\to$ keystrokes]{The default keystroke mappings for \emph{Ergo}. Note that the
+    layout is similar to the QWERTY. \emph{Ergo} recognises control keys like
+    \texttt{control} and \texttt{shift}, so the user can combine gestures to
+    get new keystrokes.}
+    \label{tab:05_keystrokes}
+\end{table}
+<!-- prettier-ignore-end -->
 
-## Hardware Components Used
+# The Conversion of Class Predictions into Keystrokes
 
-<!--- TODO -->
+Converting sensor measurements into classifications is not enough, as they
+still need to be converted into keystrokes. There are a few ambiguities to
+clear up in order to make this process clear.
+
+As only the neural-network based models natively support probabilities,
+predictions will be assumed to be just one class label, as opposed to a
+one-hot-encoded vector or a matrix of class probabilities. It is trivial to
+convert between these formats, so there is no loss of generality.
+
+If sequential predictions are made of the same class, then a keystroke will
+only be emitted the first time that class is predicted. This will improve the
+perceived performance of the model, so that one gesture does not result in
+multiple keystrokes if the model predicts that gesture in multiple sequential
+time steps.
+
+The predicted classes are converted to keystrokes using the
+gesture-to-keystroke mapping. This mapping is configurable by the user, but by
+default it is set up to mirror the QWERTY keyboard as closely as possible. The
+mapping is visible in Table \ref{tab:04_keystrokes}
+
+<!-- prettier-ignore-start -->
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
+        \hline
+        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
+        \hline
+        $0^\circ$   & \texttt{control} &  \texttt{=} &  \texttt{'} &  \texttt{-} &  \texttt{[} &  \texttt{]} &  \texttt{space} &  \texttt{\textbackslash} &  \texttt{\`} &  \texttt{shift} \\
+        \hline
+        $45^\circ$  & \texttt{z} & \texttt{x} & \texttt{c} & \texttt{v} & \texttt{b} & \texttt{n} & \texttt{m} & \texttt{,} & \texttt{.} & \texttt{/} \\
+        \hline
+        $90^\circ$  & \texttt{a} & \texttt{s} & \texttt{d} & \texttt{f} & \texttt{g} & \texttt{h} & \texttt{j} & \texttt{k} & \texttt{l} & \texttt{;} \\
+        \hline
+        $135^\circ$ & \texttt{q} & \texttt{w} & \texttt{e} & \texttt{r} & \texttt{t} & \texttt{y} & \texttt{u} & \texttt{i} & \texttt{o} & \texttt{p} \\
+        \hline
+        $180^\circ$ & \texttt{1} & \texttt{2} & \texttt{3} & \texttt{4} & \texttt{5} & \texttt{6} & \texttt{7} & \texttt{8} & \texttt{9} & \texttt{0} \\
+        \hline
+    \end{tabular}
+    \caption[The default keystroke mappings for \emph{Ergo}]{The default
+    keystroke mappings for \emph{Ergo}. Note that the layout is similar to the
+    QWERTY. \emph{Ergo} recognises control keys like \texttt{control} and
+    \texttt{shift}, so the user can combine gestures to get new keystrokes.}
+    \label{tab:04_keystrokes}
+\end{table}
+<!-- prettier-ignore-end -->
+
+The mapping allows certain gestures to emit the \texttt{control} and the
+\texttt{shift} non-printing characters. These characters, in addition to the
+other printing characters, greatly extends the number of input a user can give.
+As is natural for regular keyboard input, performing the gesture for
+\texttt{shift} and then the gesture for the letter \texttt{a} would result in
+the keystroke \texttt{A} being sent. This applies for all alphabetical
+characters a--z, as well as the numerals 0--9 and various punctuation
+characters. The effect of pressing \texttt{shift} before each character is
+visible in Table \ref{tab:04_shift_keystrokes}. Empty cells indicate that shift
+has no effect.
+
+<!-- prettier-ignore-start -->
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
+        \hline
+        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
+        \hline
+        $0^\circ$   &   &  \texttt{+} &  \texttt{"} &  \texttt{\_} &  \texttt{\{} &  \texttt{\}} &    &  | &  \texttt{\~} &   \\
+        \hline
+        $45^\circ$  & \texttt{Z} & \texttt{X} & \texttt{C} & \texttt{V} & \texttt{B} & \texttt{N} & \texttt{M} & \texttt{<} & \texttt{>} & \texttt{?} \\
+        \hline
+        $90^\circ$  & \texttt{A} & \texttt{S} & \texttt{D} & \texttt{F} & \texttt{G} & \texttt{H} & \texttt{J} & \texttt{K} & \texttt{L} & \texttt{:} \\
+        \hline
+        $135^\circ$ & \texttt{Q} & \texttt{W} & \texttt{E} & \texttt{R} & \texttt{T} & \texttt{Y} & \texttt{U} & \texttt{I} & \texttt{O} & \texttt{P} \\
+        \hline
+        $180^\circ$ & \texttt{!} & \texttt{@} & \texttt{\#} & \texttt{\$} & \texttt{\%} & \texttt{\^} & \texttt{\&} & \texttt{$\ast$} & \texttt{(} & \texttt{)} \\
+        \hline
+    \end{tabular}
+    \caption[\emph{Ergo} keystrokes with \texttt{shift} pressed]{The keystrokes
+    emitted by the \emph{Ergo} software when certain each gesture is made after
+    the \texttt{shift} control-character has been given.}
+    \label{tab:04_shift_keystrokes}
+\end{table}
+<!-- prettier-ignore-end -->
+
+The \texttt{control} character also allows for some other keystrokes to be made, such
+as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
+(\texttt{ctrl+h}), or escape (\texttt{ctrl+[}). These key combinations are the
+same as in the text editor Vim\footnote{https://vim.org}. See vim's built-in
+help \texttt{:h ins-special-keys} for more details.
 
 # Data Collection and Cleaning
 
@@ -137,12 +363,20 @@ observations, where each observation has 20 time steps of history and 30 sensor
 values per time step. Each observation has an overlap of 19 time steps with the
 observations immediately preceding and following it. Each observation only has
 1 label which is the label for the most recent time step in its 20 time steps.
-20 time steps is equivalent to half a second of sensor measurements. Every
-model is presented with the same data format, although some models cannot
-handle two-dimensional data and so the input is flattened to one dimension
-before being used for inference.
+20 time steps is equivalent to half a second of sensor measurements. <!-- TODO:
+I think a figure will be good here to clarify what you mean.... --> Every model
+is presented with the same data format, although some models cannot handle
+two-dimensional data and so the input is flattened to one dimension before
+being used for inference.
 
-25% of the dataset (60440 observations, 14 417 gesture class observations) is
+Note that the imbalance between the gesture classes and the non-gesture class
+means that there are about 40 times more non-gesture observations than
+gesture-class observations. When describing the training, validation, and
+testing datasets, both the number of observations (including the non-gesture
+class) and the number of gesture observations (excluding the non-gesture class)
+will be reported.
+
+25% of the dataset (60 294 observations, 1 442 gesture class observations) is
 split off and saved as the testing dataset. The testing dataset is saved as a
 single binary file, completely separate from the training and validation data.
 The test-set splitting procedure stratified by the class labels, ensuring
@@ -165,22 +399,28 @@ also allows for an arbitrary number of repetitions to be made for cross
 validation. Of the 75% of the dataset set aside for training/validation, 75%
 (135 990 observations, 3 243 gesture class observations) is used for training
 leaving 25% (45 330 observations, 1 078 gesture class observations) for
-validation.
+validation. This split is also stratified by the class labels, such that the
+proportions of each class is kept as equal as possible.
 
 A confidence interval can be obtained for the performance of each model, as
 each set of hyperparameters is trained and evaluated multiple times on a random
-subset of the training-validation dataset. This allows an empirical performance
-distribution to be associated with each model. This distribution can be used to
-compare models and evaluate which will most likely perform well on on the test
-set and other unseen data which might have a different underlying distribution
-to the training-validation dataset.
+subset of the training-validation dataset. Because the exact same model is
+trained on different subsets of the training-validation dataset, a distribution
+of the performance of that model can be estimated. From this distribution, the
+90% confidence interval can be obtained by calculating the performance range
+that 90% of models with the same hyperparameters would achieve. This
+distribution can be used to compare models and evaluate which will most likely
+perform well on on the test set and other unseen data which might have a
+different underlying distribution to the training-validation dataset.
 
 # Experimental Procedure
 
 Experiments will be conducted so as to answer the research questions posed in
-the Introduction. As each model type has a different hyperparameter space, the
-experiments for each of the five model types will be performed separately.
-Additionally, there will be experiments for 5-, 50-, and 51-class datasets.
+the Introduction\footnote{ Section reference to be added when the introduction
+is written <!-- TODO: Add section reference --> }. As each model type has a
+different hyperparameter space, the experiments for each of the five model
+types will be performed separately. Additionally, there will be experiments for
+5-, 50-, and 51-class datasets.
 
 The 5-class dataset is constructed by only including classes 0, 1, 2, 3, and 4
 from the full training-validation dataset. These are the gestures performed by
@@ -191,12 +431,33 @@ excluding the non-gesture class. The 51-class dataset is equivalent to the full
 training-validation dataset.
 
 For each model and each of the 5-, 50-, and 51-class datasets, a number of
-different hyperparameter combinations will be selected and tested. The number
-of hyperparameter combinations depends on the model type, as the size of the
-search space of each model is different. For example, the HMMs only have one
-discrete hyperparameter which can take on one of four values, while the HFFNNs
-have 18 continuous hyperparameters and so require a lot more exploration to
-equivalently search the hyperparameter space.
+different hyperparameter combinations will be randomly chosen and tested. The
+number of hyperparameter combinations will depend on the model type, as the
+size of the search space of each model is different.
+
+For example, the HMMs have only one discrete hyperparameters (covariance type)
+which can take on four values. This means that the HMM hyperparameter search
+space can be fully explored with only four hyperparameter combinations. This is
+a stark contrast to the HFFNNs, which have 18 continuous hyperparameters (nine
+per FFNN). These 18 continuous hyperparameters will need significantly more
+than four hyperparameter combinations in order to explore this continuous
+18-dimensional search space.
+
+<!-- TODO:
+
+Number of hyperparameter combinations per model type:
+```python
+subset[subset['preprocessing.rep_num'] == 4].groupby([
+    'model_type'
+])['group_idx'].count()
+```
+(Only for 51-class models)
+20 HMM
+57 SVM
+78 CuSUM
+88 HFFNN
+148 FFNN
+-->
 
 For all models, each hyperparameter combination will be tested five times, each
 time using different randomly selected partitions of the training-validation
@@ -244,8 +505,8 @@ In addition to evaluating the best-performing model on the unseen test dataset,
 the model will be evaluated on an unseen English language dataset. This dataset
 is small (9405 observations, 44 gestures), but contains sensor measurements
 recorded while the user performed the gestures for an English sentence. This
-dataset will provide an intuition for what the model's performance would feel
-like for an end-user.
+dataset gives insight into the real-time performance an end-user will
+experience.
 
 # Binary and Multi-class Classifiers
 
@@ -269,35 +530,83 @@ one binary classifier predicting YES and all other classifiers predicting NO
 for a given observation. This procedure for using an ensemble of binary
 classifiers as a multi-class classifier is called one-vs-rest classification.
 
-It is possible to construct an ensemble such that fewer than $n$ binary
-classifiers are required. This is done in a means similar to binary search: the
-first binary classifier is trained to differentiate the first $\frac{1}{2}$ of
-the classes $[0, \lfloor\frac{n}{2}\rfloor]$ from the second $\frac{1}{2}$ of
-the classes $[\lfloor\frac{n}{2}\rfloor+1, n]$.
+# Procedure for Hyperparameter Optimisation
 
-The second classifier is then trained to recognise the first $\frac{1}{4}$ of
-the classes $[0, \lfloor\frac{n}{4}\rfloor]$ from the second $\frac{1}{4}$ of
-the classes $[\lfloor\frac{n}{4}\rfloor+1, \lfloor\frac{n}{2}\rfloor]$ and the
-third classifier to recognise the third $\frac{1}{4}$ of the classes
-$[\lfloor\frac{n}{2}\rfloor+1, \lfloor\frac{3 n}{4}\rfloor]$ from the final
-$\frac{1}{4}$ of the classes $[\lfloor\frac{3 n}{4}\rfloor+1, n]$.
+Hyperparameter optimisation is the procedure of searching over a space of
+hyperparameters, with the goal of finding a set of hyperparameters which
+optimise some objective function. As _Ergo_ has five different model types with
+five different hyperparameter spaces, hyperparameter optimisation is done
+separately for each model type. Each procedure is identical, except for the
+model type being evaluated.
 
-This procedure of iteratively halving the number of classes each binary classifier
-predicts is recursively continued until each binary classifier is only
-distinguishing between only two classes. This method requires only $log(n)$
-binary classifiers compared to one-vs-rest's $n$ binary classifiers.
+Finding new methods for computationally efficient hyperparameter optimisation
+is a field of active research. Broadly there are three kinds of hyperparameter
+optimisation: grid search, random search, and various means of more intelligent
+search. <!-- TODO: Add references to the different search types -->
 
-However, this procedure implicitly models the first half of the classes as
-being distinct from the second half. There is no guarantee that this is true,
-but nonetheless that is what the first classifier has to be trained to do.
-Mispredictions are very problematic, as if the first classifier incorrectly
-classifies an observation, then all subsequent classifiers will have to make
-predictions on an observation that is completely out of the distribution they
-were trained on. Without guarantees about the similarities between classes, a
-binary-tree style ensemble of binary classifiers may have to trade off
-classification performance for efficiency of computation. Because of these
-problems, one-vs-rest classification will be used as the means by which all
-binary classifiers are converted into multi-class classifiers in this thesis.
+Grid search is the simplest to implement, and requires that each hyperparameter
+is a finite set. Grid search will then iterate over every
+combination of the hyperparameters, calculating the objective value in each
+case. If there are $N$ hyperparameters $h_1, h_2, \ldots, h_N$, and
+each hyperparameter $h_i$ has $n_i$ possible values, then the total number of
+hyperparameter combinations to search is
+
+$$
+    \prod_{i=1}^N n_i.
+$$
+
+Once every hyperparameter combination has been evaluated, the hyperparameter
+combination which resulted in the optimal objective value is selected as the
+best.
+
+This approach often requires a very large computational budget due to the
+number of hyperparameter combinations which must be evaluated. The researcher
+is also required to discretise continuous hyperparameters, and only these
+chosen values will be tested. If the optimal hyperparameter combination is far
+from the values chosen by the researcher, a sub-optimal result will be
+returned.
+
+Grid search is useful in circumstances where interpretability of the influence
+of different hyperparameters is valued over the optimisation of the objective
+function. Because every combination of hyperparameters is tested, it is trivial
+to observe the marginal effect one hyperparameter has on the objective function
+without concern of the effect the other hyperparameters might have on the
+objective function.
+
+Random search trades some amount of the interpretability return for an improved
+ability to find better hyperparameters faster. Random search can trivially
+handle continuous hyperparameters. As the randomly selected value for some
+continuous hyperparameter $h_i$ is almost surely different from any previous
+choice for the same hyperparameter, the marginal search of that
+hyperparameter is improved.
+
+Random search has the attractive quality that -- in contrast to grid search --
+the computational budget is independent of the number of hyperparameters one
+wishes to explore. As a trade off, the ability to directly infer the influence
+any hyperparameter has on the objective value is hampered. This is because one
+no longer has examples where the hyperparameter of interest is modified while
+all other hyperparameters remain constant.
+
+As a comparison between grid search and random search, consider a search space
+of five continuous hyperparameters, with a computational budget of 1000
+evaluations of the objective function.
+
+This is enough to either search $\approx 4$ values of each of the five
+hyperparameters (for grid search), or 1000 values of all five hyperparameters
+(for random search), with the caveat that the influence of each hyperparameter
+can not be compared as easily. As the number of hyperparameters increases, the
+number of values per hyperparameter collapses exponentially.
+
+The final method for hyperparameter search, intelligent search, is a collection
+of intelligent methods which all attempt to explore the hyperparameter space
+and then automatically exploit regions of search space which look promising.
+
+These methods often have a hyperparameter themselves, which adjusts how much
+the algorithm will explore the search space or exploit known regions of good
+performance. These methods all sacrifice human interpretability, as regions
+which are suspected of poor performance are quickly omitted from the search
+space. For this reason, they were not explored as options for hyperparameter
+optimisation.
 
 # Model Design and Implementation
 
@@ -310,14 +619,14 @@ and Support Vector Machines in Section \ref{models-specifics-svm}.
 
 ## Hidden Markov Models \label{model-specifics-hmm}
 
-Hidden Markov Models (HMMs) are able to model the progression of time via
-sequential states and their transition probability matrices. For this reason,
-each HMM classifier attempts to model an observation as a sequence of 22
-states: a start state, one state for each of the 20 time steps, and an end
-state. Each state emits a 30-dimensional Gaussian distribution (one dimension
-for each of the 30 sensors). The mean vector $\bm{\mu}$ and the covariance
-matrix $\bm{\Sigma}$ of the Gaussian are estimated using the Baum-Welch
-expectation maximisation algorithm.
+Hidden Markov Models (HMMs, discussed in Section \ref{sec:02_hmm}) are able to
+model the progression of time via sequential states and their transition
+probability matrices. For this reason, each HMM classifier attempts to model an
+observation as a sequence of 22 states: a start state, one state for each of
+the 20 time steps, and an end state. Each state emits a 30-dimensional Gaussian
+distribution (one dimension for each of the 30 sensors). The mean vector
+$\bm{\mu}$ and the covariance matrix $\bm{\Sigma}$ of the Gaussian are
+estimated using the Baum-Welch expectation maximisation algorithm.
 
 HMMs do not natively support multi-class classification, and as such
 one-vs-rest classification is used. There is one HMM for each class, including
@@ -359,16 +668,13 @@ crude estimate for the complexity, and can be seen in Table
 \end{table}
 <!-- prettier-ignore-end -->
 
-The forward algorithm allows log-likelihood that a certain observation
-originated from the same distribution as that which a certain HMM to be
-obtained.
-
-To make a class prediction for a certain observation, the forward algorithm is
-used to obtain the log-likelihood of that observation for each HMM. These 50
-log-likelihoods are compared and the HMM providing the maximum log-likelihood
-is selected as the prediction for that observation. If the HMM trained on class
-5 provided the maximum log-likelihood for a given observation, then the
-predicted class would be class 5.
+The forward algorithm makes it possible to calculate the log-likelihood that a
+given observation originated from a given HMM. To make a class prediction for a
+certain observation, the forward algorithm is used to obtain the log-likelihood
+of that observation for each HMM. These 50 log-likelihoods are compared and the
+HMM providing the maximum log-likelihood is selected as the prediction for that
+observation. If the HMM trained on class 5 provided the maximum log-likelihood
+for a given observation, then the predicted class would be class 5.
 
 Significant problems were encountered while training the HMMs due to the number
 of observations of class 50. Training times for the class 50 HMM either
@@ -398,9 +704,10 @@ Table \ref{tab:04_hpar_dists_hmm} shows the hyperparameters for the HMMs.
 
 ## Cumulative Sum \label{model-specifics-cusum}
 
-Cumulative Sum (CuSUM) is designed for real-time univariate time-series
-out-of-distribution detection. It cannot natively support multivariate
-multi-class classification, and so some adjustments are required.
+Cumulative Sum (CuSUM, discussed in Section \ref{sec:02_cusum}) is designed for
+real-time univariate time-series out-of-distribution detection. It cannot
+natively support multivariate multi-class classification, and so some
+adjustments are required.
 
 The term _CuSUM algorithm_ will be used to refer to the univariate time series
 out-of-distribution detection algorithm, and _CuSUM classifier_ to refer to the
@@ -413,6 +720,13 @@ given time series. The CuSUM algorithm will alert if the time series becomes
 either too high or too low. Each CuSUM algorithm only has one parameter, the
 threshold value, which defines how much deviation is permitted before an alert
 is raised. The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
+
+<!-- TODO:
+It is important to note that this is not the cusum algorithm I had in mind, I
+wanted one to create pdfs and use likelihoods.... Implemented in this way there
+is no optimality gaurentees. Leave as is...... In your main theory chapter just
+cite this adaptation....
+-->
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -445,10 +759,28 @@ is raised. The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
 To construct the CuSUM classifier, one CuSUM algorithm will be run for each
 dimension of the 30-dimensional time series. Each algorithm will detect when a
 certain time series exceeds a threshold value. Based on the training data, a
-connection will be made between which algorithms exceed their threshold and
+connection
+
+<!-- TODO:
+a manual decision rule or mapping is defined for the set of 30 CUSUM algorthms
+that map the alram response of this set to a gesture label based on the labels
+in the training set? Am I correct? How you currently write it; it is unclear?
+This implementation will be ver succpeptable to orientation errors.... How do
+you distinguish when the orientation changes it is not clear howyou handle that
+case....
+-->
+
+will be made between which algorithms exceed their threshold and
 what the ground truth class is for the observation. Call this group of 30 CuSUM
 algorithms combined with learnt parameters defining which algorithms alert for
-a certain class a _cluster_ of CuSUM algorithms. Each cluster is capable of
+a certain
+
+<!-- TODO:
+this cusum is fine but it does explain your results..... you need to link back
+to this to explain why it fails if orientation changes?
+-->
+
+class a _cluster_ of CuSUM algorithms. Each cluster is capable of
 multi-variate time-series binary classification.
 
 To perform multi-class classification, one-vs-rest will be used to combine 50
@@ -474,11 +806,12 @@ CuSUM.
 
 ## Feed-Forward Neural Networks \label{model-specifics-ffnn}
 
-The Feed-Forward Neural Networks (FFNNs) were implemented using the TensorFlow
-library for the Python3 programming language. Each FFNN is modelled as a
-sequence layers, where each layer performs a transformation on its input and
-provides output to the next layer. The input $20 \times 30$ matrix is flattened
-into a 600 dimensional vector before being passed to the FFNN.
+The Feed-Forward Neural Networks (FFNNs, discussed in Section
+\ref{sec:02_ffnn}) were implemented using the TensorFlow library for the
+Python3 programming language. Each FFNN is modelled as a sequence layers, where
+each layer performs a transformation on its input and provides output to the
+next layer. The input $20 \times 30$ matrix is flattened into a 600 dimensional
+vector before being passed to the FFNN.
 
 FFNNs are sensitive to the scale of the input data, and so the input data is
 normalised to have approximately zero mean and approximately unit variance
@@ -555,11 +888,11 @@ neurons have their output set to zero during inference.
 The number of neurons in the last layer of the FFNN depends on the number of
 classes being predicted, and is either 5, 50, or 51.
 
-The optimiser used is the Adam optimiser <!--TODO:
-[@kingmaAdamMethodStochastic2014]--> with a constant learning rate that is
-determined by the learning rate hyperparameter. Constant values of
-$\beta_1=0.9$, $\beta_2=0.999$, and $\hat{\epsilon}=10^{-07}$ are used for the Adam
-hyperparameters mentioned by Kingma and Ba.
+The optimiser used is the Adam optimiser \citep{kingmaAdamMethodStochastic2014}
+with a constant learning rate that is determined by the learning rate
+hyperparameter. Constant values of $\beta_1=0.9$, $\beta_2=0.999$, and
+$\hat{\epsilon}=10^{-7}$ are used for the Adam hyperparameters, as suggested by
+Kingma and Ba.
 
 Every FFNN completes 40 epochs of trainined, after which it is evaluated on the
 validation dataset. Summary statistics are stored to disc, as well as the full
@@ -595,7 +928,7 @@ Hierarchical Feed-forward Neural Networks (HFFNNs) are an extended version of
 the FFNN and operate by combining the output of two FFNNs, each of which is
 trained on a different subset of the training data.
 
-One FFNN (called the majority classifier) is binary classifier in charge of
+One FFNN (called the majority classifier) is a binary classifier in charge of
 detecting whether or not a gesture exists in the observation. The other FFNN
 (called the minority classifier) is only invoked if there is a gesture present
 in an observation, as detected by the majority FFNN.
@@ -660,10 +993,11 @@ a variable number of epochs each, in the range from 5 to 40. Table
 
 ## Support Vector Machines \label{models-specifics-svm}
 
-Support Vector Machines (SVMs) do not support multi-class classification
-natively, and so a one-vs-rest technique is used to enable an ensemble of SVMs
-to make multi-class classifications. The input $20 \times 30$ matrix is
-flattened into a 600 dimensional vector before being passed to the SVMs.
+Support Vector Machines (SVMs , discussed in Section \ref{sec:02_svm}) do not
+support multi-class classification natively, and so a one-vs-rest technique is
+used to enable an ensemble of SVMs to make multi-class classifications. The
+input $20 \times 30$ matrix is flattened into a 600 dimensional vector before
+being passed to the SVMs.
 
 All SVMs were trained for 200 iterations with a linear kernel. One
 hyperparameter, the class weight, was iterated to weight the influence of each
@@ -689,141 +1023,6 @@ the SVMs.
     \end{tabular}
 \end{table}
 <!-- prettier-ignore-end -->
-
-# Procedure for Hyperparameter Optimisation
-
-Hyperparameter optimisation is the procedure of searching over a space of
-hyperparameters, with the goal of finding a set of hyperparameters which
-optimise some objective function. As _Ergo_ has five different model types with
-five different hyperparameter spaces, hyperparameter optimisation is done
-separately for each model type. Each procedure is identical, except for the
-model type being evaluated.
-
-Finding new methods for computationally efficient hyperparameter optimisation
-is a field of active research. Broadly there are three kinds of
-hyperparameter optimisation: grid search, random search, and various means of
-more intelligent search.
-
-Grid search is the simplest to implement, and requires that each hyperparameter
-is a finite set. Grid search will then iterate over every
-combination of the hyperparameters, calculating the objective value in each
-case. If there are $N$ hyperparameters $h_1, h_2, \ldots, h_N$, and
-each hyperparameter $h_i$ has $n_i$ possible values, then the total number of
-hyperparameter combinations to search is
-
-$$
-    \prod_{i=1}^N n_i.
-$$
-
-Once every hyperparameter combination has been evaluated, the hyperparameter
-combination which resulted in the optimal objective value is selected as the
-best.
-
-This approach often requires a very large computational budget due to the
-number of hyperparameter combinations which must be evaluated. The researcher
-is also required to discretise continuous hyperparameters, and only these
-chosen values will be tested. If the optimal hyperparameter combination is far
-from the values chosen by the researcher, a sub-optimal result will be
-returned.
-
-Grid search is useful in circumstances where interpretability of the influence
-of different hyperparameters is valued over the optimisation of the objective
-function. Because every combination of hyperparameters is tested, it is trivial
-to observe the marginal effect one hyperparameter has on the objective function
-without concern of the effect the other hyperparameters might have on the
-objective function.
-
-Random search trades some amount of the interpretability return for an improved
-ability to find better hyperparameters faster. Random search can trivially
-handle continuous hyperparameters. As the randomly selected value for some
-continuous hyperparameter $h_i$ is almost surely different from any previous
-choice for the same hyperparameter, the marginal search of that
-hyperparameter is improved.
-
-Random search has the attractive quality that -- in contrast to grid search --
-the computational budget is independent of the number of hyperparameters one
-wishes to explore. As a trade off, the ability to directly infer the influence
-any hyperparameter has on the objective value is hampered. This is because one
-no longer has examples where the hyperparameter of interest is modified while
-all other hyperparameters remain constant.
-
-As a comparison between grid search and random search, consider a search space
-of five continuous hyperparameters, with a computational budget of 1000
-evaluations of the objective function.
-
-This is enough to either search $\approx 4$ values of each of the five
-hyperparameters (for grid search), or 1000 values of all five hyperparameters
-(for random search), with the caveat that the influence of each hyperparameter
-can not be compared as easily. As the number of hyperparameters increases, the
-number of values per hyperparameter collapses exponentially.
-
-The final method for hyperparameter search, intelligent search, is a collection
-of intelligent methods which all attempt to explore the hyperparameter space
-and then automatically exploit regions of search space which look promising.
-
-These methods often have a hyperparameter themselves, which adjusts how much
-the algorithm will explore the search space or exploit known regions of good
-performance. These methods all sacrifice human interpretability, as regions
-which are suspected of poor performance are quickly omitted from the search
-space. For this reason, they were not explored as options for hyperparameter
-optimisation.
-
-# Hyperparameter Search Space
-
-Hyperparameter optimisation was performed separately for each model type via
-random search over each model type's hyperparameter space. A value for each
-hyperparameter was randomly selected and then five models were trained with
-those hyperparameters.
-
-Each model was trained on a different subset of the training data, using the
-cross-validation procedure described in Section \ref{sec:trn_tst_val}. Summary
-statistics of each model's performance on the training and the validation sets
-are saved to disc.
-
-If a model requires the use of a pseudo-random number generator (PRNG) then
-that PRNG is initialised with a seed that is unique to that particular model,
-hyperparameter combination, and repetition number. This ensures that models can
-be reproduced, should the need arise.
-
-The ground truth labels for each model's validation set are saved to disc, as
-well as the predictions the model made for the observations in that validation
-set. This allows for arbitrary performance metrics to be calculated after
-training, as the ground truth and predicted labels are available for
-comparison.
-
-Different model types had differing numbers of evaluated hyperparameters
-across. This stemmed from discrepancies in the quantity of hyperparameters and
-distinct training and evaluation durations for each model.
-
-<!-- TODO: explain why the HMM  mean inference time is such an outlier
-
-The number of unique hyperparameter evaluations for each model are available in
-Table \ref{tab:04_uniq_hpar_evals}.
-
-prettier-ignore-start
-\begin{table}[!ht]
-    \centering
-    \begin{tabular}{|c|p{0.23\textwidth}|p{0.19\textwidth}|p{0.19\textwidth}|p{0.19\textwidth}|}
-    \hline
-        Model Type & Hyperparameter Combinations & Models evaluated & Mean Fit Time & Mean Inference Time \\
-    \hline
-    CuSUM 	& 7 	& 398 	&  2m 23s    &  0m 47.343s \\
-    FFNN 	& 79 	& 486 	&  5m 30s    &  0m  0.373s \\
-    HFFNN 	& 88 	& 440 	&  6m 39s    &  0m  0.734s \\
-    HMM 	& 4 	& 104 	&  1m 19s    & 29m 35.772s \\
-    SVM 	& 57 	& 285 	& 12m  3s  	 &  0m  0.122s \\
-    \hline
-    \end{tabular}
-    \caption[Hyperparameter Combinations for different model types]{Hyperparameter Combinations for different model types. Note that
-    HMM and CuSUM have only discrete hyperparameters, so there is a maximum
-    number of hyperparameter combinations that can be tested.}
-    \label{tab:04_uniq_hpar_evals}
-\end{table}
-prettier-ignore-end
-
-The mean inference time for the HMMs is much larger because of the in
-
--->
 
 # Evaluation Metrics
 
@@ -898,6 +1097,13 @@ by the model's $F_1$-score, and then adding all confusion matrices together
 element-wise. The resulting sum of weighted confusion matrices is then divided
 by the sum of all $F_1$-scores and finally column-normalised. This procedure is
 given in Algorithm \ref{alg:04_weighted_cm}.
+
+<!-- TODO:
+Need a reference for how I'm using weighted confusion matrices to compare the
+different models. Not sure why I need this, it seems pretty damn basic
+
+> Can you cite this approach? Or give a footnote to a website....
+-->
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -1063,7 +1269,8 @@ using the unweighted precision and recall due to the non-linear relationship
 between the $F_1$-score and precision and recall. This has the unfortunate
 implication that a plot showing the unweighted precision and unweighted recall
 of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
-$F_1$-score must be shown in another plot of mentioned explicitly.
+$F_1$-score must be shown in a separate plot alongside the precision-recall
+plot.
 
 # An Ordering Over Multi-class Classifiers
 
@@ -1085,99 +1292,6 @@ but rather consistently achieved a high $F_1$-score across all validation sets
 and all random initialisations. This means that the resulting model is more
 likely to generalise to unseen data.
 
-<!-- TODO: Probably need something here describing student's t-Distribution and
-how confidence intervals are calculated. -->
+\cite{kingmaAdamMethodStochastic2014}
 
-# The Conversion of Class Predictions into Keystrokes
-
-Converting sensor measurements into classifications is not enough, as they
-still need to be converted into keystrokes. There are a few ambiguities to
-clear up in order to make this process clear.
-
-As only the neural-network based models natively support probabilities,
-predictions will be assumed to be just one class label, as opposed to a
-one-hot-encoded vector or a matrix of class probabilities. It is trivial to
-convert between these formats, so there is no loss of generality.
-
-If sequential predictions are made of the same class, then a keystroke will
-only be emitted the first time that class is predicted. This will improve the
-perceived performance of the model, so that one gesture does not result in
-multiple keystrokes if the model predicts that gesture in multiple sequential
-time steps.
-
-The predicted classes are converted to keystrokes using the
-gesture-to-keystroke mapping. This mapping is configurable by the user, but by
-default it is set up to mirror the QWERTY keyboard as closely as possible. The
-mapping is visible in Table \ref{tab:04_keystrokes}
-
-<!-- prettier-ignore-start -->
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
-        \hline
-        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
-        \hline
-        $0^\circ$   & \texttt{control} &  \texttt{=} &  \texttt{'} &  \texttt{-} &  \texttt{[} &  \texttt{]} &  \texttt{space} &  \texttt{\textbackslash} &  \texttt{\`} &  \texttt{shift} \\
-        \hline
-        $45^\circ$  & \texttt{z} & \texttt{x} & \texttt{c} & \texttt{v} & \texttt{b} & \texttt{n} & \texttt{m} & \texttt{,} & \texttt{.} & \texttt{/} \\
-        \hline
-        $90^\circ$  & \texttt{a} & \texttt{s} & \texttt{d} & \texttt{f} & \texttt{g} & \texttt{h} & \texttt{j} & \texttt{k} & \texttt{l} & \texttt{;} \\
-        \hline
-        $135^\circ$ & \texttt{q} & \texttt{w} & \texttt{e} & \texttt{r} & \texttt{t} & \texttt{y} & \texttt{u} & \texttt{i} & \texttt{o} & \texttt{p} \\
-        \hline
-        $180^\circ$ & \texttt{1} & \texttt{2} & \texttt{3} & \texttt{4} & \texttt{5} & \texttt{6} & \texttt{7} & \texttt{8} & \texttt{9} & \texttt{0} \\
-        \hline
-    \end{tabular}
-    \caption[The default keystroke mappings for \emph{Ergo}]{The default
-    keystroke mappings for \emph{Ergo}. Note that the layout is similar to the
-    QWERTY. \emph{Ergo} recognises control keys like \texttt{control} and
-    \texttt{shift}, so the user can combine gestures to get new keystrokes.}
-    \label{tab:04_keystrokes}
-\end{table}
-<!-- prettier-ignore-end -->
-
-The mapping allows certain gestures to emit the \texttt{control} and the
-\texttt{shift} non-printing characters. These characters, in addition to the
-other printing characters, greatly extends the number of input a user can give.
-As is natural for regular keyboard input, performing the gesture for
-\texttt{shift} and then the gesture for the letter \texttt{a} would result in
-the keystroke \texttt{A} being sent. This applies for all alphabetical
-characters a--z, as well as the numerals 0--9 and various punctuation
-characters. The effect of pressing \texttt{shift} before each character is
-visible in Table \ref{tab:04_shift_keystrokes}. Empty cells indicate that shift
-has no effect.
-
-<!-- prettier-ignore-start -->
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        & \multicolumn{5}{|c|}{Left} & \multicolumn{5}{c|}{Right} \\
-        \hline
-        & Little & Ring & Middle & Index & Thumb & Thumb & Index & Middle & Ring & Little \\
-        \hline
-        $0^\circ$   &   &  \texttt{+} &  \texttt{"} &  \texttt{\_} &  \texttt{\{} &  \texttt{\}} &    &  | &  \texttt{\~} &   \\
-        \hline
-        $45^\circ$  & \texttt{Z} & \texttt{X} & \texttt{C} & \texttt{V} & \texttt{B} & \texttt{N} & \texttt{M} & \texttt{<} & \texttt{>} & \texttt{?} \\
-        \hline
-        $90^\circ$  & \texttt{A} & \texttt{S} & \texttt{D} & \texttt{F} & \texttt{G} & \texttt{H} & \texttt{J} & \texttt{K} & \texttt{L} & \texttt{:} \\
-        \hline
-        $135^\circ$ & \texttt{Q} & \texttt{W} & \texttt{E} & \texttt{R} & \texttt{T} & \texttt{Y} & \texttt{U} & \texttt{I} & \texttt{O} & \texttt{P} \\
-        \hline
-        $180^\circ$ & \texttt{!} & \texttt{@} & \texttt{\#} & \texttt{\$} & \texttt{\%} & \texttt{\^} & \texttt{\&} & \texttt{$\ast$} & \texttt{(} & \texttt{)} \\
-        \hline
-    \end{tabular}
-    \caption[\emph{Ergo} keystrokes with \texttt{shift} pressed]{The keystrokes
-    emitted by the \emph{Ergo} software when certain each gesture is made after
-    the \texttt{shift} control-character has been given.}
-    \label{tab:04_shift_keystrokes}
-\end{table}
-<!-- prettier-ignore-end -->
-
-The \texttt{control} character also allows for some other keystrokes to be made, such
-as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
-(\texttt{ctrl+h}), or escape (\texttt{ctrl+[}). These key combinations are the
-same as in the text editor Vim\footnote{https://vim.org}. See vim's built-in
-help \texttt{:h ins-special-keys} for more details.
+\cite{einstein1905}
