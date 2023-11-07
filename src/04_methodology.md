@@ -416,8 +416,8 @@ different underlying distribution to the training-validation dataset.
 # Experimental Procedure
 
 Experiments will be conducted so as to answer the research questions posed in
-the Introduction\footnote{ Section reference to be added when the introduction
-is written <!-- TODO: Add section reference --> }. As each model type has a
+the Introduction\footnote{Section reference to be added when the introduction
+is written}<!-- TODO: Add section reference -->. As each model type has a
 different hyperparameter space, the experiments for each of the five model
 types will be performed separately. Additionally, there will be experiments for
 5-, 50-, and 51-class datasets.
@@ -441,23 +441,50 @@ space can be fully explored with only four hyperparameter combinations. This is
 a stark contrast to the HFFNNs, which have 18 continuous hyperparameters (nine
 per FFNN). These 18 continuous hyperparameters will need significantly more
 than four hyperparameter combinations in order to explore this continuous
-18-dimensional search space.
+18-dimensional search space. Table \ref{tab:04_num_iterations} shows the number
+of search space iterations for each model type and each number of classes (5,
+50, or 51), and Table \ref{tab:04_fitting_time} shows the amount of time spent
+for each model type and each number of classes (5, 50, or 51).
 
-<!-- TODO:
+<!-- TODO: add better details talking about these tables -->
 
-Number of hyperparameter combinations per model type:
-```python
-subset[subset['preprocessing.rep_num'] == 4].groupby([
-    'model_type'
-])['group_idx'].count()
-```
-(Only for 51-class models)
-20 HMM
-57 SVM
-78 CuSUM
-88 HFFNN
-148 FFNN
--->
+<!-- prettier-ignore-start -->
+\begin{table}
+    \centering
+    \begin{tabular}{l|r r r|r}
+                        & \textbf{5 classes}  & \textbf{50 classes} & \textbf{51 classes} & \textbf{Total} \\
+        \hline
+        \textbf{CuSUM}  & 182                 & 68                  & 78                  & 328 \\
+        \textbf{FFNN}   & 83                  & 55                  & 148                 & 286 \\
+        \textbf{HFFNN}  & -                   & -                   & 88                  & 88 \\
+        \textbf{HMM}    & 62                  & 26                  & 20                  & 108 \\
+        \textbf{SVM}    & 200                 & 129                 & 57                  & 386 \\
+        \hline
+        \textbf{Total}  & 527                 & 278                 & 391                 & 1196 \\
+    \end{tabular}
+    \caption{Total number of iterations per model and per number of gesture classes.}
+    \label{tab:04_num_iterations}
+\end{table}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{table}
+    \centering
+    \begin{tabular}{l|r r r|r}
+                        & \textbf{5-classes} & \textbf{50-classes} & \textbf{51-classes} & \textbf{Total} \\
+        \hline
+        \textbf{CuSUM}  & 43.37s             & 3m 0.95s            & 3h 6m 7.04s         & 3h 9m 51.36s \\
+        \textbf{FFNN}   & 8m 51.85s          & 11m 3.45s           & 19h 44m 7.76s       & 20h 4m 3.05s \\
+        \textbf{HFFNN}  & -                  & -                   & 9h 50m 56.30s       & 9h 50m 56.30s \\
+        \textbf{HMM}    & 5m 45.51s          & 33m 21.18s          & 25m 17.45s          & 1h 4m 24.14s \\
+        \textbf{SVM}    & 40.66s             & 10m 53.66s          & 11h 27m 38.20s      & 11h 39m 12.52s \\
+        \hline
+        \textbf{Total}  & 16m 1.39s          & 58m 19.24s          & 44h 34m 6.76s       & 45h 48m 27.39s \\
+    \end{tabular}
+    \caption{Total fitting time per model and per number of gesture classes.}
+    \label{tab:04_fitting_time}
+\end{table}
+<!-- prettier-ignore-end -->
 
 For all models, each hyperparameter combination will be tested five times, each
 time using different randomly selected partitions of the training-validation
@@ -507,6 +534,10 @@ is small (9405 observations, 44 gestures), but contains sensor measurements
 recorded while the user performed the gestures for an English sentence. This
 dataset gives insight into the real-time performance an end-user will
 experience.
+
+The hardware used to train the various models is an 14-inch 2021 MacBook Pro
+laptop with the Apple M1 Pro chip and 16GB of LPDDR5 memory. The machine has 8
+performance-oriented cores and 2 efficiency-oriented cores.
 
 # Binary and Multi-class Classifiers
 
@@ -619,7 +650,7 @@ and Support Vector Machines in Section \ref{models-specifics-svm}.
 
 ## Hidden Markov Models \label{model-specifics-hmm}
 
-Hidden Markov Models (HMMs, discussed in Section \ref{sec:02_hmm}) are able to
+Hidden Markov Models (HMMs, introduced in Section \ref{sec:02_hmm}) are able to
 model the progression of time via sequential states and their transition
 probability matrices. For this reason, each HMM classifier attempts to model an
 observation as a sequence of 22 states: a start state, one state for each of
@@ -637,10 +668,10 @@ the full matrix need not be learned. In order from most constrained to least
 constrained:
 
 - Spherical covariance matrix: each state uses a single variance value that
-  applies to all features: $\lambda I$ where $\lambda \in \Re$ and $I$ is the
+  applies to all features: $\lambda I$ where $\lambda \in \mathbb{R}$ and $I$ is the
   $30 \times 30$ identity matrix.
 - Diagonal covariance matrix: each state uses a diagonal covariance matrix.
-  $\bm{\lambda} I$ where $\bm{\lambda} \in \Re^{30}$
+  $\bm{\lambda} I$ where $\bm{\lambda} \in \mathbb{R}^{30}$
 - Tied covariance matrix: each state use the same shared, full covariance
   matrix.
 - Full covariance matrix: each state uses its own full, unrestricted,
@@ -693,10 +724,10 @@ Table \ref{tab:04_hpar_dists_hmm} shows the hyperparameters for the HMMs.
     \label{tab:04_hpar_dists_hmm}
     \begin{tabular}{|c|c|c|c|}
         \hline
-        Model Type  & Hyperparameter & Range & Distribution \\
+         Hyperparameter & Range & Distribution \\
         \hline
-        HMM              & Number of Iterations & 20                                          & Fixed \\
-                         & Covariance Type      & $\{ \text{Spherical}, \text{Diagonal}, \text{Full}, \text{Tied} \}$ & Categorical \\
+        Number of Iterations & 20                                          & Fixed \\
+        Covariance Type      & $\{ \text{Spherical}, \text{Diagonal}, \text{Full}, \text{Tied} \}$ & Categorical \\
         \hline
     \end{tabular}
 \end{table}
@@ -704,8 +735,8 @@ Table \ref{tab:04_hpar_dists_hmm} shows the hyperparameters for the HMMs.
 
 ## Cumulative Sum \label{model-specifics-cusum}
 
-Cumulative Sum (CuSUM, discussed in Section \ref{sec:02_cusum}) is designed for
-real-time univariate time-series out-of-distribution detection. It cannot
+Cumulative Sum (CuSUM, introduced in Section \ref{sec:02_cusum}) is designed
+for real-time univariate time-series out-of-distribution detection. It cannot
 natively support multivariate multi-class classification, and so some
 adjustments are required.
 
@@ -725,7 +756,33 @@ is raised. The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
 It is important to note that this is not the cusum algorithm I had in mind, I
 wanted one to create pdfs and use likelihoods.... Implemented in this way there
 is no optimality gaurentees. Leave as is...... In your main theory chapter just
-cite this adaptation....
+cite this adaptation..
+
+What is TG's citation for CuSUM?
+
+
+Go back to the original background chapter and make clear what exactly is being
+defined by CuSUM
+
+
+Explain CuSUM better.
+
+
+In results, explain quickly why CuSUM isn't likely to be able to predict things
+accurately due to how the sensor alert profiles work
+
+Describe in detail how the HMM can't really be trained with the full dataset
+because it can't fit into memory. And it's beyond the scope to batch-ify it.
+And the 50-class FFNNs already show superior performance.
+
+---
+
+Notes from the paper
+
+\theta is the "quality" number, but really it's the parameter of some
+distribution which one suspects will change over time. It is assumed that the
+value of \theta is proportional to the quality of the output.
+
 -->
 
 <!-- prettier-ignore-start -->
@@ -778,10 +835,62 @@ a certain
 <!-- TODO:
 this cusum is fine but it does explain your results..... you need to link back
 to this to explain why it fails if orientation changes?
+
+TODO give a better explainer of the CuSUM algorithm
 -->
 
 class a _cluster_ of CuSUM algorithms. Each cluster is capable of
 multi-variate time-series binary classification.
+
+---
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption{Training Process}
+    \begin{algorithmic}[1]
+        \State Initialize \textit{alerts\_per\_sensor} as a matrix of zeros with shape (\textit{gestures}, \textit{sensors})
+        \For{each gesture $g$ in \textit{gestures}}
+            \State Initialize \textit{cusum\_alerts} as a zero matrix of shape (\textit{observations}, \textit{num sensors})
+            \For{each observation $i$, $x_i$ in $X$ matching $g$}
+                \For{each sensor $s$ in $x_i$}
+                    \State Perform CuSUM
+                    \State $cusum\_alert[i, s] \leftarrow$ CuSUM result (too high or too low?)
+                \EndFor
+            \EndFor
+            \State \textit{alerts\_per\_sensor}[$g$] $\leftarrow$ Sum of $cusum\_alerts[i, :]$
+        \EndFor
+        \State Initialize \textit{alert\_probability\_per\_sensor} as a matrix of zeros with the same shape as \textit{alerts\_per\_sensor}
+        \For{each gesture $g$ in \textit{gestures}}
+            \State \textit{alert\_probability\_per\_sensor}[$g$] $\leftarrow$ $\frac{\textit{alerts\_per\_sensor}[g]}{\textit{alerts\_per\_sensor}.sum()}$
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption{Predicting Process}
+    \begin{algorithmic}[1]
+        \State Initialize \textit{alerted\_sensors} as a vector of zeros with size \textit{num sensors}
+        \For{each sensor $s$ in \textit{num sensors}}
+            \State Perform CuSUM
+            \State \textit{alerted\_sensors}[$s$] $\leftarrow$ CuSUM result (too high or too low?)
+        \EndFor
+        \State Initialize \textit{max\_difference} as $-\infty$ and \textit{max\_difference\_gesture} as \textit{None}
+        \For{each gesture $g$ in \textit{gestures}}
+            \State Initialize \textit{expected\_alerted\_sensors} as \textit{alert\_probability\_per\_sensor}[$g$]
+            \State Calculate \textit{difference\_from\_expected} as $|\textit{expected\_alerted\_sensors} - \textit{alerted\_sensors}|$
+            \If{$\textit{difference\_from\_expected} > \textit{max\_difference}$}
+                \State \textit{max\_difference} $\leftarrow \textit{difference\_from\_expected}$
+                \State \textit{max\_difference\_gesture} $\leftarrow g$
+            \EndIf
+        \EndFor
+        \State \textbf{return} \textit{max\_difference\_gesture} as the predicted gesture
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+---
 
 To perform multi-class classification, one-vs-rest will be used to combine 50
 clusters of CuSUM algorithms, where each cluster is trained on a different
@@ -794,11 +903,11 @@ CuSUM.
     \centering
     \caption{CuSUM hyperparameters, ranges, and distributions}
     \label{tab:04_hpar_dists_cusum}
-    \begin{tabular}{|c|c|c|c|}
+    \begin{tabular}{|c|c|c|}
         \hline
-        Model Type  & Hyperparameter & Range & Distribution \\
+        Hyperparameter & Range & Distribution \\
         \hline
-        CuSUM            & Threshold            & $\{5, 10, 20, 40, 60, 80, 100\}$            & Categorical \\
+        Threshold            & $\{5, 10, 20, 40, 60, 80, 100\}$            & Categorical \\
         \hline
     \end{tabular}
 \end{table}
@@ -806,7 +915,7 @@ CuSUM.
 
 ## Feed-Forward Neural Networks \label{model-specifics-ffnn}
 
-The Feed-Forward Neural Networks (FFNNs, discussed in Section
+The Feed-Forward Neural Networks (FFNNs, introduced in Section
 \ref{sec:02_ffnn}) were implemented using the TensorFlow library for the
 Python3 programming language. Each FFNN is modelled as a sequence layers, where
 each layer performs a transformation on its input and provides output to the
@@ -907,16 +1016,16 @@ hyperparameters for the FFNNs.
     \label{tab:04_hpar_dists_ffnn}
     \begin{tabular}{|c|c|c|c|}
         \hline
-        Model Type  & Hyperparameter & Range & Distribution \\
+         Hyperparameter & Range & Distribution \\
         \hline
-        FFNN             & Epochs               & 40                                          & Fixed \\
-                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
-                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
-                         & Optimizer            & Adam                                        & Fixed \\
-                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
-                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
-                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
-                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
+         Epochs               & 40                                          & Fixed \\
+         Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
+         Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
+         Optimizer            & Adam                                        & Fixed \\
+         Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
+         Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
+         L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
+         Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
         \hline
     \end{tabular}
 \end{table}
@@ -993,7 +1102,7 @@ a variable number of epochs each, in the range from 5 to 40. Table
 
 ## Support Vector Machines \label{models-specifics-svm}
 
-Support Vector Machines (SVMs , discussed in Section \ref{sec:02_svm}) do not
+Support Vector Machines (SVMs, introduced in Section \ref{sec:02_svm}) do not
 support multi-class classification natively, and so a one-vs-rest technique is
 used to enable an ensemble of SVMs to make multi-class classifications. The
 input $20 \times 30$ matrix is flattened into a 600 dimensional vector before
@@ -1014,11 +1123,11 @@ the SVMs.
     \label{tab:04_hpar_dists_svm}
     \begin{tabular}{|c|c|c|c|}
         \hline
-        Model Type  & Hyperparameter & Range & Distribution \\
+         Hyperparameter & Range & Distribution \\
         \hline
-        SVM              & $C$                  & $[10^{-6}, 1]$                              & Logarithmic \\
-                         & Class Weights        & $\{ \text{Balanced}, \text{Unbalanced} \}$  & Categorical \\
-                         & Maximum Iterations   & 200                                         & Fixed \\
+         $C$                  & $[10^{-6}, 1]$                              & Logarithmic \\
+         Class Weights        & $\{ \text{Balanced}, \text{Unbalanced} \}$  & Categorical \\
+         Maximum Iterations   & 200                                         & Fixed \\
         \hline
     \end{tabular}
 \end{table}
