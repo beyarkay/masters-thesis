@@ -16,21 +16,23 @@ clean:
 	trash *.{aux,bbl,blg,brf,lof,log,lot,out,toc} **/*.{aux,bbl,blg,brf,lof,log,lot,out,toc} 2> /dev/null || true
 
 dev: pandoc clean
-	pdflatex -halt-on-error main.tex # Create the auxiliary pdflatex files
-	bibtex main # Create the auxiliary bib files
-	pdflatex -halt-on-error main.tex # Add the bibliography to the end of the pdf
-	pdflatex -halt-on-error main.tex # Provide links from inline citations to bibliography
+	pdflatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary pdflatex files
+	bibtex tmp 2> /dev/null || true # Create the auxiliary bib files, ignore errors
+	pdflatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
+	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
 	$(MAKE) clean
+	mv tmp.pdf main.pdf
 	echo "file://$$(pwd)/main.pdf"
 
 release: pandoc clean
-	pdflatex -halt-on-error main.tex # 1. create the auxiliary pdflatex files
-	bibtex main # Create the auxiliary bib files
-	pdflatex main.tex # Add the bibliography to the end of the pdf
-	pdflatex main.tex # Provide links from inline citations to bibliography
-	pdflatex main.tex # Provide links from bibliography to inline citations
+	pdflatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary pdflatex files
+	bibtex tmp 2> /dev/null || true # Create the auxiliary bib files, ignore errors
+	pdflatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
+	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
+	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from bibliography to inline citations
+	mv tmp.pdf "Boyd Kane MSc Thesis.pdf"
 	$(MAKE) clean
-	echo "file://$$(pwd)/main.pdf"
+	echo "file://$$(pwd)/Boyd Kane MSc Thesis.pdf"
 
 watch:
 	exa src/0*.md src/cite.bib src/imgs/* main.tex | entr -s 'make dev'
