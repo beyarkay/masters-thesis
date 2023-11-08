@@ -11,6 +11,8 @@
 *.toc
 *.mp4
 
+.DS_Store
+
 *.csv
 checkpoints/
 
