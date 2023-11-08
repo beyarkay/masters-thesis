@@ -1,4 +1,4 @@
-\chapter{Additional Analysis}
+\chapter{Additional Analysis}\label{app:additional-analysis}
 
 # 50-class CuSUM Hyperparameter Analysis \label{sec:appendix_50_cusum_hpar}
 
@@ -382,7 +382,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 
 -->
 
-\chapter{Additional Figures}
+\chapter{Additional Figures}\label{app:additional-figures}
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
@@ -492,7 +492,7 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 
 -->
 
-\chapter{Additional Tables}
+\chapter{Additional Tables}\label{app:additional-tables}
 
 \input{src/tables/05_best_ffnn_hpars.tex}
 
