@@ -195,37 +195,21 @@ in subsection \ref{models-and-recognition-techniques}.
 
 Early glove-based systems often used hand crafted sensors (presumably due to a
 lack of cheap electronic sensors at the time) such as optical tubes which
-occluded light when bent [@thomasa.defantiUSNEAR60341631977] or flexion sensors
+occluded light when bent \citep{thomasa.defantiUSNEAR60341631977} or flexion sensors
 where two parallel conductive metal strips touched when bent
-[@garyj.grimesUSPatentDigital1981]. Hall-effect sensors were used by some
-authors [@jacobsenDesignUtahDextrous1986; @jacobsenUTAHDextrousHand1984;
-@marcusSensingHumanHand1988] to measure the rotation of different joints.
+\citep{garyj.grimesUSPatentDigital1981}. Hall-effect sensors were used by some
+authors \footnote{\cite{jacobsenDesignUtahDextrous1986, jacobsenUTAHDextrousHand1984, marcusSensingHumanHand1988}} to measure the rotation of different joints.
 
 Commercially available flex sensors (which measure the bend of a short plastic
 strip) were first placed across joints and used successfully in the late 1980s
-and early 1990s [@abramsgentileentertainmentPowerGlove1989;
-@baudelCharadeRemoteControl1993; @felsGloveTalkIIaNeuralnetworkInterface1998;
-@zimmermanHandGestureInterface1987]. Flex sensors are unable to accurately
+and early 1990s \footnote{\cite{abramsgentileentertainmentPowerGlove1989, baudelCharadeRemoteControl1993, felsGloveTalkIIaNeuralnetworkInterface1998, zimmermanHandGestureInterface1987}}. Flex sensors are unable to accurately
 measure very acute angles (such as those between fingers) but are very
 intuitive to use, so would see use in commercial applications like the
-CyberGlove [@immersioncorporationCyberGlove2001], the PowerGlove
-[@abramsgentileentertainmentPowerGlove1989], and the DataGlove by VPL
-[@sturmanSurveyGlovebasedInput1994]. They have since been used in many papers
+CyberGlove \citep{immersioncorporationCyberGlove2001}, the PowerGlove
+\citep{abramsgentileentertainmentPowerGlove1989}, and the DataGlove by VPL
+\citep{sturmanSurveyGlovebasedInput1994}. They have since been used in many papers
 due to their interpretability and relatively low cost
-[@alviPakistanSignLanguage2007; @atzoriNinaproDatabaseResource2015;
-@baudelCharadeRemoteControl1993; @feinerVisualizingDimensionalVirtual1990;
-@felsBuildingAdaptiveInterfaces1990;
-@felsGloveTalkIIaNeuralnetworkInterface1998;
-@frankhofmannSensorGloveAnthropomorphicRobot1995;
-@heumerGraspRecognitionUncalibrated2007; @immersioncorporationCyberGlove2001;
-@kadousGRASPRecognitionAustralian1995;
-@kesslerEvaluationCyberGloveWholehand1995; @laviolaSurveyHandPosture1999;
-@leeDeepLearningBased2020; @leeSmartWearableHand2018;
-@liangSignLanguageRecognition1996; @mardiyantoDevelopmentHandGesture2017;
-@murakamiGestureRecognitionUsing1991;
-@rung-hueiliangRealtimeContinuousGesture1998; @takahashiHandGestureCoding1991;
-@wenMachineLearningGlove2020; @wiseEvaluationFiberOptic1990;
-@yuanHandGestureRecognition2020]. They are discussed in more detail in subsection
+\footnote{\cite{alviPakistanSignLanguage2007, atzoriNinaproDatabaseResource2015, baudelCharadeRemoteControl1993, feinerVisualizingDimensionalVirtual1990, felsBuildingAdaptiveInterfaces1990, felsGloveTalkIIaNeuralnetworkInterface1998, frankhofmannSensorGloveAnthropomorphicRobot1995, heumerGraspRecognitionUncalibrated2007, immersioncorporationCyberGlove2001, kadousGRASPRecognitionAustralian1995, kesslerEvaluationCyberGloveWholehand1995, laviolaSurveyHandPosture1999, leeDeepLearningBased2020, leeSmartWearableHand2018, liangSignLanguageRecognition1996, mardiyantoDevelopmentHandGesture2017, murakamiGestureRecognitionUsing1991, rung-hueiliangRealtimeContinuousGesture1998, takahashiHandGestureCoding1991, wenMachineLearningGlove2020, wiseEvaluationFiberOptic1990, yuanHandGestureRecognition2020}}. They are discussed in more detail in subsection
 \ref{hardware-products}.
 
 Accelerometers measure linear acceleration in up to three axes. Inertial
@@ -245,79 +229,40 @@ measuring acceleration while a user holds their device and performs a gesture.
 \end{figure}
 
 Accelerometers were first used by Fukumoto and Tonomura in 1997
-@fukumotoBodyCoupledFingerRing1997, who mounted them in rings worn at the base
+\cite{fukumotoBodyCoupledFingerRing1997}, who mounted them in rings worn at the base
 of the user's fingertips. These accelerometers measured the jerk caused when
 the user tapped their fingers against a table or flat surface, and mapped the
 amount of jerk in certain fingers to certain keystrokes. Acceleration sensors became popular
 for gesture recognition due to their small size and interpretability
-[@aklAccelerometerbasedGestureRecognition2010;
-@aklNovelAccelerometerBasedGesture2011; @alviPakistanSignLanguage2007;
-@alzubaidiNovelAssistiveGlove2023; @ammaAirwritingWearableHandwriting2014;
-@atzoriNinaproDatabaseResource2015; @bevilacquaContinuousRealtimeGesture2010;
-@galkaInertialMotionSensing2016; @hamdyaliComparativeStudyUser2014;
-@hernandez-rebollarAcceleGloveWholehandInput2002;
-@heumerGraspRecognitionUncalibrated2007;
-@karantonisImplementationRealTimeHuman2006;
-@kelaAccelerometerbasedGestureControl2006; @kimBichannelSensorFusion2008;
-@klingmannAccelerometerBasedGestureRecognition2009;
-@kochRecurrentNeuralNetwork2019; @kongGestureRecognitionModel2009;
-@kratzWiizards3DGesture2007; @kunduHandGestureRecognition2018;
-@leeSmartWearableHand2018; @liHandGestureRecognition2018;
-@liuUWaveAccelerometerbasedPersonalized2009;
-@makaussovLowCostIMUBasedRealTime2020; @mantyjarviEnablingFastEffortless2004;
-@mantyjarviGestureInteractionSmall2005;
-@mantyjarviIdentifyingUsersPortable2005;
-@marasovicMotionBasedGestureRecognition2015;
-@mardiyantoDevelopmentHandGesture2017; @mummadiRealTimeEmbeddedDetection2018;
-@netoHighLevelProgramming2010; @parsaniSingleAccelerometerBased2009;
-@patilMarathiSignLanguage2022; @pylvanainenAccelerometerBasedGesture2005;
-@raysarkarHandGestureRecognition2013;
-@rekimotoGestureWristGesturePadUnobtrusive2001;
-@schlomerGestureRecognitionWii2008; @sethujanakiRealTimeRecognition2013;
-@songAntLearningAlgorithm2013; @tuulariSoapBoxPlatformUbiquitous2002;
-@wangTrafficPoliceGesture2008;
-@wangUserindependentAccelerometerbasedGesture2013;
-@whiteheadGestureRecognitionAccelerometers2014; @wuGestureRecognition3D2009;
-@wuWearableSystemRecognizing2016; @xieAccelerometerGestureRecognition2014;
-@xuzhangFrameworkHandGesture2011; @zhangHandGestureRecognition2009;
-@zhangStackedLSTMBasedDynamic2021].
+\footnote{\cite{aklAccelerometerbasedGestureRecognition2010, aklNovelAccelerometerBasedGesture2011, alviPakistanSignLanguage2007, alzubaidiNovelAssistiveGlove2023, ammaAirwritingWearableHandwriting2014, atzoriNinaproDatabaseResource2015, bevilacquaContinuousRealtimeGesture2010, galkaInertialMotionSensing2016, hamdyaliComparativeStudyUser2014, hernandez-rebollarAcceleGloveWholehandInput2002, heumerGraspRecognitionUncalibrated2007, karantonisImplementationRealTimeHuman2006, kelaAccelerometerbasedGestureControl2006, kimBichannelSensorFusion2008, klingmannAccelerometerBasedGestureRecognition2009, kochRecurrentNeuralNetwork2019, kongGestureRecognitionModel2009, kratzWiizards3DGesture2007, kunduHandGestureRecognition2018, leeSmartWearableHand2018, liHandGestureRecognition2018, liuUWaveAccelerometerbasedPersonalized2009, makaussovLowCostIMUBasedRealTime2020, mantyjarviEnablingFastEffortless2004, mantyjarviGestureInteractionSmall2005, mantyjarviIdentifyingUsersPortable2005, marasovicMotionBasedGestureRecognition2015, mardiyantoDevelopmentHandGesture2017, mummadiRealTimeEmbeddedDetection2018, netoHighLevelProgramming2010, parsaniSingleAccelerometerBased2009, patilMarathiSignLanguage2022, pylvanainenAccelerometerBasedGesture2005, raysarkarHandGestureRecognition2013, rekimotoGestureWristGesturePadUnobtrusive2001, schlomerGestureRecognitionWii2008, sethujanakiRealTimeRecognition2013, songAntLearningAlgorithm2013, tuulariSoapBoxPlatformUbiquitous2002, wangTrafficPoliceGesture2008, wangUserindependentAccelerometerbasedGesture2013, whiteheadGestureRecognitionAccelerometers2014, wuGestureRecognition3D2009, wuWearableSystemRecognizing2016, xieAccelerometerGestureRecognition2014, xuzhangFrameworkHandGesture2011, zhangHandGestureRecognition2009, zhangStackedLSTMBasedDynamic2021}}.
 
 Surface Electromyography (EMG) measures the electrical impulses of a user's
 muscles through two or three conductive pads attached to the user's bare skin.
 This method generally results in a very noisy signal and does not have the
 interpretability of a flex sensor. This often means a more powerful machine
 learning technique is required in order to classify the data. Many systems have
-used EMG [@atzoriNinaproDatabaseResource2015;
-@collialfaroUserIndependentHandGesture2022; @jiangDevelopmentRealtimeHand2016;
-@kimBichannelSensorFusion2008; @kochRecurrentNeuralNetwork2019;
-@kunduHandGestureRecognition2018; @moinWearableBiosensingSystem2020;
-@vasconezHandGestureRecognition2022; @wuWearableSystemRecognizing2016;
-@xuzhangFrameworkHandGesture2011; @zhangHandGestureRecognition2009;
-@zhangRealTimeSurfaceEMG2019] with a general overview of the field given by
-Asghari and Hu's survey in 2007 @asgharioskoeiMyoelectricControlSystems2007.
+used EMG \footnote{\cite{atzoriNinaproDatabaseResource2015, collialfaroUserIndependentHandGesture2022, jiangDevelopmentRealtimeHand2016, kimBichannelSensorFusion2008, kochRecurrentNeuralNetwork2019, kunduHandGestureRecognition2018, moinWearableBiosensingSystem2020, vasconezHandGestureRecognition2022, wuWearableSystemRecognizing2016, xuzhangFrameworkHandGesture2011, zhangHandGestureRecognition2009, zhangRealTimeSurfaceEMG2019}} with a general overview of the field given by
+Asghari and Hu's survey in 2007 \cite{asgharioskoeiMyoelectricControlSystems2007}.
 
 After the introduction of acceleration and EMG sensors to the field of gesture
-recognition, there are a few papers [@ammaAirwritingWearableHandwriting2014;
-@leeSmartWearableHand2018; @liHandGestureRecognition2018;
-@wuWearableSystemRecognizing2016] which combine the two in a technique often
+recognition, there are a few papers \footnote{\cite{ammaAirwritingWearableHandwriting2014, leeSmartWearableHand2018, liHandGestureRecognition2018, wuWearableSystemRecognizing2016}} which combine the two in a technique often
 called "sensor-fusion" to gain better recognition results than either sensor in
 isolation.
 
 The changing capacitance of the body has also been used to recognise gestures
-[@rekimotoGestureWristGesturePadUnobtrusive2001;
-@wongMultiFeaturesCapacitiveHand2021]. Rekimoto
-[@rekimotoGestureWristGesturePadUnobtrusive2001] achieved this by using a
+\footnote{\cite{rekimotoGestureWristGesturePadUnobtrusive2001, wongMultiFeaturesCapacitiveHand2021}}. Rekimoto
+\citep{rekimotoGestureWristGesturePadUnobtrusive2001} achieved this by using a
 bracelet-like device which measures how the capacitance through the upper
 forearm changed as the user's muscles moved their fingers.
 
-Wen \emph{et~al.} @wenMachineLearningGlove2020 used triboelectric textile
+Wen \emph{et~al.} \cite{wenMachineLearningGlove2020} used triboelectric textile
 sensors to measure the stretch of a textile glove.
 
 ### Landmark Papers
 
 The inaugural investigation into glove-based input was undertaken by Sturman
-and Zeltzer in 1994 @sturmanSurveyGlovebasedInput1994 (following Sturman's
-dissertation on whole-hand input @sturmanWholehandInput1992 ). Sturman and
+and Zeltzer in 1994 \cite{sturmanSurveyGlovebasedInput1994} (following Sturman's
+dissertation on whole-hand input \cite{sturmanWholehandInput1992} ). Sturman and
 Zeltzer's survey comprehensively examined the predominant glove-based systems
 that were accessible during that period and delves into their respective
 applications. Regrettably, the primary accounts concerning these systems have
@@ -325,26 +270,23 @@ succumbed to the passage of time, often rendering Sturman and Zeltzer's work as
 the sole surviving repository of knowledge on the state of the field during
 that time.
 
-Following @sturmanSurveyGlovebasedInput1994 the interest in hand gesture
+Following \cite{sturmanSurveyGlovebasedInput1994} the interest in hand gesture
 recognition increased significantly, prompting the survey by LaViola in 1999
-@laviolaSurveyHandPosture1999 which discussed the models and techniques used
+\cite{laviolaSurveyHandPosture1999} which discussed the models and techniques used
 for glove and vision based classification, a perspective not present in
-@sturmanSurveyGlovebasedInput1994.
+\cite{sturmanSurveyGlovebasedInput1994}.
 
-In 2007, Mitra and Acharya @mitraGestureRecognitionSurvey2007 surveyed the
+In 2007, Mitra and Acharya \cite{mitraGestureRecognitionSurvey2007} surveyed the
 software and modelling developments for human gesture recognition (including
 face and head tracking).
 
-Shortly after @mitraGestureRecognitionSurvey2007, Dipietro \emph{et~al.}
-@dipietroSurveyGloveBasedSystems2008 described the state of glove-based input
+Shortly after \cite{mitraGestureRecognitionSurvey2007}, Dipietro \emph{et~al.}
+\cite{dipietroSurveyGloveBasedSystems2008} described the state of glove-based input
 and focused on how the technology has evolved, providing a comprehensive
 summary of the different systems and how they compare to one another.
 
 Following 2008, there have been several smaller reviews of the literature
-[@anwarHandGestureRecognition2019; @chenSurveyHandGesture2013;
-@chenSurveyHandPose2020; @harshithSurveyVariousGesture2010;
-@kudrinkoWearableSensorBasedSign2021; @rashidWearableTechnologiesHand2019;
-@raysarkarHandGestureRecognition2013] however these reviews are often lacking
+\footnote{\cite{anwarHandGestureRecognition2019, chenSurveyHandGesture2013, chenSurveyHandPose2020, harshithSurveyVariousGesture2010, kudrinkoWearableSensorBasedSign2021, rashidWearableTechnologiesHand2019, raysarkarHandGestureRecognition2013}} however these reviews are often lacking
 the depth of prior work.
 
 <!---
@@ -369,7 +311,7 @@ designing and building a glove-based system. This subsection explores hardware
 products which have been used for glove-based gesture recognition.
 
 The Computer Image Corporation of Denver, Colorado developed the ANIMAC
-@experimentaltelevisioncenterComputerImageCorporation1969 (later named the
+\cite{experimentaltelevisioncenterComputerImageCorporation1969} (later named the
 [Scanimate](https://www.fondation-langlois.org/html/e/page.php?NumPage=442))
 between 1962 and 1971 which performed full body capture for use in computer
 graphics, but did not have the fidelity for finger-level gesture capture.
@@ -381,7 +323,7 @@ graphics, but did not have the fidelity for finger-level gesture capture.
 \label{fig:03_experimental_television_center_computer_1969}
 \end{figure}
 
-The SayreGlove [@thomasa.defantiUSNEAR60341631977] is often credited as the
+The SayreGlove \citep{thomasa.defantiUSNEAR60341631977} is often credited as the
 first glove-based system developed. It used a combination of optical tubes
 which occluded light when bent and parallel conductive pads which touched and
 therefore conducted electricity when bent to sense the movement of the user's
@@ -389,28 +331,27 @@ hand.
 
 In the 1990s there were three main commercially available products: The
 DataGlove developed by Visual Programming Languages (VPL)
-[@sturmanSurveyGlovebasedInput1994], the PowerGlove developed Abrams Gentile
-Entertainment for Nintendo [@abramsgentileentertainmentPowerGlove1989], and the
-CyberGlove by Immersion Inc [@immersioncorporationCyberGlove2001]. These gloves
+\citep{sturmanSurveyGlovebasedInput1994}, the PowerGlove developed Abrams Gentile
+Entertainment for Nintendo \citep{abramsgentileentertainmentPowerGlove1989}, and the
+CyberGlove by Immersion Inc \citep{immersioncorporationCyberGlove2001}. These gloves
 were similar in nature, with some combination of flex sensors over the
 phalanges and accelerometers mounted on the back of the hands.
 
-The Utah/MIT Dexterous Hand [@jacobsenUTAHDextrousHand1984] and the associated
-Utah/MIT Dexterous HandMaster [@jacobsenDesignUtahDextrous1986] was a complex
+The Utah/MIT Dexterous Hand \citep{jacobsenUTAHDextrousHand1984} and the associated
+Utah/MIT Dexterous HandMaster \citep{jacobsenDesignUtahDextrous1986} was a complex
 system that included both a controller which sensed the position of a human
 hand through a series of hall-effect sensors (the HandMaster) and a robotic
 hand which could be controlled by this HandMaster.
 
 Marcus and Churchill used the VPL DataGlove to control the Utah/MIT Dexterous
-Hand in 1988 @marcusSensingHumanHand1988, followed by Hong and Tan
-@hongCalibratingVPLDataGlove1989 accomplishing the same task in 1989.
+Hand in 1988 \cite{marcusSensingHumanHand1988}, followed by Hong and Tan
+\cite{hongCalibratingVPLDataGlove1989} accomplishing the same task in 1989.
 
 The Nintendo Wii Remote (often called the Wiimote) was a cheap, commercially
 available game controller developed in 2006 for the Nintendo Wii. It contained
 a 3-axis accelerometer and so was used by several researchers to explore
 gesture recognition using the acceleration data it provided
-[@kratzWiizards3DGesture2007; @netoHighLevelProgramming2010;
-@schlomerGestureRecognitionWii2008].
+\footnote{\cite{kratzWiizards3DGesture2007, netoHighLevelProgramming2010, schlomerGestureRecognitionWii2008}}.
 
 \begin{figure}[!htb]
 \centering
@@ -421,18 +362,16 @@ gesture recognition using the acceleration data it provided
 
 The development of mobile devices with integrated IMU microchips also inspired
 development, with several papers proposing systems where the user would simply
-hold their smart phone [@xieAccelerometerGestureRecognition2014], smart watch
-[@xuFingerwritingSmartwatchCase2015], or Personal Digital Assistant (PDA)
-[@kelaAccelerometerbasedGestureControl2006] in their hand and perform a gesture
+hold their smart phone \citep{xieAccelerometerGestureRecognition2014}, smart watch
+\citep{xuFingerwritingSmartwatchCase2015}, or Personal Digital Assistant (PDA)
+\citep{kelaAccelerometerbasedGestureControl2006} in their hand and perform a gesture
 which would control the device.
 
 The development of the MyoWare Armband resulted in several papers
-[@vasconezHandGestureRecognition2022;
-@collialfaroUserIndependentHandGesture2022; @zhangRealTimeSurfaceEMG2019] using
+\footnote{\cite{vasconezHandGestureRecognition2022, collialfaroUserIndependentHandGesture2022, zhangRealTimeSurfaceEMG2019}} using
 the device for EMG measurements and gesture recognition, as did the Delsys
-Myomonitor IV [@zhangHandGestureRecognition2009;
-@kimBichannelSensorFusion2008]. Notably, in 2020 Moin \emph{et~al.}
-@moinWearableBiosensingSystem2020 developed a custom sheet of very densely
+Myomonitor IV \footnote{\cite{zhangHandGestureRecognition2009, kimBichannelSensorFusion2008}}. Notably, in 2020 Moin \emph{et~al.}
+\cite{moinWearableBiosensingSystem2020} developed a custom sheet of very densely
 clustered EMG sensors which wrapped around the forearm of the user and could
 infer simple gestures, significantly surpassing the resolution of previous
 systems.
@@ -463,7 +402,7 @@ research. It is unlikely for glove-based datasets to become commonly used until
 a glove-based system becomes commonly used, and that will require the
 glove-based system to be easy to build, cost effective, and applicable to a
 wide range of different applications. The SoapBox
-[@tuulariSoapBoxPlatformUbiquitous2002] was proposed as such a device, but it
+\citep{tuulariSoapBoxPlatformUbiquitous2002} was proposed as such a device, but it
 did not receive widespread adoption.
 
 ### Models and Recognition Techniques
@@ -487,63 +426,22 @@ variety of deep learning based methods to learn features implicitly.
 
 Hidden Markov Models (HMMs) have often been favoured due to their explicit
 encoding of time-dependant data, and have been used by many papers for
-glove-based gesture recognition [@ammaAirwritingWearableHandwriting2014;
-@bevilacquaContinuousRealtimeGesture2010;
-@chunliwangRealTimeLargeVocabulary2001; @fatmiComparingANNSVM2019;
-@galkaInertialMotionSensing2016; @hamdyaliComparativeStudyUser2014;
-@hofmannVelocityProfileBased1998; @jong-sungkimDynamicGestureRecognition1996;
-@kadousGRASPRecognitionAustralian1995;
-@klingmannAccelerometerBasedGestureRecognition2009;
-@kongGestureRecognitionModel2009; @kratzWiizards3DGesture2007;
-@liangSignLanguageRecognition1996; @mantyjarviEnablingFastEffortless2004;
-@mantyjarviGestureInteractionSmall2005;
-@marasovicMotionBasedGestureRecognition2015;
-@prekopcsakAccelerometerBasedRealTime2008;
-@pylvanainenAccelerometerBasedGesture2005;
-@rung-hueiliangRealtimeContinuousGesture1998;
-@schlomerGestureRecognitionWii2008; @wangchunliRealTimeLargeVocabulary2002;
-@wengaoChineseSignLanguage2004; @whiteheadGestureRecognitionAccelerometers2014;
-@wuGestureRecognition3D2009; @xuzhangFrameworkHandGesture2011;
-@zhangHandGestureRecognition2009].
+glove-based gesture recognition \footnote{\cite{ammaAirwritingWearableHandwriting2014, bevilacquaContinuousRealtimeGesture2010, chunliwangRealTimeLargeVocabulary2001, fatmiComparingANNSVM2019, galkaInertialMotionSensing2016, hamdyaliComparativeStudyUser2014, hofmannVelocityProfileBased1998, jong-sungkimDynamicGestureRecognition1996, kadousGRASPRecognitionAustralian1995, klingmannAccelerometerBasedGestureRecognition2009, kongGestureRecognitionModel2009, kratzWiizards3DGesture2007, liangSignLanguageRecognition1996, mantyjarviEnablingFastEffortless2004, mantyjarviGestureInteractionSmall2005, marasovicMotionBasedGestureRecognition2015, prekopcsakAccelerometerBasedRealTime2008, pylvanainenAccelerometerBasedGesture2005, rung-hueiliangRealtimeContinuousGesture1998, schlomerGestureRecognitionWii2008, wangchunliRealTimeLargeVocabulary2002, wengaoChineseSignLanguage2004, whiteheadGestureRecognitionAccelerometers2014, wuGestureRecognition3D2009, xuzhangFrameworkHandGesture2011, zhangHandGestureRecognition2009}}.
 
 Other popular systems have been Support Vector Machines (SVMs)
-[@ammaAirwritingWearableHandwriting2014;
-@collialfaroUserIndependentHandGesture2022; @fatmiComparingANNSVM2019;
-@hamdyaliComparativeStudyUser2014; @kimBichannelSensorFusion2008;
-@kunduHandGestureRecognition2018; @leeSmartWearableHand2018;
-@mohandesAutomationArabicSign2004; @mohandesRecognitionTwoHandedArabic2013;
-@mummadiRealTimeEmbeddedDetection2018;
-@prekopcsakAccelerometerBasedRealTime2008;
-@wongMultiFeaturesCapacitiveHand2021; @wuGestureRecognition3D2009;
-@wuWearableSystemRecognizing2016; @xieAccelerometerGestureRecognition2014],
-Dynamic Time Warping (DTW) [@aklNovelAccelerometerBasedGesture2011;
-@hamdyaliComparativeStudyUser2014; @liHandGestureRecognition2018;
-@marasovicMotionBasedGestureRecognition2015;
-@patilHandwritingRecognitionFree2016; @sethujanakiRealTimeRecognition2013;
-@wangUserindependentAccelerometerbasedGesture2013;
-@wuGestureRecognition3D2009], and k-Nearest Neighbours (kNN)
-[@alzubaidiNovelAssistiveGlove2023; @hamdyaliComparativeStudyUser2014;
-@kimBichannelSensorFusion2008; @liHandGestureRecognition2018;
-@sethujanakiRealTimeRecognition2013; @wongMultiFeaturesCapacitiveHand2021;
-@wuWearableSystemRecognizing2016].
+\footnote{\cite{ammaAirwritingWearableHandwriting2014, collialfaroUserIndependentHandGesture2022, fatmiComparingANNSVM2019, hamdyaliComparativeStudyUser2014, kimBichannelSensorFusion2008, kunduHandGestureRecognition2018, leeSmartWearableHand2018, mohandesAutomationArabicSign2004, mohandesRecognitionTwoHandedArabic2013, mummadiRealTimeEmbeddedDetection2018, prekopcsakAccelerometerBasedRealTime2008, wongMultiFeaturesCapacitiveHand2021, wuGestureRecognition3D2009, wuWearableSystemRecognizing2016, xieAccelerometerGestureRecognition2014}},
+Dynamic Time Warping (DTW) \footnote{\cite{aklNovelAccelerometerBasedGesture2011, hamdyaliComparativeStudyUser2014, liHandGestureRecognition2018, marasovicMotionBasedGestureRecognition2015, patilHandwritingRecognitionFree2016, sethujanakiRealTimeRecognition2013, wangUserindependentAccelerometerbasedGesture2013, wuGestureRecognition3D2009}}, and k-Nearest Neighbours (kNN)
+\footnote{\cite{alzubaidiNovelAssistiveGlove2023, hamdyaliComparativeStudyUser2014, kimBichannelSensorFusion2008, liHandGestureRecognition2018, sethujanakiRealTimeRecognition2013, wongMultiFeaturesCapacitiveHand2021, wuWearableSystemRecognizing2016}}.
 
 Neural Network based approaches first appeared with in 1922 when Murakami and
-Taguchi @murakamiGestureRecognitionUsing1991 used a recurrent neural network to
+Taguchi \cite{murakamiGestureRecognitionUsing1991} used a recurrent neural network to
 classify a dataset of 42 classes. The recent increase in computational power
 has allowed neural networks and their variants to be fully utilised for
 glove-based gesture recognition: Feed-Forward Neural Networks (FFNNs)
-[@damasioAnimatingVirtualHumans2002; @fatmiComparingANNSVM2019;
-@felsGloveTalkIIaNeuralnetworkInterface1998; @hamdyaliComparativeStudyUser2014;
-@jong-sungkimDynamicGestureRecognition1996; @mehdiSignLanguageRecognition2002;
-@netoHighLevelProgramming2010; @vasconezHandGestureRecognition2022;
-@zhangRealTimeSurfaceEMG2019], Recurrent Neural Networks (RNNs)
-[@kochRecurrentNeuralNetwork2019; @makaussovLowCostIMUBasedRealTime2020;
-@murakamiGestureRecognitionUsing1991; @riveraRecognitionHumanHand2017;
-@wengaoChineseSignLanguage2004;@yuanHandGestureRecognition2020;
-@zhangStackedLSTMBasedDynamic2021], Convolutional Neural Networks (CNNs)
-[@maHandGestureRecognition2017; @wenMachineLearningGlove2020;
-@yuanHandGestureRecognition2020], and Self-Organising Feature Maps (SOMs)
-[@wengaoChineseSignLanguage2004] have all shown good results.
+\footnote{\cite{damasioAnimatingVirtualHumans2002, fatmiComparingANNSVM2019, felsGloveTalkIIaNeuralnetworkInterface1998, hamdyaliComparativeStudyUser2014, jong-sungkimDynamicGestureRecognition1996, mehdiSignLanguageRecognition2002, netoHighLevelProgramming2010, vasconezHandGestureRecognition2022, zhangRealTimeSurfaceEMG2019}}, Recurrent Neural Networks (RNNs)
+\footnote{\cite{kochRecurrentNeuralNetwork2019, makaussovLowCostIMUBasedRealTime2020, murakamiGestureRecognitionUsing1991, riveraRecognitionHumanHand2017, wengaoChineseSignLanguage2004,yuanHandGestureRecognition2020, zhangStackedLSTMBasedDynamic2021}}, Convolutional Neural Networks (CNNs)
+\footnote{\cite{maHandGestureRecognition2017, wenMachineLearningGlove2020, yuanHandGestureRecognition2020}}, and Self-Organising Feature Maps (SOMs)
+\citep{wengaoChineseSignLanguage2004} have all shown good results.
 
 Papers which attack implicit segmentation (where not every observation
 necessarily contains a gesture, thus resulting in a highly imbalanced dataset
@@ -572,11 +470,11 @@ dataset with 5 classes.
 While this fact has likely dissuaded many researchers from using HMMs for
 many-class gesture classification, they have nonetheless been used successfully
 by Chunli and Wen to classify thousands of unique gestures from Chinese Sign
-Language between 2001 and 2004: @chunliwangRealTimeLargeVocabulary2001
-classified 4800 signs, @wangchunliRealTimeLargeVocabulary2002 classified 5100
-signs, and @wengaoChineseSignLanguage2004 classified 5113 signs.
+Language between 2001 and 2004: \cite{chunliwangRealTimeLargeVocabulary2001}
+classified 4800 signs, \cite{wangchunliRealTimeLargeVocabulary2002} classified 5100
+signs, and \cite{wengaoChineseSignLanguage2004} classified 5113 signs.
 
-In @wengaoChineseSignLanguage2004, Chunli and Wen applied a multi-stage
+In \cite{wengaoChineseSignLanguage2004}, Chunli and Wen applied a multi-stage
 approach, where a Self-Organising Feature Map (SOM) was used to reduce the
 dimensionality of the input data. A simple Recurrent Neural Network was used to
 detect if there was a gesture in a particular observation, and then
@@ -607,11 +505,9 @@ collected in WiFi networks). This section will not be as detailed as Section
 \ref{glove-based-gesture-recognition}, due to the focus of the thesis being
 glove-based systems. There is a wealth of research in these two fields, with
 recent review papers of WiFi-based systems citing between 100 and 150 papers
-[@maWiFiSensingChannel2020; @hussainReviewCategorizationTechniques2020;
-@wangCSIbasedHumanSensing2021; @maSurveyWiFiBased2016]. Recent reviews of
+\footnote{\cite{maWiFiSensingChannel2020, hussainReviewCategorizationTechniques2020, wangCSIbasedHumanSensing2021, maSurveyWiFiBased2016}}. Recent reviews of
 vision-based systems cited between 100 and 270 papers
-[@rautarayVisionBasedHand2015; @cheokReviewHandGesture2019;
-@oudahHandGestureRecognition2020]. While the number of papers cited is not a
+\footnote{\cite{rautarayVisionBasedHand2015, cheokReviewHandGesture2019, oudahHandGestureRecognition2020}}. While the number of papers cited is not a
 precise measure of the size of the field, is does provide an approximation. The
 interested reader is directed towards those reviews for a more detailed
 treatment of the material.
@@ -632,16 +528,14 @@ they transmit data based on the current channel conditions, which enables more
 reliable communication.
 
 Since CSI is very sensitive to the surrounding environment, changes such as a
-person moving within a room [@wuWiTrajRobustIndoor2023] or even just breathing
-[@wangWeCanHear2014] can induce a change in the CSI, which can then be
+person moving within a room \citep{wuWiTrajRobustIndoor2023} or even just breathing
+\citep{wangWeCanHear2014} can induce a change in the CSI, which can then be
 recognised using modern machine learning techniques.
 
 **Datasets** Both vision- and WiFi-based systems have seen the benefit of
 standardised hardware that enables the creation of high-quality and diverse
 datasets of gestures being performed and recorded on relevant hardware. These
-datasets [@guyonChaLearnGestureChallenge2012;
-@materzynskaJesterDatasetLargeScale2019;
-@alazraiDatasetWiFibasedHumantohuman2020] promote research in the field, as
+datasets \footnote{\cite{guyonChaLearnGestureChallenge2012, materzynskaJesterDatasetLargeScale2019, alazraiDatasetWiFibasedHumantohuman2020}} promote research in the field, as
 they provide a common baseline against which new algorithms can be tested. They
 also reduce the barrier to entry, as researchers skilled in modelling but
 without the resources to collect a large amount of data can still contributed
@@ -650,29 +544,16 @@ to the field.
 ### Chronology of Non-glove-based Systems
 
 Vision based systems have been discussed since the 1980s
-[@boltPutthatthereVoiceGesture1980;
-@jenningsComputergraphicModelingAnalysis1988;
-@myronw.kruegerArtificialRealityII1991] but the first working system was Yamato
+\footnote{\cite{boltPutthatthereVoiceGesture1980, jenningsComputergraphicModelingAnalysis1988, myronw.kruegerArtificialRealityII1991}} but the first working system was Yamato
 \emph{et~al.}'s paper recognising human actions using an HMM trained to
-recognise feature vectors [@yamatoRecognizingHumanAction1992]. Starner and
-Pentland @starnerRealtimeAmericanSign1995 were the first to use vision-based
+recognise feature vectors \citep{yamatoRecognizingHumanAction1992}. Starner and
+Pentland \cite{starnerRealtimeAmericanSign1995} were the first to use vision-based
 systems to recognise sign language gestures, using HMMs to recognise 40 signs
 from the American Sign Language. Due to the computational power available at
 the time, the user had to wear brightly coloured gloves to aid in hand
 detection and the system ran at 5 frames per second. HMMs paired with some form
 of manual feature extraction would remain the favoured modelling technique for
-vision-based systems for many years [@binhRealTimeHandTracking2005;
-@chenHandGestureRecognition2003; @eickelerHiddenMarkovModel1998;
-@elmezainGestureRecognitionAlphabets2007; @elmezainHandGestureRecognition2009;
-@elmezainRealTimeCapableSystem2008; @frieslaarRobustSouthAfrican2014;
-@ghotkarDynamicHandGesture2016; @hyeon-kyuleeHMMbasedThresholdModel1999;
-@keskinRealTimeHand2003; @naidooSouthAfricanSign2010;
-@ramamoorthyRecognitionDynamicHand2003; @rigollHighPerformanceRealtime1998;
-@starnerRealtimeAmericanSign1995; @starnerRealtimeAmericanSign1998;
-@starnerVisualRecognitionAmerican1995; @wilsonParametricHiddenMarkov1999;
-@wuDeepDynamicNeural2016; @yamatoRecognizingHumanAction1992;
-@yangDynamicHandGesture2012; @yoonHandGestureRecognition2001;
-@zhangVisionbasedSignLanguage2004; @zhaoRealtimeHeadGesture2017].
+vision-based systems for many years \footnote{\cite{binhRealTimeHandTracking2005, chenHandGestureRecognition2003, eickelerHiddenMarkovModel1998, elmezainGestureRecognitionAlphabets2007, elmezainHandGestureRecognition2009, elmezainRealTimeCapableSystem2008, frieslaarRobustSouthAfrican2014, ghotkarDynamicHandGesture2016, hyeon-kyuleeHMMbasedThresholdModel1999, keskinRealTimeHand2003, naidooSouthAfricanSign2010, ramamoorthyRecognitionDynamicHand2003, rigollHighPerformanceRealtime1998, starnerRealtimeAmericanSign1995, starnerRealtimeAmericanSign1998, starnerVisualRecognitionAmerican1995, wilsonParametricHiddenMarkov1999, wuDeepDynamicNeural2016, yamatoRecognizingHumanAction1992, yangDynamicHandGesture2012, yoonHandGestureRecognition2001, zhangVisionbasedSignLanguage2004, zhaoRealtimeHeadGesture2017}}.
 
 \begin{figure}[!htb]
 \centering
@@ -682,43 +563,25 @@ vision-based systems for many years [@binhRealTimeHandTracking2005;
 \end{figure}
 
 In 2011, Halperin \emph{et~al.} published a tool
-[@halperinToolReleaseGathering2011] which provided a detailed picture of the
+\citep{halperinToolReleaseGathering2011} which provided a detailed picture of the
 wireless channel conditions using CSI information. The release of this tool
 made apparent the level of detail available in CSI and how that information
 changes with changes to the environment. Adib and Katabi first applied the data
-available in CSI to recognise human gestures [@adibSeeWallsWiFi2013] and were
+available in CSI to recognise human gestures \citep{adibSeeWallsWiFi2013} and were
 followed by papers investigating many diverse applications such as breathing
-detection [@liuWiSleepContactlessSleep2014; @wangHumanRespirationDetection2016;
-@wuNonInvasiveDetectionMoving2015], sign language recognition
-[@liWiFingerTalkYour2016], fall detection [@wangRTFallRealTimeContactless2017;
-@wangWiFallDeviceFreeFall2017], distinguishing different people from one
-another based on their movement or gait [@wangGaitRecognitionUsing2016;
-@zengWiWhoWiFiBasedPerson2016; @zhangWiFiIDHumanIdentification2016], keystroke
-and password inference [@aliRecognizingKeystrokesUsing2017;
-@liWhenCSIMeets2016; @shenWiPassCSIbasedKeystroke2020], sleep detection
-[@liuWiSleepContactlessSleep2014], speech recognition [@wangWeCanHear2014], and
-the monitoring of vital signs [@liuTrackingVitalSigns2015].
+detection \footnote{\cite{liuWiSleepContactlessSleep2014, wangHumanRespirationDetection2016, wuNonInvasiveDetectionMoving2015}}, sign language recognition
+\citep{liWiFingerTalkYour2016}, fall detection \footnote{\cite{wangRTFallRealTimeContactless2017, wangWiFallDeviceFreeFall2017}}, distinguishing different people from one
+another based on their movement or gait \footnote{\cite{wangGaitRecognitionUsing2016, zengWiWhoWiFiBasedPerson2016, zhangWiFiIDHumanIdentification2016}}, keystroke
+and password inference \footnote{\cite{aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016, shenWiPassCSIbasedKeystroke2020}}, sleep detection
+\citep{liuWiSleepContactlessSleep2014}, speech recognition \citep{wangWeCanHear2014}, and
+the monitoring of vital signs \citep{liuTrackingVitalSigns2015}.
 
 The applications of vision-based gesture recognition have been less varied,
-with an emphasis on sign language [@avolaExploitingRecurrentNeural2019;
-@bhagatIndianSignLanguage2019; @binhRealTimeHandTracking2005;
-@bowdenLinguisticFeatureVector2004; @bowdenVisionBasedInterpretation2003;
-@chenHandGestureRecognition2003; @elbadawyArabicSignLanguage2017;
-@ghotkarDynamicHandGesture2016; @hurrooSignLanguageRecognition2020;
-@jiehuangSignLanguageRecognition2015; @kadirMinimalTrainingLarge2004;
-@liang3DConvolutionalNeural2018; @ming-hsuanyangRecognizingHandGesture1999;
-@nelIntegratedSignLanguage2013; @sahooRealTimeHandGesture2022;
-@sharmaASL3DCNNAmericanSign2021; @starnerRealtimeAmericanSign1995;
-@starnerRealtimeAmericanSign1998; @starnerVisualRecognitionAmerican1995;
-@zhangVisionbasedSignLanguage2004]. Other applications have included
-augmented/virtual reality [@buchmannFingARtipsGestureBased2004;
-@sagayamHandPostureGesture2017], video game control
-[@freemanOrientationHistogramsHand1995;
-@marceloGeFightersExperimentGesturebased2006], generic gesture recognition
-[@ahujaHandGestureRecognition2015], various medical applications
-[@funkeUsing3DConvolutional2019; @wanExploreEfficientLocal2016], and remote
-robot control [@qiMultiSensorGuidedHand2021;
-@ramamoorthyRecognitionDynamicHand2003; @wanExploreEfficientLocal2016].
+with an emphasis on sign language \footnote{\cite{avolaExploitingRecurrentNeural2019, bhagatIndianSignLanguage2019, binhRealTimeHandTracking2005, bowdenLinguisticFeatureVector2004, bowdenVisionBasedInterpretation2003, chenHandGestureRecognition2003, elbadawyArabicSignLanguage2017, ghotkarDynamicHandGesture2016, hurrooSignLanguageRecognition2020, jiehuangSignLanguageRecognition2015, kadirMinimalTrainingLarge2004, liang3DConvolutionalNeural2018, ming-hsuanyangRecognizingHandGesture1999, nelIntegratedSignLanguage2013, sahooRealTimeHandGesture2022, sharmaASL3DCNNAmericanSign2021, starnerRealtimeAmericanSign1995, starnerRealtimeAmericanSign1998, starnerVisualRecognitionAmerican1995, zhangVisionbasedSignLanguage2004}}. Other applications have included
+augmented/virtual reality \footnote{\cite{buchmannFingARtipsGestureBased2004, sagayamHandPostureGesture2017}}, video game control
+\footnote{\cite{freemanOrientationHistogramsHand1995, marceloGeFightersExperimentGesturebased2006}}, generic gesture recognition
+\citep{ahujaHandGestureRecognition2015}, various medical applications
+\footnote{\cite{funkeUsing3DConvolutional2019, wanExploreEfficientLocal2016}}, and remote robot control \footnote{\cite{qiMultiSensorGuidedHand2021, ramamoorthyRecognitionDynamicHand2003, wanExploreEfficientLocal2016}}.
 
 \begin{figure}[!htb]
 \centering
@@ -728,15 +591,9 @@ robot control [@qiMultiSensorGuidedHand2021;
 \end{figure}
 
 Convolutional Neural Networks (CNNs) were first used for gesture recognition in
-2015 by Huang \emph{et~al.} [@jiehuangSignLanguageRecognition2015] and neural
+2015 by Huang \emph{et~al.} \citep{jiehuangSignLanguageRecognition2015} and neural
 network based models have been used by many researchers for gesture recognition
-[@funkeUsing3DConvolutional2019; @hakimDynamicHandGesture2019;
-@hurrooSignLanguageRecognition2020; @jiehuangSignLanguageRecognition2015;
-@kopukluRealtimeHandGesture2019; @liuDynamicGestureRecognition2021;
-@luOneshotLearningHand2019; @mohammedDeepLearningBasedEndtoEnd2019;
-@mujahidRealTimeHandGesture2021; @sahooRealTimeHandGesture2022;
-@sharmaASL3DCNNAmericanSign2021; @urrehmanDynamicHandGesture2022;
-@wuDeepDynamicNeural2016; @zhangGestureRecognitionBased2020].
+\footnote{\cite{funkeUsing3DConvolutional2019, hakimDynamicHandGesture2019, hurrooSignLanguageRecognition2020, jiehuangSignLanguageRecognition2015, kopukluRealtimeHandGesture2019, liuDynamicGestureRecognition2021, luOneshotLearningHand2019, mohammedDeepLearningBasedEndtoEnd2019, mujahidRealTimeHandGesture2021, sahooRealTimeHandGesture2022, sharmaASL3DCNNAmericanSign2021, urrehmanDynamicHandGesture2022, wuDeepDynamicNeural2016, zhangGestureRecognitionBased2020}}.
 
 ## Applications of Gesture Recognition
 
@@ -776,7 +633,7 @@ language simply as a useful collection of gestures, and the fact that the
 gestures have distinct meaning is not of direct interest to the research being
 performed.
 
-An analogy can be made to the Utah Teapot [@torrenceMartinNewellOriginal2006],
+An analogy can be made to the Utah Teapot \citep{torrenceMartinNewellOriginal2006},
 common in computer graphics research. The utility of the Utah Teapot is not
 that it is an accurate representation of a specific teapot, but rather that it
 is a shape complex enough to be non-trivial and common enough that it does not
