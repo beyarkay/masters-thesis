@@ -22,8 +22,8 @@ into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
 # Artificial Neural Networks \label{sec:02_ffnn}
 
 Artificial Neural Networks (ANNs) are a form of machine learning that started
-with the development of the perceptron [@Rosenblatt1963PRINCIPLESON], which
-itself was inspired by work done by @McCulloch2021ALC.
+with the development of the perceptron \citep{Rosenblatt1963PRINCIPLESON}, which
+itself was inspired by work done by \cite{McCulloch2021ALC}.
 
 This section will first describe the perceptron in subsection
 \ref{perceptrons}. Then neural networks will be covered in subsection
@@ -266,9 +266,9 @@ Gradient descent can be made more efficient via Stochastic Gradient Descent
 biases based on the average gradient over the observations in each batch.
 
 Optimisation algorithms other than SGD are more commonly used in practical
-machine learning: AdaGrad [@Duchi2011AdaptiveSM] is performant on sparse
-gradients, RMSProp [@RMSProp] works well in non-stationary settings, and Adam
-[@Kingma2014AdamAM] provides good performance with little tuning.
+machine learning: AdaGrad \citep{@Duchi2011AdaptiveSM} is performant on sparse
+gradients, RMSProp \citep{@RMSProp} works well in non-stationary settings, and Adam
+\citep{@Kingma2014AdamAM} provides good performance with little tuning.
 
 ## Backpropogation
 
@@ -522,10 +522,10 @@ Note that if the true class is 0, the loss is zero.
 
 Hidden Markov Models (HMMs) are a form of machine learning often used to model
 a series of observations over time. HMMs were initially proposed by
-@Baum1966HMMs in a series of statistical papers with other authors in the late
+\cite{Baum1966HMMs} in a series of statistical papers with other authors in the late
 1960s. In the late 1980s, they became commonplace for sequence analysis
-[@Bishop1986MaximumLA], specifically in the field of bioinformatics
-[@Durbin1998BiologicalSA].
+\citep{@Bishop1986MaximumLA}, specifically in the field of bioinformatics
+\citep{@Durbin1998BiologicalSA}.
 
 Markov Models provide a formalism for reasoning about states and state
 transitions over time. HMMs then expand on Markov Models so that they can be
@@ -1115,50 +1115,54 @@ Different class weights were attempted
 -->
 
 Support Vector Machines (SVMs) are a form of supervised learning that can be
-used for classification and regression. As _Ergo_ is a classification problem,
+used for classification or regression. As _Ergo_ is a classification problem,
 only SVM classifiers will be discussed here. SVMs work well in high dimensions
 and perform classifications using a small subset of the training observations,
-so are fast and memory efficient. SVMs do not natively support multi-class
-classification, however this can be implemented via one-vs-rest classification
-which will be discussed in the Methodology chapter, Section
-\ref{models-specifics-svm}. The remainder of this section will describe SVMs as
-used for binary classification tasks.
+making them relatively fast and memory efficient. While SVMs do not natively
+support multi-class classification, it be implemented via one-vs-rest
+classification which will be discussed in Section \ref{sec:04-one-vs-rest}.
+The remainder of this section will describe SVMs as used for binary
+classification tasks.
 
-SVMs learn to distinguish two classes in a dataset by finding a hyperplane
-which will completely separate the two classes. Intuitively, an SVM attempts to
-find a hyperplane which splits the dataset, such that 1) the hyperplane
-maximises the distance to the nearest observation (regardless of the class of
-that observation) and 2) all observations from the same class are on the same
-side of the hyperplane. In the case where the data is not linearly separable
-and thus no hyperplane exists which can separate the classes, a kernel function
-is used to transform the data into a new space in which the classes can be
-linearly separated. Kernel functions will be discussed in section \ref{todo}.
+SVMs learn to distinguish two classes in a dataset by finding a hyperplane that
+completely separates the two classes. Intuitively, an SVM attempts to find a
+hyperplane which splits the dataset, such that 1) the hyperplane maximises the
+distance to the nearest observation regardless of the class of that observation
+and 2) all observations from the same class are on the same side of the
+hyperplane. Many classification tasks are not linearly separable, and thus a
+certain amount of "slack" is often permitted in the mathematical formulation of
+an SVM which permits some observations to be on the wrong side of the
+hyperplane. These observations incur some penalty, the magnitude of which is
+controlled by a hyperparameter. In some cases it is advantageous to use a
+kernel function to transform the data into a new space and the hyperplane is
+found in this new space.
 
 Given a dataset with input vectors (features) $x_i$ and corresponding labels
-$y_i$, where $y_i$ is either -1 or 1, we want to find a hyperplane represented
-by $\bm{w} x + b = 0$. $\bm{w}$ is the weight vector, $x$ is the input
-vector, and $b$ is the bias.
+$y_i$, where $y_i$ is either -1 or 1, the task of an SVM is to find a
+hyperplane to split the two classes. This hyperplane is defined by $\bm{w} x +
+b = 0$, where $\bm{w}$ is named the weight vector, $x$ is the input vector, and
+$b$ is named the bias.
 
 Given an observation $x_i$, the sign of $\bm{w} x_i + b$ will indicate which
 class it belongs to, according to the SVM classifier.
 
 The _margin_ of a SVM is defined as the distance between the hyperplane and the
-nearest data points. In maximising the margin, an SVM is better able to
+nearest data point(s). In maximising the margin, an SVM is better able to
 generalise to unseen data because it creates a better separation between the
-classes and a greater chance that an unseen data point will be far from the
-hyperplane.
+classes. This results in a greater probability that an unseen data point will
+be further from the hyperplane.
 
-To calculate the value of the margin, recognise first that the margin is equal
-to the distance between the two hyperplanes
+To calculate the magnitude of the margin, recognise first that the margin is
+equal to the distance between two hyperplanes
 
 $$
-    \bm{w} x - b = -1 \quad \text{(called the negative hyperplane)}
+    \bm{w} x - b = -1 \quad \text{(named the negative hyperplane)}
 $$
 
 and
 
 $$
-    \bm{w} x - b = +1 \quad \text{(called the negative hyperplane)}
+    \bm{w} x - b = +1 \quad \text{(named the negative hyperplane)}.
 $$
 
 If we define $x_0$ as a point in the negative hyperplane such that
@@ -1177,7 +1181,7 @@ $$
     \frac{w}{\|w\|}
 $$
 
-The point in the positive hyperplane closest to the point $x_0$ can be
+and the point in the positive hyperplane closest to the point $x_0$ can be
 calculated as
 
 $$
@@ -1209,9 +1213,9 @@ in terms of $\bm{w}$:
 <!-- prettier-ignore-end -->
 
 Fitting an SVM is therefore a process of finding $\bm{w}$ and $b$ which
-maximise the margin $\frac{2}{\|\bm{w}\|}$, while ensuring that all
-observations are correctly classified. This can be expressed as an optimisation
-problem like:
+maximise the magnitude of the margin $\frac{2}{\|\bm{w}\|}$, while ensuring
+that all observations are correctly classified. This can be expressed as an
+optimisation problem like:
 
 $$
     \min_{\bm{w}, b} ||\bm{w}||^2
@@ -1220,262 +1224,40 @@ $$
 subject to the constraints
 
 $$
-    y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
+    y_i \cdot (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
 $$
 
 However, it often is impossible to perfectly separate the two classes, and it
-is desirable to allow for some misclassifications in the pursuit of a
-separating hyperplane which will generalise better. For these situations, a
-soft margin is introduced which shall allow some misclassification.
+is desirable to allow for some misclassifications in the search of a separating
+hyperplane which will generalise better. For these situations, a "soft" margin
+is introduced that incorporates some "slack" variables. This formulation will
+permit some misclassification.
 
-For each observation $x_i$, a slack variable $\xi_i$ is defined, which is
+For each observation $x_i$, a slack variable $\xi_i$ is defined. $\xi_i$ is
 zero if $x_i$ is correctly classified, greater than 1 if it is misclassified,
-and between 0 and 1 if it is correctly classified but is within the SVMs
+and between 0 and 1 if it is correctly classified but is within the SVM's
 margin:
 
 $$
-    \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b))
+    \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b)) \quad \forall i \in {1, \ldots, n}.
 $$
 
-The objective function using a soft margin can then be defined with a
-regularisation parameter $C$:
+The soft-margin objective function can then be defined with a regularisation
+parameter $C$ which controls the degree of influence misclassifications have on
+the hyperplane. Larger values for $C$ result in less generalisation but fewer
+misclassifications. Smaller values for $C$ encourage a wider margin (with more
+generalisation) but with more misclassifications. This soft-margin objective
+function is as follows:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \text{minimize }
+    \text{minimize }_{\bm{w}, b}
         & \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
     \text{subject to }
-        &y_i(\mathbf{w}^T x_i + b) \ge 1 - \xi_i \\
-    \text{ and } &\, \xi_i \ge 0, \text{ for all } i.
+        &y_i \cdot (\mathbf{w}^T x_i + b) \ge 1 - \xi_i \\
+    \text{ and } &\, \xi_i \ge 0, \forall i \in {1, \ldots, n}.
 \end{align*}
 <!-- prettier-ignore-end -->
-
-<!-- TODO: why is \frac{1}{2} included? -->
-
-$C$ controls the influence misclassifications should have on the hyperplane.
-Larger values for $C$ result in less generalisation but fewer
-misclassifications. Smaller values for $C$ encourage a wider margin (with more
-generalisation) but with more misclassifications.
-
-To solve this constrained optimisation problem, Lagrange multipliers $\alpha_i
-\ge 0$ and $\beta_i \ge 0$ are introduced for the constraints
-$y_i(\mathbf{w}^T x_i + b) \ge 1 - \xi_i$ and $\xi_i \ge 0$ respectively. The
-Lagrangian $\mathcal{L}(\bm{w}, b, \xi, \alpha, \beta)$ is then defined as
-
-<!-- prettier-ignore-start -->
-$$
-\mathcal{L}(\bm{w}, b, \xi, \alpha, \beta) = \frac{1}{2} \|\bm{w}\|^2
-    + C\sum_{i=1}^{n} \xi_i
-    - \sum_{i=1}^{n} \alpha_i[y_i(\bm{w} \cdot \bm{x}_i + b) - 1 + \xi_i]
-    - \sum_{i=1}^{n} \beta_i \xi_i
-$$
-<!-- prettier-ignore-end -->
-
-The corresponding set of Karush-Kuhn-Tucker (KKT) conditions are given by
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \alpha_i & \ge 0 \\
-    y_i(\bm{w} \cdot \bm{x}_i + b) - 1 + \xi_i & \ge 0 \\
-    \alpha_i (y_i (\bm{w} x_i + b) - 1 + \xi_i) & = 0 \\
-    \beta_i & \ge 0 \\
-    \xi_i & \ge 0 \\
-    \beta_i \xi_i & = 0
-\end{align*}
-<!-- prettier-ignore-end -->
-
-Taking the partial derivative with respect to $\bm{w}$, $b$, and $\xi_i$ and
-setting equal to zero, we obtain:
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \frac{\partial \mathcal{L}}{\partial \bm{w}} = 0 \implies &
-        \bm{w} = \sum_{i=1}^n \alpha_i y_i x_i \\
-    \frac{\partial \mathcal{L}}{\partial b} = 0 \implies &
-        0 = \sum_{i=1}^n \alpha_i y_i \\
-    \frac{\partial \mathcal{L}}{\partial \xi_i} = 0 \implies &
-        \alpha_i = C - \beta_i
-\end{align*}
-<!-- prettier-ignore-end -->
-
-We can then obtain the dual Lagrangian in the form
-
-$$
-    \widetilde{\mathcal{L}}(\bm{\alpha}) = \sum_{i=1}^n \alpha_i
-        - \frac{1}{2} \sum_{i=1}^n\sum_{j=1}^n \alpha_i \alpha_j y_i y_j \bm{x}_i^T \bm{x}_j
-$$
-
----
-
-We will use the following definitions: a dataset of $n$ $p$-dimensional
-feature-vectors $\bm{x} = x_1, \ldots, x_n$ where $x_i \in \Re^p$, and $n$
-corresponding target values $\bm{t} = t_1, \ldots, t_n$ where $t_i \in {-1,
-1}$. $y(\bm{x})$ shall be the output of the SVM, and new data points are
-classified based on the sign of $y(\bm{x})$. Note that with this formulation, a
-correctly classified observation $x_i$ and corresponding label $t_i$ will
-satisfy $t_i y(x_i) > 0$
-
-We can define our hyperplane by the set of points such that a weight vector
-$\bm{w}$ perpendicular to the hyperplane and a bias $b$:
-
-$$
-    \bm{w}^T \bm{x} - b = 0
-$$
-
-The decision function for the SVM, $y(\bm{x})$, is then defined as
-
-$$
-    y(\bm{x}) = \bm{w}^T\bm{x} + b.
-$$
-
-Note that the value $\frac{b}{||\bm{w}||}$ defines the offset of the hyperplane
-from the origin, in the direction along the normal vector $\bm{w}$.
-
-## Hard-margin SVMs
-
-If the data is linearly separable, then there exist two parallel hyperplanes
-that separate the data and contain no observations between them. The usage of
-two parallel hyperplanes (as opposed to one hyperplane which is the maximum
-distance from all points and separates the classes) allows the efficacy of an
-SVM to be judged based on the distance between the two hyperplanes. The
-intuition being that an SVM with hyperplanes that maximally separate the data
-will generalise to unseen data better than one which does not.
-
-We can define these two hyperplanes by the equations
-
-$$
-    \bm{w}^T \bm{x} - b = +1
-$$
-
-and
-
-$$
-    \bm{w}^T \bm{x} - b = -1
-$$
-
-The margin is then defined as the region bounded by these two hyperplanes, and
-the maximum-margin hyperplane is defined as the hyperplane that lies halfway
-between them.
-
-To prevent an observation from being inside the margin, we have to require
-that for each observation $x_i$ either
-
-$$
-    \bm{w}^T x_i - b \ge 1, if t_i = 1
-$$
-
-or
-
-$$
-    \bm{w}^T x_i - b \le -1, if t_i = -1
-$$
-
-which can be simplified as
-
-$$
-    t_i (\bm{w}^T x_i - b) \ge 1.
-$$
-
-Given these constraints, we can construct the optimisation problem as
-
-$$
-    \min_{\bm{w}, b} ||\bm{w}||^2
-$$
-
-subject to the constraints
-
-$$
-    t_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
-$$
-
-The values for $\bm{w}$ and $b$ will fully define the SVM, with a
-classification of an unseen feature vector $x$ as belonging to either class -1
-or class 1 made as:
-
-$$
-    \text{sign}(\bm{w}^T x + b).
-$$
-
-## Soft-margin SVMs
-
-Hard-margin SVMs have the constraint that the classes be linearly separable.
-Soft-margin SVMs remove this constraint by introducing a loss function which
-penalises the amount and number of observations which are on the incorrect side
-of the decision boundary.
-
-Note that $t_i (\bm{w}^T x_i - b)$ is negative when the observation $x_i$ is
-incorrectly classified. The _hinge loss_ function is given by
-
-$$
-    \text{loss}(x_i | \bm{w}, b) = \max(0, 1 - t_i (\bm{w}^T x_i - b))
-$$
-
-And is therefore zero if the observation in question is correctly classified.
-It will be negative if the observation in question is incorrectly classified.
-
-## Solving for the SVM parameters
-
-The method for solving for the parameters $\bm{w}$ and $b$ for a soft-margin
-SVM will be discussed here, as a hard-margin SVM is equivalent to a soft-margin
-SVM with a sufficiently large regularisation parameter $C$.
-
-We seek to minimise the expression
-
-$$
-    \frac{1}{n} \sum_{i=1}^n \max\left(0, 1 - t_i(\bm{w}^T x_i - b)\right)
-    + \frac{1}{C} \|\bm{w}\|^2.
-$$
-
-To rewrite this in a differentiable form, we introduce a _slack variable_
-$\xi_i$ for each observation $x_i$ such that
-
-$$
-    \xi_i = \max(0, 1 - t_i (\bm{w}^T x_i - b))
-$$
-
-This ensures that $\xi_i$ is the smallest non-negative number such that
-$t_i(\bm{w}^T x_i - b) \ge 1 - \xi_i$. The optimisation problem can then be
-rewritten as minimising
-
-<!-- prettier-ignore-start -->
-\begin{align*}
-    \text{minimize }
-        &\frac{1}{n} \sum_{i=1}^n \xi_i + \frac{1}{C} \|\mathbf{w}\|^2 \\
-    \text{subject to }
-        &t_i(\mathbf{w}^T x_i - b) \ge 1 - \xi_i \\
-    \text{ and } &\, \xi_i \ge 0, \text{ for all } i.
-\end{align*}
-<!-- prettier-ignore-end -->
-
----
-
-The objective of SVMs is to find the hyperplane which maximises the distance to
-the nearest observation while minimising the classification error.
-
-We define a _slack variable_ $\xi_i \ge 0$ for each observation $x_i$. $\xi_i$
-is zero if the observation is on the correct side of the hyperplane, and is the
-perpendicular distance from the observation to the hyperplane otherwise:
-
-$$
-    \xi_i = |t_i - y(x_i)|.
-$$
-
-When the slack variables are incorporated to the loss function, they allow some
-observations to be misclassified if there is an improvement in the decision
-boundary.
-
-We therefore seek to minimise the sum of the slack variables (multiplied by
-some regularization hyperparameter $C > 0$) and the length of the weights $\bm{w}$
-
-$$
-    \frac{1}{2} ||w||^2 + C \sum_{i=1}^n \xi_i.
-$$
-
-Note that as $C \to \infty$ the penalisation for misclassifications increases.
-
-The vector $\bm{w}$ then has the same number of elements as an observation
-$x_i$. Separating the weights $\bm{w}$ from the bias $b$ allows us to interpret
-$\bm{w}$ as a
 
 # Cumulative Sum \label{sec:02_cusum}
 
@@ -1506,7 +1288,8 @@ The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
 so will be described in detail in the Methodology chapter.
 
-# Autocorrect
+<!-- NOTE: Removed from the final thesis
+Autocorrect
 
 Autocorrect is a tool used when the nature of the interface means that small
 user errors are common. This is ideal for _Ergo_, as new users may not be
@@ -1601,3 +1384,5 @@ This procedure is given in Algorithm \ref{alg:autocorrect}.
     \end{algorithmic}
 
 \end{algorithm}
+
+NOTE: Removed from the final thesis -->
