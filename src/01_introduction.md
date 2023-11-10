@@ -21,13 +21,13 @@ fingertip-mounted sensor suite, with the goal of completely replicating the
 functionality of a computer keyboard.
 
 Gesture recognition has a long history, going back to the first attempts in
-19XX (TODO: reference). Initial attempts used various kinds of sensors mounted
-on the user's hands to measure movement. With the improvements in computer
-vision algorithms, many recent attempts focus on improving performance on
-shared datasets containing labelled videos of people performing different
-gestures. Recent changes in commercially available Wi-Fi routers have also
-enabled the detection of hand gestures by analysing diagnostics data from these
-routers.
+1969 \citep{experimentaltelevisioncenterComputerImageCorporation1969}. Initial
+attempts used various kinds of sensors mounted on the user's hands to measure
+movement. With the improvements in computer vision algorithms, many recent
+attempts focus on improving performance on shared datasets containing labelled
+videos of people performing different gestures. Recent changes in commercially
+available Wi-Fi routers have also enabled the detection of hand gestures by
+analysing diagnostics data from these routers.
 
 Work done on gesture detection is notably divided based on whether the
 application allows the user to make gestures at arbitrary points in time
@@ -59,12 +59,15 @@ intentional gestures from the background hand movements and has 51 classes
 (with the 51\textsuperscript{st} class representing all background hand
 movements).
 
-The rest of this chapter is as follows: Section \ref{problem-statement} will
-describe the problem to be solved. Section \ref{research-questions} will pose
-the research questions which will address the problem. Section
-\ref{contributions} provides Internet links with the data and code used in this
-thesis. Finally, Section \ref{thesis-structure} describes the structure of the
-thesis and the layout of the chapters.
+The rest of this chapter is as follows\footnote{This chapter has broken
+references some sections that look like ?? because I've excluded the content of
+all other chapters so that the PDF easier to manage. These references will be
+fixed when the entire PDF is compiled as one document.}: Section
+\ref{problem-statement} will describe the problem to be solved. Section
+\ref{sec:research-questions} will pose the research questions which will
+address the problem. Section \ref{contributions} provides Internet links with
+the data and code used in this thesis. Finally, Section \ref{thesis-structure}
+describes the structure of the thesis and the layout of the chapters.
 
 # Problem Statement
 
@@ -86,7 +89,7 @@ which is unrelated to any gestures being made by the user. An analysis of the
 inference speed is performed, with a focus on how completely \emph{Ergo} could
 replace a user's computer keyboard in day-to-day use.
 
-# Research Questions
+# Research Questions\label{sec:research-questions}
 
 Addressing the concerns mentioned earlier, a set of research questions is
 presented. These inquiries will steer the execution of experiments and the
@@ -117,23 +120,18 @@ The study aims to address the following points:
    replacement, the speed with which different models can make gesture
    predictions is recorded and evaluated.
 
-<!--
-TODO: Nothing is said about how high-fidelity Ergo is compared to other work
-which just strapped a sensor onto the back of someone's hand and called it
-done. Ergo is able to pick up much smaller movements than anything else out
-there, so the user has a much nicer time and doesn't have to make unwieldy
-full-hand movements.
--->
-
 # Contributions
 
 The dataset used in this thesis is freely available on
-[Zenodo](https://zenodo.org/). Both the raw sensor readings are available, as
-well as the pre-windowed and processed data.
+[Zenodo](https://zenodo.org/)\footnote{I am yet to upload the dataset, I want
+to double check some details with you before I do so}. Both the raw sensor
+readings are available, as well as the pre-windowed and processed data.
 
 The code used to train the classification algorithms, control the hardware, and
 to make predictions using the raw sensor data in real time is available on
-[GitHub](https://github.com/beyarkay/masters-code/).
+[GitHub](https://github.com/beyarkay/masters-code/)\footnote{This repo is
+private for now, is there any problem with me making it public now or should I
+wait for the hand-in date?}.
 
 # Thesis Structure
 
