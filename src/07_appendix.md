@@ -505,3 +505,71 @@ Predictions made with a probability of less than 50% are marked as incorrect.
 \input{src/tables/05_best_hmm_hpars.tex}
 
 \input{src/tables/05_best_cusum_hpars.tex}
+
+\chapter{The Human Hand}\label{app:the-human-hand}
+
+The human hand contains 27 bones which are split into three regions: the 14
+_phalanges_ (three for each finger and two for the thumb), the 5 _metacarpal
+bones_ (the palm bones, each of which connect to a finger or the thumb), and
+the 8 _carpal bones_ (the wrist bones, which are arranged in two rows going
+across the wrist).
+
+The carpals connect to the bones of the arm: the _radius_ (which is closest to
+the thumb) and the _ulnar_ (which is closest to the little finger)
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.6\textwidth]{src/imgs/03_bones.png}
+\caption{Medical diagram of the bones of the hand.}
+\label{fig:}
+\end{figure}
+
+The joints between bones are, logically, named according the bones they
+connect:
+
+- _Carpometacarpal_ (CMC): Those joints connecting the carpal (wrist) bones to
+  the metacarpal (palm) bones.
+
+- _Metacarpophalangeal_ (MCP): Those joints connecting the metacarpal (palm)
+  bones to the palangeal (finger) bones.
+
+- _Interphalangeal_ (IP): Those joints between the phalangeal (finger) bones.
+  Due to the number of phalangeal bones, these are subdivided into the _distal
+  interphalangeal_ joints (DIP, closest to the fingertip) and the _proximal
+  interphalangeal_ joints (PIP, closest to the palm).
+
+In addition to the bones and joints, there are terms for each movement of the
+hand. These are named based on the direction of movement.
+
+"Splaying" movements:
+
+- _Abduction_: moving the fingers away from the middle finger ("splaying" the
+  fingers").
+- _Radial abduction_: moving the thumb towards the radius.
+- _Adduction_: moving the fingers towards the middle finger.
+- _Radial adduction_: moving the thumb towards the middle finger.
+
+"Closing/Opening" movements:
+
+- _Extension_: moving the fingers or thumb "outwards", "opening" the
+  fingers or thumb of the hand.
+- _Flexion_: moving the fingers or thumb "inwards", "closing" the
+  fingers or thumb of the hand.
+- _Palmar adduction_: moving the thumb towards the back of the palm.
+- _Palmar abduction_: moving the thumb "down" away from the palm.
+
+"Curving" movements:
+
+- _Retroposition_: Rotating the thumb to be in the same plane as the palm.
+- _Opposition_: Rotating the thumb to be directly above the metacarpal of the
+  index finger.
+- _Bending_: Curving the metacarpal bones of the palm towards each other.
+- _Flattening_: Flattening the metacarpal bones of the palm to be in the same
+  plane.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.6\textwidth]{src/imgs/03_movements.png}
+\caption{Movements of the hand.}
+\label{fig:03_movements}
+\end{figure}
