@@ -1261,10 +1261,10 @@ function is as follows:
 
 # Cumulative Sum \label{sec:02_cusum}
 
-Cumulative Sum (CuSUM, @page_continuous_1954) is a sequential method used for
-change detection. Given a time series from an initial distribution, it can
-alert when the time series deviates from the initial distribution by some
-threshold amount.
+Cumulative Sum (CuSUM, \cite{pageCONTINUOUSINSPECTIONSCHEMES1954}) is a
+sequential method used for change detection. Given a time series from an
+initial distribution, it can alert when the time series deviates from the
+initial distribution by some threshold amount.
 
 The method works by keeping track of a cumulative sum and alerting if that
 cumulative sum passes above some threshold value. The threshold value is

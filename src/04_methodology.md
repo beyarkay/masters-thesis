@@ -1,24 +1,28 @@
 The construction of \emph{Ergo} is discussed in Section
-\ref{construction-of-ergo}. The procedure for collecting, labelling, and
-cleaning the dataset is discussed in Section
-\ref{data-collection-and-cleaning}. The method for splitting the dataset into
-training, validation, and testing datasets is discussed in Section
-\ref{sec:trn_tst_val}. The procedure followed for conducting the experiments is
-discussed in Section \ref{experimental-procedure}. The procedure for converting
-binary classifiers into multi-class classifiers is discussed in Section
-\ref{binary-and-multi-class-classifiers}. The implementation details for each
-model type is discussed in Section \ref{model-design-and-implementation}, The
-procedure followed for optimising the hyperparameters of each model type is
-discussed in Section \ref{procedure-for-hyperparameter-optimisation}. The exact
-search space for each model is tabulated in Section
-\ref{hyperparameter-search-space}. The evaluation metrics by which multi-class
-classifiers can be compared is discussed in Section \ref{evaluation-metrics}. A
-means of ordering those classifiers is discussed in Section
-\ref{an-ordering-over-multi-class-classifiers}. Finally, the method by which
-gestures are converted into keystrokes via class predictions is discussed in
-Section \ref{the-conversion-of-class-predictions-into-keystrokes}.
+\ref{sec:04-construction-of-ergo}. Section
+\ref{sec:04-gestures-and-class-labels} discusses the gestures which \emph{Ergo}
+can recognise and how those gestures are systematically mapped onto class
+labels. The method by which gestures are converted into keystrokes via class
+predictions is discussed in Section
+\ref{sec:04-the-conversion-of-class-predictions-into-keystrokes}. The procedure
+for collecting, labelling, and cleaning the dataset is discussed in Section
+\ref{sec:04-data-collection-and-cleaning}. The method for splitting the dataset
+into training, validation, and testing datasets is discussed in Section
+\ref{sec:04-splitting-the-data-into-train-test-validation}. The procedure
+followed for conducting the experiments is discussed in Section
+\ref{sec:04-experimental-procedure}. The procedure for converting binary
+classifiers into multi-class classifiers is discussed in Section
+\ref{sec:04-binary-and-multi-class-classifiers}. The procedure followed for
+optimising the hyperparameters of each model type is discussed in Section
+\ref{sec:04-procedure-for-hyperparameter-optimisation}. The implementation
+details for each model type is discussed in Section
+\ref{sec:04-model-design-and-implementation}. The evaluation metrics by which
+multi-class classifiers can be compared is discussed in Section
+\ref{sec:04-evaluation-metrics}. A means of ordering those classifiers is
+discussed in Section
+\ref{sec:04-an-ordering-over-multi-class-classifiers}.
 
-# Construction of Ergo
+# Construction of Ergo \label{sec:04-construction-of-ergo}
 
 \emph{Ergo} is a completely bespoke sensor suite, designed and constructed by
 the author. \emph{Ergo} uses a suite of acceleration sensors mounted on the
@@ -118,7 +122,7 @@ each newline being one set of sensor readings. If configured to perform
 classification, then the sensor readings will be streamed to a provided
 classifier and the predictions will be surfaced to the user.
 
-# Gestures and Class Labels
+# Gestures and Class Labels \label{sec:04-gestures-and-class-labels}
 
 _Ergo_ can recognise 50 gesture classes and one non-gesture class. The
 non-gesture class is used to represent the empty durations in-between gestures
@@ -209,7 +213,7 @@ gestures map to which keystrokes.
 \end{table}
 <!-- prettier-ignore-end -->
 
-# The Conversion of Class Predictions into Keystrokes
+# The Conversion of Class Predictions into Keystrokes \label{sec:04-the-conversion-of-class-predictions-into-keystrokes}
 
 Converting sensor measurements into classifications is not enough, as they
 still need to be converted into keystrokes. There are a few ambiguities to
@@ -303,7 +307,7 @@ as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
 same as in the text editor Vim\footnote{https://vim.org}. See vim's built-in
 help \texttt{:h ins-special-keys} for more details.
 
-# Data Collection and Cleaning
+# Data Collection and Cleaning \label{sec:04-data-collection-and-cleaning}
 
 To collect training data, the author wore _Ergo_ and performed each of the
 pre-specified gestures sequentially, repeating each gesture until there was
@@ -352,7 +356,7 @@ gesture associated with that time stamp. There are 37MB and 241 762
 observations, 235 995 of which belong to class 50 and the remaining 5 767 are
 the gesture classes.
 
-# Splitting the Data into Train, Test, Validation \label{sec:trn_tst_val}
+# Splitting the Data into Train, Test, Validation \label{sec:04-splitting-the-data-into-train-test-validation}
 
 Preliminary modelling showed that models trained on just a single instant of time
 did not perform as well as models provided with a historical window of 20 time
@@ -413,7 +417,7 @@ distribution can be used to compare models and evaluate which will most likely
 perform well on on the test set and other unseen data which might have a
 different underlying distribution to the training-validation dataset.
 
-# Experimental Procedure
+# Experimental Procedure \label{sec:04-experimental-procedure}
 
 Experiments will be conducted so as to answer the research questions posed in
 the Introduction\footnote{Section reference to be added when the introduction
@@ -539,7 +543,7 @@ The hardware used to train the various models is an 14-inch 2021 MacBook Pro
 laptop with the Apple M1 Pro chip and 16GB of LPDDR5 memory. The machine has 8
 performance-oriented cores and 2 efficiency-oriented cores.
 
-# Binary and Multi-class Classifiers
+# Binary and Multi-class Classifiers \label{sec:04-binary-and-multi-class-classifiers}
 
 Some classification algorithms have support for multi-class classification
 built-in to the classification procedure. Examples would be Feed Forward Neural
@@ -561,7 +565,7 @@ one binary classifier predicting YES and all other classifiers predicting NO
 for a given observation. This procedure for using an ensemble of binary
 classifiers as a multi-class classifier is called one-vs-rest classification.
 
-# Procedure for Hyperparameter Optimisation
+# Procedure for Hyperparameter Optimisation \label{sec:04-procedure-for-hyperparameter-optimisation}
 
 Hyperparameter optimisation is the procedure of searching over a space of
 hyperparameters, with the goal of finding a set of hyperparameters which
@@ -639,16 +643,20 @@ which are suspected of poor performance are quickly omitted from the search
 space. For this reason, they were not explored as options for hyperparameter
 optimisation.
 
-# Model Design and Implementation
+# Model Design and Implementation \label{sec:04-model-design-and-implementation}
 
 This section discusses each model type and explains the implementation thereof.
 Hidden Markov Models will be described in Section \ref{model-specifics-hmm},
 Cumulative Sum in Section \ref{model-specifics-cusum},
 Feed-Forward Neural Networks in Section \ref{model-specifics-ffnn},
-Hierarchical Feed-forward Neural Networks in Section \ref{model-specifics-hffnn},
+Hierarchical Feed-forward Neural Networks in Section \ref{sec:04-model-specifics-hffnn},
 and Support Vector Machines in Section \ref{models-specifics-svm}.
 
 ## Hidden Markov Models \label{model-specifics-hmm}
+
+<!-- TODO:
+Need to give the math for why HMMs don't work with >100k observations
+-->
 
 Hidden Markov Models (HMMs, introduced in Section \ref{sec:02_hmm}) are able to
 model the progression of time via sequential states and their transition
@@ -1031,7 +1039,7 @@ hyperparameters for the FFNNs.
 \end{table}
 <!-- prettier-ignore-end -->
 
-## Hierarchical Feed-forward Neural Networks \label{model-specifics-hffnn}
+## Hierarchical Feed-forward Neural Networks \label{sec:04-model-specifics-hffnn}
 
 Hierarchical Feed-forward Neural Networks (HFFNNs) are an extended version of
 the FFNN and operate by combining the output of two FFNNs, each of which is
@@ -1133,7 +1141,7 @@ the SVMs.
 \end{table}
 <!-- prettier-ignore-end -->
 
-# Evaluation Metrics
+# Evaluation Metrics \label{sec:04-evaluation-metrics}
 
 Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
 observations $n$, multi-class classifiers can be evaluated against one another
@@ -1381,7 +1389,7 @@ of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
 $F_1$-score must be shown in a separate plot alongside the precision-recall
 plot.
 
-# An Ordering Over Multi-class Classifiers
+# An Ordering Over Multi-class Classifiers \label{sec:04-an-ordering-over-multi-class-classifiers}
 
 In order that the best model can be chosen, an ordering must be defined. This
 ordering should work given solely the list of predictions and the list of

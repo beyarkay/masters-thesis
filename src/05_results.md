@@ -47,19 +47,19 @@ in terms of gesture detection _and_ classification.
 
 This chapter will discuss the results obtained from the experiments described
 in the Methodology chapter. The dataset will be described and some preliminary
-analysis done in Section \ref{dataset-description}. Section
-\ref{comparison-of-hypothetical-models} will compare some hypothetical models
+analysis done in Section \ref{sec:05-dataset-description}. Section
+\ref{sec:05-comparison-of-hypothetical-models} will compare some hypothetical models
 and explore their performance characteristics, so as to better understand
-common failure cases for the dataset at hand. Section \ref{model-justification}
+common failure cases for the dataset at hand. Section \ref{sec:05-evaluated-classification-algorithms}
 will justify the choice of models which were evaluated in this thesis. The
 performance of each model is described in subsections
-\ref{in-depth-cusum} (CuSUM),
-\ref{in-depth-hmm} (HMMs),
-\ref{in-depth-svm} (SVMs),
-\ref{in-depth-hffnn} (HFFNNs), and
-\ref{in-depth-ffnn} (FFNNs).
+\ref{sec:05-in-depth-cusum} (CuSUM),
+\ref{sec:05-in-depth-hmm} (HMMs),
+\ref{sec:05-in-depth-svm} (SVMs),
+\ref{sec:05-in-depth-hffnn} (HFFNNs), and
+\ref{sec:05-in-depth-ffnn} (FFNNs).
 
-Section \ref{best-model} looks at all trained models on the 51-class training
+Section \ref{sec:05-best-performing-51-class-classifier} looks at all trained models on the 51-class training
 dataset and evaluates their performance. As _Ergo_ requires real-time
 inference, Section \ref{time-comparison} compares the inference and training
 times of each model. Section \ref{ratio-comparison} assesses the training and
@@ -70,7 +70,9 @@ evaluates the best performing model on the unseen test set. Finally, Section
 \ref{real-world-data} evaluates each model on a real-world dataset of
 English-language typing data.
 
-# Dataset Description
+# Dataset Description \label{sec:05-dataset-description}
+
+<!-- TODO: Probably can remove this section or more it to methodology -->
 
 The core goal of _Ergo_ is to convert hand motion to keyboard input. To this
 end, there are 10 acceleration sensors mounted on the user's fingertips. Each
@@ -220,7 +222,7 @@ TODO: wrt to the caption:
 \end{figure}
 <!-- prettier-ignore-end -->
 
-# Comparison of hypothetical models
+# Comparison of hypothetical models \label{sec:05-comparison-of-hypothetical-models}
 
 In this section, several hypothetical models are defined and their performance
 examined. These hypothetical models have been chosen so as to provide some
@@ -319,7 +321,7 @@ other fingers on that hand). The mean $F_1$-score for these classifiers is
 \end{figure}
 <!-- prettier-ignore-end -->
 
-# Evaluated Classification Algorithms \label{model-justification}
+# Evaluated Classification Algorithms \label{sec:05-evaluated-classification-algorithms}
 
 Several different classification algorithms were evaluated. The chosen
 classification algorithms were selected if they are often used in the general
@@ -447,9 +449,11 @@ one-vs-rest classification. The training time of one-vs-rest classification
 scales poorly as the number of classes increases, and so only a linear kernel
 for the SVM is considered.
 
+<!--
 TODO: Figure \ref{fig:05_fit_time_vs_num_classes} shows the amount of time each
 model takes to be fit to the data. Note how poorly SVMs scale as the number of
 classes increase.
+-->
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
@@ -466,25 +470,25 @@ TODO:
 > decreases, this does not make sense?
 -->
 
-# Discussion of each model
+# Discussion of each model \label{sec:05-discussion-of-each-model}
 
 This section will evaluate each of the models in depth, but will not make
 comparisons between different model types. Characteristics specific to each
 model type are discussed, relating to $F_1$-score, precision, recall, inference
 times, and training times. Where appropriate, confusion matrices of different
 models are visualised to aid with the analysis of these models. For inter-model
-comparisons, please see sections \ref{best-model} and \ref{time-comparison}.
+comparisons, please see sections \ref{sec:05-best-performing-51-class-classifier} and \ref{time-comparison}.
 All evaluation metrics ($F_1$-score, precision, recall, confusion matrices) are
 and calculated using the validation set unless otherwise specified. When an
 evaluation metric is given for an entire model, that metric is the unweighted
 mean of the metric for each class. The models are evaluated on the unseen test
 set in Section \ref{test-set-eval}.
 
-FFNNs are be discussed in section \ref{in-depth-ffnn}, HMMs in section
-\ref{in-depth-hmm}, CuSUMs in section \ref{in-depth-cusum}, HFFNNs in section
-\ref{in-depth-hffnn}, and SVMs in section \ref{in-depth-svm}.
+FFNNs are be discussed in section \ref{sec:05-in-depth-ffnn}, HMMs in section
+\ref{sec:05-in-depth-hmm}, CuSUMs in section \ref{sec:05-in-depth-cusum}, HFFNNs in section
+\ref{sec:05-in-depth-hffnn}, and SVMs in section \ref{sec:05-in-depth-svm}.
 
-## Cumulative Sum \label{in-depth-cusum}
+## Cumulative Sum \label{sec:05-in-depth-cusum}
 
 Figure \ref{fig:05_mean_conf_mat_cusum} shows the confusion matrices for CuSUM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
@@ -563,7 +567,7 @@ models with a threshold of 100 is 0.937.
 The hyperparameter analysis of the 50- and 51-class CuSUM models is done in the
 appendix (Section \ref{sec:appendix_50_cusum_hpar} and \ref{sec:appendix_51_cusum_hpar} respectively)
 
-## Hidden Markov Models \label{in-depth-hmm}
+## Hidden Markov Models \label{sec:05-in-depth-hmm}
 
 Figure \ref{fig:05_mean_conf_mat_hmm} shows the confusion matrices for HMMs
 trained on 5, 50, and 51 classes.
@@ -725,7 +729,7 @@ This makes the bias of the spherical and diagonal HMMs clear: the precision of
 these HMMs is very obviously higher for gestures involving the thumbs. The tied
 covariance HMM generally performed the best, making very few mispredictions.
 
-## Support Vector Machines \label{in-depth-svm}
+## Support Vector Machines \label{sec:05-in-depth-svm}
 
 Figure \ref{fig:05_mean_conf_mat_svm} shows the confusion matrices for SVM
 models trained on 5, 50, and 51 classes. The values in the confusion matrices
@@ -918,7 +922,7 @@ There is no relationship between the inference time and the class weight nor
 the inference time and the regularisation coefficient C. This is to be
 expected, as neither hyperparameter is used to perform inference.
 
-## Feed-forward Neural Networks \label{in-depth-ffnn}
+## Feed-forward Neural Networks \label{sec:05-in-depth-ffnn}
 
 Due to the large number of hyperparameters for FFNNs, plots which show no
 relationship between hyperparameters and evaluation metrics will be excluded
@@ -1377,7 +1381,7 @@ TODO:
 > in general. If the data is complex enough one ought to be able to get better
 > performance from a three layer network. From what I saw in the histogram the
 > good ranges of learning rate was not explored well enough. I would therefore
-> not imply that three layers are a no go. Rather say for the hyperparmeter
+> not imply that three layers are a no go. Rather say for the hyperparameter
 > ranges explored the three layer networks underperfomed. This either indicatess
 > that they are of a too high capacity for htis data or that certain
 > hyperparameter ranges need to be explored in more detail. This is left for
@@ -1522,7 +1526,7 @@ An analysis of the performance of the FFNNs against the regularisation
 hyperparameters (dropout rate and L2 coefficient) is available in the appendix,
 Section \ref{sec:appendix_51_ffnn_regularisation}.
 
-## Hierarchical Feed Forward Neural Networks \label{in-depth-hffnn}
+## Hierarchical Feed Forward Neural Networks \label{sec:05-in-depth-hffnn}
 
 As with the FFNNs, the HFFNNs have many hyperparameters. Plots which show no
 relationship between hyperparameters and evaluation metrics will be excluded
@@ -1723,7 +1727,7 @@ need to add some plots just to show nothing's going on?
 Make some plots of f1 vs hpar
 -->
 
-# Best performing 51-class classifier \label{best-model}
+# Best performing 51-class classifier \label{sec:05-best-performing-51-class-classifier}
 
 The performance of each of the five classification algorithms can be seen in
 Figure \ref{fig:05_precision_recall_51_classes} (for those models trained on

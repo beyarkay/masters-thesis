@@ -1,28 +1,15 @@
-This chapter reviews the literature as related to human hand gesture
-recognition. There are three primary methods of sensing the movement of a user's
-hands: glove-based, vision-based, and (most recently) WiFi-based.
-
-This review is divided into four sections. The first (Section \ref{overview})
-will provide an overview of the field and some important metrics which will be
-used to compare different works. The second (Section
-\ref{glove-based-gesture-recognition}) discusses glove-based gesture
-recognition, and contains the most detail as the subject of this thesis is a
-glove-based system for gesture recognition. The third section (Section
-\ref{vision--and-wifi-based-gesture-recognition}) will cover other means of
-gesture recognition that do not use a physical glove of some sort, namely
-vision-based and WiFi-based. The fourth section (Section
-\ref{applications-of-gesture-recognition}) will discuss how gesture recognition
-has been used over the decades and how that has affected its development.
-
-The topic of gesture recognition touches upon many diverse fields from the
-electromagnetic spectrum to computer science to anatomy. The relevant concepts
-will be given a brief explanation when they are first mentioned, but the reader
-is guided towards the Glossary of Terms (Section \ref{glossary-of-terms}) for a more
-thorough description.
-
 <!---
 TODO:
 - This lacks the alpha that some tikz diagrams will provide
+
+
+
+TODO: should also note that the vast majority of glove-based gesture
+recognition is very dumb "arm movements" and very little is as dexterous as
+Ergo
+
+
+TODO: Include some plot about the fidelity of the glove-based systems
 
 Notes from Trienko meeting:
 - Use the harvard referencing style
@@ -55,7 +42,29 @@ Notes from Trienko meeting:
   fidelity.
 --->
 
-## Overview
+This chapter reviews the literature as related to human hand gesture
+recognition. There are three primary methods of sensing the movement of a user's
+hands: glove-based, vision-based, and (most recently) WiFi-based.
+
+This review is divided into four sections. The first (Section \ref{overview})
+will provide an overview of the field and some important metrics which will be
+used to compare different works. The second (Section
+\ref{glove-based-gesture-recognition}) discusses glove-based gesture
+recognition, and contains the most detail as the subject of this thesis is a
+glove-based system for gesture recognition. The third section (Section
+\ref{sec:03-vision-and-wifi-based-gesture-recognition}) will cover other means of
+gesture recognition that do not use a physical glove of some sort, namely
+vision-based and WiFi-based. The fourth section (Section
+\ref{applications-of-gesture-recognition}) will discuss how gesture recognition
+has been used over the decades and how that has affected its development.
+
+The topic of gesture recognition touches upon many diverse fields from the
+electromagnetic spectrum to computer science to anatomy. The relevant concepts
+will be given a brief explanation when they are first mentioned, but the reader
+is guided towards the Glossary of Terms (Section \ref{glossary-of-terms}) for a more
+thorough description.
+
+# Overview
 
 Automatic gesture recognition has gone through several periods since the first
 attempts in the 1970s, however there are a few themes which have survived
@@ -164,12 +173,12 @@ is a valid gesture) drastically reduces the practicality of the developed
 model, as any real-world system would need some way to eliminate the portions
 of the dataset which do not contain any gestures.
 
-## Glove-based Gesture Recognition
+# Glove-based Gesture Recognition
 
 Glove-based gesture recognition can be defined as any gesture recognition
 system which gathers hand information using a device physically attached to the
 user's hands or upper arms. First the technologies used in building the gloves
-will be discussed (Subsection \ref{technologies-used}). Then an overview of the
+will be discussed (Subsection \ref{sec:03-technologies-used}). Then an overview of the
 seminal papers and larger surveys will be provided (Subsection
 \ref{landmark-papers}). The hardware products produced (and sometimes sold
 commercially) will be discussed in subsection \ref{hardware-products}. Datasets
@@ -178,7 +187,7 @@ Subsection \ref{datasets}. Finally, Subsection
 \ref{models-and-recognition-techniques} reviews the different models and
 recognition techniques used for glove-based gesture recognition.
 
-### Technologies Used
+## Technologies Used \label{sec:03-technologies-used}
 
 Different electronic and mechanical technologies have been used over the
 decades to instrument the movement of a user's hand or hands. The movement
@@ -258,7 +267,7 @@ forearm changed as the user's muscles moved their fingers.
 Wen \emph{et~al.} \cite{wenMachineLearningGlove2020} used triboelectric textile
 sensors to measure the stretch of a textile glove.
 
-### Landmark Papers
+## Landmark Papers
 
 The inaugural investigation into glove-based input was undertaken by Sturman
 and Zeltzer in 1994 \cite{sturmanSurveyGlovebasedInput1994} (following Sturman's
@@ -302,7 +311,7 @@ for glove-based systems
 \label{fig:03_based_on_over_time}
 \end{figure}
 
-### Hardware Products
+## Hardware Products
 
 Commercially available gloves which can measure the movement of a user's hands
 often result in research using those gloves, as the researchers capable of
@@ -337,7 +346,7 @@ CyberGlove by Immersion Inc \citep{immersioncorporationCyberGlove2001}. These gl
 were similar in nature, with some combination of flex sensors over the
 phalanges and accelerometers mounted on the back of the hands.
 
-The Utah/MIT Dexterous Hand \citep{jacobsenUTAHDextrousHand1984} and the associated
+The Utah/MIT Dexterous Hand \cite{jacobsenUTAHDextrousHand1984} and the associated
 Utah/MIT Dexterous HandMaster \citep{jacobsenDesignUtahDextrous1986} was a complex
 system that included both a controller which sensed the position of a human
 hand through a series of hall-effect sensors (the HandMaster) and a robotic
@@ -376,7 +385,7 @@ clustered EMG sensors which wrapped around the forearm of the user and could
 infer simple gestures, significantly surpassing the resolution of previous
 systems.
 
-### Datasets
+## Datasets
 
 There is a lack of commonly used datasets for glove-based systems due to the
 lack of commonly used hardware solutions. Some researchers have recently
@@ -394,7 +403,7 @@ researchers would not have to create the hardware themselves but would be able
 to focus on creating the classification models. This has already occurred in
 vision-based systems, where there now exist widely used datasets recorded on
 standard and easily available hardware (see subsection
-\ref{vision--and-wifi-based-gesture-recognition}).
+\ref{sec:03-vision-and-wifi-based-gesture-recognition}).
 
 While commercially available systems do exist, they are largely aimed
 at industrial applications and are generally too costly for exploratory
@@ -405,7 +414,7 @@ wide range of different applications. The SoapBox
 \citep{tuulariSoapBoxPlatformUbiquitous2002} was proposed as such a device, but it
 did not receive widespread adoption.
 
-### Models and Recognition Techniques
+## Models and Recognition Techniques
 
 \begin{figure}[!htb]
 \centering
@@ -433,7 +442,7 @@ Other popular systems have been Support Vector Machines (SVMs)
 Dynamic Time Warping (DTW) \footnote{\cite{aklNovelAccelerometerBasedGesture2011, hamdyaliComparativeStudyUser2014, liHandGestureRecognition2018, marasovicMotionBasedGestureRecognition2015, patilHandwritingRecognitionFree2016, sethujanakiRealTimeRecognition2013, wangUserindependentAccelerometerbasedGesture2013, wuGestureRecognition3D2009}}, and k-Nearest Neighbours (kNN)
 \footnote{\cite{alzubaidiNovelAssistiveGlove2023, hamdyaliComparativeStudyUser2014, kimBichannelSensorFusion2008, liHandGestureRecognition2018, sethujanakiRealTimeRecognition2013, wongMultiFeaturesCapacitiveHand2021, wuWearableSystemRecognizing2016}}.
 
-Neural Network based approaches first appeared with in 1922 when Murakami and
+Neural Network based approaches first appeared with in 1991 when Murakami and
 Taguchi \cite{murakamiGestureRecognitionUsing1991} used a recurrent neural network to
 classify a dataset of 42 classes. The recent increase in computational power
 has allowed neural networks and their variants to be fully utilised for
@@ -496,7 +505,7 @@ years.
 \label{fig:03_models_glove_based}
 \end{figure}
 
-## Vision- and WiFi-based Gesture Recognition
+# Vision- and WiFi-based Gesture Recognition \label{sec:03-vision-and-wifi-based-gesture-recognition}
 
 This section focuses on non-glove based gesture recognition, which resolves to
 just two categories: vision-based (using visible light and depth data), and
@@ -541,7 +550,7 @@ also reduce the barrier to entry, as researchers skilled in modelling but
 without the resources to collect a large amount of data can still contributed
 to the field.
 
-### Chronology of Non-glove-based Systems
+## Chronology of Non-glove-based Systems
 
 Vision based systems have been discussed since the 1980s
 \footnote{\cite{boltPutthatthereVoiceGesture1980, jenningsComputergraphicModelingAnalysis1988, myronw.kruegerArtificialRealityII1991}} but the first working system was Yamato
@@ -563,18 +572,25 @@ vision-based systems for many years \footnote{\cite{binhRealTimeHandTracking2005
 \end{figure}
 
 In 2011, Halperin \emph{et~al.} published a tool
-\citep{halperinToolReleaseGathering2011} which provided a detailed picture of the
-wireless channel conditions using CSI information. The release of this tool
+\citep{halperinToolReleaseGathering2011} which provided a detailed picture of
+the wireless channel conditions using CSI information. The release of this tool
 made apparent the level of detail available in CSI and how that information
 changes with changes to the environment. Adib and Katabi first applied the data
-available in CSI to recognise human gestures \citep{adibSeeWallsWiFi2013} and were
-followed by papers investigating many diverse applications such as breathing
-detection \footnote{\cite{liuWiSleepContactlessSleep2014, wangHumanRespirationDetection2016, wuNonInvasiveDetectionMoving2015}}, sign language recognition
-\citep{liWiFingerTalkYour2016}, fall detection \footnote{\cite{wangRTFallRealTimeContactless2017, wangWiFallDeviceFreeFall2017}}, distinguishing different people from one
-another based on their movement or gait \footnote{\cite{wangGaitRecognitionUsing2016, zengWiWhoWiFiBasedPerson2016, zhangWiFiIDHumanIdentification2016}}, keystroke
-and password inference \footnote{\cite{aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016, shenWiPassCSIbasedKeystroke2020}}, sleep detection
-\citep{liuWiSleepContactlessSleep2014}, speech recognition \citep{wangWeCanHear2014}, and
-the monitoring of vital signs \citep{liuTrackingVitalSigns2015}.
+available in CSI to recognise human gestures \citep{adibSeeWallsWiFi2013} and
+were followed by papers investigating many diverse applications such as
+breathing detection \footnote{\cite{liuWiSleepContactlessSleep2014,
+wangHumanRespirationDetection2016, wuNonInvasiveDetectionMoving2015}}, sign
+language recognition \citep{liWiFingerTalkYour2016}, fall detection
+\footnote{\cite{wangRTFallRealTimeContactless2017,
+wangWiFallDeviceFreeFall2017}}, distinguishing different people from one
+another based on their movement or gait \footnote{\cite{
+wangGaitRecognitionUsing2016, zengWiWhoWiFiBasedPerson2016,
+zhangWiFiIDHumanIdentification2016}}, keystroke and password inference
+\footnote{\cite{aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016,
+shenWiPassCSIbasedKeystroke2020}}, sleep detection
+\citep{liuWiSleepContactlessSleep2014}, speech recognition
+\citep{wangWeCanHear2014}, and the monitoring of vital signs
+\citep{liuTrackingVitalSigns2015}.
 
 The applications of vision-based gesture recognition have been less varied,
 with an emphasis on sign language \footnote{\cite{avolaExploitingRecurrentNeural2019, bhagatIndianSignLanguage2019, binhRealTimeHandTracking2005, bowdenLinguisticFeatureVector2004, bowdenVisionBasedInterpretation2003, chenHandGestureRecognition2003, elbadawyArabicSignLanguage2017, ghotkarDynamicHandGesture2016, hurrooSignLanguageRecognition2020, jiehuangSignLanguageRecognition2015, kadirMinimalTrainingLarge2004, liang3DConvolutionalNeural2018, ming-hsuanyangRecognizingHandGesture1999, nelIntegratedSignLanguage2013, sahooRealTimeHandGesture2022, sharmaASL3DCNNAmericanSign2021, starnerRealtimeAmericanSign1995, starnerRealtimeAmericanSign1998, starnerVisualRecognitionAmerican1995, zhangVisionbasedSignLanguage2004}}. Other applications have included
@@ -595,7 +611,7 @@ Convolutional Neural Networks (CNNs) were first used for gesture recognition in
 network based models have been used by many researchers for gesture recognition
 \footnote{\cite{funkeUsing3DConvolutional2019, hakimDynamicHandGesture2019, hurrooSignLanguageRecognition2020, jiehuangSignLanguageRecognition2015, kopukluRealtimeHandGesture2019, liuDynamicGestureRecognition2021, luOneshotLearningHand2019, mohammedDeepLearningBasedEndtoEnd2019, mujahidRealTimeHandGesture2021, sahooRealTimeHandGesture2022, sharmaASL3DCNNAmericanSign2021, urrehmanDynamicHandGesture2022, wuDeepDynamicNeural2016, zhangGestureRecognitionBased2020}}.
 
-## Applications of Gesture Recognition
+# Applications of Gesture Recognition
 
 \begin{figure}[!htb]
 \centering
@@ -641,77 +657,3 @@ require significant explanation. Similarly, The utility of using gestures from
 a sign language is not that they have semantic meaning, but rather that they
 are complex enough to be non-trivial and common enough that they do not require
 significant explanation.
-
-# Glossary of terms
-
-This section provides some useful terms regarding hand anatomy.
-
-## Anatomy of the hand
-
-The human hand contains 27 bones which are split into three regions: the 14
-_phalanges_ (three for each finger and two for the thumb), the 5 _metacarpal
-bones_ (the palm bones, each of which connect to a finger or the thumb), and
-the 8 _carpal bones_ (the wrist bones, which are arranged in two rows going
-across the wrist).
-
-The carpals connect to the bones of the arm: the _radius_ (which is closest to
-the thumb) and the _ulnar_ (which is closest to the little finger)
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.6\textwidth]{src/imgs/03_bones.png}
-\caption{Medical diagram of the bones of the hand.}
-\label{fig:}
-\end{figure}
-
-The joints between bones are, logically, named according the bones they
-connect:
-
-- _Carpometacarpal_ (CMC): Those joints connecting the carpal (wrist) bones to
-  the metacarpal (palm) bones.
-
-- _Metacarpophalangeal_ (MCP): Those joints connecting the metacarpal (palm)
-  bones to the palangeal (finger) bones.
-
-- _Interphalangeal_ (IP): Those joints between the phalangeal (finger) bones.
-  Due to the number of phalangeal bones, these are subdivided into the _distal
-  interphalangeal_ joints (DIP, closest to the fingertip) and the _proximal
-  interphalangeal_ joints (PIP, closest to the palm).
-
-In addition to the bones and joints, there are terms for each movement of the
-hand. These are named based on the direction of movement.
-
-"Splaying" movements:
-
-- _Abduction_: moving the fingers away from the middle finger ("splaying" the
-  fingers").
-- _Radial abduction_: moving the thumb towards the radius.
-- _Adduction_: moving the fingers towards the middle finger.
-- _Radial adduction_: moving the thumb towards the middle finger.
-
-"Closing/Opening" movements:
-
-- _Extension_: moving the fingers or thumb "outwards", "opening" the
-  fingers or thumb of the hand.
-- _Flexion_: moving the fingers or thumb "inwards", "closing" the
-  fingers or thumb of the hand.
-- _Palmar adduction_: moving the thumb towards the back of the palm.
-- _Palmar abduction_: moving the thumb "down" away from the palm.
-
-"Curving" movements:
-
-- _Retroposition_: Rotating the thumb to be in the same plane as the palm.
-- _Opposition_: Rotating the thumb to be directly above the metacarpal of the
-  index finger.
-- _Bending_: Curving the metacarpal bones of the palm towards each other.
-- _Flattening_: Flattening the metacarpal bones of the palm to be in the same
-  plane.
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.6\textwidth]{src/imgs/03_movements.png}
-\caption{Movements of the hand.}
-\label{fig:03_movements}
-\end{figure}
-
-# References
