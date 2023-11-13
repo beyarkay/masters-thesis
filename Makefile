@@ -15,11 +15,20 @@ pandoc:
 clean:
 	trash *.{aux,bbl,blg,brf,lof,log,lot,out,toc} **/*.{aux,bbl,blg,brf,lof,log,lot,out,toc} 2> /dev/null || true
 
-dev: pandoc clean
-	pdflatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary pdflatex files
+dev-edit: pandoc clean
+	xelatex -jobname=tmp main.tex # Create the auxiliary pdflatex files
 	bibtex tmp 2> /dev/null || true # Create the auxiliary bib files, ignore errors
-	pdflatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
-	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
+	xelatex -jobname=tmp main.tex # Add the bibliography to the end of the pdf
+	xelatex -jobname=tmp main.tex # Provide links from inline citations to bibliography
+	$(MAKE) clean
+	mv tmp.pdf main.pdf
+	echo "file://$$(pwd)/main.pdf"
+
+dev: pandoc clean
+	xelatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary pdflatex files
+	bibtex tmp 2> /dev/null || true # Create the auxiliary bib files, ignore errors
+	xelatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
+	xelatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
 	$(MAKE) clean
 	mv tmp.pdf main.pdf
 	echo "file://$$(pwd)/main.pdf"
