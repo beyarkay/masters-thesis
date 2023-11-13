@@ -12,7 +12,7 @@
 
 %==== Math setup =====================================================
 \usepackage{amsmath}%............................. Advanced math (before fonts)
-%\usepackage{amssymb}%............................ AMS Symbol fonts
+\usepackage{amssymb}%............................ AMS Symbol fonts
 
 %==== Font setup (default is Computer Modern) ========================
 \usepackage{iftex}
@@ -101,27 +101,21 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
-\usepackage{bm}
 \usepackage{booktabs}
-\usepackage{caption}
 \usepackage{flafter}
 \usepackage{framed}
-\usepackage{graphicx}
 \usepackage{listings}
-\usepackage{longtable}
 \usepackage{marginfix}
 \usepackage{multirow}
 \usepackage{pdfpages}
 \usepackage{pgfplots}
 \usepackage{rotating}
 \usepackage{sidenotes}
-\usepackage{siunitx}
 \usepackage{soul}
 \usepackage{subcaption}
 \usepackage{tabularray}
 \usepackage{tikz}
 \usepackage{wrapfig}
-\usepackage{xcolor}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -179,19 +173,19 @@
 \DeclarationDate{2023/12/01}
 \DeclarationPage
 
-% \include{tex/00_abstract}
-% \include{tex/00_acknowledgements}
+% \input{tex/00_abstract}
+% \input{tex/00_acknowledgements}
 \chapter*{Acknowledgements}
 
 % TODO
 Acknowledgements chapter has not been written % TODO
 
-% \include{tex/00_dedication}
+% \input{tex/00_dedication}
 \chapter*{Dedication}
 Dedication chapter has not been written % TODO
 % TODO
-% \include{chaps-front/chap-acknowledge}
-% \include{chaps-front/chap-dedication}
+% \input{chaps-front/chap-acknowledge}
+% \input{chaps-front/chap-dedication}
 
 % Use \chapter*{} before TOC
 \tableofcontents
@@ -208,31 +202,31 @@ Dedication chapter has not been written % TODO
 
 \chapter{Introduction}\label{chap:introduction}
 % src/01_introduction.md
-\include{tex/01_introduction}
+\input{tex/01_introduction}
 
 % src/02_background.md
 \chapter{Background}\label{chap:background}
-\include{tex/02_background}
+\input{tex/02_background}
 
 % src/03_lit_review.md
 \chapter{Literature Review}\label{chap:literature-review}
-\include{tex/03_lit_review}
+\input{tex/03_lit_review}
 
 % src/04_methodology.md
 \chapter{Methodology}\label{chap:methodology}
-\include{tex/04_methodology}
+\input{tex/04_methodology}
 
 % src/05_results.md
 \chapter{Results}\label{chap:results}
-\include{tex/05_results}
+\input{tex/05_results}
 
 % src/06_conclusion.md
 \chapter{Conclusion}\label{chap:conclusion}
-\include{tex/06_conclusion}
+\input{tex/06_conclusion}
 
 \appendix%------------------------------------------------------------
 % src/07_appendix.md
-\include{tex/07_appendix}
+\input{tex/07_appendix}
 
 \backmatter%----------------------------------------------------------
 
