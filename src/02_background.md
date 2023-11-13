@@ -1,29 +1,91 @@
-This chapter describes various concepts which _Ergo_ utilizes. The relevant
-background information includes different machine learning methods and autocorrect
-techniques.
+This chapter describes the mathematics behind the classification algorithms
+used by \emph{Ergo}, as well as providing some background to the problem at
+hand. Section \ref{sec:02-artificial-intelligence-and-machine-learning}
+provides a brief history of artificial intelligence, machine learning, and the
+nomenclature therein \footnote{ Hi professor, should I move my explanation about the different
+evaluation metrics (confusion matrices, $F_1$, precision, recall, basically
+section \ref{sec:04-evaluation-metrics}) to here instead?}
 
-Artificial Neural Networks (ANNs) have shown a lot of promise in a wide range
-of classification problems and are discussed in Section
-\ref{artificial-neural-networks}.
+Artificial Neural Networks (ANNs) have shown a lot of
+promise in a wide range of classification
+problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
+netoHighLevelProgramming2010, mehdiSignLanguageRecognition2002,
+jong-sungkimDynamicGestureRecognition1996,
+felsGloveTalkIIaNeuralnetworkInterface1998}} and are discussed in Section
+\ref{sec:02-artificial-neural-networks}. Hidden Markov Models have historically
+been used for problems similar to those which _Ergo_ seeks to
+solve\footnote{\citealt{galkaInertialMotionSensing2016,
+bevilacquaContinuousRealtimeGesture2010, xuzhangFrameworkHandGesture2011,
+wuGestureRecognition3D2009, zhangHandGestureRecognition2009,
+schlomerGestureRecognitionWii2008, mantyjarviEnablingFastEffortless2004,
+wengaoChineseSignLanguage2004, rung-hueiliangRealtimeContinuousGesture1998,
+liangSignLanguageRecognition1996}}, and thus they will be used to provide a
+comparison between candidate models and the prior work. They are discussed in
+Section \ref{sec:02-hidden-markov-models}. Support Vector Machines have been
+used with success for gesture recognition in prior
+work\footnote{\citealt{leeSmartWearableHand2018,
+wuWearableSystemRecognizing2016, wuGestureRecognition3D2009,
+kimBichannelSensorFusion2008}} and will be described in Section
+\ref{sec:02-support-vector-machines}. CuSum is a simple statistical technique
+used for online change detection in the distribution of a time series. It will
+be used as a baseline against which other models can be compared, and is
+discussed in Section \ref{sec:02-cumulative-sum}.
 
-Hidden Markov Models have historically been used for problems similar to those
-which _Ergo_ seeks to solve, and thus they will be used to provide a comparison
-between candidate models and the prior work. They are discussed in Section
-\ref{hidden-markov-models}.
+# Artificial Intelligence and Machine Learning \label{sec:02-artificial-intelligence-and-machine-learning}
 
-CuSum is a simple statistical technique used for online change detection in the
-distribution of a time series. It will be used as a baseline against which
-other models can be compared, and is discussed in Section \ref{cusum}.
+Artificial Intelligence (AI) refers to the development of non-human systems
+that can perform tasks typically requiring human intelligence. These non-human
+systems often refer to computer systems, although
+\cite{bostromEthicalIssuesAdvanced} notes that this is not necessarily
+required. The field was founded in 1956
+\citep{johnmccarthyProposalDartmouthSummer}. The field went through periods of
+optimism in the capabilities of AI, as well as subsequent periods of scepticism
+which are often referred to as the "AI winters".
 
-Autocorrect is a valuable aid to users operating a virtual keyboard where
-mistakes are common due to the nature of the interface, and so it is integrated
-into _Ergo_. Autocorrect methods are discussed in Section \ref{autocorrect}
+Arthur Samuel coined the term "machine learning" (ML) in his 1959 paper
+studying the popular board game of checkers
+\citep{samuelStudiesMachineLearning1959}. Machine learning is a subfield of AI,
+and renewed interest was shown in it after the development of deep learning
+with AlexNet in \citealp{krizhevskyImageNetClassificationDeep2012}. Machine
+learning has solved many problems once thought impossible, beating humans at
+games such as Chess\citep{campbellDeepBlue2002}, Go
+\citep{silverMasteringGameGo2016}, StarCraft
+II\citep{vinyalsGrandmasterLevelStarCraft2019}, and Dota 2
+\citep{openaiDotaLargeScale2019} as well as diverse tasks such as protein
+folding \citep{jumperHighlyAccurateProtein2021} and natural language processing
+\citep{openaiGPT4TechnicalReport2023}.
 
-# Artificial Neural Networks \label{sec:02_ffnn}
+A machine learning task can have varying levels of information about what the
+"correct" answer is. This is referred to as supervised or unsupervised machine
+learning. Supervised machine learning is where the model is provided with ideal
+output for a set of inputs and is required to learn the pattern connecting the
+inputs to the output. Unsupervised machine learning is where the model is not
+provided with any desired output, but is required to learn the structure in the
+data. Hybrid approaches ("semi-supervised") are also possible, which combine
+elements of supervised and unsupervised learning.
+
+Many supervised machine learning tasks can be divided into either a regression or a
+classification problem. A regression problem requires the estimation of a
+function that maps a set of input features $\bm{x}$ to a value $y$ where
+$y\in\mathbb{R}^p, p\in\mathbb{N}$. Classification problems require the
+estimation of a function that maps a set of input features $\bm{x}$ to a value
+$y$ where $y$ is an element of some finite set $A$.
+
+# Artificial Neural Networks \label{sec:02-artificial-neural-networks}
 
 Artificial Neural Networks (ANNs) are a form of machine learning that started
-with the development of the perceptron \citep{Rosenblatt1963PRINCIPLESON}, which
-itself was inspired by work done by \cite{McCulloch2021ALC}.
+with the development of the perceptron by
+\cite{whitePrinciplesNeurodynamicsPerceptrons1963}, which itself was inspired
+by work done by \cite{warrens.mccullochLogicalCalculusIdeas1944}. It was not until the
+backpropagation algorithm was introduced by
+\cite{rumelhartLearningRepresentationsBackpropagating1986} that multiple layers
+of perceptrons could be stacked and their weights efficiently trained. This
+renewed interest in neural networks as a field of research. Different means of
+arranging perceptrons to better solve different problems have been introduced,
+such as the Long Short-Term Memory network for sequence learning (introduced in
+\citealt{hochreiterLongShortTermMemory1997}) or the convolutional neural network
+for image processing (introduced in
+\citealt{lecunGradientbasedLearningApplied1998}).
 
 This section will first describe the perceptron in subsection
 \ref{perceptrons}. Then neural networks will be covered in subsection
@@ -59,7 +121,7 @@ $$
 $$
 
 Modern implementations of a perceptron have changed many aspects of
-Rosenblatt's initial description. The threshold was replaced with the
+Rosenblatt's initial description. Firstly, the threshold was replaced with the
 combination of a scalar bias $b$ term and a comparison with zero:
 
 $$
@@ -69,42 +131,47 @@ $$
     \end{cases}
 $$
 
-Instead of a comparison to zero and restricting the output to a binary 1 or 0,
-a scaling function $\sigma: \mathbb{R} \to (0, 1)$ is used which restricts the
-range of the output:
+Finally, instead of a comparison to zero and restricting the output to a binary
+1 or 0, a scaling or _activation_ function $\sigma$ is used. The purpose of
+this $\sigma$ is to introduce a non-linearity such that the sequential linear
+operations of multiplying each $x_i$ by a weight $w_i$ and adding a bias $b$ do
+not collapse into one linear operation. This function is applied to the result
+of the linear transformation like so:
 
 $$
     \text{output} = \sigma \left( \ b + \sum_i w_i x_i \right)
 $$
 
-This function is called the activation function, and there have been several
-different functions mapping to several different domains have been proposed.
-The first was the sigmoid (or logistic) activation function (see Figure
-\ref{fig:02_sigmoid}):
+Several different activation functions (each mapping to several different
+domains) have been proposed, such as tanh
+\citep{rumelhartLearningRepresentationsBackpropagating1986} and ReLU
+\citep{nairRectifiedLinearUnits2010}. The first was the sigmoid activation
+function (see Figure \ref{fig:02_sigmoid}) which is derived from the logistic
+function:
 
 <!-- prettier-ignore-start -->
-\begin{figure}[!htb]
-\centering
-\begin{tikzpicture}
-    \begin{axis}[
-        title = {Sigmoid function $\sigma(x) = \frac{1}{1 + e^{-x}}$},
-        axis on top = true,
-        axis x line = bottom,
-        axis y line = left,
-        grid = major,
-        xlabel = $x$,
-        ylabel = $\sigma(x)$
-    ]
-        \addplot[
-            blue,
-            domain = -10:10,
-            samples = 100
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            title = {Sigmoid function $\sigma(x) = \frac{1}{1 + e^{-x}}$},
+            axis on top = true,
+            axis x line = bottom,
+            axis y line = left,
+            grid = major,
+            xlabel = $x$,
+            ylabel = $\sigma(x)$
         ]
-            {1/(1+exp(-x))};
-    \end{axis}
-\end{tikzpicture}
-\caption{The sigmoid activation function.}
-\label{fig:02_sigmoid}
+            \addplot[
+                blue,
+                domain = -10:10,
+                samples = 100
+            ]
+                {1/(1+exp(-x))};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{The sigmoid activation function.}
+    \label{fig:02_sigmoid}
 \end{figure}
 <!-- prettier-ignore-end -->
 
@@ -125,17 +192,13 @@ Figure \ref{fig:02_nn}).
 <!-- prettier-ignore-start -->
 \begin{figure}
     \centering
-    \label{fig:02_nn}
     \begin{tikzpicture}
         % Number of input neurons
         \newcommand{\inputnum}{3}
-
         % Number of neurons in the hidden layer
         \newcommand{\hiddennum}{5}
-
         % Number of output neurons
         \newcommand{\outputnum}{2}
-
         % Input Layer
         \foreach \i in {1,...,\inputnum} {
             \node[
@@ -144,7 +207,6 @@ Figure \ref{fig:02_nn}).
                 draw=black
             ] (Input-\i) at (0,-\i) {};
         }
-
         % Hidden Layer
         \foreach \i in {1,...,\hiddennum} {
             \node[
@@ -154,7 +216,6 @@ Figure \ref{fig:02_nn}).
                 yshift=(\hiddennum-\inputnum)*5 mm
             ] (Hidden-\i) at (2.5,-\i) {};
         }
-
         % Output Layer
         \foreach \i in {1,...,\outputnum} {
             \node[
@@ -164,27 +225,23 @@ Figure \ref{fig:02_nn}).
                 yshift=(\outputnum-\inputnum)*5 mm
             ] (Output-\i) at (5,-\i) {};
         }
-
         % Connect neurons In-Hidden
         \foreach \i in {1,...,\inputnum} {
             \foreach \j in {1,...,\hiddennum} {
                 \draw[->, shorten >=1pt] (Input-\i) -- (Hidden-\j);
             }
         }
-
         % Connect neurons Hidden-Out
         \foreach \i in {1,...,\hiddennum} {
             \foreach \j in {1,...,\outputnum} {
                 \draw[->, shorten >=1pt] (Hidden-\i) -- (Output-\j);
             }
         }
-
         % Inputs
         \foreach \i in {1,...,\inputnum} {
             \draw[<-, shorten <=1pt] (Input-\i) -- ++(-1,0)
             node[left]{$x_{\i}$};
         }
-
         % Outputs
         \foreach \i in {1,...,\outputnum} {
             \draw[->, shorten <=1pt] (Output-\i) -- ++(1,0)
@@ -193,6 +250,7 @@ Figure \ref{fig:02_nn}).
     \end{tikzpicture}
     \caption{A neural network with three input neurons, five hidden neurons,
     and two output neurons}
+    \label{fig:02_nn}
 \end{figure}
 <!-- prettier-ignore-end -->
 
@@ -217,22 +275,25 @@ expected output $\bm{y}$? Gradient descent solves this question by efficiently
 calculating how to change the weights and biases so as to decrease the
 difference between $\hat{\bm{y}}$ and $\bm{y}$.
 
-To achieve this, a cost function is defined that gradient descent will minimise:
+To achieve this, a cost function is defined that gradient descent will
+minimise. This cost function is the mean squared error:
 
 $$
-    C(w, b) = \frac{1}{2n} \sum_x || \bm{y} - \hat{\bm{y}}(w, b, x) ||^2
+    C(\bm{w}, \bm{b}, \bm{x}) = \frac{1}{2n} \sum_{i=1}^n || \bm{y} - \hat{\bm{y}}(\bm{w}, \bm{b}, x_i) ||^2
 $$
 
-Where $w$ are the weights of the network, $b$ the biases, $x$ the input data,
-and $n$ the number of observations. This particular cost function is known as
-the mean squared error, although other cost functions can be used.
+The weights of the network are $\bm{w}$, the biases are $\bm{b}$, the input data is
+$\bm{x}$, and the number of observations is $n$. This particular cost function
+is known as the mean squared error, although other cost functions can be used.
 
-Gradient descent can be intuitively understood as evaluating $C(w, b)$ at some
-initial $(w, b)$ and then calculating the derivative of $C(w,b)$ at that point.
-The derivative will provide information about how to apply a small nudge to
-$(w, b)$ so that $C(w, b)$ will decrease. Iteratively applying this approach
-will cause the cost function to decrease to a local minimum. There is no
-guarantee that gradient descent will find a global minimum.
+Gradient descent can be intuitively understood as evaluating $C(\bm{w},
+\bm{b})$ at some initial $(\bm{w}, \bm{b})$ and then calculating the gradient
+of $C(\bm{w}, \bm{b})$ at that point. The gradient will provide information
+about how to apply a small nudge to $(\bm{w}, \bm{b})$ so that $C(\bm{w},
+\bm{b})$ will decrease. This direction is the negative of the gradient.
+Iteratively applying this approach will cause the cost function to decrease to
+a local minimum. There is no guarantee that gradient descent will find a global
+minimum.
 
 To control the amount by which we nudge the weights and biases, we define the
 _learning rate_ to be a scalar hyperparameter $\eta$. Larger learning rates
@@ -262,21 +323,30 @@ respect to any weight $w_{jk}^l$ or bias $b_j^l$. The calculation of this
 gradient is done by backpropogation, the subject of the next subsection.
 
 Gradient descent can be made more efficient via Stochastic Gradient Descent
-(SGD), which batches the data into subsets and only changes the weights and
-biases based on the average gradient over the observations in each batch.
+(SGD, introduced by \citealt{rosenblattPerceptronProbabilisticModel1958}),
+which batches the data into subsets and only changes the weights and biases
+based on the average gradient over the observations in each batch.
 
 Optimisation algorithms other than SGD are more commonly used in practical
-machine learning: AdaGrad \citep{@Duchi2011AdaptiveSM} is performant on sparse
-gradients, RMSProp \citep{@RMSProp} works well in non-stationary settings, and Adam
-\citep{@Kingma2014AdamAM} provides good performance with little tuning.
+machine learning: AdaGrad \citep{duchiOnlineLearningStochastic} is performant
+on sparse gradients, RMSProp \citep{geoffreyhintonCourseraNeuralNetworks2012}
+works well in non-stationary settings, and Adam
+\citep{kingmaAdamMethodStochastic2014} provides good performance with little
+tuning.
 
 ## Backpropogation
 
 Backpropogation is the process of efficiently calculating the gradient of the
-cost function $C(w, b)$ with respect to any weight or bias in the network. It
-derives from the method of reverse mode automatic differentiation for networks
-of differentiable functions introduced by @Leppo1970 and was popularised for
-deep learning applications bby @Rumelhart1986LearningRB.
+cost function $C(\bm{w}, \bm{b})$ with respect to any weight or bias in the
+network. It derives from the method of reverse mode automatic differentiation
+for networks of differentiable functions introduced by
+\cite{linnainmaaAlgoritminKumulatiivinenPyoristysvirhe1970} (published in
+English as \citealt{linnainmaaTaylorExpansionAccumulated1976}).
+\cite{werbosRegressionNewTools1974} laid the theoretical foundation for
+backpropagation based on Linnainmaa's work.
+\cite{rumelhartLearningRepresentationsBackpropagating1986} demonstrated the
+practical applications of backpropogation for training artificial neural
+networks.
 
 For notation, $a_j^l$ will refer to the output of the $j$th neuron in the $l$th
 layer, and $L$ be the last layer of the network, such that $a^L$ is the output
@@ -288,14 +358,15 @@ $$
     a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right)
 $$
 
-By defining a matrix of weights $w^l$, a vector of biases $b^l$, and a vector
-of activations $a^l$, we can rewrite the above equation in matrix notation as
+By defining a matrix of weights $\bm{w}^l$, a vector of biases $\bm{b}^l$, and a vector
+of activations $\bm{a}^l$, we can rewrite the above equation in matrix notation as
 
 $$
-    a^{l} = \sigma\left( w^{l} a^{l-1} + b^l \right).
+    \bm{a}^{l} = \sigma\left( \bm{w}^{l} \bm{a}^{l-1} + \bm{b}^l \right).
 $$
 
-We will also define an intermediate quantity $z^l = w^{l} a^{l-1} + b^l$.
+We will also define an intermediate quantity, named the pre-activation, as
+$\bm{z}^l = \bm{w}^{l} \bm{a}^{l-1} + \bm{b}^l$.
 
 Using the chain rule, the partial derivative of the cost function with respect
 to an arbitrary weight $w_{jk}^l$ is expanded to include $z_j^l$
@@ -348,6 +419,8 @@ Note that all terms in the expression $\frac{\partial C}{\partial a_j^L}
 depend on the cost function, but for the mean squared error cost function it is
 simply $a^L_j - y_j$:
 
+<!-- TODO: Explain why this cost function differs from the previous C(w,b) -->
+
 <!-- prettier-ignore-start -->
 \begin{align*}
     \frac{\partial C}{\partial a_j^L} &= \frac{\partial }{\partial a_j^L}
@@ -364,10 +437,8 @@ change. For the sigmoid activation function, the derivative is $\sigma(x) (1 -
 \begin{align*}
 \sigma'(x) &= \frac{d}{dx} \left( 1 + \mathrm{e}^{-x} \right)^{-1} \\
     &= \frac{e^{-x}}{\left(1 + e^{-x}\right)^2} \\
-    &= \frac{1}{1 + e^{-x}\ } \cdot \frac{e^{-x}}{1 + e^{-x}}  \\
     &= \sigma(x) \cdot \frac{(1 + e^{-x}) - 1}{1 + e^{-x}}  \\
     &= \sigma(x) \cdot \left( \frac{1 + e^{-x}}{1 + e^{-x}} - \frac{1}{1 + e^{-x}} \right) \\
-    &= \sigma(x) \cdot \left( 1 - \frac{1}{1 + e^{-x}} \right) \\
     &= \sigma(x) (1 - \sigma(x))
 \end{align*}
 <!-- prettier-ignore-end -->
@@ -390,16 +461,15 @@ result:
         &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \frac{\partial}{\partial z_j^l} \left[
         \sum_k w_{ik}^{l+1} \sigma(z_k^l) + b_i^{l+1}
         \right] \\
-\intertext{
-    Note that the partial derivative of the sum over $k$
-    ($\frac{\partial}{\partial z_j^l} \sum_k$) is all zeros except where $j=k$
-}
         &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \left[
         0 + \ldots + w_{ij}^{l+1} \sigma'(z_j^l) + \ldots + 0
         \right] \\
         &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} w_{ij}^{l+1} \sigma'(z_j^l)
 \end{align*}
 <!-- prettier-ignore-end -->
+
+Note that the partial derivative of the sum over $k$ ($\frac{\partial}{\partial
+z_j^l} \sum_k$) is all zeros except where $j=k$.
 
 This shows that the partial derivative of each layer $\frac{\partial
 C}{\partial z_j^l}$ is a function of the partial derivative of the next layer
@@ -455,7 +525,7 @@ Backpropogation then proceeds as follows
 \end{align*}
 <!-- prettier-ignore-end -->
 
-This completes one iteration of the gradient descent algorithm. Multiple
+This completes one iteration of the backpropogation algorithm. Multiple
 iterations over a large dataset of observations are required in practice for an
 ANN to accurately match some target function.
 
@@ -484,17 +554,19 @@ So a neuron with low activation in layer $l-1$ will result in all weights in
 the next layer $l$ being updated by some very small amount. This decreases how
 quickly the ANN can learn since the weights are only being updated by some
 small amount. This effect is called the vanishing gradient problem, and was
-first identified by @Hochreiter2001GradientFI.
+first identified by \cite{hochreiterGradientFlowRecurrent2001}.
 
 There have been multiple proposed solutions to the vanishing gradient problem,
 such as using a different activation function like ReLU
-[@Hahnloser2000DigitalSA] or re-centering and re-scaling each layer's inputs
-through a process called Batch Normalization [@Ioffe2015BatchNA].
+\cite{nairRectifiedLinearUnits2010} or re-centering and re-scaling each layer's
+inputs through a process called Batch Normalization
+\citep{ioffeBatchNormalizationAccelerating2015}.
 
 ## Cross entropy loss
 
 For multi-class classification problems such as _Ergo_, categorical
-cross-entropy is commonly used as the loss function [@Neal2007PatternRA]:
+cross-entropy is commonly used as the loss function
+\citep{nealPatternRecognitionMachine2007}:
 
 $$
     H(p, q) = - \sum_i p_i \log q_i
@@ -518,14 +590,52 @@ infinity.
 
 Note that if the true class is 0, the loss is zero.
 
-# Hidden Markov Models \label{sec:02_hmm}
+## L2 Normalisation
+
+L2 normalisation is a regularisation technique used to improve the
+generalisation capabilities of artificial neural networks by penalising large
+weights and biases in their network. This technique defines a new cost function
+$C'$ which is used instead of the ANN's regular cost function $C$ as follows:
+
+$$
+    C'(\bm{w}, \bm{b}, \bm{x}) = C'(\bm{w}, \bm{b}, \bm{x}) + l \sum_w w^2 + l \sum_b b^2
+$$
+
+$l$ is a hyperparameter which controls the amount of regularisation to apply to
+the model. Lower values of $l$ will result in less regularisation being
+applied, leading to a model that is more likely to overfit on the training data
+and perform worse on unseen data. It can also help ensure the magnitude of the
+weights and biases do not become too large during training, which could lead to
+numerical instability.
+
+## Dropout Regularisation
+
+Dropout \citep{srivastavaDropoutSimpleWay2014} is another regularisation
+technique used while training a neural network in order to help prevent
+overfitting. Dropout will set the activation of a random subset of neurons to
+zero during training. The fractions of neurons set to zero is controlled by a
+hyperparameter, the dropout rate. Setting randomly selected neurons to zero
+prevents the neural network from relying too heavily on specific neurons,
+making it more robust to variations in the input data. Dropout can also be
+viewed as training a large ensemble of neural networks which all share
+different portions of the same weights, biases, and architecture.
+
+When the model is performing inference, the output of each neuron is scaled by
+the dropout rate so that the sum of the activations for a given layer remains
+consistent. During training, the neurons whose activations were not dropped out
+have their activation scaled up by $\frac{1}{1-r}$ (where $r$ is the dropout
+rate) to account for the fact that $1-r$ fraction of neurons are active on
+average.
+
+# Hidden Markov Models \label{sec:02-hidden-markov-models}
 
 Hidden Markov Models (HMMs) are a form of machine learning often used to model
 a series of observations over time. HMMs were initially proposed by
-\cite{Baum1966HMMs} in a series of statistical papers with other authors in the late
-1960s. In the late 1980s, they became commonplace for sequence analysis
-\citep{@Bishop1986MaximumLA}, specifically in the field of bioinformatics
-\citep{@Durbin1998BiologicalSA}.
+\cite{baumStatisticalInferenceProbabilistic1966} in a series of statistical
+papers with other authors in the late 1960s. In the late 1980s, they became
+commonplace for sequence analysis \citep{bishopMaximumLikelihoodAlignment1986},
+specifically in the field of bioinformatics
+\citep{durbinBiologicalSequenceAnalysis1998}.
 
 Markov Models provide a formalism for reasoning about states and state
 transitions over time. HMMs then expand on Markov Models so that they can be
@@ -542,16 +652,17 @@ a foundation, and then HMMs will be discussed in section
 Many problems can be simplified to a sequence of events happening over time.
 Let us simplify further, and require that
 
-1. Time occurs in discrete timesteps $t \in \{1, 2, 3, \ldots\}$.
-2. The events are discrete and taken from a set of possible states $S = \{s_1,
-   s_2, \ldots, s_{|S|}\}$.
-3. Only one event (notated as $z_t$) can happen at each timestep.
+1. Time occurs in discrete timesteps $t \in \{1, 2, 3, \ldots\}$, and one
+   "event" happens at each time step.
+2. Events are notated as $z_1, z_2, \ldots$.
+3. Each event is an element from a set of possible states $S = \{s_1, s_2,
+   \ldots, s_{|S|}\}$ such that $z_i \in S\,\forall i = 1, 2, \ldots$
 
-We then have a sequence of events $\{z_1, z_2, z_3, \ldots\}$ where each $z_t
-\in S$ describes what happened at timestep $t$. As it stands, the state at a
-point in time could be the result of any number of variables, including all
-prior states of the system $z_1, z_2, \ldots, z_{t-1}$. We will impose two
-assumptions which will allow us to reason mathematically about our model.
+We then have a sequence of events $\{z_1, z_2, \ldots\}$ where each $z_t \in S$
+describes what happened at timestep $t$. As it stands, the state at a point in
+time could be the result of any number of variables, including all prior states
+of the system $z_1, z_2, \ldots, z_{t-1}$. We will impose two assumptions which
+will allow us to reason mathematically about our model.
 
 1. The _Limited Horizon Assumption_ is that the state of the system at time $t$
    depends only on the state of the system at time $t-1$. Formally, the
@@ -582,20 +693,24 @@ probability distribution of $z_1$ given the initial observation $z_0$: $\pr(z_1
 
 Now that we have the assumptions and conventions in place, we need some way to
 represent how the model can transition from one state to the next. Our
-assumptions allow us to encode this as a state transition matrix $A \in
-\mathbb{R}^{(|S| + 1) \times (|S| + 1)}$ where the rows of $A$ represent the
-state we transition from and the columns of $A$ represent the state we
+assumptions allow us to encode this as a state transition matrix $\bm{A} \in
+\mathbb{R}^{(|S| + 1) \times (|S| + 1)}$ where the rows of $\bm{A}$ represent the
+state we transition from and the columns of $\bm{A}$ represent the state we
 transition to. For example, the scalar value $A_{ij}$ is the probability that
 we transition from state $i$ to state $j$.
 
 Note that because of the stationary process assumption, $A_{ij}$ is the same
 for the first time step as it is for any other time step.
 
-A completely hypothetical transition matrix describing an undergraduate's
-understanding of x86 Assembly might look like:
+$\bm{A}$ completely hypothetical transition matrix describing an undergraduate's
+understanding of x86 Assembly\footnote{
+x86 Assembly is a low-level programming language designed for x86-based
+processors, and is commonly taught in undergraduate Computer Science
+courses.
+} might look like:
 
 $$
-    A = \begin{matrix}
+    \bm{A} = \begin{matrix}
                             & s_0  & s_{\text{No knowledge}} & s_{\text{Fear}} & s_{\text{Competence}} &  s_{\text{Mastery}} \\
     s_0                     & 0.00 & 0.99                    & 0.01            & 0.00                  & 0.00                \\
     s_{\text{No knowledge}} & 0.00 & 0.80                    & 0.15            & 0.05                  & 0.00                \\
@@ -605,56 +720,79 @@ $$
     \end{matrix}
 $$
 
-Where we can see that undergraduates typically start out in the state of No
-knowledge (with probability 99%) but a few of them start out in the state of
-Fear (with probability 1%). The only way to transition into the state of
-Mastery is from either the state of Competence (at 5% probability) or by having
-already been in the state of Mastery (65% probability). Once they have
+As $s_0$ encodes the initial state, we can look at the $s_0$ row to see that
+undergraduates typically start out in the state of No knowledge (with
+probability 99%) but a few of them start out in the state of Fear (with
+probability 1%).
+
+The means by which a student could transition into the state of Mastery can be
+seen by looking at the $s_{\text{Mastery}}$ column. They can enter the Mastery
+state either by having already been in the state of Mastery (65% probability)
+or from the state of Competence (at 5% probability). Once they have
 transitioned out of the state of No knowledge, there is no way to go back to
-the state of No knowledge (as represented by the 0.00s in the No knowledge
-column).
+the state of No knowledge (as represented by the 0.00s in the $s_{\text{No
+knowledge}}$ column).
 
 ### From transition matrix to state sequence
 
-Given a transition matrix $A$ and a Markov Model, one might ask what the
+Given a transition matrix $\bm{A}$ and a Markov Model, one might ask what the
 probability of a specific sequence of states is. We will prove that it is
 simply the product of the corresponding probabilities in the transition matrix
-$A$.
+$\bm{A}$.
 
-Given a series of states $z_1, z_2, \ldots z_t$ we can calculate it's
-probability through the chain rule of probability which states that the
-probability of two events is the same as the product of the probability of each
-event if and only if the two events are independent:
+We can calculate the probability of a series of states $z_1, z_2, \ldots z_t$
+occurring through the chain rule of probability
 
 $$
-    \pr(A \cap B) = \pr (A) \cdot \pr(B) \iff A \indep B
+    \pr(A \cap B) = \pr (B|A) \cdot \pr(B),
+$$
+
+Where:
+
+- $\pr(X)$ is the probability that some event $X$ will occur
+- $\pr(X | Y)$ is the conditional probability of $X$ occurring, given that $Y$
+  has occurred
+- $X \cap Y$ represents the event where both $X$ and $Y$ occur
+
+Two events are said to be _independent_ if the probability distribution of the
+one is not effected by the probability distribution of the other, and the
+independence of $X$ and $Y$ is notated as $X \indep Y$. If $A$ and $B$ are
+independent, then the probability of $B$ does not depend on the probability of
+$A$, which means that $\pr(B|A) = \pr(B)$. This gives us the definition of
+independence of two events from the chain rule of probability:
+
+$$
+    A \indep B \iff \pr(A \cap B) = \pr (A) \cdot \pr(B).
 $$
 
 From this, we write a statement for the probability of every $z_t, z_{t-1},
-\ldots, z_1$ occurring given some transition matrix $A$:
+\ldots, z_1$ occurring given some transition matrix $\bm{A}$, given that the
+initial state $s_0$ takes on the initial observation $z_0$ with probability 1:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 | A)
-    &= \pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 \cap z_0 | A) \\
-\intertext{Expand out the union of events}
-    &= \pr (z_t | z_{t-1} \cap \ldots \cap z_0 \cap A)
-        \cdot \pr (z_{t-1} | z_{t-2} \cap \ldots \cap z_0 \cap A)
+    &\pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 | \bm{A})
+    = \pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 \cap z_0 | \bm{A}) \\
+\intertext{Expand out the union of events using the chain rule of probability}
+    &= \pr (z_t | z_{t-1} \cap \ldots \cap z_0 \cap \bm{A})
+        \cdot \pr (z_{t-1} | z_{t-2} \cap \ldots \cap z_0 \cap \bm{A})
         \cdot \ldots
-        \cdot \pr (z_1 | z_0 \cap A) \\
+        \cdot \pr (z_1 | z_0 \cap \bm{A}) \\
 \intertext{Use the limited horizon assumption}
-    &= \pr (z_t | z_{t-1} \cap A)
-        \cdot \pr (z_{t-1} | z_{t-2} \cap A)
+    &= \pr (z_t | z_{t-1} \cap \bm{A})
+        \cdot \pr (z_{t-1} | z_{t-2} \cap \bm{A})
         \cdot \ldots
-        \cdot \pr (z_1 | z_0 \cap A) \\
+        \cdot \pr (z_1 | z_0 \cap \bm{A}) \\
 \intertext{Rewrite using $\prod$-notation}
-    &= \prod_{t=1}^{T} \pr (z_t | z_{t-1} \cap A) \\
-\intertext{Express the probabilities using the transition matrix $A$}
-    &= \prod_{t=1}^{T} A_{z_{t-1}},{z_t} \\
+    &= \prod_{t=1}^{T} \pr (z_t | z_{t-1} \cap \bm{A}) \\
+\intertext{Express the probabilities using the transition matrix $\bm{A}$,
+recalling that $A_{ij}$ is the probability of a transition from state $i$ to
+state $j$}
+    &= \prod_{t=1}^{T} A_{z_{t-1},{z_t}}. \\
 \end{align*}
 <!-- prettier-ignore-end -->
 
-Which indicates that the probability of a sequence of states is simply the
+This indicates that the probability of a sequence of states is simply the
 product of the transitions between those states.
 
 For example, we can calculate the probability of an undergraduate student
@@ -665,36 +803,36 @@ then being competent, and finally achieving mastery:
 \begin{align*}
     &\pr(s_0 \to s_{\text{No knowledge}} \to s_{\text{Fear}} \to s_{\text{Competence}} \to s_{\text{Mastery}}) \\
     &= 0.99 \times 0.15 \times 0.2 \times 0.05\\
-    &= 0.001485 \\
+    &= 0.001485. \\
 \end{align*}
 <!-- prettier-ignore-end -->
 
-Which should approximately align with intuition.
+This result should approximately align with intuition.
 
 ### From state sequence to transition matrix
 
 Another question one might ask of a Markov model is: given a sequence of states
 ($\bm{z} = \{z_0, z_1, z_2, \ldots, z_t\}$) which we know to have occurred,
-what transition matrix $A$ is most likely to have caused them? More precisely,
-we would seek to find the parameters $A$ which maximise the log-likelihood of a
+what transition matrix $\bm{A}$ is most likely to have caused them? More precisely,
+we would seek to find the parameters $\bm{A}$ which maximise the log-likelihood of a
 given sequence of observations.
 
-Likelihood can be seen as an "inverse" of probability. Probability describes
-the chances of some outcome $\bm{z}$ given some known parameters $A$:
+Intuitively, likelihood can be seen as an opposite of probability. Probability
+describes the chances of some outcome $\bm{z}$ given that the model used to
+describe the generation of outcomes is dependent on some known parameters
+$\bm{A}$. Likelihood describes the chance of a model used to describe the
+generation of outcomes being dependent of some particular set of _parameters_,
+given that some outcome has been observed.
 
-$$
-    \text{Probability:} \, \pr (\bm{z} | A)
-$$
-
-But likelihood describes the chances of some _parameters_ given some known
-_outcomes_:
-
-$$
-    \text{Likelihood:} \,\pr (A | \bm{z})
-$$
+<!-- prettier-ignore-start -->
+\begin{align*}
+    \text{Probability:}& \, \pr (\bm{z} | \bm{A}) \\
+    \text{Likelihood:} & \,\pr (\bm{A} | \bm{z}) \\
+\end{align*}
+<!-- prettier-ignore-end -->
 
 Maximum likelihood estimation is then the process of discovering which
-parameters $A$ result in the maximal likelihood given some observations
+parameters $\bm{A}$ result in the maximal likelihood given some observations
 $\bm{z}$.
 
 Practically, it is often more useful to work with the log-likelihood (notated
@@ -705,32 +843,34 @@ We will define the log-likelihood of a Markov model as:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    l(A) &= \log \pr (\bm{z} | A) \\
-    l(A) &= \log \pr (z_0, z_1, z_2, \ldots, z_t | A) \\
+    l(\bm{A}) &= \log \pr (\bm{z} | \bm{A}) \\
+    l(\bm{A}) &= \log \pr (z_0, z_1, z_2, \ldots, z_t | \bm{A}) \\
     &= \log \left( \prod_{t=1}^T A_{z_{t-1},z_t}\right) \\
     &= \sum_{t=1}^T \log  \left( A_{z_{t-1},z_t} \right)\\
-    &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \log  \left( A_{ij} \right)\\
+    &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right)\\
 \end{align*}
 <!-- prettier-ignore-end -->
 
-Where $[z_{t-1} = s_i \wedge z_t = s_j]$ is Iverson notation
-[@Knuth1992TwoNO] defined as:
+Where $[z_{t-1} = s_i \cap z_t = s_j]$ is Iverson notation
+\citep{knuthTwoNotesNotation1992}, defined as:
 
-$$
+<!-- prettier-ignore-start -->
+\begin{equation*}
     [\text{condition}] = \begin{cases}
         1 & \text{if condition is true}\\
         0 & \text{if condition is false}\\
     \end{cases}
-$$
+\end{equation*}
+<!-- prettier-ignore-end -->
 
-When solving this optimisation problem, we need to enforce that $A$ is still a
+When solving this optimisation problem, we need to enforce that $\bm{A}$ is still a
 valid transition matrix (which requires that all elements are non-negative and
 the rows all sum to 1). This can be done with the method of Lagrange
 multipliers. We will define the problem to be:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-     \max_A l(A) \quad & \\
+     \max_A l(\bm{A}) \quad & \\
     \text{such that:}\quad & \sum_{j=1}^{|S|} A_{ij} = 1,\quad i \in \{1,2, \ldots |S|\}\\
     & A_{ij} \ge 0,\quad i,j \in \{1,2, \ldots |S|\}\\
 \end{align*}
@@ -743,8 +883,8 @@ and so there is no need to explicitly introduce the inequality constraint.
 The Lagrangian can therefore be constructed as:
 
 $$
-    \mathcal{L}(A, \alpha) =
-        \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \log  \left( A_{ij} \right)
+    \mathcal{L}(\bm{A}, \alpha) =
+        \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right)
         + \sum_{i=1}^{|S|} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right)
 $$
 
@@ -753,14 +893,14 @@ zero, we get:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \frac{\partial \mathcal{L}(A, \alpha)}{\partial A_{ij}}
+    \frac{\partial \mathcal{L}(\bm{A}, \alpha)}{\partial A_{ij}}
         &=
-        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \log  \left( A_{ij} \right) \right)
+        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right) \right)
         + \frac{\partial}{\partial A_{ij}} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right)\\
      &\Rightarrow\\
-      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] - \alpha_i \\
-     \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
-     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
+      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] - \alpha_i \\
+     \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
 \end{align*}
 <!-- prettier-ignore-end -->
 
@@ -769,12 +909,12 @@ $\alpha$ equal to zero:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \frac{\partial \mathcal{L}(A, \beta)}{\partial \alpha_i}
+    \frac{\partial \mathcal{L}(\bm{A}, \beta)}{\partial \alpha_i}
      &= 1 - \sum_{j=1}^{|S|} A_{ij} \\
      &\Rightarrow\\
-    0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
-    1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
-    \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
+    0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+    1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+    \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
              &= \sum_{t=1}^T [z_{t-1} = s_i] \\
 \end{align*}
 <!-- prettier-ignore-end -->
@@ -785,19 +925,23 @@ term $\hat{A}_{ij}$:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
-    \hat{A}_{ij}  &= \frac{1}{\sum_{t=1}^T [z_{t-1} = s_i]} \sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j] \\
-    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [z_{t-1} = s_i \wedge z_t = s_j]}{\sum_{t=1}^T [z_{t-1} = s_i]}  \\
+     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+    \hat{A}_{ij}  &= \frac{1}{\sum_{t=1}^T [z_{t-1} = s_i]} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]}{\sum_{t=1}^T [z_{t-1} = s_i]}  \\
 \end{align*}
 <!-- prettier-ignore-end -->
 
 This expression for $\hat{A}_{ij}$ encodes the intuitive explanation that the
-maximum likelihood of transitioning from state $i$ to state $j$ is just
+maximum likelihood of transitioning from state $i$ to state $j$ is just the
 fraction of times that we were in state $i$ and then transitioned to state $j$.
 
 $$
     \text{Intuitively: } \quad \hat{A}_{ij}  = \frac{\text{\# $i\to j$}}{\text{\# $\to i$}}
 $$
+
+With #$i\to j$ representing the number of transitions from state $i$ to state
+$j$ and #$\to i$ representing the number of transitions from any state to
+state $i$.
 
 ## Introduction to HMMs
 
@@ -832,16 +976,21 @@ Mastery state.
 
 We will express this mathematically by defining an HMM as a Markov model for
 which there are a series of observed outputs $\bm{x} = \{x_1, x_2, \ldots,
-x_T\}$. Each output $x_i$ is drawn from an output alphabet $V = \{v_1, v_2,
-\ldots, v_{|V|}\}$ such that $x_t \in V, t \in \{1, 2, \ldots, T\}$.
+x_T\}$. Each output $x_i$ is drawn from an output alphabet
+
+$$
+    V = \{v_1, v_2, \ldots, v_{|V|}\}
+$$
+
+such that $x_t \in V, t \in \{1, 2, \ldots, T\}$.
 
 As for Markov models, we will define a series of hidden states that the model
 takes on $\bm{z} = \{z_1, z_2, \ldots, z_T\}$ which we have no way of observing
 but which will provide a useful construct for reasoning about this model. Each
 of these states which the model occupies is drawn from a state alphabet $S =
 \{s_1, s_2, \ldots, s_{|S|}\}$ such that $z_t \in S, t \in \{1, 2, \ldots,
-T\}$. We will again use $A$ as the transition matrix defining the probability
-of transitioning from one hidden state to another.
+T\}$. We will again use $\bm{A}$ as the transition matrix defining the
+probability of transitioning from one hidden state to another.
 
 In addition to the above, we will allow the output observations $\bm{x}$ to be
 a function of our hidden state $\bm{z}$. For this, we make another assumption:
@@ -850,15 +999,24 @@ a function of our hidden state $\bm{z}$. For this, we make another assumption:
   at time $t$ is dependant only on the hidden state of the model $z_t$ at time
   $t$:
 
-  $$
-      \pr(x_t = v_k | z_t = s_j) = \pr(x_t = v_k | x_1, \ldots, x_T, z_1, \ldots, z_t)
-  $$
+<!-- prettier-ignore-start -->
+\begin{equation}
+    \pr(x_t = v_k | z_t = s_j) = \pr(x_t = v_k | x_1, \ldots, x_T, z_1, \ldots, z_t)
+\end{equation}
+<!-- prettier-ignore-end -->
 
-  We will use a new matrix, $B_{jk}$ to represent the probability of the hidden
-  state generating some output observation $v_k$ given that the hidden state
-  was $s_j$. Therefore $B_{jk} = \pr(x_t = v_k | z_t = s_j)$ (or equivalently,
-  $B_{a, b} = \pr(b | a)$ given that $b$ is some output value and $a$ is some
-  hidden state).
+We will use a new matrix to represent the emission probabilities, where an
+element $B_{jk}$ represents the probability of some hidden state $s_j$ emitting
+some output observation $v_k$:
+
+<!-- prettier-ignore-start -->
+\begin{equation}
+    B_{jk} := \pr(x_t = v_k | z_t = s_j).
+\end{equation}
+<!-- prettier-ignore-end -->
+
+$B_{jk}$ is therefore the probability of $v_k$ being emitted given that the
+model is in state $s_j$.
 
 ### What's the probability of observing a certain sequence?
 
@@ -874,50 +1032,57 @@ possible series of states $\bm{z}$:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \pr(\bm{x} | A \cap B)
-        &= \sum_{\forall\bm{z}} \pr (\bm{x} \cap \bm{z} | A \cap B) && \text{(Condition over all $\bm{z}$)} \\
-        &= \sum_{\forall\bm{z}} \pr (\bm{x} | \bm{z} \cap A \cap B) \pr (\bm{z} | A \cap B) &&\text{(Bayes' Rule)} \\
+    \pr(\bm{x} &| \bm{A} \cap \bm{B}) \\
+        &= \sum_{\forall\bm{z}} \pr (\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) && \text{(Condition over $\bm{z}$)} \\
+        &= \sum_{\forall\bm{z}} \pr (\bm{x} | \bm{z} \cap \bm{A} \cap \bm{B}) \pr (\bm{z} | \bm{A} \cap \bm{B}) &&\text{(Chain rule)} \\
         &= \sum_{\forall\bm{z}}
-            \left( \prod_{t=1}^T \pr (x_t | z_t \cap B) \right)
-            \left( \prod_{t=1}^T \pr (z_t | z_{t-1} \cap A) \right) \\
+            \left( \prod_{t=1}^T \pr (x_t | z_t \cap \bm{B}) \right)
+            \left( \prod_{t=1}^T \pr (z_t | z_{t-1} \cap \bm{A}) \right) \\
         &= \sum_{\forall\bm{z}}
             \left( \prod_{t=1}^T B_{z_t, x_t} \right)
-            \left( \prod_{t=1}^T A_{z_{t-1}, z_t} \right) &&\text{(Defn. of $A$ and $B$)}\\
+            \left( \prod_{t=1}^T A_{z_{t-1}, z_t} \right) &&\text{(Defn. of $\bm{A}$ and $\bm{B}$)}\\
 \end{align*}
 <!-- prettier-ignore-end -->
 
+Where:
+
+- $\bm{A}$ is the state transition matrix
+- $\bm{B}$ is the emission probability matrix
+
 This provides us with a simple expression of the probability we want
-$\pr(\bm{x} | A \cap B)$, but this simple expression is intractable to
+$\pr(\bm{x} | \bm{A} \cap \bm{B})$, but this simple expression is intractable to
 calculate. It requires a sum over every possible sequence of states, which
 means that $z_t$ can take on any one of the $|S|$ states for each timestep $t$.
 This means that the calculation will require $O(|S|^T)$ operations.
 
 Luckily, there exists a dynamic programming means of computing the probability,
-called the _Forward Procedure_. First we define an intermediate quantity
-$\alpha_i(t)$ to represent the probability firstly of all the observations
-$x_i$ up until time $t$ and secondly that the HMM is in some specific state
-$s_i$ at time $t$:
+called the _Forward Procedure_ \citep{rabinerTutorialHiddenMarkov1989}. First
+we define an intermediate quantity $\alpha_i(t)$ to represent the probability
+firstly of all the observations $x_i$ up until time $t$ and secondly that the
+HMM is in some specific state $s_i$ at time $t$:
 
-$$
-    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | A \cap B)
-$$
+<!-- prettier-ignore-start -->
+\begin{equation*}
+    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap \bm{B})
+\end{equation*}
+<!-- prettier-ignore-end -->
 
-If we has this quantity, we could express the probability of a certain sequence
-of observations $\bm{x}$ much more succinctly as:
+If we have this quantity, we could express the probability of a certain
+sequence of observations $\bm{x}$ much more succinctly as:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \pr(\bm{x} | A \cap B)
-    &= \pr(x_1 \cap x_2 \cap \ldots \cap x_T | A \cap B) \\
-    &= \sum_{i=1}^{|S|} \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | A \cap B) \\
+    \pr(\bm{x} | \bm{A} \cap \bm{B})
+    &= \pr(x_1 \cap x_2 \cap \ldots \cap x_T | \bm{A} \cap \bm{B}) \\
+    &= \sum_{i=1}^{|S|} \pr(x_1 \cap x_2 \cap \ldots \cap x_T \cap z_T = s_i | \bm{A} \cap \bm{B}) \\
     &= \sum_{i=1}^{|S|} \alpha_i(T) \\
 \end{align*}
 <!-- prettier-ignore-end -->
 
-The _Forward Procedure_ presents an efficient method of computing
-$\alpha_i(t)$, which requires only $O(|S|)$ operations at each timestep,
-resulting in a complexity of $O(|S| \cdot T)$ instead of $O(|S|^T)$. This
-procedure recursive and is given in Algorithm \ref{alg:alphai}.
+The _Forward Procedure_ presents an efficient means by which $\alpha_i(t)$ can
+be calculated, requiring only $O(|S|)$ operations at each timestep, resulting
+in a complexity of $O(|S| \cdot T)$ instead of $O(|S|^T)$. This procedure is
+recursive and is given in Algorithm \ref{alg:alphai}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -948,15 +1113,15 @@ given in Algorithm \ref{alg:betai}.
 
 ### The Viterbi algorithm: What's the most likely series of states for some output?
 
-If we observed a series of outputs from a HMM $x_1, x_2, \ldots, x_T \forall
+If we observed a series of outputs from a HMM $x_1, x_2, \ldots, x_T\,\forall
 x_i \in V$, then what is the sequence of hidden states $z_1, z_2, \ldots, z_T
-\forall z_i \in S$, which has the highest likelihood? Specifically:
+\forall\,z_i \in S$, which has the highest likelihood? Specifically:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \argmax_{\bm{z}} \pr(\bm{z} | \bm{x} \cap A \cap B)
-    &= \argmax_{\bm{z}} \frac{ \pr(\bm{x} \cap \bm{z} | A \cap B) }{ \sum_{\forall\bm{z}} \pr(\bm{x} \cap \bm{z} | A \cap B) } &&\text{(Bayes' Theorem)} \\
-    &= \argmax_{\bm{z}} \pr(\bm{x} \cap \bm{z} | A \cap B)  &&
+    \argmax_{\bm{z}} \pr(\bm{z} | \bm{x} \cap \bm{A} \cap \bm{B})
+    &= \argmax_{\bm{z}} \frac{ \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) }{ \sum_{\forall\bm{z}} \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) } &&\text{(Bayes' Theorem)} \\
+    &= \argmax_{\bm{z}} \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B})  &&
     \text{(Denominator $\indep \bm{z}$)}\\
 \end{align*}
 <!-- prettier-ignore-end -->
@@ -965,10 +1130,10 @@ Here we might again try the naïve approach and evaluate every possible $\bm{z}$
 to check which one achieves a maximum. This approach requires $O(|S|^T)$
 operations, and so we will be using another dynamic programming approach.
 
-The Viterbi algorithm is very similar to the forward procedure, except that it
-tracks the maximum probability of generating the observations seen so far and
-records the corresponding state sequence. See the procedure in Algorithm
-\ref{alg:viterbi}.
+The Viterbi algorithm \citep{viterbiErrorBoundsConvolutional1967} is very
+similar to the forward procedure, except that it tracks the maximum probability
+of generating the observations seen so far and records the corresponding state
+sequence. See the procedure in Algorithm \ref{alg:viterbi}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -976,15 +1141,15 @@ records the corresponding state sequence. See the procedure in Algorithm
   \label{alg:viterbi}
   \begin{algorithmic}[1]
     \State \textbf{Input:} Hidden states $S=\{s_0, s_1, \ldots\}$,
-    observations, Transition probabilities $A_{i,j}$ from state $i$ to state
-    $j$, Emission probabilities $B_{i,j}$ that state $i$ will emit an
+    observations, Transition probabilities $A_{ij}$ from state $i$ to state
+    $j$, Emission probabilities $B_{ij}$ that state $i$ will emit an
     observation $j$.
     \State \textbf{Output:} Most likely sequence of hidden states
     \State \textit{Initialize} the Viterbi table and path table
     \State \textit{Let} $viterbi$ be a 2D array of size $|S| \times num\_observations$
     \State \textit{Let} $path$ be a 2D array of size $|S| \times num\_observations$
     \For{$i$ in $1..|S|$}
-        \State $viterbi[i][0] \gets A_{s_0, s_i} \times B_{s_i, \textit{observations[0]}}$
+        \State $viterbi[i][0] \gets A_{s_0 s_i} \times B_{s_i \textit{observations[0]}}$
         \State $path[i][0] \gets i$
     \EndFor
     \For{$i$ in $1..$\textit{len(observations)}}
@@ -992,13 +1157,13 @@ records the corresponding state sequence. See the procedure in Algorithm
             \State $p_{\text{max}} \gets 0$
             \State $s_{\text{best}} \gets 0$
             \For{$k$ in $1..|S|$}
-                \State $p \gets viterbi[k][i-1] \times  A_{s_j, s_i}$
+                \State $p \gets viterbi[k][i-1] \times  A_{s_j s_i}$
                 \If{$p > p_{\text{max}}$}
                     \State $p_{\text{max}} \gets p$
                     \State $s_{\text{best}} \gets k$
                 \EndIf
             \EndFor
-            \State $viterbi[j][i] \gets p_{\text{max}} \times B_{s_i,
+            \State $viterbi[j][i] \gets p_{\text{max}} \times B_{s_i
             \textit{observations[i]}}$
             \State $path[j][i] \gets s_{\text{best}}$
         \EndFor
@@ -1013,19 +1178,19 @@ records the corresponding state sequence. See the procedure in Algorithm
 ### Most likely parameters for an HMM
 
 Another question we might ask of our HMM is, given a set of observations, what
-values do the transition probabilities $A$ and the emission probabilities $B$
-have to take to maximise the likelihood of those observations?
+values do the transition probabilities $\bm{A}$ and the emission probabilities
+$\bm{B}$ have to take to maximise the likelihood of those observations?
 
 This goal is equivalent to "fitting" or training a neural network so that the
 weights and biases minimise the loss function, however the procedure followed
 is quite different.
 
-The Baum-Welch algorithm [@Baum1970AMT] is a special case of the
-Expectation-Maximisation (EM) algorithm applied to finding the unknown
-parameters of an HMM. It consists of three steps which are repeated until a
-desired level of convergence is reached such that successive iterations do not
-lead to significant changes in the parameters. Note that this algorithm does
-not converge to a global maximum, and the performance of the converged
+The Baum-Welch algorithm \citep{baumStatisticalInferenceProbabilistic1966} is a
+special case of the Expectation-Maximisation (EM) algorithm applied to finding
+the unknown parameters of an HMM. It consists of three steps which are repeated
+until a desired level of convergence is reached such that successive iterations
+do not lead to significant changes in the parameters. Note that this algorithm
+does not converge to a global maximum, and the performance of the converged
 parameters depends on the random initialisation of those parameters.
 
 Recall the following variables:
@@ -1046,22 +1211,22 @@ of the sequence $z_{t+1}, \ldots, z_T$ given that the HMM is in state $i$ at
 time $t$, $\beta_i(t)$, and was presented in Algorithm \ref{alg:betai}.
 
 The **update step** uses the calculated values for $\alpha_i$ and $\beta_i$ to
-update the HMM parameters $A$ and $B$.
+update the HMM parameters $\bm{A}$ and $\bm{B}$.
 
 We will need to calculate some temporary variables:
 
 - $\gamma_i(t)$ is the probability of being in state $i$ at time $t$ given the
-  observed sequence $\bm{z}$ and the HMM $(A, B)$
+  observed sequence $\bm{z}$ and the HMM $(\bm{A}, \bm{B})$
 
 - $\xi_{ij}(t)$ is the probability of being in state $i$ and $j$ at times $t$
-  and $t+1$ given the observed sequence $\bm{z}$ and the HMM defined by $A, B$
+  and $t+1$ given the observed sequence $\bm{z}$ and the HMM defined by $\bm{A}, \bm{B}$
 
 According to Bayes' theorem:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \gamma_i(t) &= \pr(x_t = i | \bm{z}, A,B) \\
-    &= \frac{ \pr(x_t = i, \bm{z} | A, B)}{ \pr (\bm{z} | A, B)} \\
+    \gamma_i(t) &= \pr(x_t = i | \bm{z}, \bm{A}, \bm{B}) \\
+    &= \frac{ \pr(x_t = i, \bm{z} | \bm{A}, \bm{B})}{ \pr (\bm{z} | \bm{A}, \bm{B})} \\
     &= \frac{\alpha_i(t)\beta_i(t)}{ \sum^N_{j=1} \alpha_i(t)\beta_i(t)} \\
 \end{align*}
 <!-- prettier-ignore-end -->
@@ -1070,8 +1235,8 @@ And
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \xi_{ij}(t) &= \pr(x_t = i, x_{t+1} = j | \bm{z}, A,B) \\
-    &= \frac{\pr(x_t = i, x_{t+1} = j, \bm{z} | A,B)}{\pr(\bm{z} | A,B)} \\
+    \xi_{ij}(t) &= \pr(x_t = i, x_{t+1} = j | \bm{z}, \bm{A},\bm{B}) \\
+    &= \frac{\pr(x_t = i, x_{t+1} = j, \bm{z} | \bm{A}, \bm{B})}{\pr(\bm{z} | \bm{A}, \bm{B})} \\
     &= \frac{
         \alpha_i(t) A_{ij} \beta_j(t+1) B_{j,z_{t+1}}
     }{
@@ -1089,13 +1254,13 @@ We can now update the parameters of the HMM:
 - $B_{j,k}^* = \frac{ \sum^T_{t=1} [y_t = k] \gamma_j(t)}{ \sum^T_{t=1}
   \gamma_j(t) }$
 
-The above steps can now be repeated until a convergence within some threshold
-is reached.
+The above steps can now be repeated until either a convergence within some
+threshold is reached or some set number of iterations have been performed.
 
-# Support Vector Machines \label{sec:02_svm}
+# Support Vector Machines \label{sec:02-support-vector-machines}
 
 <!--
-Support Vector Machines \label{sec:02_cusum}
+Support Vector Machines
 
 High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
 library for large linear classification.”, Journal of machine learning research
@@ -1259,12 +1424,12 @@ function is as follows:
 \end{align*}
 <!-- prettier-ignore-end -->
 
-# Cumulative Sum \label{sec:02_cusum}
+# Cumulative Sum \label{sec:02-cumulative-sum}
 
-Cumulative Sum (CuSUM, \cite{pageCONTINUOUSINSPECTIONSCHEMES1954}) is a
-sequential method used for change detection. Given a time series from an
-initial distribution, it can alert when the time series deviates from the
-initial distribution by some threshold amount.
+Cumulative Sum (CuSUM) is a sequential method used for change detection
+developed by \cite{pageCONTINUOUSINSPECTIONSCHEMES1954}. Given a time series
+from an initial distribution, it can alert when the time series deviates from
+the initial distribution by some threshold amount.
 
 The method works by keeping track of a cumulative sum and alerting if that
 cumulative sum passes above some threshold value. The threshold value is
@@ -1286,7 +1451,7 @@ value then a change is said to have been found.
 
 The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
-so will be described in detail in the Methodology chapter.
+so will be described in detail in Section \ref{model-specifics-cusum}.
 
 <!-- NOTE: Removed from the final thesis
 Autocorrect

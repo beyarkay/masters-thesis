@@ -1,3 +1,13 @@
+## Consistency checks
+
+- Vectors are bold
+- Matrices are bold upper case
+- Scatter plots have all the same markers
+- Equations should fit within margins
+- Equation numbers
+- Equation punctuation
+- Prettier messes up spaces after equations
+
 ## Ergo Report
 
 - On the issue of unbalanced class frequencies, if you've got the positive
