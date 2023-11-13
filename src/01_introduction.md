@@ -14,6 +14,12 @@ Contributions:
 - Segmentation is done automatically, which is often not considered
 --->
 
+<!-- prettier-ignore-start -->
+\epigraph{
+    In the beginning there was nothing, which exploded.
+}{\textit{ Terry Pratchett }}
+<!-- prettier-ignore-end -->
+
 # Overview \label{sec:01-overview}
 
 This thesis explores gesture recognition using an acceleration-based

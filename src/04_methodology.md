@@ -1,3 +1,10 @@
+<!-- prettier-ignore-start -->
+\epigraph{
+    We are trying to prove ourselves wrong as quickly as possible, because only
+    in that way can we find progress.
+}{\textit{  Richard P. Feynman  }}
+<!-- prettier-ignore-end -->
+
 The construction of \emph{Ergo} is discussed in Section
 \ref{sec:04-construction-of-ergo}. Section
 \ref{sec:04-gestures-and-class-labels} discusses the gestures which \emph{Ergo}

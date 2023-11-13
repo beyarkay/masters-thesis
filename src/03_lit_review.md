@@ -42,6 +42,13 @@ Notes from Trienko meeting:
   fidelity.
 --->
 
+<!-- prettier-ignore-start -->
+\epigraph{
+    Always remember, however, that there’s usually a simpler and better way to
+    do something than the first way that pops into your head.
+}{\textit{ Donald Knuth }}
+<!-- prettier-ignore-end -->
+
 This chapter reviews the literature as related to human hand gesture
 recognition. There are three primary methods of sensing the movement of a user's
 hands: glove-based, vision-based, and (most recently) WiFi-based.

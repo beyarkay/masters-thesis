@@ -1,3 +1,9 @@
+<!-- prettier-ignore-start -->
+\epigraph{
+    Nothing should be taken for granted, even if everybody believes it.
+}{\textit{ Yuval Noah Harari }}
+<!-- prettier-ignore-end -->
+
 This chapter describes the mathematics behind the classification algorithms
 used by \emph{Ergo}, as well as providing some background to the problem at
 hand. Section \ref{sec:02-artificial-intelligence-and-machine-learning}

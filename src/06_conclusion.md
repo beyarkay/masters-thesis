@@ -19,6 +19,12 @@ Notes on writing a conclusion from TG:
 TODO: Get a friend to do the Afrikaans translations for you.
 -->
 
+<!-- prettier-ignore-start -->
+\epigraph{
+    The best way to predict the future is to invent it.
+}{\textit{ Alan Key }}
+<!-- prettier-ignore-end -->
+
 This chapter provides some final remarks on the thesis and an overview of what
 was found. Section \ref{sec:06-thesis-summary} provides a summary of what was
 discussed in each chapter of the thesis. Section

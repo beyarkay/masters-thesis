@@ -45,6 +45,13 @@ in terms of gesture detection _and_ classification.
 - TODO: Fit figures into margins
 -->
 
+<!-- prettier-ignore-start -->
+\epigraph{
+    So the universe is not quite as you thought it was. You'd better rearrange
+    your beliefs, then. Because you certainly can't rearrange the universe.
+}{\textit{ Isaac Asimov }}
+<!-- prettier-ignore-end -->
+
 This chapter will discuss the results obtained from the experiments described
 in the Methodology chapter. The dataset will be described and some preliminary
 analysis done in Section \ref{sec:05-dataset-description}. Section
