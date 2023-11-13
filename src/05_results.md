@@ -1,5 +1,8 @@
 <!--
 
+TODO: explain quickly why CuSUM isn't likely to be able to predict things
+accurately due to how the sensor alert profiles work
+
 TODO: lots of the models achieve near-zero but not actually zero $F_1$-score.
 This is probably because they're just predicting everything is class 50
 

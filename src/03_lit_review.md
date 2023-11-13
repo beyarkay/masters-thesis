@@ -807,10 +807,12 @@ marceloGeFightersExperimentGesturebased2006}}, generic gesture recognition
 and remote robot control\footnote{\cite{qiMultiSensorGuidedHand2021,
 ramamoorthyRecognitionDynamicHand2003, wanExploreEfficientLocal2016}}.
 
+<!-- NOTE: Excluded since it's not really talked about much and not super
+necessary
 Figure \ref{fig:03_wifi_vision_applications} shows the applications of vision
 and WiFi-based gesture recognition systems over time.
 
-<!-- prettier-ignore-start -->
+< !-- prettier-ignore-start -- >
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_wifi_vision_applications}
@@ -818,7 +820,9 @@ and WiFi-based gesture recognition systems over time.
     time.}
     \label{fig:03_wifi_vision_applications}
 \end{figure}
-<!-- prettier-ignore-end -->
+< !-- prettier-ignore-end -- >
+
+-->
 
 Convolutional Neural Networks (CNNs) were first used for gesture recognition in
 2015 by Huang \emph{et~al.} \citep{jiehuangSignLanguageRecognition2015} and

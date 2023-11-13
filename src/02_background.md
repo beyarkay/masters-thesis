@@ -8,13 +8,10 @@ This chapter describes the mathematics behind the classification algorithms
 used by \emph{Ergo}, as well as providing some background to the problem at
 hand. Section \ref{sec:02-artificial-intelligence-and-machine-learning}
 provides a brief history of artificial intelligence, machine learning, and the
-nomenclature therein \footnote{ Hi professor, should I move my explanation about the different
-evaluation metrics (confusion matrices, $F_1$, precision, recall, basically
-section \ref{sec:04-evaluation-metrics}) to here instead?}
+nomenclature therein.
 
-Artificial Neural Networks (ANNs) have shown a lot of
-promise in a wide range of classification
-problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
+Artificial Neural Networks (ANNs) have shown a lot of promise in a wide range
+of classification problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
 netoHighLevelProgramming2010, mehdiSignLanguageRecognition2002,
 jong-sungkimDynamicGestureRecognition1996,
 felsGloveTalkIIaNeuralnetworkInterface1998}} and are discussed in Section
@@ -35,7 +32,9 @@ kimBichannelSensorFusion2008}} and will be described in Section
 \ref{sec:02-support-vector-machines}. CuSum is a simple statistical technique
 used for online change detection in the distribution of a time series. It will
 be used as a baseline against which other models can be compared, and is
-discussed in Section \ref{sec:02-cumulative-sum}.
+discussed in Section \ref{sec:02-cumulative-sum}. The evaluation metrics by
+which multi-class classifiers can be compared is discussed in Section
+\ref{sec:02-evaluation-metrics}.
 
 # Artificial Intelligence and Machine Learning \label{sec:02-artificial-intelligence-and-machine-learning}
 
@@ -1453,11 +1452,293 @@ $$
 $$
 
 This cumulative sum is monitored, and if it exceeds some pre-selected threshold
-value then a change is said to have been found.
+value then a change is said to have been found. The procedure for performing
+CuSUM on a stream of data is presented in Algorithm \ref{alg:cusum}. Each CuSUM
+algorithm requires a reference value against which any deviations will be
+compared. This reference value is set to be the first 10 values in the given
+time series. The CuSUM algorithm will alert if the time series becomes either
+too high or too low. Each CuSUM algorithm only has one parameter, the threshold
+value, which defines how much deviation is permitted before an alert is raised.
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption{CuSUM Algorithm}
+    \label{alg:cusum}
+    \begin{algorithmic}
+        \Require Data stream: $x_1, x_2, \ldots, x_n$
+        \Require Threshold: $t$
+        \State $U_0 = 0$, $L_0 = 0$ \Comment{Upper and lower cumulative sums}
+        \State $r = \frac{1}{10}\sum_{i=1}^{10} x_i$ \Comment{Reference value}
+        \For{$i = 1$ to $n$}
+            \State $d_i = x_i - r$ \Comment{Calculate the incremental change}
+            \If{$d_i > 0$} \Comment{Update the cumulative sums:}
+                \State $U_i = U_{i-1} + d_i$
+                \State $L_i = L_{i-1}$
+            \Else
+                \State $U_i = U_{i-1}$
+                \State $L_i = L_{i-1} - d_i$
+            \EndIf
+
+            \If{$U_i > t$ \textbf{or} $L_i > t$}
+                \State \textbf{Alarm condition met}
+            \EndIf
+        \EndFor
+        \State \textbf{Alarm condition not met}
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
 
 The details of how this algorithm can be applied to a multi-class
 classification problem diverge significantly from "background" information, and
 so will be described in detail in Section \ref{model-specifics-cusum}.
+
+# Evaluation Metrics \label{sec:02-evaluation-metrics}
+
+Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
+observations $n$, multi-class classifiers can be evaluated against one another
+when comparing the ground truth labels $\bm{t}: t_i \in C \,\forall\, i \in {1,
+\ldots, n}$ against the labels predicted by that classifier $\bm{p}: p_i \in C
+\,\forall\, i \in {1, \ldots, n}$. The following subsections will describe
+different means of comparing multi-class classifiers.
+
+## Confusion Matrices
+
+Confusion matrices collate a models performance by grouping each combination of
+predicted and ground truth label. For a $|C|$-class classification problem, a
+confusion matrix is a $|C| \times |C|$ matrix of values, where the
+element in the $i$-th row and the $j$-th column of the confusion matrix is the
+number of times a classifier predicted an observation that belongs to class $i$
+as belonging to class $j$. That is, that the ground truth label is $i$ and the
+predicted label is $j$. The element-wise definition of a confusion matrix is
+
+$$
+    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [t_k = j \land p_k = i].
+$$
+
+An example confusion matrix is given in the top-left plot of Figure
+\ref{fig:04_example_conf_mat}. Note that elements in the confusion matrix which
+are zero are left uncoloured and are not annotated with a 0. For confusion
+matrices with few classes and few observations this will not matter
+significantly. However, for confusion matrices with many classes and many
+observations it will prove informative to be able to distinguish one
+misprediction from zero mispredictions.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/04_example_conf_mat}
+    \caption[Example confusion matrices]{Four example confusion matrices, each showing the same data but
+    visualised under four different normalisation schemes.}
+    \label{fig:04_example_conf_mat}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+In practice, confusion matrices are often normalised before visualisation as
+this aids in the interpretation of the model's performance. The unnormalised
+confusion matrix is shown in the top-left plot of
+Figure \ref{fig:04_example_conf_mat}. Confusion matrices can also be column- or
+row-normalised (shown in the top-right and bottom-left plots respectively).
+Column normalisation divides each element by the sum of its column, such that
+each column sums to one. Row normalisation is similar, and ensures each row
+sums to one.
+
+Row-normalization and column-normalization ensure that each element in the
+matrix represents the proportion of ground truth or predicted labels concerning
+the total number of ground truth or predicted labels for the associated class,
+respectively.
+
+Confusion matrices can also be total-normalised (as seen in the bottom-right
+plot) in which case every element is divided by the sum over the entire
+confusion matrix. This allows the elements to be interpreted as a fraction of
+the total number of observations.
+
+Unless otherwise specified, all confusion matrices presented in this thesis are
+column-normalised.
+
+It is also useful to compare the confusion matrices for all instances of a
+model across two or more values of a discrete hyperparameter. For example,
+comparing the confusion matrices for FFNNs with one, two, and three layers. In
+these cases, the weighted confusion matrix shall be shown. The weighted
+confusion matrix of a subset of models is calculated by taking the unnormalised
+confusion matrix for a model, multiplying each value in that confusion matrix
+by the model's $F_1$-score, and then adding all confusion matrices together
+element-wise. The resulting sum of weighted confusion matrices is then divided
+by the sum of all $F_1$-scores and finally column-normalised. This procedure is
+given in Algorithm \ref{alg:04_weighted_cm}.
+
+<!-- TODO:
+Need a reference for how I'm using weighted confusion matrices to compare the
+different models. Not sure why I need this, it seems pretty damn basic
+
+> Can you cite this approach? Or give a footnote to a website....
+-->
+
+<!-- prettier-ignore-start -->
+\begin{algorithm}
+    \caption[Weighted confusion matrices]{Comparison of Weighted Confusion Matrices}
+    \label{alg:04_weighted_cm}
+    \begin{algorithmic}[1]
+        \Require A set of models
+        \Require A method for computing the confusion matrix for a model
+        \Require A method for computing the $F_1$-score for a model
+        \State $\bm{C}_{weighted} \gets \mathbf{0}_{n\times n}$
+        \State $\Sigma F_1 \gets 0$
+        \For{$model$ in $models$}
+            \State $\bm{C} \gets$ \Call{ComputeConfusionMatrix}{model}
+            \State $F_1 \gets$ \Call{$\text{ComputeF}_1\text{Score}$}{model}
+            \State $\bm{C}_{weighted} \gets \bm{C}_{weighted} + (F_1 \cdot \bm{C})$
+            \State $\Sigma F_1 \gets \Sigma F_1 + F_1$
+        \EndFor
+        \State $C_{weighted} \gets \frac{\bm{C}_{weighted}}{\Sigma F_1}$
+        \State $C_{weighted} \gets$ \Call{ColumnNormalize}{$C_{weighted}$}
+    \end{algorithmic}
+\end{algorithm}
+<!-- prettier-ignore-end -->
+
+## Accuracy
+
+The accuracy of a classifier is defined as the number of correct predictions
+over the total number of predictions. This metric does not take into account
+the distribution of predictions and does not work well when there is a class
+imbalance. If 99% of the data belongs to a class YES while 1% of the data
+belongs to the class NO, then a naïve classifier can achieve 99% accuracy by
+always predicting YES. As the _Ergo_ dataset has a large class imbalance,
+accuracy will not be used as a metric for comparing models.
+
+## Precision, Recall, and $F_1$-score
+
+Confusion matrices aid in the interpretation of large numbers of predictions,
+but do not have a total ordering. To this end, we will define first the
+per-class precision, recall, and $F_1$-score. These metrics depend on
+four summary statistics:
+
+- $\text{TP}_i$, the number of true positives for class $c_i$: This is the
+  number of labels for which both the ground truth and the predicted class are
+  $c_i$:
+
+  $$
+       \text{TP}_i = \sum_{j=1}^n [t_j = p_j = c_i]
+  $$
+
+- $\text{TN}_i$, the number of true negatives for class $c_i$: This is the
+  number of labels for which both the ground truth and the predicted class are
+  _not_ $c_i$:
+
+  $$
+       \text{TN}_i = \sum_{j=1}^n [t_j \neq c_i \land p_j \neq c_i]
+  $$
+
+- $\text{FP}_i$, the number of False positives for class $c_i$: This is the
+  number of labels for which the predicted class is $c_i$ but the true label
+  is _not_ $c_i$:
+
+  $$
+       \text{FP}_i = \sum_{j=1}^n [p_j = c_i \land t_j \neq c_i]
+  $$
+
+- $\text{FN}_i$, the number of False negatives for class $c_i$: This is the
+  number of labels for which the predicted label is not $c_i$ but the true
+  label is $c_i$:
+
+  $$
+       \text{FN}_i = \sum_{j=1}^n [p_j \neq c_i \land t_j = c_i]
+  $$
+
+The precision for some class $c_i$ can be intuitively understood as a metric that
+penalises classifiers which too frequently predict class $c_i$. It is defined as
+
+$$
+    \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
+$$
+
+Likewise, the recall for some class $c_i$ can be understood as a metric that
+penalises classifiers which too infrequently predict class $c_i$. It is defined
+as
+
+$$
+    \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}.
+$$
+
+The $F_1$-score for some class $c_i$ ($F_{1,i}$) is defined as the harmonic
+mean of the precision and recall of that class:
+
+$$
+    F_{1,i} = 2 \cdot \frac{
+            \text{Precision}_i \cdot \text{Recall}_i
+        }{
+            \text{Precision}_i + \text{Recall}_I
+        }
+$$
+
+The fact that the harmonic mean is used to calculate the $F_1$-score ensures
+that both a high precision and high recall are required to obtain a high
+$F_1$-score. This is made clear when plotting the $F_1$-scores for various
+precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics{src/imgs/graphs/04_precision_recall_f1}
+    \caption[Precision and recall with $F_1$ as contours]{Precision and recall with the calculated $F_1$-score plotted as
+    contours. Both a high recall and a high precision are required for a high
+    $F_1$-score.}
+    \label{fig:04_precision_recall_f1}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+To aid comparison, the same data used to construct the confusion matrices in
+Figure \ref{fig:04_example_conf_mat} will be used to plot the per-class
+precision, recall, and $F_1$-score. They will be visualised as a heatmap with
+one column per class and one row for each of precision, recall, and
+$F_1$-score. This plot is shown in Figure \ref{fig:04_prec_rec_f1_example}.
+
+<!-- prettier-ignore-start -->
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/04_prec_rec_f1_example}
+    \caption[Precision, recall, $F_1$ heatmap]{Precision, recall, and $F_1$ score for the confusion matrix in
+    Figure \ref{fig:04_example_conf_mat}.}
+    \label{fig:04_prec_rec_f1_example}
+\end{figure}
+<!-- prettier-ignore-end -->
+
+It is apparent that the classes with perfect precision (classes 0, 1, and 3)
+have columns in the confusion matrix which are zero except for the element on
+the principle diagonal. Likewise, classes with perfect recall (class 2) have
+rows in the confusion matrix which are zero except for the element on the
+principle diagonal. Precision can therefore be gleaned from a confusion matrix
+by observing the columns of the appropriate confusion matrix, and
+\textbf{r}ecall by observing the \textbf{r}ows.
+
+## Weighted and Unweighted Averages
+
+While precision, recall, and $F_1$-score provide a much more concise
+representation of a classifier's performance than a confusion matrix, they
+still do not provide a single number through which all classifiers might be
+given a total ordering. To this end, we will calculate the unweighted
+arithmetic mean of the per-class precision, recall, and
+$F_1$-scores\footnote{
+The unweighted average is sometimes referred to as the macro average, and
+the weighted average as the micro average.
+}.
+
+The unweighted mean is desirable for the task at hand as the _Ergo_ dataset is
+highly imbalanced, with one class being assigned to 97% of the observations. If
+the weighted mean was used instead, then a classifier would be able to achieve
+very high performance by ignoring the minority classes and only focusing on
+predicting the majority class correctly.
+
+For these reasons, the unqualified terms precision, recall, and
+$F_1$-score will be taken to mean the unweighted mean over the per-class
+precisions, recalls, and $F_1$-scores.
+
+It is important to note that one cannot calculate the unweighted $F_1$-score
+using the unweighted precision and recall due to the non-linear relationship
+between the $F_1$-score and precision and recall. This has the unfortunate
+implication that a plot showing the unweighted precision and unweighted recall
+of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
+$F_1$-score must be shown in a separate plot alongside the precision-recall
+plot.
 
 <!-- NOTE: Removed from the final thesis
 Autocorrect

@@ -49,11 +49,11 @@ discussed in Section \ref{sec:02_ffnn}, providing a short history of their
 development, a description of the mathematical process of training and
 inference, as well as a description of commonly used modifications to plain
 neural networks that generally improve performance. Hidden Markov Models were
-discussed in Section \ref{sec:02_hmm}, discussing the mathematics required for
+discussed in Section \ref{sec:02-hidden-markov-models}, discussing the mathematics required for
 the forward and backward procedures as well as the Viterbi algorithm. Support
-Vector Machines were discussed in Section \ref{sec:02_svm} and the relevant
+Vector Machines were discussed in Section \ref{sec:02-support-vector-machines} and the relevant
 mathematics for finding the optimal splitting hyperplane was discussed.
-Cumulative Sum were discussed in Section \ref{sec:02_cusum} with reference to
+Cumulative Sum were discussed in Section \ref{sec:02-cumulative-sum} with reference to
 the original work by \cite{pageCONTINUOUSINSPECTIONSCHEMES1954} who introduced
 the algorithm as a means for detection of a change in the parameters of an
 underlying distribution of sequential data.
@@ -244,7 +244,7 @@ video datasets of humans performing gestures can be shared between researchers.
 WiFi-based systems are relatively new, but show promise if some details can be
 worked out. Based on the number of contemporary literature surveys which claim
 to review gesture recognition and yet fail too mention WiFi-based gesture
-recognition\footnote{\cite{chenSurveyHandPose2020,
+recognition\footnote{\citealp{chenSurveyHandPose2020,
 anwarHandGestureRecognition2019, chenSurveyHandGesture2013,
 raysarkarHandGestureRecognition2013}}, one might conclude that many researchers
 are simply unfamiliar with the technology and thus have not considered it as an
@@ -277,7 +277,7 @@ the emulation of keyboard input. Much previous work has focussed on
 low-fidelity <!-- TODO: add reference to Literature review here --> gesture
 recognition where the time taken to perform each gesture makes those gestures
 unsuitable for everyday computer
-interaction\footnote{\cite{bevilacquaContinuousRealtimeGesture2010,
+interaction\footnote{\citealp{bevilacquaContinuousRealtimeGesture2010,
 netoHighLevelProgramming2010, patilHandwritingRecognitionFree2016,
 schlomerGestureRecognitionWii2008, aklAccelerometerbasedGestureRecognition2010,
 aklNovelAccelerometerBasedGesture2011, riveraRecognitionHumanHand2017}}.
@@ -352,12 +352,12 @@ have not yet (in the author's opinion) been fully explored with regards to
 their potential for gesture recognition, and could possible prove fruitful.
 WiFi-based systems (see Section
 \ref{sec:03-vision-and-wifi-based-gesture-recognition} and
-\cite{maWiFiSensingChannel2020}) have been explored with regards to security ,
+\citealt{maWiFiSensingChannel2020}) have been explored with regards to security,
 but could result in very good results when applied to gesture detection. This
 is particularly interesting when one considers that the user need not interact
 with any device explicitly. It could appear to "just work". However, the
 privacy implications of this are very concerning\footnote{
-\cite{aliKeystrokeRecognitionUsing2015, aliRecognizingKeystrokesUsing2017,
+\citealp{aliKeystrokeRecognitionUsing2015, aliRecognizingKeystrokesUsing2017,
 liWhenCSIMeets2016}} and also require more thought about how to provide a good
 experience to the user while still communicating to the user when their
 movements are being watched and recorded. Closed-Circuit television (CCTV) is
@@ -367,7 +367,7 @@ detection, making this avenue rife for attack from a malicious agent.
 
 Surface Electromyography (sEMG, discussed in Section
 \ref{sec:03-technologies-used} ) is also very promising (see
-\cite{moinWearableBiosensingSystem2020}), as it requires only the user's
+\citealt{moinWearableBiosensingSystem2020}), as it requires only the user's
 forearm to be measured but could provide information about the user's whole
 hand movement by measuring muscle activity. Keeping one's hands clear and
 unobstructed is often desirable for intricate movements and is often more

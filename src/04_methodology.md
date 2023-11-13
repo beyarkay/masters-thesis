@@ -23,11 +23,8 @@ classifiers into multi-class classifiers is discussed in Section
 optimising the hyperparameters of each model type is discussed in Section
 \ref{sec:04-procedure-for-hyperparameter-optimisation}. The implementation
 details for each model type is discussed in Section
-\ref{sec:04-model-design-and-implementation}. The evaluation metrics by which
-multi-class classifiers can be compared is discussed in Section
-\ref{sec:04-evaluation-metrics}. A means of ordering those classifiers is
-discussed in Section
-\ref{sec:04-an-ordering-over-multi-class-classifiers}.
+\ref{sec:04-model-design-and-implementation}. A means of ordering those classifiers is
+discussed in Section \ref{sec:04-an-ordering-over-multi-class-classifiers}.
 
 # Construction of Ergo \label{sec:04-construction-of-ergo}
 
@@ -427,8 +424,7 @@ different underlying distribution to the training-validation dataset.
 # Experimental Procedure \label{sec:04-experimental-procedure}
 
 Experiments will be conducted so as to answer the research questions posed in
-the Introduction\footnote{Section reference to be added when the introduction
-is written}<!-- TODO: Add section reference -->. As each model type has a
+the Chapter \ref{sec:01-research-questions}. As each model type has a
 different hyperparameter space, the experiments for each of the five model
 types will be performed separately. Additionally, there will be experiments for
 5-, 50-, and 51-class datasets.
@@ -584,7 +580,8 @@ model type being evaluated.
 Finding new methods for computationally efficient hyperparameter optimisation
 is a field of active research. Broadly there are three kinds of hyperparameter
 optimisation: grid search, random search, and various means of more intelligent
-search. <!-- TODO: Add references to the different search types -->
+search\footnote{\cite{bergstraAlgorithmsHyperParameterOptimization2011,
+jamiesonNonstochasticBestArm2015, shahriariTakingHumanOut2016}}.
 
 Grid search is the simplest to implement, and requires that each hyperparameter
 is a finite set. Grid search will then iterate over every
@@ -662,17 +659,23 @@ and Support Vector Machines in Section \ref{models-specifics-svm}.
 ## Hidden Markov Models \label{model-specifics-hmm}
 
 <!-- TODO:
-Need to give the math for why HMMs don't work with >100k observations
+
+Describe in detail how the HMM can't really be trained with the full
+dataset because it can't fit into memory. And it's beyond the scope to
+batch-ify it. And the 50-class FFNNs already show superior performance. Need to
+give the math for why HMMs don't work with >100k observations
+
 -->
 
-Hidden Markov Models (HMMs, introduced in Section \ref{sec:02_hmm}) are able to
-model the progression of time via sequential states and their transition
-probability matrices. For this reason, each HMM classifier attempts to model an
-observation as a sequence of 22 states: a start state, one state for each of
-the 20 time steps, and an end state. Each state emits a 30-dimensional Gaussian
-distribution (one dimension for each of the 30 sensors). The mean vector
-$\bm{\mu}$ and the covariance matrix $\bm{\Sigma}$ of the Gaussian are
-estimated using the Baum-Welch expectation maximisation algorithm.
+Hidden Markov Models (HMMs, introduced in Section
+\ref{sec:02-hidden-markov-models}) are able to model the progression of time
+via sequential states and their transition probability matrices. For this
+reason, each HMM classifier attempts to model an observation as a sequence of
+22 states: a start state, one state for each of the 20 time steps, and an end
+state. Each state emits a 30-dimensional Gaussian distribution (one dimension
+for each of the 30 sensors). The mean vector $\bm{\mu}$ and the covariance
+matrix $\bm{\Sigma}$ of the Gaussian are estimated using the Baum-Welch
+expectation maximisation algorithm.
 
 HMMs do not natively support multi-class classification, and as such
 one-vs-rest classification is used. There is one HMM for each class, including
@@ -683,8 +686,8 @@ the full matrix need not be learned. In order from most constrained to least
 constrained:
 
 - Spherical covariance matrix: each state uses a single variance value that
-  applies to all features: $\lambda I$ where $\lambda \in \mathbb{R}$ and $I$ is the
-  $30 \times 30$ identity matrix.
+  applies to all features: $\lambda I$ where $\lambda \in \mathbb{R}$ and $I$
+  is the $30 \times 30$ identity matrix.
 - Diagonal covariance matrix: each state uses a diagonal covariance matrix.
   $\bm{\lambda} I$ where $\bm{\lambda} \in \mathbb{R}^{30}$
 - Tied covariance matrix: each state use the same shared, full covariance
@@ -750,133 +753,44 @@ Table \ref{tab:04_hpar_dists_hmm} shows the hyperparameters for the HMMs.
 
 ## Cumulative Sum \label{model-specifics-cusum}
 
-Cumulative Sum (CuSUM, introduced in Section \ref{sec:02_cusum}) is designed
+Cumulative Sum (CuSUM, introduced in Section \ref{sec:02-cumulative-sum}) is designed
 for real-time univariate time-series out-of-distribution detection. It cannot
 natively support multivariate multi-class classification, and so some
 adjustments are required.
 
 The term _CuSUM algorithm_ will be used to refer to the univariate time series
-out-of-distribution detection algorithm, and _CuSUM classifier_ to refer to the
-ensemble of _CuSUM algorithms_ used to perform multivariate multi-class
-classification.
+out-of-distribution detection algorithm, as described in Algorithm
+\ref{alg:cusum} in Section \ref{sec:02-cumulative-sum}.
 
-Each CuSUM algorithm requires a reference value against which any deviations
-will be compared. This reference value is set to be the first 10 values in the
-given time series. The CuSUM algorithm will alert if the time series becomes
-either too high or too low. Each CuSUM algorithm only has one parameter, the
-threshold value, which defines how much deviation is permitted before an alert
-is raised. The CuSUM algorithm is given in Algorithm \ref{alg:cusum}.
+In order to classify a given observation as belonging to one of 51 classes, a
+one-vs-rest approach will be used. 51 different CuSUM classifiers will be
+trained, where the $i$th CuSUM classifier predicts whether or not a given
+observation belongs to class $i$.
 
-<!-- TODO:
-It is important to note that this is not the cusum algorithm I had in mind, I
-wanted one to create pdfs and use likelihoods.... Implemented in this way there
-is no optimality gaurentees. Leave as is...... In your main theory chapter just
-cite this adaptation..
-
-What is TG's citation for CuSUM?
-
-
-Go back to the original background chapter and make clear what exactly is being
-defined by CuSUM
-
-
-Explain CuSUM better.
-
-
-In results, explain quickly why CuSUM isn't likely to be able to predict things
-accurately due to how the sensor alert profiles work
-
-Describe in detail how the HMM can't really be trained with the full dataset
-because it can't fit into memory. And it's beyond the scope to batch-ify it.
-And the 50-class FFNNs already show superior performance.
-
----
-
-Notes from the paper
-
-\theta is the "quality" number, but really it's the parameter of some
-distribution which one suspects will change over time. It is assumed that the
-value of \theta is proportional to the quality of the output.
-
--->
+Each of these classifiers will be made up of 30 CuSUM algorithms, one for each
+time series of sensor measurements. The $i$th classifier will learn which of
+these 30 CuSUM algorithms raise an alert when presented with an observation
+belonging to the $i$th class. The procedure for learning which alerts from
+which CuSUM algorithms is associated with which classes is given in Algorithm
+\ref{alg:04-cusum-training} and the procedure for performing inference is given
+in Algorithm \ref{alg:04-cusum-inference}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
-    \caption{CuSUM Algorithm}
-    \label{alg:cusum}
-    \begin{algorithmic}
-        \Require Data stream: $x_1, x_2, \ldots, x_n$
-        \Require Threshold: $t$
-        \State $U_0 = 0$, $L_0 = 0$ \Comment{Upper and lower cumulative sums}
-        \State $r = \frac{1}{10}\sum_{i=1}^{10} x_i$ \Comment{Reference value}
-        \For{$i = 1$ to $n$}
-            \State $d_i = x_i - r$ \Comment{Calculate the incremental change}
-            \If{$d_i > 0$} \Comment{Update the cumulative sums:}
-                \State $U_i = U_{i-1} + d_i$
-                \State $L_i = L_{i-1}$
-            \Else
-                \State $U_i = U_{i-1}$
-                \State $L_i = L_{i-1} - d_i$
-            \EndIf
-
-            \If{$U_i > t$ \textbf{or} $L_i > t$}
-                \State \textbf{Alarm condition met}
-            \EndIf
-        \EndFor
-        \State \textbf{Alarm condition not met}
-    \end{algorithmic}
-\end{algorithm}
-<!-- prettier-ignore-end -->
-
-To construct the CuSUM classifier, one CuSUM algorithm will be run for each
-dimension of the 30-dimensional time series. Each algorithm will detect when a
-certain time series exceeds a threshold value. Based on the training data, a
-connection
-
-<!-- TODO:
-a manual decision rule or mapping is defined for the set of 30 CUSUM algorthms
-that map the alram response of this set to a gesture label based on the labels
-in the training set? Am I correct? How you currently write it; it is unclear?
-This implementation will be ver succpeptable to orientation errors.... How do
-you distinguish when the orientation changes it is not clear howyou handle that
-case....
--->
-
-will be made between which algorithms exceed their threshold and
-what the ground truth class is for the observation. Call this group of 30 CuSUM
-algorithms combined with learnt parameters defining which algorithms alert for
-a certain
-
-<!-- TODO:
-this cusum is fine but it does explain your results..... you need to link back
-to this to explain why it fails if orientation changes?
-
-TODO give a better explainer of the CuSUM algorithm
--->
-
-class a _cluster_ of CuSUM algorithms. Each cluster is capable of
-multi-variate time-series binary classification.
-
----
-
-<!-- prettier-ignore-start -->
-\begin{algorithm}
-    \caption{Training Process}
+    \caption{CuSUM Training Algorithm}
+    \label{alg:04-cusum-training}
     \begin{algorithmic}[1]
-        \State Initialize \textit{alerts\_per\_sensor} as a matrix of zeros with shape (\textit{gestures}, \textit{sensors})
-        \For{each gesture $g$ in \textit{gestures}}
-            \State Initialize \textit{cusum\_alerts} as a zero matrix of shape (\textit{observations}, \textit{num sensors})
-            \For{each observation $i$, $x_i$ in $X$ matching $g$}
-                \For{each sensor $s$ in $x_i$}
-                    \State Perform CuSUM
-                    \State $cusum\_alert[i, s] \leftarrow$ CuSUM result (too high or too low?)
+        \State $ \text{training\_alerts} \leftarrow \mathbb{0}_{30, n_{\text{classes}}}$ \Comment{Initialise training\_alerts to a matrix of zeros}
+        \For{$i$ in $1 \ldots n_{\text{classes}}$}
+            \State $\text{subset} \leftarrow \text{observations belonging to class}\,i$
+            \For{$\text{observation}$ in $\text{subset}$}
+                \For{$j$ in $1$ to $30$}
+                    \If{CuSUM algorithm $j$ alerting for observation?}
+                        \State $\text{training\_alerts}_{ij} \mathrel{+}= 1$
+                    \EndIf
                 \EndFor
             \EndFor
-            \State \textit{alerts\_per\_sensor}[$g$] $\leftarrow$ Sum of $cusum\_alerts[i, :]$
-        \EndFor
-        \State Initialize \textit{alert\_probability\_per\_sensor} as a matrix of zeros with the same shape as \textit{alerts\_per\_sensor}
-        \For{each gesture $g$ in \textit{gestures}}
-            \State \textit{alert\_probability\_per\_sensor}[$g$] $\leftarrow$ $\frac{\textit{alerts\_per\_sensor}[g]}{\textit{alerts\_per\_sensor}.sum()}$
+            \State $\text{training\_alerts}_{ij} = \frac{\text{training\_alerts}_{ij}}{|\text{subset}|}$
         \EndFor
     \end{algorithmic}
 \end{algorithm}
@@ -884,34 +798,30 @@ multi-variate time-series binary classification.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
-    \caption{Predicting Process}
+    \caption{CuSUM Inference Algorithm}
+    \label{alg:04-cusum-inference}
     \begin{algorithmic}[1]
-        \State Initialize \textit{alerted\_sensors} as a vector of zeros with size \textit{num sensors}
-        \For{each sensor $s$ in \textit{num sensors}}
-            \State Perform CuSUM
-            \State \textit{alerted\_sensors}[$s$] $\leftarrow$ CuSUM result (too high or too low?)
-        \EndFor
-        \State Initialize \textit{max\_difference} as $-\infty$ and \textit{max\_difference\_gesture} as \textit{None}
-        \For{each gesture $g$ in \textit{gestures}}
-            \State Initialize \textit{expected\_alerted\_sensors} as \textit{alert\_probability\_per\_sensor}[$g$]
-            \State Calculate \textit{difference\_from\_expected} as $|\textit{expected\_alerted\_sensors} - \textit{alerted\_sensors}|$
-            \If{$\textit{difference\_from\_expected} > \textit{max\_difference}$}
-                \State \textit{max\_difference} $\leftarrow \textit{difference\_from\_expected}$
-                \State \textit{max\_difference\_gesture} $\leftarrow g$
+        \State $\text{alerts} \leftarrow \mathbb{0}_{30}$ \Comment{Initialise alerts to vector of zeros}
+        \For{$j$ in $1\ldots 30$}
+            \If{CuSUM algorithm $j$ alerting for observation?}
+                \State $\text{alerts}_j \leftarrow 1$
             \EndIf
         \EndFor
-        \State \textbf{return} \textit{max\_difference\_gesture} as the predicted gesture
+        \State $\text{best\_class} \leftarrow \text{None}$
+        \State $\text{best\_distance} \leftarrow \infty$
+        \For{$i$ in $1\ldots n_{\text{classes}}$}
+            \State $\text{distance} \leftarrow \|\text{alerts} - \text{training\_alerts}_i\|$
+            \If{$\text{distance} \mathrel{<} \text{best\_distance}$}
+                \State $\text{best\_distance} \leftarrow \text{distance}$
+                \State $\text{best\_class} \leftarrow i$
+            \EndIf
+        \EndFor
+        \State \textbf{return} $\text{best\_class}$
     \end{algorithmic}
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
----
-
-To perform multi-class classification, one-vs-rest will be used to combine 50
-clusters of CuSUM algorithms, where each cluster is trained on a different
-class. A CuSUM classifier is therefore constructed of 50 clusters of 30 CuSUM
-algorithms. Table \ref{tab:04_hpar_dists_cusum} shows the hyperparameter for
-CuSUM.
+Table \ref{tab:04_hpar_dists_cusum} shows the hyperparameter values for CuSUM.
 
 <!-- prettier-ignore-start -->
 \begin{table}
@@ -931,7 +841,7 @@ CuSUM.
 ## Feed-Forward Neural Networks \label{model-specifics-ffnn}
 
 The Feed-Forward Neural Networks (FFNNs, introduced in Section
-\ref{sec:02_ffnn}) were implemented using the TensorFlow library for the
+\ref{sec:02-artificial-neural-networks}) were implemented using the TensorFlow library for the
 Python3 programming language. Each FFNN is modelled as a sequence layers, where
 each layer performs a transformation on its input and provides output to the
 next layer. The input $20 \times 30$ matrix is flattened into a 600 dimensional
@@ -1117,7 +1027,7 @@ a variable number of epochs each, in the range from 5 to 40. Table
 
 ## Support Vector Machines \label{models-specifics-svm}
 
-Support Vector Machines (SVMs, introduced in Section \ref{sec:02_svm}) do not
+Support Vector Machines (SVMs, introduced in Section \ref{sec:02-support-vector-machines}) do not
 support multi-class classification natively, and so a one-vs-rest technique is
 used to enable an ensemble of SVMs to make multi-class classifications. The
 input $20 \times 30$ matrix is flattened into a 600 dimensional vector before
@@ -1127,9 +1037,8 @@ All SVMs were trained for 200 iterations with a linear kernel. One
 hyperparameter, the class weight, was iterated to weight the influence of each
 class based on it's prevalence in the training dataset. The hyperparameter $C$
 controls the regularisation and is used in the same way as described in the
-Background chapter\footnote{NOTE: The background section on SVMs is being
-completed}. Table \ref{tab:04_hpar_dists_svm} describes the hyperparameters for
-the SVMs.
+Section \ref{sec:02-support-vector-machines}. Table \ref{tab:04_hpar_dists_svm}
+describes the hyperparameters for the SVMs.
 
 <!-- prettier-ignore-start -->
 \begin{table}
@@ -1147,254 +1056,6 @@ the SVMs.
     \end{tabular}
 \end{table}
 <!-- prettier-ignore-end -->
-
-# Evaluation Metrics \label{sec:04-evaluation-metrics}
-
-Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
-observations $n$, multi-class classifiers can be evaluated against one another
-when comparing the ground truth labels $\bm{t}: t_i \in C \,\forall\, i \in {1,
-\ldots, n}$ against the labels predicted by that classifier $\bm{p}: p_i \in C
-\,\forall\, i \in {1, \ldots, n}$. The following subsections will describe
-different means of comparing multi-class classifiers.
-
-## Confusion Matrices
-
-Confusion matrices collate a models performance by grouping each combination of
-predicted and ground truth label. For a $|C|$-class classification problem, a
-confusion matrix is a $|C| \times |C|$ matrix of values, where the
-element in the $i$-th row and the $j$-th column of the confusion matrix is the
-number of times a classifier predicted an observation that belongs to class $i$
-as belonging to class $j$. That is, that the ground truth label is $i$ and the
-predicted label is $j$. The element-wise definition of a confusion matrix is
-
-$$
-    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [t_k = j \land p_k = i].
-$$
-
-An example confusion matrix is given in the top-left plot of Figure
-\ref{fig:04_example_conf_mat}. Note that elements in the confusion matrix which
-are zero are left uncoloured and are not annotated with a 0. For confusion
-matrices with few classes and few observations this will not matter
-significantly. However, for confusion matrices with many classes and many
-observations it will prove informative to be able to distinguish one
-misprediction from zero mispredictions.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/04_example_conf_mat}
-    \caption[Example confusion matrices]{Four example confusion matrices, each showing the same data but
-    visualised under four different normalisation schemes.}
-    \label{fig:04_example_conf_mat}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-In practice, confusion matrices are often normalised before visualisation as
-this aids in the interpretation of the model's performance. The unnormalised
-confusion matrix is shown in the top-left plot of
-Figure \ref{fig:04_example_conf_mat}. Confusion matrices can also be column- or
-row-normalised (shown in the top-right and bottom-left plots respectively).
-Column normalisation divides each element by the sum of its column, such that
-each column sums to one. Row normalisation is similar, and ensures each row
-sums to one.
-
-Row-normalization and column-normalization ensure that each element in the
-matrix represents the proportion of ground truth or predicted labels concerning
-the total number of ground truth or predicted labels for the associated class,
-respectively.
-
-Confusion matrices can also be total-normalised (as seen in the bottom-right
-plot) in which case every element is divided by the sum over the entire
-confusion matrix. This allows the elements to be interpreted as a fraction of
-the total number of observations.
-
-Unless otherwise specified, all confusion matrices presented in this thesis are
-column-normalised.
-
-It is also useful to compare the confusion matrices for all instances of a
-model across two or more values of a discrete hyperparameter. For example,
-comparing the confusion matrices for FFNNs with one, two, and three layers. In
-these cases, the weighted confusion matrix shall be shown. The weighted
-confusion matrix of a subset of models is calculated by taking the unnormalised
-confusion matrix for a model, multiplying each value in that confusion matrix
-by the model's $F_1$-score, and then adding all confusion matrices together
-element-wise. The resulting sum of weighted confusion matrices is then divided
-by the sum of all $F_1$-scores and finally column-normalised. This procedure is
-given in Algorithm \ref{alg:04_weighted_cm}.
-
-<!-- TODO:
-Need a reference for how I'm using weighted confusion matrices to compare the
-different models. Not sure why I need this, it seems pretty damn basic
-
-> Can you cite this approach? Or give a footnote to a website....
--->
-
-<!-- prettier-ignore-start -->
-\begin{algorithm}
-    \caption[Weighted confusion matrices]{Comparison of Weighted Confusion Matrices}
-    \label{alg:04_weighted_cm}
-    \begin{algorithmic}[1]
-        \Require A set of models
-        \Require A method for computing the confusion matrix for a model
-        \Require A method for computing the $F_1$-score for a model
-        \State $\bm{C}_{weighted} \gets \mathbf{0}_{n\times n}$
-        \State $\Sigma F_1 \gets 0$
-        \For{$model$ in $models$}
-            \State $\bm{C} \gets$ \Call{ComputeConfusionMatrix}{model}
-            \State $F_1 \gets$ \Call{$\text{ComputeF}_1\text{Score}$}{model}
-            \State $\bm{C}_{weighted} \gets \bm{C}_{weighted} + (F_1 \cdot \bm{C})$
-            \State $\Sigma F_1 \gets \Sigma F_1 + F_1$
-        \EndFor
-        \State $C_{weighted} \gets \frac{\bm{C}_{weighted}}{\Sigma F_1}$
-        \State $C_{weighted} \gets$ \Call{ColumnNormalize}{$C_{weighted}$}
-    \end{algorithmic}
-\end{algorithm}
-<!-- prettier-ignore-end -->
-
-## Accuracy
-
-The accuracy of a classifier is defined as the number of correct predictions
-over the total number of predictions. This metric does not take into account
-the distribution of predictions and does not work well when there is a class
-imbalance. If 99% of the data belongs to a class YES while 1% of the data
-belongs to the class NO, then a naïve classifier can achieve 99% accuracy by
-always predicting YES. As the _Ergo_ dataset has a large class imbalance,
-accuracy will not be used as a metric for comparing models.
-
-## Precision, Recall, and $F_1$-score
-
-Confusion matrices aid in the interpretation of large numbers of predictions,
-but do not have a total ordering. To this end, we will define first the
-per-class precision, recall, and $F_1$-score. These metrics depend on
-four summary statistics:
-
-- $\text{TP}_i$, the number of true positives for class $c_i$: This is the
-  number of labels for which both the ground truth and the predicted class are
-  $c_i$:
-
-  $$
-       \text{TP}_i = \sum_{j=1}^n [t_j = p_j = c_i]
-  $$
-
-- $\text{TN}_i$, the number of true negatives for class $c_i$: This is the
-  number of labels for which both the ground truth and the predicted class are
-  _not_ $c_i$:
-
-  $$
-       \text{TN}_i = \sum_{j=1}^n [t_j \neq c_i \land p_j \neq c_i]
-  $$
-
-- $\text{FP}_i$, the number of False positives for class $c_i$: This is the
-  number of labels for which the predicted class is $c_i$ but the true label
-  is _not_ $c_i$:
-
-  $$
-       \text{FP}_i = \sum_{j=1}^n [p_j = c_i \land t_j \neq c_i]
-  $$
-
-- $\text{FN}_i$, the number of False negatives for class $c_i$: This is the
-  number of labels for which the predicted label is not $c_i$ but the true
-  label is $c_i$:
-
-  $$
-       \text{FN}_i = \sum_{j=1}^n [p_j \neq c_i \land t_j = c_i]
-  $$
-
-The precision for some class $c_i$ can be intuitively understood as a metric that
-penalises classifiers which too frequently predict class $c_i$. It is defined as
-
-$$
-    \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
-$$
-
-Likewise, the recall for some class $c_i$ can be understood as a metric that
-penalises classifiers which too infrequently predict class $c_i$. It is defined
-as
-
-$$
-    \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}.
-$$
-
-The $F_1$-score for some class $c_i$ ($F_{1,i}$) is defined as the harmonic
-mean of the precision and recall of that class:
-
-$$
-    F_{1,i} = 2 \cdot \frac{
-            \text{Precision}_i \cdot \text{Recall}_i
-        }{
-            \text{Precision}_i + \text{Recall}_I
-        }
-$$
-
-The fact that the harmonic mean is used to calculate the $F_1$-score ensures
-that both a high precision and high recall are required to obtain a high
-$F_1$-score. This is made clear when plotting the $F_1$-scores for various
-precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!h]
-    \centering
-    \includegraphics{src/imgs/graphs/04_precision_recall_f1}
-    \caption[Precision and recall with $F_1$ as contours]{Precision and recall with the calculated $F_1$-score plotted as
-    contours. Both a high recall and a high precision are required for a high
-    $F_1$-score.}
-    \label{fig:04_precision_recall_f1}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-To aid comparison, the same data used to construct the confusion matrices in
-Figure \ref{fig:04_example_conf_mat} will be used to plot the per-class
-precision, recall, and $F_1$-score. They will be visualised as a heatmap with
-one column per class and one row for each of precision, recall, and
-$F_1$-score. This plot is shown in Figure \ref{fig:04_prec_rec_f1_example}.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/04_prec_rec_f1_example}
-    \caption[Precision, recall, $F_1$ heatmap]{Precision, recall, and $F_1$ score for the confusion matrix in
-    Figure \ref{fig:04_example_conf_mat}.}
-    \label{fig:04_prec_rec_f1_example}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-It is apparent that the classes with perfect precision (classes 0, 1, and 3)
-have columns in the confusion matrix which are zero except for the element on
-the principle diagonal. Likewise, classes with perfect recall (class 2) have
-rows in the confusion matrix which are zero except for the element on the
-principle diagonal. Precision can therefore be gleaned from a confusion matrix
-by observing the columns of the appropriate confusion matrix, and
-\textbf{r}ecall by observing the \textbf{r}ows.
-
-## Weighted and Unweighted Averages
-
-While precision, recall, and $F_1$-score provide a much more concise
-representation of a classifier's performance than a confusion matrix, they
-still do not provide a single number through which all classifiers might be
-given a total ordering. To this end, we will calculate the unweighted
-arithmetic mean of the per-class precision, recall, and
-$F_1$-scores\footnote{
-The unweighted average is sometimes referred to as the macro average, and
-the weighted average as the micro average.
-}.
-
-The unweighted mean is desirable for the task at hand as the _Ergo_ dataset is
-highly imbalanced, with one class being assigned to 97% of the observations. If
-the weighted mean was used instead, then a classifier would be able to achieve
-very high performance by ignoring the minority classes and only focusing on
-predicting the majority class correctly.
-
-For these reasons, the unqualified terms precision, recall, and
-$F_1$-score will be taken to mean the unweighted mean over the per-class
-precisions, recalls, and $F_1$-scores.
-
-It is important to note that one cannot calculate the unweighted $F_1$-score
-using the unweighted precision and recall due to the non-linear relationship
-between the $F_1$-score and precision and recall. This has the unfortunate
-implication that a plot showing the unweighted precision and unweighted recall
-of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
-$F_1$-score must be shown in a separate plot alongside the precision-recall
-plot.
 
 # An Ordering Over Multi-class Classifiers \label{sec:04-an-ordering-over-multi-class-classifiers}
 
@@ -1415,7 +1076,3 @@ not just have a single outlier performance which achieved a high $F_1$-score,
 but rather consistently achieved a high $F_1$-score across all validation sets
 and all random initialisations. This means that the resulting model is more
 likely to generalise to unseen data.
-
-\cite{kingmaAdamMethodStochastic2014}
-
-\cite{einstein1905}
