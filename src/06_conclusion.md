@@ -45,18 +45,19 @@ recognition was given and some commonly-faced problems were outlined.
 
 Chapter \ref{chap:background} provided the theoretical background about the
 different classification algorithms used in the thesis. Neural Networks were
-discussed in Section \ref{sec:02_ffnn}, providing a short history of their
-development, a description of the mathematical process of training and
-inference, as well as a description of commonly used modifications to plain
-neural networks that generally improve performance. Hidden Markov Models were
-discussed in Section \ref{sec:02-hidden-markov-models}, discussing the mathematics required for
-the forward and backward procedures as well as the Viterbi algorithm. Support
-Vector Machines were discussed in Section \ref{sec:02-support-vector-machines} and the relevant
-mathematics for finding the optimal splitting hyperplane was discussed.
-Cumulative Sum were discussed in Section \ref{sec:02-cumulative-sum} with reference to
-the original work by \cite{pageCONTINUOUSINSPECTIONSCHEMES1954} who introduced
-the algorithm as a means for detection of a change in the parameters of an
-underlying distribution of sequential data.
+discussed in Section \ref{sec:02-artificial-neural-networks}, providing a short
+history of their development, a description of the mathematical process of
+training and inference, as well as a description of commonly used modifications
+to plain neural networks that generally improve performance. Hidden Markov
+Models were discussed in Section \ref{sec:02-hidden-markov-models}, discussing
+the mathematics required for the forward and backward procedures as well as the
+Viterbi algorithm. Support Vector Machines were discussed in Section
+\ref{sec:02-support-vector-machines} and the relevant mathematics for finding
+the optimal splitting hyperplane was discussed. Cumulative Sum were discussed
+in Section \ref{sec:02-cumulative-sum} with reference to the original work by
+\cite{pageCONTINUOUSINSPECTIONSCHEMES1954} who introduced the algorithm as a
+means for detection of a change in the parameters of an underlying distribution
+of sequential data.
 
 Chapter \ref{chap:literature-review} reviewed the gesture recognition
 literature since the first work by
@@ -365,7 +366,7 @@ commonly used to monitor behaviour in public and the public largely know this.
 However, very few people are aware of the capabilities of WiFi-based gesture
 detection, making this avenue rife for attack from a malicious agent.
 
-Surface Electromyography (sEMG, discussed in Section
+Surface Electromyography (EMG, discussed in Section
 \ref{sec:03-technologies-used} ) is also very promising (see
 \citealt{moinWearableBiosensingSystem2020}), as it requires only the user's
 forearm to be measured but could provide information about the user's whole
@@ -375,7 +376,7 @@ comfortable, making this technology worth pursuing. Current research requires
 dense arrays of custom designed electrodes to be attached to the user's
 forearm. This technology has promise, but requires a lot more work to be simple
 to use. The NinaPro database \citep{atzoriNinaproDatabaseResource2015} is a
-useful resource for sEMG controlled robotic hand prosthetics.
+useful resource for EMG controlled robotic hand prosthetics.
 
 Future development on the \emph{Ergo} sensor suite would focus on portability:
 The current system is tethered to the user's computer but it is technically

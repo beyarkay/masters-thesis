@@ -36,20 +36,21 @@ atzoriNinaproDatabaseResource2015, guyonChaLearnGestureChallenge2012,
 materzynskaJesterDatasetLargeScale2019, zhangEgoGestureNewDataset2018}}. Recent
 changes in commercially available Wi-Fi routers
 \citep{halperinToolReleaseGathering2011} have also enabled the detection of
-hand gestures by analysing diagnostics data from these routers
+hand gestures by analysing diagnostic data from these routers
 \citep{puWholehomeGestureRecognition2013}.
 
-Work done on gesture detection is notably divided based on whether the
-application allows the user to make gestures at arbitrary points in time
+Work done on gesture detection can be divided based on whether the
+gesture detection system allows the user to make gestures at arbitrary points in time
 (implicit segmentation), or whether the user is required to explicitly mark the
 start and end of their gestures (explicit segmentation). Implicit segmentation
 dramatically improves the experience for the user and may be considered a
 requirement for a commercial product. Explicit segmentation significantly
 reduces the complexity of classifying gestures. This thesis will present an
-adequate solution to the former.
+adequate solution to implicit segmentation.
 
-A bespoke sensor suite, named \emph{Ergo}, has been constructed and is used to
-measure the acceleration of a user's fingertips in real time (see Figure
+A bespoke sensor suite, named \emph{Ergo}, has been constructed for the purpose
+of real-time high-fidelity gesture recognition and is used to measure the
+acceleration of a user's fingertips in real time (see Figure
 \ref{fig:01_glove}).
 
 <!-- prettier-ignore-start -->
@@ -64,10 +65,9 @@ measure the acceleration of a user's fingertips in real time (see Figure
 \end{figure}
 <!-- prettier-ignore-end -->
 
-This sensor suite was designed and constructed by the author for the purpose of
-gesture recognition, and is capable of recording one 3-dimensional acceleration
-vector for each of the user's ten fingertips every 0.025 seconds. This is
-equivalent to 1200 measurements per second.
+This sensor suite is capable of recording one 3-dimensional acceleration vector
+for each of the user's ten fingertips every 0.025 seconds. This is equivalent
+to 1200 measurements per second.
 
 Using this data, several multi-class classification algorithms are trained 1)
 to distinguish intentional gestures from regular hand movements, and if an
@@ -83,21 +83,18 @@ intentional gestures from the background hand movements and has 51 classes
 (with the 51\textsuperscript{st} class representing all background hand
 movements).
 
-The rest of this chapter is as follows\footnote{This chapter has broken
-references some sections that look like ?? because I've excluded the content of
-all other chapters so that the PDF easier to manage. These references will be
-fixed when the entire PDF is compiled as one document.}: Section
-\ref{sec:01-problem-statement} will describe the problem to be solved. Section
-\ref{sec:01-research-questions} will pose the research questions related to the
-problem. Section \ref{sec:01-contributions} lists the software and the dataset
-contributions of the thesis. Finally, Section \ref{sec:01-thesis-structure}
-describes the structure of the thesis and the layout of the chapters.
+The rest of this chapter is as follows: Section \ref{sec:01-problem-statement}
+will describe the problem to be solved. Section \ref{sec:01-research-questions}
+will pose the research questions related to the problem. Section
+\ref{sec:01-contributions} lists the software and the dataset contributions of
+the thesis. Finally, Section \ref{sec:01-thesis-structure} describes the
+structure of the thesis and the layout of the chapters.
 
 # Problem Statement \label{sec:01-problem-statement}
 
 <!-- prettier-ignore-start -->
 \begin{framed}
-    Ascertain the feasibility of a commercially viable gesture recognition
+    Ascertain the feasibility of a commercially-viable gesture recognition
     device that is capable of implicit segmentation, and evaluate its ability
     to replace a full QWERTY keyboard as an input device.
 \end{framed}
@@ -160,15 +157,14 @@ The study aims to address the following points:
 # Contributions \label{sec:01-contributions}
 
 The dataset used in this thesis is freely available on
-[Zenodo](https://zenodo.org/)\footnote{I am yet to upload the dataset, I want
-to double check some details with you before I do so}. Both the raw sensor
-readings are available, as well as the pre-windowed and processed data.
+[Zenodo](https://zenodo.org/). Both the raw sensor readings are available, as
+well as the pre-windowed and processed data.
 
 The code used to train the classification algorithms, control the hardware, and
 to make predictions using the raw sensor data in real time is available on
-[GitHub](https://github.com/beyarkay/masters-code/)\footnote{This repo is
-private for now, is there any problem with me making it public now or should I
-wait for the hand-in date?}.
+[GitHub](https://github.com/beyarkay/masters-code/). The source code for this
+thesis, as well as the code used to analyse the database of the literature, is
+also available on [GitHub](https://github.com/beyarkay/masters-thesis/).
 
 # Thesis Structure \label{sec:01-thesis-structure}
 
@@ -195,5 +191,6 @@ The structure of the thesis is as follows:
 - The Appendix has several sections, none of which are required for the thesis
   but which are presented for the interested reader: Appendix
   \ref{app:additional-analysis} contains some additional analysis, Appendix
-  \ref{app:additional-figures} contains additional figures, and Appendix
-  \ref{app:additional-tables} contains additional tables.
+  \ref{app:additional-figures} contains additional figures, Appendix
+  \ref{app:additional-tables} contains additional tables, and Appendix
+  \ref{app:the-human-hand} contains anatomical details about the human hand.

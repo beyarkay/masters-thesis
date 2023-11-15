@@ -34,11 +34,12 @@ dev: pandoc clean
 	echo "file://$$(pwd)/main.pdf"
 
 release: pandoc clean
-	pdflatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary pdflatex files
+	xelatex -halt-on-error -jobname=tmp main.tex # Create the auxiliary xelatex files
 	bibtex tmp 2> /dev/null || true # Create the auxiliary bib files, ignore errors
-	pdflatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
-	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
-	pdflatex -halt-on-error -jobname=tmp main.tex # Provide links from bibliography to inline citations
+	xelatex -halt-on-error -jobname=tmp main.tex # Add the bibliography to the end of the pdf
+	xelatex -halt-on-error -jobname=tmp main.tex # Provide links from inline citations to bibliography
+	xelatex -halt-on-error -jobname=tmp main.tex # Provide links from bibliography to inline citations
+	cp tmp.pdf main.pdf
 	mv tmp.pdf "Boyd Kane MSc Thesis.pdf"
 	$(MAKE) clean
 	echo "file://$$(pwd)/Boyd Kane MSc Thesis.pdf"

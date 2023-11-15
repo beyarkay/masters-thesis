@@ -178,16 +178,13 @@ fingers and 5 gestures combine to make 50 gestures is described in Table
 
 As previously mentioned, these 50 gestures are mapped to keystrokes via a
 gesture-to-keystroke mapping. The default mapping is shown in Table
-\ref{tab:05_keystrokes}, which has the same layout as Table
-\ref{tab:05_gestures} to allow for easy comparison.
-
-The gestures are defined in a manner that is similar to the English QWERTY
-keyboard. For example, the gestures with an orientation of $90^\circ$ are
-ordered in the same way as the keys on the home row of the QWERTY keyboard.
-Flexing one's left little finger with an orientation of $90^\circ$ is the same
-as using ones left little finger on the home row of the QWERTY keyboard: both
-result in the keystroke "a". This allows new users to easily learn which
-gestures map to which keystrokes.
+\ref{tab:05_keystrokes}. The gestures are defined in a manner that is similar
+to the English QWERTY keyboard. For example, the gestures with an orientation
+of $90^\circ$ are ordered in the same way as the keys on the home row of the
+QWERTY keyboard. Flexing one's left little finger with an orientation of
+$90^\circ$ is the same as using ones left little finger on the home row of the
+QWERTY keyboard: both result in the keystroke "a". This allows new users to
+easily learn which gestures map to which keystrokes.
 
 <!-- prettier-ignore-start -->
 \begin{table}[h]
@@ -474,6 +471,8 @@ for each model type and each number of classes (5, 50, or 51).
 \end{table}
 <!-- prettier-ignore-end -->
 
+<!--- TODO 25m for 51-class HMM seems wrong... -->
+
 <!-- prettier-ignore-start -->
 \begin{table}
     \centering
@@ -588,11 +587,7 @@ is a finite set. Grid search will then iterate over every
 combination of the hyperparameters, calculating the objective value in each
 case. If there are $N$ hyperparameters $h_1, h_2, \ldots, h_N$, and
 each hyperparameter $h_i$ has $n_i$ possible values, then the total number of
-hyperparameter combinations to search is
-
-$$
-    \prod_{i=1}^N n_i.
-$$
+hyperparameter combinations to search is $\prod_{i=1}^N n_i$.
 
 Once every hyperparameter combination has been evaluated, the hyperparameter
 combination which resulted in the optimal objective value is selected as the
@@ -879,24 +874,16 @@ Where:
 - The summation is performed over all $n$ classes.
 - $\text{weight}_i$ is the weight of class $i$.
 
-The weight of each class is determined by the formula below, where
-$\text{count}_i$ is the number of samples in the class.
-
-$$
-    \text{weight}_i = -\log_{10}\left( {\text{count}_i} \right)
-$$
+The weight of each class is determined by $\text{weight}_i = -\log_{10}\left(
+{\text{count}_i} \right)$, where $\text{count}_i$ is the number of samples in
+the class.
 
 L2 normalisation is applied to the loss function such that the model is
 penalised for weights which are too large. The strength of regularisation is
 controlled by the L2 coefficient hyperparameter. A regularisation term is added
-to the loss function:
-
-$$
-    \text{L2} \cdot \sum_w w^2
-$$
-
-Where L2 is the L2 coefficient hyperparameter and the sum iterates over every
-weight in the network.
+to the loss function: $\text{L2} \cdot \sum_w w^2$, where L2 is the L2
+coefficient hyperparameter and the sum iterates over every weight in the
+network.
 
 The activation function of each fully connected layer is the ReLU activation
 function:
@@ -997,29 +984,22 @@ a variable number of epochs each, in the range from 5 to 40. Table
 <!-- prettier-ignore-start -->
 \begin{table}
     \centering
-    \caption{HFFNN hyperparameters, ranges, and distributions}
+    \caption{HFFNN hyperparameters, ranges, and distributions. The
+    hyperparameter distributions are the same but independent for the majority
+    and minority classifiers.}
     \label{tab:04_hpar_dists_hffnn}
-    \begin{tabular}{|c|c|c|c|}
+    \begin{tabular}{|c|c|c|}
         \hline
-        Model Type  & Hyperparameter & Range & Distribution \\
+        Hyperparameter & Range & Distribution \\
         \hline
-        HFFNN (Majority) & Epochs               & $[5, 40]$                                   & Linear \\
-                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
-                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
-                         & Optimizer            & Adam                                        & Fixed \\
-                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
-                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
-                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
-                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
-        \hline
-        HFFNN (Minority) & Epochs               & $[5, 40]$                                   & Linear \\
-                         & Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
-                         & Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
-                         & Optimizer            & Adam                                        & Fixed \\
-                         & Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
-                         & Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
-                         & L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
-                         & Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
+        Epochs               & $[5, 40]$                                   & Linear \\
+        Batch Size           & $[2^6, 2^8]$                                & Logarithmic \\
+        Learning Rate        & $[10^{-6}, 10^{-1}]$                        & Logarithmic \\
+        Optimizer            & Adam                                        & Fixed \\
+        Number of Layers     & \{1, 2, 3\}                                 & Categorical \\
+        Nodes per Layer      & $[2^2, 2^9]$                                & Logarithmic \\
+        L2 Coefficient       & $[10^{-7}, 10^{-4}]$                        & Logarithmic \\
+        Dropout Rate         & $[0.0, 0.5]$                                & Linear \\
         \hline
     \end{tabular}
 \end{table}

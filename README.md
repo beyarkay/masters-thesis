@@ -7,6 +7,8 @@
 - Equation numbers
 - Equation punctuation
 - Prettier messes up spaces after equations
+- Make sure the trailing dashes "5-, 50-, 51-classes" and "vision- and
+  WiFi-based" are correct.
 
 ## Ergo Report
 

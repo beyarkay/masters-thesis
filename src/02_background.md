@@ -6,12 +6,13 @@
 
 This chapter describes the mathematics behind the classification algorithms
 used by \emph{Ergo}, as well as providing some background to the problem at
-hand. Section \ref{sec:02-artificial-intelligence-and-machine-learning}
-provides a brief history of artificial intelligence, machine learning, and the
-nomenclature therein.
+hand.
 
-Artificial Neural Networks (ANNs) have shown a lot of promise in a wide range
-of classification problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
+Section \ref{sec:02-artificial-intelligence-and-machine-learning} provides a
+brief history of artificial intelligence, machine learning, and the
+nomenclature therein. Artificial Neural Networks (ANNs) have shown a lot of
+promise in a wide range of classification
+problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
 netoHighLevelProgramming2010, mehdiSignLanguageRecognition2002,
 jong-sungkimDynamicGestureRecognition1996,
 felsGloveTalkIIaNeuralnetworkInterface1998}} and are discussed in Section
@@ -69,12 +70,12 @@ provided with any desired output, but is required to learn the structure in the
 data. Hybrid approaches ("semi-supervised") are also possible, which combine
 elements of supervised and unsupervised learning.
 
-Many supervised machine learning tasks can be divided into either a regression or a
-classification problem. A regression problem requires the estimation of a
+Many supervised machine learning tasks can be divided into either a regression
+or a classification problem. A regression problem requires the estimation of a
 function that maps a set of input features $\bm{x}$ to a value $y$ where
 $y\in\mathbb{R}^p, p\in\mathbb{N}$. Classification problems require the
 estimation of a function that maps a set of input features $\bm{x}$ to a value
-$y$ where $y$ is an element of some finite set $A$.
+$y$, where $y$ is an element of some finite set $A$.
 
 # Artificial Neural Networks \label{sec:02-artificial-neural-networks}
 
@@ -411,11 +412,11 @@ activations of the last layer and the derivative of the activation function:
 
 <!-- prettier-ignore-start -->
 \begin{align*}
-    \frac{\partial C}{\partial z_j^L} &= \frac{\partial C}{\partial a_j^L}
-    \frac{\partial a_j^L}{\partial z^L_j} \\
-    &= \frac{\partial C}{\partial a_j^L}
-    \frac{\partial \left( \sigma(z_j^L) \right)}{\partial z^L_j} \\
-    &= \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)
+    \frac{\partial C}{\partial z_j^L} = \frac{\partial C}{\partial a_j^L}
+    \frac{\partial a_j^L}{\partial z^L_j}
+    = \frac{\partial C}{\partial a_j^L}
+    \frac{\partial \left( \sigma(z_j^L) \right)}{\partial z^L_j}
+    = \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)
 \end{align*}
 <!-- prettier-ignore-end -->
 
@@ -474,11 +475,10 @@ result:
 <!-- prettier-ignore-end -->
 
 Note that the partial derivative of the sum over $k$ ($\frac{\partial}{\partial
-z_j^l} \sum_k$) is all zeros except where $j=k$.
-
-This shows that the partial derivative of each layer $\frac{\partial
-C}{\partial z_j^l}$ is a function of the partial derivative of the next layer
-$\frac{\partial C}{\partial z_j^{l+1}}$
+z_j^l} \sum_k$) is all zeros except where $j=k$. This shows that the partial
+derivative of each layer $\frac{\partial C}{\partial z_j^l}$ is a function of
+the partial derivative of the next layer $\frac{\partial C}{\partial
+z_j^{l+1}}$
 
 Backpropogation then proceeds as follows
 
@@ -587,13 +587,11 @@ Calculating whether or not the elements are identical is done via the
 expression $- p_i \log q_i$ which encodes the idea that if the true class is 1,
 then the loss is the log of the predicted label for that class.
 
-If the predicted label is close to 1, then the log of that predicted label
-will be close to 0 and thus the loss will be close to 0. However, if the
-predicted label is close to 0 then the log of that predicted label will
-approach negative infinity and thus the loss will be close to positive
-infinity.
-
-Note that if the true class is 0, the loss is zero.
+If the predicted label is close to 1, then the log of that predicted label will
+be close to 0 and thus the loss will be close to 0. However, if the predicted
+label is close to 0 then the log of that predicted label will approach negative
+infinity and thus the loss will be close to positive infinity. Note that if the
+true class is 0, the loss is zero.
 
 ## L2 Normalisation
 
@@ -707,12 +705,10 @@ we transition from state $i$ to state $j$.
 Note that because of the stationary process assumption, $A_{ij}$ is the same
 for the first time step as it is for any other time step.
 
-$\bm{A}$ completely hypothetical transition matrix describing an undergraduate's
-understanding of x86 Assembly\footnote{
-x86 Assembly is a low-level programming language designed for x86-based
-processors, and is commonly taught in undergraduate Computer Science
-courses.
-} might look like:
+$\bm{A}$ completely hypothetical transition matrix describing an
+undergraduate's understanding of x86 Assembly\footnote{ x86 Assembly is a
+low-level programming language designed for x86-based processors, and is
+commonly taught in undergraduate Computer Science courses. } might look like:
 
 $$
     \bm{A} = \begin{matrix}
@@ -902,7 +898,13 @@ zero, we get:
         &=
         \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right) \right)
         + \frac{\partial}{\partial A_{ij}} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right)\\
-     &\Rightarrow\\
+\end{align*}
+<!-- prettier-ignore-end -->
+
+Which implies
+
+<!-- prettier-ignore-start -->
+\begin{align*}
       0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] - \alpha_i \\
      \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
      A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
@@ -1290,9 +1292,9 @@ only SVM classifiers will be discussed here. SVMs work well in high dimensions
 and perform classifications using a small subset of the training observations,
 making them relatively fast and memory efficient. While SVMs do not natively
 support multi-class classification, it be implemented via one-vs-rest
-classification which will be discussed in Section \ref{sec:04-one-vs-rest}.
-The remainder of this section will describe SVMs as used for binary
-classification tasks.
+classification which will be discussed in Section
+\ref{sec:04-binary-and-multi-class-classifiers}. The remainder of this section
+will describe SVMs as used for binary classification tasks.
 
 SVMs learn to distinguish two classes in a dataset by finding a hyperplane that
 completely separates the two classes. Intuitively, an SVM attempts to find a
@@ -1323,29 +1325,14 @@ classes. This results in a greater probability that an unseen data point will
 be further from the hyperplane.
 
 To calculate the magnitude of the margin, recognise first that the margin is
-equal to the distance between two hyperplanes
-
-$$
-    \bm{w} x - b = -1 \quad \text{(named the negative hyperplane)}
-$$
-
-and
-
-$$
-    \bm{w} x - b = +1 \quad \text{(named the negative hyperplane)}.
-$$
+equal to the distance between two hyperplanes $\bm{w} x - b = -1$, named the
+negative hyperplane, and $\bm{w} x - b = +1$, named the negative hyperplane.
 
 If we define $x_0$ as a point in the negative hyperplane such that
-
-$$
-    \bm{w} x_0 - b = -1
-$$
-
-then finding the distance between the parallel
-hyperplanes is the same as finding the distance between $x_0$ and the positive
-hyperplane. We will name this distance $d$.
-
-The unit normal vector of the positive hyperplane is
+$\bm{w}x_0-b=-1$, then finding the distance between the parallel hyperplanes is
+the same as finding the distance between $x_0$ and the positive hyperplane. We
+will name this distance $d$. The unit normal vector of the positive hyperplane
+is
 
 $$
     \frac{w}{\|w\|}

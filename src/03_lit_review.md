@@ -51,19 +51,18 @@ Notes from Trienko meeting:
 
 This chapter reviews the literature as related to human hand gesture
 recognition. There are three primary methods of sensing the movement of a user's
-hands: glove-based, vision-based, and (most recently) WiFi-based systems.
+hands: glove-based, vision-based, and WiFi-based systems.
 
 This review is divided into four sections. The first (Section \ref{overview})
 will provide an overview of the field and some important metrics which will be
-used to compare different works. The second (Section
-\ref{glove-based-gesture-recognition}) discusses glove-based gesture
-recognition, and contains the most detail, as the subject of this thesis is a
-glove-based system for gesture recognition. The third section (Section
-\ref{sec:03-vision-and-wifi-based-gesture-recognition}) will cover other means
-of gesture recognition that do not use a physical glove of some sort, namely
-vision-based and WiFi-based systems. The fourth section (Section
-\ref{applications-of-gesture-recognition}) will discuss how gesture recognition
-has been used over the decades and how that has affected its development.
+used to compare different works. Section \ref{glove-based-gesture-recognition}
+discusses glove-based gesture recognition, and contains the most detail, as the
+subject of this thesis is a glove-based system for gesture recognition. Section
+\ref{sec:03-vision-and-wifi-based-gesture-recognition} covers other means of
+gesture recognition that do not use a physical glove of some sort, namely
+vision-based and WiFi-based systems. Section
+\ref{applications-of-gesture-recognition} discusses how gesture recognition has
+been used over the decades and how that has affected its development.
 
 # Overview
 
@@ -200,12 +199,12 @@ of the dataset which do not contain any gestures.
 Glove-based gesture recognition can be defined as any gesture recognition
 system which gathers hand information using a device physically attached to the
 user's hands or upper arms. First the technologies used in building the gloves
-will be discussed (Subsection \ref{sec:03-technologies-used}). Then an overview of the
-seminal papers and larger surveys will be provided (Subsection
+will be discussed (subsection \ref{sec:03-technologies-used}). Then an overview of the
+seminal papers and larger surveys will be provided (subsection
 \ref{landmark-papers}). The hardware products produced (and sometimes sold
 commercially) will be discussed in subsection \ref{sec:03-hardware-products}. Datasets
 used in glove-based systems (or the lack thereof) will be discussed in
-Subsection \ref{datasets}. Finally, Subsection
+subsection \ref{datasets}. Finally, subsection
 \ref{models-and-recognition-techniques} reviews the different models and
 recognition techniques used for glove-based gesture recognition.
 
@@ -321,7 +320,6 @@ kunduHandGestureRecognition2018, moinWearableBiosensingSystem2020,
 vasconezHandGestureRecognition2022, wuWearableSystemRecognizing2016,
 xuzhangFrameworkHandGesture2011, zhangHandGestureRecognition2009,
 zhangRealTimeSurfaceEMG2019}} with a general overview of the field given by
-Asghari and Hu's survey in 2007
 \cite{asgharioskoeiMyoelectricControlSystems2007}.
 
 After the introduction of acceleration and EMG sensors to the field of gesture
@@ -334,24 +332,24 @@ isolation.
 
 The changing capacitance of the body has also been used to recognise gestures
 \footnote{\cite{rekimotoGestureWristGesturePadUnobtrusive2001,
-wongMultiFeaturesCapacitiveHand2021}}. Rekimoto
-\citep{rekimotoGestureWristGesturePadUnobtrusive2001} achieved this by using a
+wongMultiFeaturesCapacitiveHand2021}}.
+\cite{rekimotoGestureWristGesturePadUnobtrusive2001} achieved this by using a
 bracelet-like device which measures how the capacitance through the upper
 forearm changed as the user's muscles moved their fingers.
 
-Wen \emph{et~al.} \cite{wenMachineLearningGlove2020} used triboelectric textile
-sensors to measure the stretch of a textile glove.
+\cite{wenMachineLearningGlove2020} used triboelectric textile sensors to
+measure the stretch of a textile glove.
 
 Figure \ref{fig:03_tech_for_gloves} shows the different technologies used by
 glove-based systems over time. Each point is a paper, and the colour of the
 point indicates the number of citations. If a paper used multiple technologies,
 then it is represented by multiple points, one point for each technology.
 
-. Not every paper represented in the
-figures in this chapter is necessarily cited. The reader is directed to the
-Zenodo dataset containing the author's database of approximately 750 papers,
-theses, and websites which were used to construct these plots. The code
-required to reproduce the figures is available on GitHub.
+For the sake of brevity, not every paper represented in the figures in this
+chapter is necessarily cited. The reader is directed to the Zenodo dataset
+containing the author's database of approximately 750 papers, theses, and
+websites which were used to construct these plots. The code required to
+reproduce the figures is available on GitHub.
 
 <!-- TODO: add links to these -->
 
@@ -359,7 +357,8 @@ required to reproduce the figures is available on GitHub.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_tech_for_gloves}
-    \caption{Different technologies used for glove-based systems. EMG refers to
+    \caption[Technologies used for glove-based systems]{Different technologies
+    used for glove-based systems. EMG refers to
     electromyography. IMU stands for Inertial Measurement Unit, a device
     typically capable of measuring rotational acceleration, linear
     acceleration, and orientation relative to the earth's magnetic field. The
@@ -379,19 +378,17 @@ Regrettably, the primary accounts concerning these systems have succumbed to
 the passage of time, often rendering Sturman and Zeltzer's work as the sole
 surviving repository of knowledge on the state of the field during that time.
 
-Following \cite{sturmanSurveyGlovebasedInput1994}, the interest in hand gesture
-recognition increased significantly, prompting the survey by
-\cite{laviolaSurveyHandPosture1999} which discussed the models and techniques
-used for glove and vision based classification.
+Following this survey, the interest in hand gesture recognition increased
+significantly, prompting the survey by \cite{laviolaSurveyHandPosture1999}
+which discussed the models and techniques used for glove and vision based
+classification.
 
-In 2007, Mitra and Acharya \cite{mitraGestureRecognitionSurvey2007} surveyed the
-software and modelling developments for human gesture recognition (including
-face and head tracking).
-
-Shortly after \cite{mitraGestureRecognitionSurvey2007}, Dipietro \emph{et~al.}
-\cite{dipietroSurveyGloveBasedSystems2008} described the state of glove-based input
-and focused on how the technology has evolved, providing a comprehensive
-summary of the different systems and how they compare to one another.
+\cite{mitraGestureRecognitionSurvey2007} surveyed the software and modelling
+developments for human gesture recognition (including face and head tracking).
+shortly after which \cite{dipietroSurveyGloveBasedSystems2008} described the
+state of glove-based input and focused on how the technology has evolved,
+providing a comprehensive summary of the different systems and how they compare
+to one another.
 
 Following 2008, there have been several smaller reviews of the literature
 \footnote{\cite{anwarHandGestureRecognition2019, chenSurveyHandGesture2013,
@@ -406,12 +403,14 @@ glove/vision/wifi or something. Or maybe a graph of paper types over time, just
 for glove-based systems
 --->
 
+<!--- NOTE: this is excluded since it's not referenced
 \begin{figure}[!htb]
-\centering
-\includegraphics[width=\textwidth]{src/imgs/graphs/03_based_on_over_time.pdf}
-\caption{Trend of glove/vision/WiFi based systems over time}
-\label{fig:03_based_on_over_time}
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/03_based_on_over_time.pdf}
+    \caption{Trend of glove/vision/WiFi based systems over time}
+    \label{fig:03_based_on_over_time}
 \end{figure}
+--->
 
 ## Hardware Products \label{sec:03-hardware-products}
 
@@ -436,7 +435,7 @@ capture.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/imgs/03_experimental_television_center_computer_1969}
-    \caption{The Animac system
+    \caption[The 1969 Animac system]{The Animac system
     \citep{experimentaltelevisioncenterComputerImageCorporation1969} by the
     Computer Image Corporation of Denver, Colorado.}
     \label{fig:03_experimental_television_center_computer_1969}
@@ -489,7 +488,8 @@ used over time for glove-based gesture recognition systems.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_hardware_for_gloves}
-    \caption{Different hardware used for glove-based systems. The Contactglove
+    \caption[Hardware used for glove-based gesture recognition]{Different
+    hardware used for glove-based systems. The Contactglove
     was used by \cite{felsGloveTalkIIaNeuralnetworkInterface1998}, the TUB
     Sensorglove by \cite{hofmannVelocityProfileBased1998}, and the Microsoft
     Band2 by \cite{liHandGestureRecognition2018}.}
@@ -546,16 +546,14 @@ Different techniques have been applied to recognise gestures. The exact
 application of the model depends on the dataset collected, however some high
 level trends can be noticed. The datasets being classified often take the form
 of a multi-dimensional time series. Figure \ref{fig:03_models_glove_based}
-shows the models used over time for glove-based gesture recognition. The colour
-of each point indicates the number of citations of each paper. "None" indicates
-that the paper did not attempt to process the data after it was captured from
-the glove.
+shows the models used over time for glove-based gesture recognition.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_glove_based}
-    \caption{Classification models used for glove-based gesture recognition.
+    \caption[Models used for glove-based gesture recognition]{Classification
+    models used for glove-based gesture recognition.
     NNs are any models based on Neural Networks, RNN are Recurrent Neural
     Networks, FFNNs are Feed-forward Neural Networks, SVMs are Support Vector
     Machines, KNNs are k-Nearest Neighbours, CNNs are Convolutional Neural
@@ -565,11 +563,8 @@ the glove.
 <!-- prettier-ignore-end -->
 
 Early on in the field, many researchers extracted a custom-designed feature
-vector from their data and trained a model on that feature vector. This
-approach has recently fallen out of favour, with many recent papers using a
-variety of deep learning based methods to learn features implicitly.
-
-Hidden Markov Models (HMMs) have often been favoured due to their explicit
+vector from their data and trained a model on that feature vector. Following
+this, Hidden Markov Models (HMMs) have been favoured due to their explicit
 encoding of time-dependant data, and have been used by many papers for
 glove-based gesture
 recognition\footnote{\cite{ammaAirwritingWearableHandwriting2014,
@@ -590,7 +585,8 @@ wangchunliRealTimeLargeVocabulary2002, wengaoChineseSignLanguage2004,
 whiteheadGestureRecognitionAccelerometers2014, wuGestureRecognition3D2009,
 xuzhangFrameworkHandGesture2011, zhangHandGestureRecognition2009}}.
 
-Other popular systems employed for gesture recognition have been Support Vector Machines (SVMs)\footnote{\cite{ammaAirwritingWearableHandwriting2014,
+Other popular systems employed for gesture recognition have been Support Vector
+Machines (SVMs)\footnote{\cite{ammaAirwritingWearableHandwriting2014,
 collialfaroUserIndependentHandGesture2022, fatmiComparingANNSVM2019,
 hamdyaliComparativeStudyUser2014, kimBichannelSensorFusion2008,
 kunduHandGestureRecognition2018, leeSmartWearableHand2018,
@@ -609,54 +605,27 @@ hamdyaliComparativeStudyUser2014, kimBichannelSensorFusion2008,
 liHandGestureRecognition2018, sethujanakiRealTimeRecognition2013,
 wongMultiFeaturesCapacitiveHand2021, wuWearableSystemRecognizing2016}}.
 
-Neural Network based approaches first appeared with in 1991 when Murakami and
-Taguchi \cite{murakamiGestureRecognitionUsing1991} used a recurrent neural
-network to classify a dataset of 42 classes. The recent increase in
-computational power has allowed neural networks and their variants to be fully
-utilised for glove-based gesture recognition: Feed-Forward Neural Networks
-(FFNNs) \footnote{\cite{damasioAnimatingVirtualHumans2002,
-fatmiComparingANNSVM2019, felsGloveTalkIIaNeuralnetworkInterface1998,
-hamdyaliComparativeStudyUser2014, jong-sungkimDynamicGestureRecognition1996,
-mehdiSignLanguageRecognition2002, netoHighLevelProgramming2010,
-vasconezHandGestureRecognition2022, zhangRealTimeSurfaceEMG2019}}, Recurrent
-Neural Networks (RNNs) \footnote{\cite{kochRecurrentNeuralNetwork2019,
+Neural Network based approaches first appeared when
+\cite{murakamiGestureRecognitionUsing1991} used a recurrent neural network to
+classify a dataset of 42 classes. The recent increase in computational power
+has allowed neural networks and their variants to be fully utilised for
+glove-based gesture recognition: Feed-Forward Neural Networks (FFNNs)
+\footnote{\cite{damasioAnimatingVirtualHumans2002, fatmiComparingANNSVM2019,
+felsGloveTalkIIaNeuralnetworkInterface1998, hamdyaliComparativeStudyUser2014,
+jong-sungkimDynamicGestureRecognition1996, mehdiSignLanguageRecognition2002,
+netoHighLevelProgramming2010, vasconezHandGestureRecognition2022,
+zhangRealTimeSurfaceEMG2019}}, Recurrent Neural Networks (RNNs)
+\footnote{\cite{kochRecurrentNeuralNetwork2019,
 makaussovLowCostIMUBasedRealTime2020, murakamiGestureRecognitionUsing1991,
 riveraRecognitionHumanHand2017,
 wengaoChineseSignLanguage2004,yuanHandGestureRecognition2020,
 zhangStackedLSTMBasedDynamic2021}}, Convolutional Neural Networks (CNNs)
 \footnote{\cite{maHandGestureRecognition2017, wenMachineLearningGlove2020,
-yuanHandGestureRecognition2020}}, and Self-Organising Feature Maps (SOMs)
-\citep{wengaoChineseSignLanguage2004} have all shown good results.
+yuanHandGestureRecognition2020}}, and Self-Organising Feature Maps (SOMs,
+\cite{wengaoChineseSignLanguage2004}) have all shown good results.
 
-Papers which address implicit segmentation (where not every observation
-necessarily contains a gesture, thus resulting in a highly imbalanced dataset
-with many no-gesture observations) often use a two-model approach, with one
-model being used for gesture detection (without attempting to classify which
-gesture is being observed) and a second (often more complex) model being used
-for gesture recognition _given_ that the observation already contains a
-gesture. These two models are chained together, such that the gesture
-recogniser is only applied to observations which the gesture detector has
-predicted as actually containing a gesture. <!-- TODO: It would be nice to see
-the papers that does this versus not -->
-
-The training times and inference times of different models scale in different
-ways. Regular HMMs are unable of performing multi-class classification, and the
-only way to create a HMM-based classifier for multiple classes is to train one
-HMM for each class. At inference time, every HMM must output the log-likelihood
-of the given observation being generated. These log-likelihoods are then
-compared, and the class associated with the most likely HMM is selected as the
-classifiers prediction. This is called one-vs-rest classification. SVMs also
-require one-vs-rest classification for similar reasons.
-
-The problem with one-vs-rest classification is that it scales linearly with the
-number of classes being predicted. So performing inference on a dataset with 50
-classes will take approximately 10 times longer than performing inference on a
-dataset with 5 classes.
-
-While this fact has likely dissuaded many researchers from using HMMs for
-many-class gesture classification, they have nonetheless been used successfully
-by Chunli and Wen to classify thousands of unique gestures from Chinese Sign
-Language between 2001 and 2004: 4800 in
+HMMs have been used by Chunli and Wen to classify thousands of unique
+gestures from Chinese Sign Language between 2001 and 2004: 4800 in
 \citep{wangchunliRealTimeLargeVocabulary2001}, 5100 in
 \citep{wangchunliRealTimeLargeVocabulary2002} , and 5113 in
 \cite{wengaoChineseSignLanguage2004}. To accomplish this,
@@ -669,27 +638,23 @@ observation. They applied a heavily modified version of the Viterbi algorithm
 (which they named the "lattice" Viterbi Algorithm) to efficiently evaluate the
 log-likelihood of the thousands of HMMs.
 
-The inference and prediction times for neural network based methods do not tend
-to grow linearly with the number of classes being predicted. This is due to
-their internal architecture being able to support multi-class classification.
-This fact has lead to more neural network based approaches being used in recent
-years.
-
 # Vision- and WiFi-based Gesture Recognition \label{sec:03-vision-and-wifi-based-gesture-recognition}
 
-This section focuses on non-glove based gesture recognition, which resolves to
+This section focuses on non-glove-based gesture recognition, which resolves to
 just two categories: vision-based (using visible light and depth data), and
 WiFi-based (using the effect the human body has on diagnostic information
 collected in WiFi networks). This section will not be as detailed as Section
 \ref{glove-based-gesture-recognition}, due to the focus of the thesis being
 glove-based systems. There is a wealth of research in these two fields, with
 recent review papers of WiFi-based systems citing between 100 and 150 papers
-\footnote{\cite{maWiFiSensingChannel2020, hussainReviewCategorizationTechniques2020, wangCSIbasedHumanSensing2021, maSurveyWiFiBased2016}}. Recent reviews of
-vision-based systems cited between 100 and 270 papers
-\footnote{\cite{rautarayVisionBasedHand2015, cheokReviewHandGesture2019, oudahHandGestureRecognition2020}}. While the number of papers cited is not a
-precise measure of the size of the field, is does provide an approximation. The
-interested reader is directed towards those reviews for a more detailed
-treatment of the material.
+\footnote{\cite{maWiFiSensingChannel2020,
+hussainReviewCategorizationTechniques2020, wangCSIbasedHumanSensing2021,
+maSurveyWiFiBased2016}}. Recent reviews of vision-based systems cited between
+100 and 270 papers \footnote{\cite{rautarayVisionBasedHand2015,
+cheokReviewHandGesture2019, oudahHandGestureRecognition2020}}. While the number
+of papers cited is not a precise measure of the size of the field, is does
+provide an approximation. The interested reader is directed towards those
+reviews for a more detailed treatment of the material.
 
 **How vision-based systems work** Vision-based systems collect visual data
 using video cameras and more recently, depth information, either using
@@ -717,13 +682,10 @@ recognised using modern machine learning techniques.
 **Datasets** Both vision- and WiFi-based systems have seen the benefit of
 standardised hardware that enables the creation of high-quality and diverse
 datasets of gestures being performed and recorded on relevant hardware. These
-datasets\footnote{\cite{guyonChaLearnGestureChallenge2012, materzynskaJesterDatasetLargeScale2019, alazraiDatasetWiFibasedHumantohuman2020}} promote research in the field, as
-they provide a common baseline against which new algorithms can be tested. They
-also reduce the barrier to entry, as researchers skilled in modelling but
-without the resources to collect a large amount of data can still contributed
-to the field.
-
-## Chronology of Non-glove-based Systems
+datasets\footnote{\cite{guyonChaLearnGestureChallenge2012,
+materzynskaJesterDatasetLargeScale2019,
+alazraiDatasetWiFibasedHumantohuman2020}} promote research in the field, as
+they provide a common baseline against which new algorithms can be tested.
 
 Vision based systems have been investigated since the 1980s
 \footnote{\cite{boltPutthatthereVoiceGesture1980,
@@ -758,7 +720,8 @@ vision- and WiFi-based gesture recognition.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_no_gloves}
-    \caption{Models used for recognising gestures in vision- and WiFi-based
+    \caption[Models used for vision- and WiFi-based gesture recognition]{Models
+    used for recognising gestures in vision- and WiFi-based
     systems over time. PCA stands for Principal Component Analysis.}
     \label{fig:03_models_no_gloves}
 \end{figure}
@@ -806,26 +769,8 @@ marceloGeFightersExperimentGesturebased2006}}, generic gesture recognition
 \footnote{\cite{funkeUsing3DConvolutional2019, wanExploreEfficientLocal2016}},
 and remote robot control\footnote{\cite{qiMultiSensorGuidedHand2021,
 ramamoorthyRecognitionDynamicHand2003, wanExploreEfficientLocal2016}}.
-
-<!-- NOTE: Excluded since it's not really talked about much and not super
-necessary
-Figure \ref{fig:03_wifi_vision_applications} shows the applications of vision
-and WiFi-based gesture recognition systems over time.
-
-< !-- prettier-ignore-start -- >
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/03_wifi_vision_applications}
-    \caption{The applications of Vision and WiFi-based gesture recognition over
-    time.}
-    \label{fig:03_wifi_vision_applications}
-\end{figure}
-< !-- prettier-ignore-end -- >
-
--->
-
 Convolutional Neural Networks (CNNs) were first used for gesture recognition in
-2015 by Huang \emph{et~al.} \citep{jiehuangSignLanguageRecognition2015} and
+2015 by \cite{jiehuangSignLanguageRecognition2015} and
 neural network based models have been used by many researchers for gesture
 recognition \footnote{\cite{funkeUsing3DConvolutional2019,
 hakimDynamicHandGesture2019, hurrooSignLanguageRecognition2020,
@@ -836,57 +781,38 @@ sahooRealTimeHandGesture2022, sharmaASL3DCNNAmericanSign2021,
 urrehmanDynamicHandGesture2022, wuDeepDynamicNeural2016,
 zhangGestureRecognitionBased2020}}.
 
-Figure \ref{fig:03_models_no_gloves} shows the models used over time for
-Vision and WiFi-based gesture recognition. The colour of each point indicates
-whether it was a vision or WiFi-based system.
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_no_gloves}
-    \caption{Classification models used for vision and WiFi-based gesture recognition.}
-    \label{fig:03_models_no_gloves}
-\end{figure}
-<!-- prettier-ignore-end -->
-
 # Applications of Gesture Recognition
 
 One of the most common applications for gesture recognition is classification
 of the sign language local to the researcher. Figure
 \ref{fig:03_sl_applications} shows the multitude of sign languages which have
-been reported as the application of various gesture recognition research. These
-languages appear ideal at first glance, as they provide a large set of
-non-trivial gestures which do not require extensive description. The ability to
-automatically translate a sign language into a spoken language has immediate
-and clear benefit.
-
-However, sign language communication goes beyond the simple hand signs that are
-popularly shown in simple charts. Sign languages include non-manual markers which
-use the face or body posture of the signer to convey grammatical structure and
-lexical distinctions, for example questions or negations.
-
-This means that the common task of developing a system to recognise sign
-language is often reported as a complete system, even though it is a partial
-solution.
+been reported as the application of various gesture recognition research.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_sl_applications}
-    \caption{The different sign languages to which gesture recognition has been
-    applied.}
+    \caption[Sign language applications of gesture recognition]{The different
+    sign languages to which gesture recognition has been applied.}
     \label{fig:03_sl_applications}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-This has raised some critique from sign language communities, however
-it should be noted that many authors use gestures from their local sign
+Sign languages appear ideal at first glance, as they provide a large set of
+non-trivial gestures which do not require extensive description. The ability to
+automatically translate a sign language into a spoken language has immediate
+and clear benefit. However, sign language communication goes beyond the simple
+hand signs that are popularly shown in simple charts. Sign languages include
+non-manual markers which use the face or body posture of the signer to convey
+grammatical structure and lexical distinctions, for example questions or
+negations. This means that the common task of developing a system to recognise
+sign language is often reported as a complete system, even though it is a
+partial solution. This has raised some critique from sign language communities,
+however it should be noted that many authors use gestures from their local sign
 language simply as a useful collection of gestures, and the fact that the
 gestures have distinct meaning is not of direct interest to the research being
-performed.
-
-An analogy can be made to the Utah Teapot\footnote{A commonly used baseline
-used to evaluate computer graphics programs,
+performed. An analogy can be made to the Utah Teapot\footnote{A commonly used
+baseline used to evaluate computer graphics programs,
 \cite{torrenceMartinNewellOriginal2006}}, common in computer graphics research.
 The utility of the Utah Teapot is not that it is an accurate representation of
 a specific teapot, but rather that it is a shape complex enough to be

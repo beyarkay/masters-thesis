@@ -567,9 +567,11 @@ hand. These are named based on the direction of movement.
 - _Flattening_: Flattening the metacarpal bones of the palm to be in the same
   plane.
 
+<!-- prettier-ignore-start -->
 \begin{figure}[!htb]
-\centering
-\includegraphics[width=0.6\textwidth]{src/imgs/03_movements.png}
-\caption{Movements of the hand.}
-\label{fig:03_movements}
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/03_movements.png}
+    \caption{Movements of the hand.}
+    \label{fig:03_movements}
 \end{figure}
+<!-- prettier-ignore-end -->
