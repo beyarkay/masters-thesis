@@ -18,15 +18,4 @@ checkpoints/
 
 # Intermediary tex files that are useful for debugging but are generally
 # ethereal
-tex/00_abstract.tex
-tex/00_acknowledgements.tex
-tex/00_dedication.tex
-tex/00_preface.tex
-tex/01_introduction.tex
-tex/02_background.tex
-tex/03_lit_review.tex
-tex/04_methodology.tex
-tex/05_results.tex
-tex/06_conclusion.tex
-tex/07_appendix.tex
-tex/07_postmatter.tex
+tex/*.tex
