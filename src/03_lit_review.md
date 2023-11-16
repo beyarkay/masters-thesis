@@ -77,15 +77,15 @@ in the topical understanding of the field. Where confusion may arise, reference
 will be made to the existing terminology before defining what will be used in
 this review.
 
-Over the years, numerous authors have published a wide range of gesture
-recognition systems, each dealing with slightly different challenges in their
-unique ways. This diversity makes it tricky to compare the various research
-papers. To address this, this review will use several metrics to allow for a
-systematic comparison of different works in the field. The tasks tackled by
-different authors may sound similar, but they vary significantly in difficulty.
-Note that not all authors publish enough information to ensure every metric is
-relevant, and some papers might have tested multiple systems, resulting in
-multiple metrics recorded for that paper.
+Over the years, many authors have published gesture recognition systems, each
+dealing with slightly different challenges in their unique ways. This diversity
+makes it tricky to compare the various research papers. To address this, this
+review will use several metrics to allow for a systematic comparison of
+different works in the field. The tasks tackled by different authors may sound
+similar, but they vary significantly in difficulty. Note that not all authors
+publish enough information to ensure every metric is relevant, and some papers
+might have tested multiple systems, resulting in multiple metrics recorded for
+that paper.
 
 The metrics are listed below, with short explanations. More detailed
 explanations are also given for the metrics which require them.
@@ -100,15 +100,18 @@ development, and use the noise present in WiFi signals to infer the position of
 the human body.
 
 **Technology used** This refers to the underlying technology that enables data
-collection, for example: flexion sensors, accelerometers\footnote{An
-accelerometer is a sensor that measures acceleration, most commonly linear
-acceleration in three orthogonal directions.},
-electromyography\footnote{Electromyography is a technique that records
-electrical activity produced by the flexion and extension of skeletal muscles},
-or full-colour cameras\footnote{Also called Red-Green-Blue or RGB cameras} with
-depth information.
+collection, for example: flexion\footnote{Flexion sensors measure the bend of a
+strip of plastic which can be attached to a user's finger.} sensors,
+accelerometers\footnote{An accelerometer is a sensor that measures
+acceleration, most commonly linear acceleration in three orthogonal
+directions.}, electromyography\footnote{Electromyography is a technique that
+records electrical activity produced by the flexion and extension of skeletal
+muscles}, or full-colour cameras\footnote{Also called Red-Green-Blue or RGB
+cameras} with depth information.
 
-<!-- TDOO: Add graphs about the number of classes -->
+<!-- TODO: Add graphs about the number of classes -->
+<!-- TODO: Add graphs about the number of repetitions -->
+<!-- TODO: Add graphs about the number of participants -->
 
 **Number of classes** The number of classes classified by the system. This is
 often 26 (one class for each letter _a_ through _z_) or 36 (the letters _a_
@@ -343,7 +346,9 @@ measure the stretch of a textile glove.
 Figure \ref{fig:03_tech_for_gloves} shows the different technologies used by
 glove-based systems over time. Each point is a paper, and the colour of the
 point indicates the number of citations. If a paper used multiple technologies,
-then it is represented by multiple points, one point for each technology.
+then it is represented by multiple points, one point for each technology. If
+multiple papers are published in the same year and use the same technology,
+then they are plotted above or below one another to avoid
 
 For the sake of brevity, not every paper represented in the figures in this
 chapter is necessarily cited. The reader is directed to the Zenodo dataset
@@ -418,7 +423,7 @@ Commercially available gloves which can measure the movement of a user's hands
 often result in research using those gloves, as the researchers capable of
 purchasing a glove-based system are a strict subset of the researchers capable
 of designing and building a glove-based system. The researchers who do not have
-the expertise to build their own glove-based system much use a commercially
+the expertise to build their own glove-based system must use a commercially
 available system if they wish to perform research in this area. This subsection
 explores hardware products which have been used for glove-based gesture
 recognition.
@@ -450,10 +455,10 @@ hand.
 
 In the 1990s there were three main commercially available products: The
 DataGlove developed by Visual Programming Languages (VPL)
-\citep{sturmanSurveyGlovebasedInput1994}, the PowerGlove developed Abrams
+\citep{sturmanSurveyGlovebasedInput1994}, the PowerGlove developed by Abrams
 Gentile Entertainment for Nintendo
 \citep{abramsgentileentertainmentPowerGlove1989}, and the CyberGlove by
-Immersion Inc \citep{immersioncorporationCyberGlove2001}. These gloves were
+Immersion Inc\. \citep{immersioncorporationCyberGlove2001}. These gloves were
 similar in nature, with some combination of flex sensors over the phalanges and
 accelerometers mounted on the back of the hands. They were occasionally used
 with the Polhemus tracker\footnote{\cite{baudelCharadeRemoteControl1993,
@@ -462,11 +467,12 @@ wengaoChineseSignLanguage2004, wilsonParametricHiddenMarkov1999}} which mounted
 onto each glove and allowed the approximate location of the glove in 3D space
 to be triangulated.
 
-The Utah/MIT Dexterous Hand \cite{jacobsenUTAHDextrousHand1984} and the associated
-Utah/MIT Dexterous HandMaster \citep{jacobsenDesignUtahDextrous1986} was a complex
-system that included both a controller which sensed the position of a human
-hand through a series of hall-effect sensors (the HandMaster) and a robotic
-hand which could be controlled by this HandMaster.
+The Utah/M.I.T\.\footnote{Massachusetts Institute of Technology} Dexterous Hand
+\cite{jacobsenUTAHDextrousHand1984} and the associated Utah/M.I.T\. Dexterous
+HandMaster \citep{jacobsenDesignUtahDextrous1986} was a complex system that
+included both a controller which sensed the position of a human hand through a
+series of hall-effect sensors (the HandMaster) and a robotic hand which could
+be controlled by this HandMaster.
 
 \cite{marcusSensingHumanHand1988} used the VPL DataGlove to control the
 Utah/MIT Dexterous Hand, followed by an independent study by
@@ -489,10 +495,13 @@ used over time for glove-based gesture recognition systems.
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_hardware_for_gloves}
     \caption[Hardware used for glove-based gesture recognition]{Different
-    hardware used for glove-based systems. The Contactglove
-    was used by \cite{felsGloveTalkIIaNeuralnetworkInterface1998}, the TUB
-    Sensorglove by \cite{hofmannVelocityProfileBased1998}, and the Microsoft
-    Band2 by \cite{liHandGestureRecognition2018}.}
+    hardware used for glove-based systems. The Contactglove was used by
+    \cite{felsGloveTalkIIaNeuralnetworkInterface1998}, the Technische
+    Universität Berlin (TUB) Sensorglove by
+    \cite{hofmannVelocityProfileBased1998}, and the Microsoft Band2 by
+    \cite{liHandGestureRecognition2018}. The 5DT DataGlove refers to the
+    glove developed by Fifth Dimension Technologies
+    \citep{fifthdimensiontechnologies5DTHardware}.}
     \label{fig:03_hardware_for_gloves}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -553,11 +562,14 @@ shows the models used over time for glove-based gesture recognition.
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_glove_based}
     \caption[Models used for glove-based gesture recognition]{Classification
-    models used for glove-based gesture recognition.
-    NNs are any models based on Neural Networks, RNN are Recurrent Neural
-    Networks, FFNNs are Feed-forward Neural Networks, SVMs are Support Vector
-    Machines, KNNs are k-Nearest Neighbours, CNNs are Convolutional Neural
-    Networks, LSTMs are Long Short-Term Memory models.}
+    models used for glove-based gesture recognition. The highly-cited Decision
+    tree paper is \cite{karantonisImplementationRealTimeHuman2006}, which used
+    a waist-mounted tri-axis linear accelerometer to classify activities such
+    as walking, sitting, standing, falling, and resting. NNs are any models
+    based on Neural Networks, RNN are Recurrent Neural Networks, FFNNs are
+    Feed-forward Neural Networks, SVMs are Support Vector Machines, KNNs are
+    k-Nearest Neighbours, CNNs are Convolutional Neural Networks, LSTMs are
+    Long Short-Term Memory models.}
     \label{fig:03_models_glove_based}
 \end{figure}
 <!-- prettier-ignore-end -->
@@ -568,7 +580,7 @@ this, Hidden Markov Models (HMMs) have been favoured due to their explicit
 encoding of time-dependant data, and have been used by many papers for
 glove-based gesture
 recognition\footnote{\cite{ammaAirwritingWearableHandwriting2014,
-bevilacquaContinuousRealtimeGesture2010, chunliwangRealTimeLargeVocabulary2001,
+bevilacquaContinuousRealtimeGesture2010, wangchunliRealTimeLargeVocabulary2001,
 fatmiComparingANNSVM2019, galkaInertialMotionSensing2016,
 hamdyaliComparativeStudyUser2014, hofmannVelocityProfileBased1998,
 jong-sungkimDynamicGestureRecognition1996,
@@ -667,12 +679,12 @@ images, did not have colour information, and had fewer frames per second when
 compared to modern hardware.
 
 **How WiFi-based systems work** The technology enabling gesture-recognition
-with WiFi was implemented in the IEEE 802.11n standard released in 2009. This
-standard introduced Channel State Information (CSI) which provided
-significantly more information about the noise in an environment than was
-previously available. CSI allows transmitters in a WiFi network to change how
-they transmit data based on the current channel conditions, which enables more
-reliable communication.
+with WiFi was implemented in the IEEE 802.11n standard released in 2009
+\cite{IEEEStandardInformation2009a}. This standard introduced Channel State
+Information (CSI) which provided significantly more information about the noise
+in an environment than was previously available. CSI allows transmitters in a
+WiFi network to change how they transmit data based on the current channel
+conditions, which enables more reliable communication.
 
 Since CSI is very sensitive to the surrounding environment, changes such as a
 person moving within a room \citep{wuWiTrajRobustIndoor2023} or even just breathing
@@ -728,7 +740,7 @@ vision- and WiFi-based gesture recognition.
 <!-- prettier-ignore-end -->
 
 \cite{halperinToolReleaseGathering2011} published a tool which provided
-detailed picture of the wireless channel conditions using CSI information. The
+a detailed picture of the wireless channel conditions using CSI information. The
 release of this tool made apparent the level of detail available in CSI and how
 that information changes with changes to the environment. Adib and Katabi first
 applied the data available in CSI to recognise human gestures

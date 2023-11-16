@@ -331,7 +331,7 @@ has a low dropout rate and a high number of nodes in its final layer. This
 behaviour is less distinct for the 3-layer FFNNs, which is to be expected as
 the extra layer introduces more complexity into its performance characteristics.
 
-# Analysis of best model predicting "lazy"
+# Analysis of best model predicting "lazy" \label{sec:appendix-best-model-predicting-lazy}
 
 Figure \ref{fig:05_pred_plot_7400_to_8500_lazy} shows the prediction
 probabilities and sensor values for the word "lazy ". There are several points

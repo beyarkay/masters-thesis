@@ -84,12 +84,14 @@ mounted onto the back of the user's fingernails to measure acceleration at the
 fingertips. Each ADXL335 provides 3 analogue signal lines (one for each of X,
 Y, and Z), resulting in 15 signal lines per hand.
 
-The \textbf{Nano 33 BLE} module by Arduino (Figure \ref{fig:04_nano}) is
-multi-purpose chip containing a 64MHz Arm Cortex-M4F with 1MB flash and 256KB
-RAM, a 12 Mbps USB serial connection, and eight 12-bit analogue inputs. One
-Nano is used per hand to read the input from that hand's ADXL335s, however as
-the Nano only has 8 analogue inputs but the ADXL335s provide 15 analogue
-signals per hand, a multiplexer is required.
+The \textbf{Nano 33 Bluetooth Low Energy} (BLE) module by Arduino (Figure
+\ref{fig:04_nano}) is multi-purpose chip containing a 64 megahertz (MHz) Arm
+Cortex-M4F with 1 megabyte (MB) flash and 256 kilobytes (kB) Random Access
+Memory (RAM), a 12 megabits per second (Mbps) Universal Serial Bus (USB) serial
+connection, and eight 12-bit analogue inputs. One Nano is used per hand to read
+the input from that hand's ADXL335s, however as the Nano only has 8 analogue
+inputs but the ADXL335s provide 15 analogue signals per hand, a multiplexer is
+required.
 
 The \textbf{CD74HC4067} 16-channel analogue multiplexer/demultiplexer (Figure
 \ref{fig:04_cd74hc4067}) is a low-power digitally controlled integrated circuit
@@ -106,11 +108,12 @@ the eight analogue input pins available on the Nano.
 
 Before the signals can be sent to the user's computer, the packages from the
 left and right hand must be combined. The Nano from the left hand is connected
-via a serial wire to the right hand using the I\textsuperscript{2}C serial
-communication protocol. When the left hand's Nano has read data from every
-left-hand ADXL335, it transmits this data to the right hand via this
-I\textsuperscript{2}C connection. The right hand then combines the data from
-the left hand with the data from the right hand into one complete packet.
+via a serial wire to the right hand using the I\textsuperscript{2}C
+(Inter-Integrated Circuit) serial communication protocol, commonly used for
+communication between integrated circuits. When the left hand's Nano has read
+data from every left-hand ADXL335, it transmits this data to the right hand via
+this I\textsuperscript{2}C connection. The right hand then combines the data
+from the left hand with the data from the right hand into one complete packet.
 
 The Nano on the right hand then sends this complete packet to the user's
 computer via a wired serial connection from serial port on the Nano to the USB
@@ -134,8 +137,9 @@ during which the user's hands may be still: the transitioning period from the
 end of one gesture to the start of the next. The 50 gesture classes are
 numbered from 0 to 49. The non-gesture class is numbered as class 50 The
 software powering _Ergo_ takes care of converting a class prediction in the
-range $[0, \ldots 50]$ into a keystroke (any UTF8 character) via a
-user-configurable gesture-to-keystroke mapping.
+range $[0, \ldots 50]$ into a keystroke (any Unicode Transformation Format
+8-bit -- UTF8 -- character) via a user-configurable gesture-to-keystroke
+mapping.
 
 The motion for each gesture is defined as the Cartesian product of a finger
 motion and a hand orientation. There are 10 finger motions: each motion defines
@@ -229,10 +233,14 @@ If sequential predictions are made of the same class, then a keystroke will
 only be emitted the first time that class is predicted. This will improve the
 perceived performance of the model, so that one gesture does not result in
 multiple keystrokes if the model predicts that gesture in multiple sequential
-time steps.
+time steps. If a word has duplicated letters (such as the \texttt{o}'s in
+\texttt{book}) then those duplicated letters must be performed the same number
+of times as they are duplicated. Gesturing the word \texttt{book} is done by
+gesturing the letters \texttt{b},\texttt{o}, \texttt{o}, \texttt{k}, with no
+special case for the double \texttt{o}.
 
 The predicted classes are converted to keystrokes using the
-gesture-to-keystroke mapping. This mapping is configurable by the user, but by
+gesture to keystroke mapping. This mapping is configurable by the user, but by
 default it is set up to mirror the QWERTY keyboard as closely as possible. The
 mapping is visible in Table \ref{tab:04_keystrokes}
 
@@ -295,9 +303,9 @@ has no effect.
         $180^\circ$ & \texttt{!} & \texttt{@} & \texttt{\#} & \texttt{\$} & \texttt{\%} & \texttt{\^} & \texttt{\&} & \texttt{$\ast$} & \texttt{(} & \texttt{)} \\
         \hline
     \end{tabular}
-    \caption[\emph{Ergo} keystrokes with \texttt{shift} pressed]{The keystrokes
-    emitted by the \emph{Ergo} software when certain each gesture is made after
-    the \texttt{shift} control-character has been given.}
+    \caption[\emph{Ergo} keystrokes with \texttt{shift} pressed]{
+    This table shows what keystroke is emitted by the \emph{Ergo} software
+    immediately after the \texttt{shift} control-character has been performed.}
     \label{tab:04_shift_keystrokes}
 \end{table}
 <!-- prettier-ignore-end -->
@@ -309,6 +317,8 @@ same as in the text editor Vim\footnote{https://vim.org}. See vim's built-in
 help \texttt{:h ins-special-keys} for more details.
 
 # Data Collection and Cleaning \label{sec:04-data-collection-and-cleaning}
+
+<!-- TODO: Picture of the data??? -->
 
 To collect training data, the author wore _Ergo_ and performed each of the
 pre-specified gestures sequentially, repeating each gesture until there was
@@ -384,7 +394,7 @@ will be reported.
 25% of the dataset (60 294 observations, 1 442 gesture class observations) is
 split off and saved as the testing dataset. The testing dataset is saved as a
 single binary file, completely separate from the training and validation data.
-The test-set splitting procedure stratified by the class labels, ensuring
+The test-set splitting procedure was stratified by the class labels, ensuring
 that the frequency of the different classes is maintained. Apart from this
 constraint, the subset of data used for the testing set is random.
 
@@ -542,8 +552,9 @@ dataset gives insight into the real-time performance an end-user will
 experience.
 
 The hardware used to train the various models is an 14-inch 2021 MacBook Pro
-laptop with the Apple M1 Pro chip and 16GB of LPDDR5 memory. The machine has 8
-performance-oriented cores and 2 efficiency-oriented cores.
+laptop with the Apple M1 Pro chip and 16 gigabytes (GB) of Low Power Double
+Data Rate 5 (LPDDR5) memory. The machine has 8 performance-oriented cores and 2
+efficiency-oriented cores.
 
 # Binary and Multi-class Classifiers \label{sec:04-binary-and-multi-class-classifiers}
 

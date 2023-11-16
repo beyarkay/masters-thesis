@@ -57,8 +57,9 @@ learning has solved many problems once thought impossible, beating humans at
 games such as Chess\citep{campbellDeepBlue2002}, Go
 \citep{silverMasteringGameGo2016}, StarCraft
 II\citep{vinyalsGrandmasterLevelStarCraft2019}, and Dota 2
-\citep{openaiDotaLargeScale2019} as well as diverse tasks such as protein
-folding \citep{jumperHighlyAccurateProtein2021} and natural language processing
+\citep{openaiDotaLargeScale2019}. Additionally, machine learning has either
+solved or made substantial progress in tasks such as protein folding
+\citep{jumperHighlyAccurateProtein2021} and natural language processing
 \citep{openaiGPT4TechnicalReport2023}.
 
 A machine learning task can have varying levels of information about what the
@@ -82,15 +83,36 @@ $y$, where $y$ is an element of some finite set $A$.
 Artificial Neural Networks (ANNs) are a form of machine learning that started
 with the development of the perceptron by
 \cite{whitePrinciplesNeurodynamicsPerceptrons1963}, which itself was inspired
-by work done by \cite{warrens.mccullochLogicalCalculusIdeas1944}. It was not until the
-backpropagation algorithm was introduced by
-\cite{rumelhartLearningRepresentationsBackpropagating1986} that multiple layers
-of perceptrons could be stacked and their weights efficiently trained. This
-renewed interest in neural networks as a field of research. Different means of
-arranging perceptrons to better solve different problems have been introduced,
-such as the Long Short-Term Memory network for sequence learning (introduced in
-\citealt{hochreiterLongShortTermMemory1997}) or the convolutional neural network
-for image processing (introduced in
+by work done by \cite{warrens.mccullochLogicalCalculusIdeas1944}.
+
+The backpropogation algorithm (essential for the efficient parameter estimation of
+an ANN) derives from the method of reverse mode automatic differentiation for
+networks of differentiable functions introduced by
+\cite{linnainmaaAlgoritminKumulatiivinenPyoristysvirhe1970} (published in
+English as \citealt{linnainmaaTaylorExpansionAccumulated1976}).
+
+Paul Werbos laid the theoretical foundation for backpropagation based on
+Linnainmaa's work during Werbos' PhD thesis
+\citep{werbosRegressionNewTools1974}. He experienced repeated difficulty in
+publishing the work\footnote{\cite{werbosRootsBackpropagationOrdered1994}}
+until \citep{werbosApplicationsAdvancesNonlinear1982}.
+
+\cite{rumelhartLearningRepresentationsBackpropagating1986} later demonstrated
+the practical applications of backpropogation for training artificial neural
+networks. Werbos reported that he "[was] not accusing anyone of plagiarism"
+\citep[p\.251]{rodriguezHistoricalSociologyNeural1991} but nonetheless that he
+did "believe that the idea did spread from me to the relevant places".
+Rumelhart firmly denied any knowledge of Werbos' work or that it had any
+influence on his 1986 paper, and that "As far as I know his work was entirely
+hidden, and nobody knew about
+it"\citep[p\.252]{rodriguezHistoricalSociologyNeural1991}.
+
+Regardless of the pedigree of backpropogation, its development renewed interest
+in neural networks as a field of research. Different means of arranging
+perceptrons to better solve different problems have been introduced, such as
+the Long Short-Term Memory network for sequence learning (introduced in
+\citealt{hochreiterLongShortTermMemory1997}) or the convolutional neural
+network for image processing (introduced in
 \citealt{lecunGradientbasedLearningApplied1998}).
 
 This section will first describe the perceptron in subsection
@@ -101,7 +123,7 @@ The method by which backpropogation allows for the efficient calculation of the
 gradients within a neural network is described in subsection
 \ref{backpropogation}, and some details about the loss function used for
 multi-class classification problems, cross entropy loss, are described in
-subsection \ref{cross-entropy-loss}.
+subsection \ref{categorical-cross-entropy-loss}.
 
 ## Perceptrons
 
@@ -282,15 +304,14 @@ calculating how to change the weights and biases so as to decrease the
 difference between $\hat{\bm{y}}$ and $\bm{y}$.
 
 To achieve this, a cost function is defined that gradient descent will
-minimise. This cost function is the mean squared error:
+minimise. One possible cost function is the mean squared error:
 
 $$
     C(\bm{w}, \bm{b}, \bm{x}) = \frac{1}{2n} \sum_{i=1}^n || \bm{y} - \hat{\bm{y}}(\bm{w}, \bm{b}, x_i) ||^2
 $$
 
-The weights of the network are $\bm{w}$, the biases are $\bm{b}$, the input data is
-$\bm{x}$, and the number of observations is $n$. This particular cost function
-is known as the mean squared error, although other cost functions can be used.
+The weights of the network are $\bm{w}$, the biases are $\bm{b}$, the input
+data is $\bm{x}$, and the number of observations is $n$.
 
 Gradient descent can be intuitively understood as evaluating $C(\bm{w},
 \bm{b})$ at some initial $(\bm{w}, \bm{b})$ and then calculating the gradient
@@ -344,15 +365,7 @@ tuning.
 
 Backpropogation is the process of efficiently calculating the gradient of the
 cost function $C(\bm{w}, \bm{b})$ with respect to any weight or bias in the
-network. It derives from the method of reverse mode automatic differentiation
-for networks of differentiable functions introduced by
-\cite{linnainmaaAlgoritminKumulatiivinenPyoristysvirhe1970} (published in
-English as \citealt{linnainmaaTaylorExpansionAccumulated1976}).
-\cite{werbosRegressionNewTools1974} laid the theoretical foundation for
-backpropagation based on Linnainmaa's work.
-\cite{rumelhartLearningRepresentationsBackpropagating1986} demonstrated the
-practical applications of backpropogation for training artificial neural
-networks.
+network.
 
 For notation, $a_j^l$ will refer to the output of the $j$th neuron in the $l$th
 layer, and $L$ be the last layer of the network, such that $a^L$ is the output
@@ -364,15 +377,15 @@ $$
     a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right)
 $$
 
-By defining a matrix of weights $\bm{w}^l$, a vector of biases $\bm{b}^l$, and a vector
+By defining a matrix of weights $\bm{W}^l$, a vector of biases $\bm{b}^l$, and a vector
 of activations $\bm{a}^l$, we can rewrite the above equation in matrix notation as
 
 $$
-    \bm{a}^{l} = \sigma\left( \bm{w}^{l} \bm{a}^{l-1} + \bm{b}^l \right).
+    \bm{a}^{l} = \sigma\left( \bm{W}^{l} \bm{a}^{l-1} + \bm{b}^l \right).
 $$
 
 We will also define an intermediate quantity, named the pre-activation, as
-$\bm{z}^l = \bm{w}^{l} \bm{a}^{l-1} + \bm{b}^l$.
+$\bm{z}^l = \bm{W}^{l} \bm{a}^{l-1} + \bm{b}^l$.
 
 Using the chain rule, the partial derivative of the cost function with respect
 to an arbitrary weight $w_{jk}^l$ is expanded to include $z_j^l$
@@ -422,10 +435,10 @@ activations of the last layer and the derivative of the activation function:
 
 Note that all terms in the expression $\frac{\partial C}{\partial a_j^L}
 \sigma'(z_j^L)$ are easily calculated. $\frac{\partial C}{\partial a_j^L}$ will
-depend on the cost function, but for the mean squared error cost function it is
+depend on the cost function, and for the mean squared error cost function it is
 simply $a^L_j - y_j$:
 
-<!-- TODO: Explain why this cost function differs from the previous C(w,b) -->
+<!-- TODO: Explain why this cost function differs from the previous C(W,b) -->
 
 <!-- prettier-ignore-start -->
 \begin{align*}
@@ -563,25 +576,40 @@ first identified by \cite{hochreiterGradientFlowRecurrent2001}.
 
 There have been multiple proposed solutions to the vanishing gradient problem,
 such as using a different activation function like ReLU
-\cite{nairRectifiedLinearUnits2010} or re-centering and re-scaling each layer's
-inputs through a process called Batch Normalization
-\citep{ioffeBatchNormalizationAccelerating2015}.
+\cite{nairRectifiedLinearUnits2010}, initialisation schemes such as random
+initialisation \citep{glorotUnderstandingDifficultyTraining2010}, Xavier/Glorot
+initialisation \citep{glorotUnderstandingDifficultyTraining2010}, and He
+initialisation \citep{heDelvingDeepRectifiers2015}. Re-centering and re-scaling
+each layer's inputs through a process called Batch Normalization
+\citep{ioffeBatchNormalizationAccelerating2015} is also used.
 
-## Cross entropy loss
+## Categorical cross-entropy loss
 
 For multi-class classification problems such as _Ergo_, categorical
 cross-entropy is commonly used as the loss function
 \citep{nealPatternRecognitionMachine2007}:
 
 $$
-    H(p, q) = - \sum_i p_i \log q_i
+    H(\bm{p}, \bm{q}) = - \sum_{i\in\mathcal{C}} p_i \log q_i
 $$
 
+Where:
+
+- $H(\bm{p}, \bm{q})$ defines the categorical cross entropy loss for one
+  observation
+- $\mathcal{C}$ is the set of possible classes, and $|\mathcal{C}|$ the number
+  of different classes
+- $\bm{p} \in \{0, 1\}^{|\mathcal{C}|}$ is a one-hot-encoded vector of the
+  expected discrete probability distribution such that $\sum_{i\in\mathcal{C}}
+  p_i = 1$
+- $\bm{q} \in [0, 1]^{|\mathcal{C}|}$ is a vector of the predicted discrete
+  probability distribution such that $\sum_{i\in\mathcal{C}} q_i = 1$
+
 Intuitively, categorical cross-entropy compares the expected discrete
-probability distribution $p$ to a predicted discrete probability distribution
-$q$. The distributions are compared element-wise, and instances where the
-elements are not identical are penalised with a higher loss. These elements are
-summed together to get the total loss.
+probability distribution to a predicted discrete probability distribution. The
+distributions are compared element-wise, and instances where the elements are
+not identical are penalised with a higher loss. These elements are summed
+together to get the total loss.
 
 Calculating whether or not the elements are identical is done via the
 expression $- p_i \log q_i$ which encodes the idea that if the true class is 1,
@@ -601,7 +629,7 @@ weights and biases in their network. This technique defines a new cost function
 $C'$ which is used instead of the ANN's regular cost function $C$ as follows:
 
 $$
-    C'(\bm{w}, \bm{b}, \bm{x}) = C'(\bm{w}, \bm{b}, \bm{x}) + l \sum_w w^2 + l \sum_b b^2
+    C'(\bm{W}, \bm{b}, \bm{x}) = C'(\bm{W}, \bm{b}, \bm{x}) + l \sum_w w^2 + l \sum_b b^2
 $$
 
 $l$ is a hyperparameter which controls the amount of regularisation to apply to
@@ -641,7 +669,7 @@ specifically in the field of bioinformatics
 \citep{durbinBiologicalSequenceAnalysis1998}.
 
 Markov Models provide a formalism for reasoning about states and state
-transitions over time. HMMs then expand on Markov Models so that they can be
+transitions over time. HMMs expand on Markov Models so that they can be
 applied to the common and general problem of extracting a sequence of unseen
 (hence "hidden") states given a sequence of seen observations, where the
 distribution of each observation is dependant on the unseen state of the model.
@@ -705,10 +733,10 @@ we transition from state $i$ to state $j$.
 Note that because of the stationary process assumption, $A_{ij}$ is the same
 for the first time step as it is for any other time step.
 
-$\bm{A}$ completely hypothetical transition matrix describing an
-undergraduate's understanding of x86 Assembly\footnote{ x86 Assembly is a
-low-level programming language designed for x86-based processors, and is
-commonly taught in undergraduate Computer Science courses. } might look like:
+A completely hypothetical transition matrix describing an undergraduate's
+understanding of x86 Assembly\footnote{ x86 Assembly is a low-level programming
+language designed for x86-based processors, and is commonly taught in
+undergraduate Computer Science courses. } might look like:
 
 $$
     \bm{A} = \begin{matrix}
@@ -1291,7 +1319,7 @@ used for classification or regression. As _Ergo_ is a classification problem,
 only SVM classifiers will be discussed here. SVMs work well in high dimensions
 and perform classifications using a small subset of the training observations,
 making them relatively fast and memory efficient. While SVMs do not natively
-support multi-class classification, it be implemented via one-vs-rest
+support multi-class classification, it will be implemented via one-vs-rest
 classification which will be discussed in Section
 \ref{sec:04-binary-and-multi-class-classifiers}. The remainder of this section
 will describe SVMs as used for binary classification tasks.

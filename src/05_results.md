@@ -753,7 +753,8 @@ Models with one, two, or three layers were all able to learn the data and
 achieve a high $F_1$-score, however this was more frequent with models with one
 or two layers. Models with three layers were also unable to achieve a
 validation loss as low as some of the models with one or two layers. This is
-likely due to the increased complexity of the additional layer.
+likely due to the increased complexity that the additional layer introduces to
+the model.
 
 <!--
 
@@ -1295,8 +1296,8 @@ achieves much higher recall than precision.
 The two neural network based models (FFNN and HFFNN) perform similarly as is to
 be expected from their similar architecture, however the two-model HFFNN
 largely performed worse than the single model FFNN. This is likely due to the
-HFFNN having a larger number of hyperparameters to tune, resulting in a model
-which is more prone to overfitting. These neural network-based models exhibit a
+HFFNN having a larger number of hyperparameters to tune, making it difficult to
+find a well-performing model. These neural network-based models exhibit a
 notably larger and denser hyperparameter space in comparison to the relatively
 constrained hyperparameter space explored for SVMs, HMMs, or CuSUM,
 contributing to the observed variance in their performance
@@ -1309,7 +1310,7 @@ corresponding to the four covariance types.
 
 High recall on the _Ergo_ dataset means that many of the minority class
 observations get correctly predicted. High precision on the _Ergo_ dataset
-means that many very few of the majority class observations get predicted as
+means that very few of the majority class observations get predicted as
 belonging to one of the minority classes.
 
 Therefore, high recall implies good performance when identifying minority
@@ -1405,11 +1406,12 @@ in tables
 # Comparison of the inference and training times for each model \label{time-comparison}
 
 Raw performance is not the only metric of interest, as _Ergo_ requires
-real-time prediction at a rate of 40 predictions per second. The inference and
-training times for each model were recorded on the training and validation
-dataset. This allows values to be calculated for the amount of time each model
-takes to perform inference and to train, on both the training dataset and the
-validation dataset.
+real-time prediction at a rate of 40 predictions per second\footnote{See the
+machine performance specifications in subsection
+\ref{sec:04-experimental-procedure}}. The inference and training times for each
+model were recorded on the training and validation dataset. This allows values
+to be calculated for the amount of time each model takes to perform inference
+and to train, on both the training dataset and the validation dataset.
 
 There were significant technical problems with the Hidden Markov Models due to
 the volume of observations being trained on. This necessitated that the HMMs be
@@ -1462,7 +1464,7 @@ training and validation datasets .
 From the right plot in Figure \ref{fig:05_inf_trn_times_per_obs}, one can see
 that the HMMs take orders of magnitude longer to fit to the data than other
 model types. Some HMMs take around 0.04 seconds per observation to train, and
-other HMMs take around 0.01 seconds per observation. This is in start contrast
+other HMMs take around 0.01 seconds per observation. This is in stark contrast
 to the FFNNs, HFFNNs, and SVMs which take an order of magnitude less time to
 train, around 0.0025 seconds per observation
 
@@ -1598,4 +1600,7 @@ for each gesture.
 
 It is clear that there is no systematic bias in the model against any gestures
 and that the gestures for which the model performs poorly is due to the data,
-not some bias inherent in the model.
+not some bias inherent in the model. Appendix
+\ref{sec:appendix-best-model-predicting-lazy} contains details about the
+probabilities and predictions as the word "lazy" is gestured with the glove in
+real time.

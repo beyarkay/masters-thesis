@@ -59,8 +59,8 @@ acceleration of a user's fingertips in real time (see Figure
     \includegraphics[width=0.5\textwidth]{src/imgs/glove}
     \caption[Picture of \emph{Ergo}]{The sensor suite, \emph{Ergo} as viewed
     from the user's perspective. The accelerometers (the blue chips on the
-    user's fingertips) are capable of recording tri-axis linear acceleration at
-    40 Hz.}
+    user's fingertips) are capable of recording 30 linear acceleration
+    measurements at a rate of 40 times per second.}
     \label{fig:01_glove}
 \end{figure}
 <!-- prettier-ignore-end -->
