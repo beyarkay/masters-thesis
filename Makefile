@@ -1,4 +1,5 @@
 pandoc:
+	cp 	   src/00_symbols.tex             tex/00_symbols.tex # The symbols section is just written in latex
 	pandoc src/00_abstract.md          -o tex/00_abstract.tex
 	pandoc src/00_acknowledgements.md  -o tex/00_acknowledgements.tex
 	pandoc src/00_dedication.md        -o tex/00_dedication.tex
