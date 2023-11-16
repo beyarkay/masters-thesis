@@ -24,73 +24,83 @@ Contributions:
 
 This thesis explores gesture recognition using an acceleration-based
 fingertip-mounted sensor suite, with the goal of completely replicating the
-functionality of a computer keyboard. Gesture recognition has a long history,
-going back to the first attempts in 1969 by the
-\citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Initial
-attempts used various kinds of sensors mounted on the user's hands to measure
-movement. With the improvements in computer vision algorithms, many recent
-attempts focus on improving performance on shared datasets containing labelled
-videos of people performing different
-gestures\footnote{\cite{alazraiDatasetWiFibasedHumantohuman2020,
+functionality of a computer keyboard. The first attempts at automated gesture
+recognition were in 1969 by the \citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Initial
+attempts used hand-mounted sensors to measure
+movement. With the improvements in video capture technology and computer vision algorithms, many
+attempts use labelled videos of people performing different
+gestures to perform gesture recognition\footnote{\citealt{alazraiDatasetWiFibasedHumantohuman2020,
 atzoriNinaproDatabaseResource2015, guyonChaLearnGestureChallenge2012,
 materzynskaJesterDatasetLargeScale2019, zhangEgoGestureNewDataset2018}}. Recent
 changes in commercially available Wi-Fi routers
-\citep{halperinToolReleaseGathering2011} have also enabled the detection of
+\citep{halperinToolReleaseGathering2011} also enable the detection of
 hand gestures by analysing diagnostic data from these routers
 \citep{puWholehomeGestureRecognition2013}.
 
-Work done on gesture detection can be divided based on whether the
-gesture detection system allows the user to make gestures at arbitrary points in time
-(implicit segmentation), or whether the user is required to explicitly mark the
-start and end of their gestures (explicit segmentation). Implicit segmentation
-dramatically improves the experience for the user and may be considered a
-requirement for a commercial product. Explicit segmentation significantly
-reduces the complexity of classifying gestures. This thesis will present an
-adequate solution to implicit segmentation.
+Gesture detection systems can be divided based on whether the user is required
+to explicitly mark the start and end of their gestures (explicit segmentation)
+or whether the user is allowed to make gestures at arbitrary points in time
+(implicit segmentation). Implicit segmentation dramatically improves the
+experience for the user and may be considered a requirement for a commercial
+product. Explicit segmentation significantly reduces the complexity of
+classifying gestures. This thesis will present an adequate solution to implicit
+segmentation.
 
-A bespoke sensor suite, named \emph{Ergo}, has been constructed for the purpose
-of real-time high-fidelity gesture recognition and is used to measure the
-acceleration of a user's fingertips in real time (see Figure
+Gesture detection systems can also be divided by the number of gesture classes
+that can be recognised. Media playback (such as pausing, playing, and skipping
+songs) can be controlled with fewer than 10 gesture classes. Being able to
+input the full English alphabet requires 26 gesture classes. This thesis will
+present a solution capable of recognising 50 gesture classes, allowing the
+input of the full English alphabet, the numbers 0 through 9, various
+punctuation characters, and two meta-characters (shift and control).
+
+This thesis uses a bespoke sensor suite named \emph{Ergo}, has been constructed
+for the purpose of real-time high-fidelity gesture recognition (see Figure
 \ref{fig:01_glove}).
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/imgs/glove}
-    \caption[Picture of \emph{Ergo}]{The sensor suite, \emph{Ergo} as viewed
-    from the user's perspective. The accelerometers (the blue chips on the
+    \caption[Picture of \emph{Ergo}]{The sensor suite, \emph{Ergo}, as viewed
+    from the user's perspective. The ten accelerometers (blue chips on the
     user's fingertips) are capable of recording 30 linear acceleration
     measurements at a rate of 40 times per second.}
     \label{fig:01_glove}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-This sensor suite is capable of recording one 3-dimensional acceleration vector
-for each of the user's ten fingertips every 0.025 seconds. This is equivalent
-to 1200 measurements per second.
+One acceleration sensor is mounted onto each of the user's ten fingertips. Each
+acceleration sensor is capable of recording a 3-dimensional acceleration vector
+every 0.025 seconds. This is equivalent to 1200 measurements per second.
 
-Using this data, several multi-class classification algorithms are trained 1)
-to distinguish intentional gestures from regular hand movements, and if an
-intentional gesture is detected, 2) to predict which one of the 50 learnt
-gestures is being performed.
+While wearing \emph{Ergo} 50 different gestures are performed and the resulting
+measurements are saved. This data is used to train several multi-class
+classification algorithms to 1) distinguish intentional gestures from regular
+hand movements, and 2) to predict which one of the 50 learnt gestures is being
+performed. Regular hand movements are represented by the 51\textsuperscript{st}
+class, while all other gestures are represented by first 50 classes.
 
 To evaluate the difficulty of implicit segmentation when compared to explicit
 segmentation, all classification algorithms are evaluated on three different
-datasets. The first is explicitly segmented and has only five classes. The
-second is also explicitly segmented but includes 50 different gesture classes.
-The third requires the classification algorithm to implicitly segment the
-intentional gestures from the background hand movements and has 51 classes
-(with the 51\textsuperscript{st} class representing all background hand
-movements).
+datasets. The first has only five classes made up entirely of intentional
+gestures. The second dataset is also made up entirely of intentional gestures,
+but contains all 50 gestures for which data was captured. These two datasets
+are representative of explicit segmentation. The third dataset contains all 50
+gestures for which the data was captured, as well as the data representing
+regular hand movements that occur before and after a gesture is made. This
+dataset is representative of implicit segmentation.
 
 The rest of this chapter is as follows: Section \ref{sec:01-problem-statement}
 will describe the problem to be solved. Section \ref{sec:01-research-questions}
 will pose the research questions related to the problem. Section
 \ref{sec:01-contributions} lists the software and the dataset contributions of
-the thesis. Finally, Section \ref{sec:01-thesis-structure} describes the
-structure of the thesis and the layout of the chapters.
+the thesis. Section \ref{sec:01-thesis-structure} describes the structure of
+the rest of the thesis and the layout of the chapters.
 
 # Problem Statement \label{sec:01-problem-statement}
+
+The problem statement is as follows:
 
 <!-- prettier-ignore-start -->
 \begin{framed}
@@ -100,93 +110,68 @@ structure of the thesis and the layout of the chapters.
 \end{framed}
 <!-- prettier-ignore-end -->
 
-Existing glove-based gesture classification research either requires the start
-and end of each gesture to be explicitly marked or is only able to recognise a
-small number of gestures. Either of these constraints render the research
-impractical for real-world usage as a keyboard replacement.
-
-Recent developments in computational hardware and machine learning research
-mean that using glove-based acceleration data to classify gestures is more
-likely than ever to succeed. Such success would provide a product that could
-replace regular computer keyboards with a more ergonomic\footnote{
-\emph{ergonomic} is defined here to mean a device designed for efficiency
-and comfort in the working environment.
-} alternative.
-
-A study of the above description is considered, evaluating multiple
-classification algorithms on datasets with 5, 50, and 51 classes. The 5- and
-50-class datasets include only intentional gestures, while the 51-class dataset
-uses the 51\textsuperscript{st} class to represent the background movement
-which is unrelated to any gestures being made by the user. An analysis of the
-inference speed is performed, with a focus on how completely \emph{Ergo} could
-replace a user's computer keyboard in day-to-day use.
+A study to resolve the above problem statement is considered, evaluating
+multiple classification algorithms on datasets with 5, 50, and 51 classes based
+on data collected from a custom made sensor suite. An analysis of the
+performance and inference speed is performed, with a focus on how completely
+\emph{Ergo} could replace a user's computer keyboard in day-to-day use.
 
 # Research Questions\label{sec:01-research-questions}
 
-Addressing the concerns mentioned earlier, a set of research questions is
-presented. These inquiries will steer the execution of experiments and the
-examination of the ensuing outcomes.
-
-The study aims to address the following points:
+This study aims to address the following points:
 
 1. **Hardware construction and data capture**: The viability of off-the-shelf
    hardware components for high-frequency data capture is assessed. A custom
    sensor suite is designed and built to capture the movement of a user's
    fingertips with enough fidelity that many different gestures can be
    distinguished.
-1. **Performance of different classification algorithms**: Five classification
-   algorithms are assessed on the same dataset over a wide variety of
-   hyperparameter\footnote{\emph{Hyperparameter} is defined as a parameter of
-   an algorithm that is chosen by the researcher, as opposed to being chosen by
-   the algorithm itself.} combinations. The performance of each algorithm is
-   compared, as well as the impact different hyperparameters have on each
-   algorithm's performance.
-1. **Detecting gestures from background noise**: The capability of any one
-   algorithm to both detect a gesture from the background noise and classify
-   that gesture into one of 50 gesture classes is assessed.
-1. **Performance impact of background noise**: The requirement for an algorithm
-   to distinguish background noise is likely to have a detrimental effect on
-   the model's performance on classifying the gestures. This impact is examined
-   and discussed.
-1. **Classification speed**: As _Ergo_ is to be a real-time keyboard
-   replacement, the speed with which different models can make gesture
-   predictions is recorded and evaluated. This is done so as to determine
-   whether or not \emph{Ergo} can be used in real time, as well to determine
-   which classification algorithms are best suited to real-time prediction.
+2. **Performance of different classification algorithms**: Five classification
+   algorithms are assessed on the same dataset, each over a wide variety of
+   hyperparameter combinations\footnote{\emph{hyperparameter} is defined as a
+   parameter of an algorithm that is chosen by the researcher, as opposed to
+   being chosen by the algorithm itself.}. The performance of each algorithm
+   and of the different hyperparameter combinations is compared.
+3. **Detecting gestures from background noise**: An assessment is made of the
+   capability of any one algorithm to perform implicit segmentation.
+4. **Performance impact of background noise**: The requirement for an algorithm
+   to perform implicit segmentation is likely to have a detrimental effect on
+   the classification algorithm's performance on classifying the gestures. This
+   impact is examined and discussed.
+5. **Classification speed**: As _Ergo_ is to be a real-time keyboard
+   replacement, the speed with which different classification algorithms can
+   make accurate class predictions is recorded and evaluated.
 
 # Contributions \label{sec:01-contributions}
 
-The dataset used in this thesis is freely available on
-[Zenodo](https://zenodo.org/). Both the raw sensor readings are available, as
-well as the pre-windowed and processed data.
+The dataset used in this thesis containing acceleration measurements from
+\emph{Ergo} is freely available on [Zenodo](https://zenodo.org/). Both the raw
+sensor readings are available, as well as the preprocessed data. During the
+process of performing a literature review, a large number of papers in were
+indexed by various metrics (discussed in Section \ref{sec:03-overview}). A
+dataset of these papers and the metrics is also available on
+[Zenodo](https://zenodo.org/).
 
 The code used to train the classification algorithms, control the hardware, and
 to make predictions using the raw sensor data in real time is available on
 [GitHub](https://github.com/beyarkay/masters-code/). The source code for this
-thesis, as well as the code used to analyse the database of the literature, is
+thesis, as well as the code used to analyse the dataset of the literature, is
 also available on [GitHub](https://github.com/beyarkay/masters-thesis/).
 
 # Thesis Structure \label{sec:01-thesis-structure}
 
 The structure of the thesis is as follows:
 
-- Chapter \ref{chap:introduction} has introduced the goals of the thesis and
-  what will be explored in the coming chapters.
-- Chapter \ref{chap:background} provides background information relating to the
-  concepts discussed in this thesis in-depth discussion of the various models
-  used throughout.
+- Chapter \ref{chap:introduction} has introduced the goals of the thesis.
+- Chapter \ref{chap:background} provides background information related to the
+  concepts discussed in this thesis.
 - Chapter \ref{chap:literature-review} reviews the gesture-detection literature
-  over the past 50 years and compares the different subfields as split by the
-  data collection methodology, the classification algorithm used, the number of
-  gesture classes which could be recognised, and the intended application of
-  the research.
-- Chapter \ref{chap:methodology} describes how data was collected, how
-  classifiers were trained on the collected data, and how the performance of
-  the trained classifiers was evaluated.
-- Chapter \ref{chap:results} presents the results found after training the
-  various classifiers, and evaluates the relative performance of those
-  classifiers.
-- Chapter \ref{chap:conclusion} concludes the thesis, summarising the results
+  over the past 50 years.
+- Chapter \ref{chap:methodology} describes how the data was collected, how the
+  classification algorithms were trained, and how the performance of the
+  classification algorithms was evaluated.
+- Chapter \ref{chap:results} presents the results and evaluates the relative
+  performance of each classification algorithms.
+- Chapter \ref{chap:conclusion} concludes the thesis, summarising the findings
   and providing recommendations for future work.
 - The Appendix has several sections, none of which are required for the thesis
   but which are presented for the interested reader: Appendix
