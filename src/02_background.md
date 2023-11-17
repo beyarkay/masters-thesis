@@ -664,15 +664,18 @@ commonplace for sequence analysis \citep{bishopMaximumLikelihoodAlignment1986},
 specifically in the field of bioinformatics
 \citep{durbinBiologicalSequenceAnalysis1998}.
 
-Markov Models provide a formalism for reasoning about states and state
-transitions over time. HMMs expand on Markov Models so that they can be
-applied to the common and general problem of extracting a sequence of unseen
-(hence "hidden") states given a sequence of seen observations, where the
-distribution of each observation is dependant on the unseen state of the model.
+Markov Models provide a formal structure for reasoning about states and
+transitions between those states over time. Hidden Markov Models (HMMs) build
+upon Markov Models. They are designed to address the challenge of extracting a
+sequence of unseen states, referred to as "hidden", from a sequence of observed
+states. In this context, the distribution of each observation is dependent on
+the hidden state of the model. HMMs are particularly useful for modelling
+systems where the underlying states are not directly observable but can be
+inferred from observable outcomes.
 
-First Markov Models will be discussed in section \ref{markov-models} to provide
-a foundation, and then HMMs will be discussed in section
-\ref{introduction-to-hmms}.
+First Markov Models will be discussed in subsection \ref{markov-models} to provide
+a foundation, and then HMMs will be discussed in subsection
+\ref{sec:02-hidden-markov-models}.
 
 ## Markov Models
 
@@ -681,15 +684,17 @@ Let us simplify further, and require that
 
 1. Time occurs in discrete timesteps $t \in \{1, 2, 3, \ldots\}$, and one
    "event" happens at each time step.
-2. Events are notated as $z_1, z_2, \ldots$.
+2. Events are notated as $z_1, z_2, z_3, \ldots$.
 3. Each event is an element from a set of possible states $S = \{s_1, s_2,
-   \ldots, s_{|S|}\}$ such that $z_i \in S\,\forall i = 1, 2, \ldots$
+   \ldots, s_{|S|}\}$ such that $z_t \in S\,\forall t = 1, 2, 3, \ldots$.
 
-We then have a sequence of events $\{z_1, z_2, \ldots\}$ where each $z_t \in S$
-describes what happened at timestep $t$. As it stands, the state at a point in
-time could be the result of any number of variables, including all prior states
-of the system $z_1, z_2, \ldots, z_{t-1}$. We will impose two assumptions which
-will allow us to reason mathematically about our model.
+We then have a sequence of events $[z_1, z_2, \ldots]$ where each $z_t \in S$
+describes the event that occurred at timestep $t$. We will describe the
+probability that a Markov Model takes on state $s_i$ at time $t$ as $\pr(z_t =
+s_i)$. As it stands, the event $z_t$ be dependent on any number of variables,
+including all prior states of the system $z_{t-1}, \ldots, z_2, z_1$. In order
+to more easily reason about our model, we will impose two assumptions about the
+system modelled by a Markov Model:
 
 1. The _Limited Horizon Assumption_ is that the state of the system at time $t$
    depends only on the state of the system at time $t-1$. Formally, the
@@ -704,31 +709,39 @@ will allow us to reason mathematically about our model.
 
 2. The _Stationary Process Assumption_ is that the probabilities for our model
    don't change over time. We can assume that the start, middle, and end of our
-   time series has the same underlying probability distribution, and that
+   time series have the same underlying probability distribution, and that
    nothing about these probabilities change from timestep to timestep:
 
 \begin{equation}
-    \pr (z_t|z_{t-1}) = \pr (z_s|z_{s-1}); \quad t,s \in 2, 3, \ldots, T
+    \pr (z_t|z_{t-1}) = \pr (z_s|z_{s-1}) \quad \forall\,t,s \in 2, 3, \ldots
 \end{equation}
 
-By convention, it is also common to assume there is some initial state $s_0$ and some
-initial observation $z_0$ which takes on the initial state with probability 1:
-$\pr(z_0 = s_0) = 1$.
+It is conventional and convenient to also assume that there is some initial
+observation $z_0$ which takes on some initial state $s_0$ with probability 1:
+$\pr(z_0 = s_0) = 1$. This convention allows the prior probability of the
+initial states of the Markov Model to be expressed as the probability
+distribution of $z_1$ given the initial observation $z_0$: $\pr(z_1 | z_0)$.
 
-This convention allows the encoding of a prior probability for as the
-probability distribution of $z_1$ given the initial observation $z_0$: $\pr(z_1
-| z_0)$.
+We now require a means to represent how the Markov Model can transition from
+one state to the next. The limited horizon assumption and the stationary
+process assumption allow us to encode the transitions between states as a
+_state transition matrix_:
 
-Now that we have the assumptions and conventions in place, we need some way to
-represent how the model can transition from one state to the next. Our
-assumptions allow us to encode this as a state transition matrix $\bm{A} \in
-\mathbb{R}^{(|S| + 1) \times (|S| + 1)}$ where the rows of $\bm{A}$ represent the
-state we transition from and the columns of $\bm{A}$ represent the state we
-transition to. For example, the scalar value $A_{ij}$ is the probability that
-we transition from state $i$ to state $j$.
+\begin{equation}
+    \bm{A} \in \mathbb{R}^{(|S| + 1) \times (|S| + 1)}.
+\end{equation}
 
-Note that because of the stationary process assumption, $A_{ij}$ is the same
-for the first time step as it is for any other time step.
+Where:
+
+1. All entries are non-negative: $\bm{A}_{ij} \geq 0 \forall\, i, j$.
+2. The sum of each row is equal to 1: $\sum_{j} \bm{A}_{ij} = 1 \forall\, i$.
+
+The rows of $\bm{A}$ represent the state we transition _from_ and the columns
+of $\bm{A}$ represent the state we transition _to_. For example, the scalar
+value $A_{ij}$ contains the probability of transitioning from state $i$ to
+state $j$ at any time step (due to the stationary process assumption). The
+matrix has $(|S| + 1)$ and $(|S| + 1)$ rows such that the initial state $s_0$
+can be encoded, in addition to the other states $S$ of the Markov Model.
 
 A completely hypothetical transition matrix describing an undergraduate's
 understanding of x86 Assembly\footnote{x86 Assembly is a low-level programming
@@ -753,11 +766,10 @@ probability 1%).
 
 The means by which a student could transition into the state of Mastery can be
 seen by looking at the $s_{\text{Mastery}}$ column. They can enter the Mastery
-state either by having already been in the state of Mastery (65% probability)
-or from the state of Competence (at 5% probability). Once they have
-transitioned out of the state of No knowledge, there is no way to go back to
-the state of No knowledge (as represented by the 0.00s in the $s_{\text{No
-knowledge}}$ column).
+state either by having already been in the state of Mastery (with 65%
+probability) or from the state of Competence (with 5% probability). Once they
+have transitioned out of the state of No knowledge, there is no way to go back
+to the state of No knowledge.
 
 ### From transition matrix to state sequence
 
@@ -770,112 +782,99 @@ We can calculate the probability of a series of states $z_1, z_2, \ldots z_t$
 occurring through the chain rule of probability
 
 \begin{equation}
-    \pr(A \cap B) = \pr (B|A) \cdot \pr(B),
+    \pr(X \cap Y) = \pr (Y|X) \cdot \pr(Y),
 \end{equation}
 
 Where:
 
-- $\pr(X)$ is the probability that some event $X$ will occur
+- $\pr(X)$ is the probability that some event $X$ will occur.
 - $\pr(X | Y)$ is the conditional probability of $X$ occurring, given that $Y$
-  has occurred
-- $X \cap Y$ represents the event where both $X$ and $Y$ occur
+  has occurred.
+- $X \cap Y$ represents the event where both $X$ and $Y$ occur.
 
 Two events are said to be _independent_ if the probability distribution of the
-one is not effected by the probability distribution of the other, and the
-independence of $X$ and $Y$ is notated as $X \indep Y$. If $A$ and $B$ are
-independent, then the probability of $B$ does not depend on the probability of
-$A$, which means that $\pr(B|A) = \pr(B)$. This gives us the definition of
+one is not effected by the probability distribution of the other. The
+independence of $X$ and $Y$ is notated as $X \indep Y$. If $X$ and $Y$ are
+independent, then the probability of $Y$ does not depend on the probability of
+$X$, which means that $\pr(Y|X) = \pr(Y)$. This gives us the definition of
 independence of two events from the chain rule of probability:
 
 \begin{equation}
-    A \indep B \iff \pr(A \cap B) = \pr (A) \cdot \pr(B).
+    X \indep Y \iff \pr(X \cap Y) = \pr (X) \cdot \pr(Y).
 \end{equation}
 
-From this, we write a statement for the probability of every $z_t, z_{t-1},
-\ldots, z_1$ occurring given some transition matrix $\bm{A}$, given that the
+From this, we write a statement for the probability of the occurrence of every
+$z_t, z_{t-1}, \ldots, z_1$, given some transition matrix $\bm{A}$ and that the
 initial state $s_0$ takes on the initial observation $z_0$ with probability 1:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     &\pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 | \bm{A})
     = \pr (z_t \cap z_{t-1} \cap \ldots \cap z_1 \cap z_0 | \bm{A}) \\
-\intertext{Expand out the union of events using the chain rule of probability}
+\intertext{Expanding out the union of events using the chain rule of probability:}
     &= \pr (z_t | z_{t-1} \cap \ldots \cap z_0 \cap \bm{A})
         \cdot \pr (z_{t-1} | z_{t-2} \cap \ldots \cap z_0 \cap \bm{A})
         \cdot \ldots
         \cdot \pr (z_1 | z_0 \cap \bm{A}) \\
-\intertext{Use the limited horizon assumption}
+\intertext{Using the limited horizon assumption}
     &= \pr (z_t | z_{t-1} \cap \bm{A})
         \cdot \pr (z_{t-1} | z_{t-2} \cap \bm{A})
         \cdot \ldots
         \cdot \pr (z_1 | z_0 \cap \bm{A}) \\
-\intertext{Rewrite using $\prod$-notation}
+\intertext{Rewriting using $\prod$-notation}
     &= \prod_{t=1}^{T} \pr (z_t | z_{t-1} \cap \bm{A}) \\
-\intertext{Express the probabilities using the transition matrix $\bm{A}$,
+\intertext{Expressing the probabilities using the transition matrix $\bm{A}$,
 recalling that $A_{ij}$ is the probability of a transition from state $i$ to
 state $j$}
-    &= \prod_{t=1}^{T} A_{z_{t-1},{z_t}}. \\
+    &= \prod_{t=1}^{T} A_{z_{t-1} z_t}.
 \end{align}
-<!-- prettier-ignore-end -->
-
-This indicates that the probability of a sequence of states is simply the
-product of the transitions between those states.
+This indicates that the probability of a sequence of states $\pr (z_t \cap
+z_{t-1} \cap \ldots \cap z_1 | \bm{A})$ is simply the product of the
+transitions between those states $\prod_{t=1}^{T} A_{z_{t-1} z_t}$.
 
 For example, we can calculate the probability of an undergraduate student
-initially not knowing assembly, then being fearful of it,
-then being competent, and finally achieving mastery:
+initially not knowing x86 Assembly, then being fearful of it, then being
+competent, and finally achieving mastery:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     &\pr(s_0 \to s_{\text{No knowledge}} \to s_{\text{Fear}} \to s_{\text{Competence}} \to s_{\text{Mastery}}) \\
     &= 0.99 \times 0.15 \times 0.2 \times 0.05\\
     &= 0.001485. \\
 \end{align}
-<!-- prettier-ignore-end -->
 
 This result should approximately align with intuition.
 
 ### From state sequence to transition matrix
 
-Another question one might ask of a Markov model is: given a sequence of states
+Another question one might ask of a Markov Model is: given a sequence of states
 ($\bm{z} = \{z_0, z_1, z_2, \ldots, z_t\}$) which we know to have occurred,
-what transition matrix $\bm{A}$ is most likely to have caused them? More precisely,
-we would seek to find the parameters $\bm{A}$ which maximise the log-likelihood of a
-given sequence of observations.
+what transition matrix $\bm{A}$ is most likely to have caused them? We define
+the likelihood function $\mathbb{L}(\bm{A}|\bm{z})$  as the probability of observing
+$\bm{z}$ given the parameters $\bm{A}$:
 
-Intuitively, likelihood can be seen as an opposite of probability. Probability
-describes the chances of some outcome $\bm{z}$ given that the model used to
-describe the generation of outcomes is dependent on some known parameters
-$\bm{A}$. Likelihood describes the chance of a model used to describe the
-generation of outcomes being dependent of some particular set of _parameters_,
-given that some outcome has been observed.
+\begin{equation}
+    \mathbb{L}(\bm{A}|\bm{z}) := \pr(\bm{z}|\bm{A}).
+\end{equation}
 
-<!-- prettier-ignore-start -->
+We would like to estimate the parameters $\bm{A}$ which maximise the likelihood
+of a given sequence of observations $\bm{z}$.
+
+Practically, it is often more convenient to work with the log-likelihood:
+
+\begin{equation}
+    l(\bm{A}|\bm{z}) := \log \mathbb{L}(\bm{A}|\bm{z}).
+\end{equation}
+
+A value which maximises the log-likelihood will also maximise the likelihood,
+as $\log(x)$ is monotonically increasing. We will define the log-likelihood of
+a Markov model as:
+
 \begin{align}
-    \text{Probability:}& \, \pr (\bm{z} | \bm{A}) \\
-    \text{Likelihood:} & \,\pr (\bm{A} | \bm{z}) \\
+    l(\bm{A}|\bm{z}) &= \log \pr (\bm{z} | \bm{A}) \\
+    l(\bm{A}|\bm{z}) &= \log \pr (z_0, z_1, z_2, \ldots, z_t | \bm{A}) \\
+    &= \log \left( \prod_{t=1}^T A_{z_{t-1} z_t}\right) \\
+    &= \sum_{t=1}^T \log  \left( A_{z_{t-1} z_t} \right)\\
+    &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \log  \left( A_{ij} \right)\\
 \end{align}
-<!-- prettier-ignore-end -->
-
-Maximum likelihood estimation is then the process of discovering which
-parameters $\bm{A}$ result in the maximal likelihood given some observations
-$\bm{z}$.
-
-Practically, it is often more useful to work with the log-likelihood (notated
-$l$), and because $\log(x)$ is monotonically increasing, a value which
-maximises the log-likelihood will also maximise the likelihood.
-
-We will define the log-likelihood of a Markov model as:
-
-<!-- prettier-ignore-start -->
-\begin{align}
-    l(\bm{A}) &= \log \pr (\bm{z} | \bm{A}) \\
-    l(\bm{A}) &= \log \pr (z_0, z_1, z_2, \ldots, z_t | \bm{A}) \\
-    &= \log \left( \prod_{t=1}^T A_{z_{t-1},z_t}\right) \\
-    &= \sum_{t=1}^T \log  \left( A_{z_{t-1},z_t} \right)\\
-    &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right)\\
-\end{align}
-<!-- prettier-ignore-end -->
 
 Where $[z_{t-1} = s_i \cap z_t = s_j]$ is Iverson notation
 \citep{knuthTwoNotesNotation1992}, defined as:
@@ -896,7 +895,7 @@ multipliers. We will define the problem to be:
 
 <!-- prettier-ignore-start -->
 \begin{align}
-     \max_A l(\bm{A}) \quad & \\
+     \max_{\bm{A}} l(\bm{A}|\bm{z}) \quad & \\
     \text{such that:}\quad & \sum_{j=1}^{|S|} A_{ij} = 1,\quad i \in \{1,2, \ldots |S|\}\\
     & A_{ij} \ge 0,\quad i,j \in \{1,2, \ldots |S|\}\\
 \end{align}
@@ -909,8 +908,8 @@ and so there is no need to explicitly introduce the inequality constraint.
 The Lagrangian can therefore be constructed as:
 
 \begin{equation}
-    \mathcal{L}(\bm{A}, \alpha) =
-        \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right)
+    \mathcal{L}(\bm{A}, \bm{\alpha}) =
+        \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \log A_{ij}
         + \sum_{i=1}^{|S|} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right)
 \end{equation}
 
@@ -919,53 +918,46 @@ zero, we get:
 
 <!-- prettier-ignore-start -->
 \begin{align}
-    \frac{\partial \mathcal{L}(\bm{A}, \alpha)}{\partial A_{ij}}
+    \frac{\partial \mathcal{L}(\bm{A}, \bm{\alpha})}{\partial A_{ij}}
         &=
-        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log  \left( A_{ij} \right) \right)
-        + \frac{\partial}{\partial A_{ij}} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right)\\
+        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log A_{ij} \right)
+        + \frac{\partial}{\partial A_{ij}} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right) \\
+      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] - \alpha_i
 \end{align}
-<!-- prettier-ignore-end -->
-
-Which implies
-
-<!-- prettier-ignore-start -->
+which implies
 \begin{align}
-      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] - \alpha_i \\
      \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]. \label{eqn:Aij}
 \end{align}
-<!-- prettier-ignore-end -->
 
 Substituting back in and setting the partial derivative with respect to
-$\alpha$ equal to zero:
+$\bm{\alpha}$ equal to zero:
 
-<!-- prettier-ignore-start -->
 \begin{align}
-    \frac{\partial \mathcal{L}(\bm{A}, \beta)}{\partial \alpha_i}
-     &= 1 - \sum_{j=1}^{|S|} A_{ij} \\
-     &\Rightarrow\\
+    \frac{\partial \mathcal{L}(\bm{A}, \bm{\alpha})}{\partial \alpha_i}
+     &= 1 - \sum_{j=1}^{|S|} A_{ij},
+\end{align}
+which implies that
+\begin{align}
     0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
     1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
     \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-             &= \sum_{t=1}^T [z_{t-1} = s_i] \\
+             &= \sum_{t=1}^T [z_{t-1} = s_i].
 \end{align}
-<!-- prettier-ignore-end -->
 
-When we substitute this expression for $\alpha_i$ into the expression for
-$A_{ij}$, we get the maximum likelihood estimate for $A_{ij}$, which we will
-term $\hat{A}_{ij}$:
+When we substitute the expression for $\alpha_i$ into Equation \eqref{eqn:Aij}
+(the expression for $A_{ij}$), we get the maximum likelihood estimate for
+$A_{ij}$ which we will term $\hat{A}_{ij}$:
 
-<!-- prettier-ignore-start -->
 \begin{align}
      A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
     \hat{A}_{ij}  &= \frac{1}{\sum_{t=1}^T [z_{t-1} = s_i]} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]}{\sum_{t=1}^T [z_{t-1} = s_i]}  \\
+    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]}{\sum_{t=1}^T [z_{t-1} = s_i]}. \label{eqn:ahatij}
 \end{align}
-<!-- prettier-ignore-end -->
 
-This expression for $\hat{A}_{ij}$ encodes the intuitive explanation that the
-maximum likelihood of transitioning from state $i$ to state $j$ is just the
-fraction of times that we were in state $i$ and then transitioned to state $j$.
+Equation \eqref{eqn:ahatij} encodes the intuitive explanation that the maximum
+likelihood of transitioning from state $i$ to state $j$ is just the fraction of
+times that we were in state $i$ and then transitioned to state $j$.
 
 \begin{equation}
     \text{Intuitively: } \quad \hat{A}_{ij}  = \frac{\text{\# $i\to j$}}{\text{\# $\to i$}}
@@ -975,148 +967,122 @@ With #$i\to j$ representing the number of transitions from state $i$ to state
 $j$ and #$\to i$ representing the number of transitions from any state to
 state $i$.
 
-## Introduction to HMMs
+## Hidden Markov Models\label{sec:02-hidden-markov-models}
 
-With the formalism of Markov models understood, we can motivate _hidden_ markov
-models and the additional power they provide.
+With the formalism of Markov Models understood, we can motivate _Hidden_ Markov
+Models (HMMs) and the additional power they provide.
 
-Regular Markov models have a shortcoming in that they assume we can observe the
+Regular Markov Models have a shortcoming in that they assume we can observe the
 state of the world directly. In our undergraduate x86 Assembly example, it is
 impossible for us to directly know the exact understanding of an undergraduate
-student. We might be able to ask them, or we might be able to have them take a
-test or program in assembly and derive some information from the results, but
-all of these are indirect measures of the student's understanding. Since these
-are indirect, they are very likely to have some amount of error associated with
-them. It is cyclical to assume a student could asses their own knowledge of a
-topic they don't already know, and no test can perfectly assess a student's
-knowledge.
+student. We might estimate this value (by having them take a test or program in
+assembly), but all of these are indirect measures of the student's
+understanding. Since these are indirect, they are very likely to have some
+amount of error associated with them.
 
-The crux of the idea is not to try figure out exactly how uncertainties are
-introduced, but rather realise that they are inevitable. For our example, we
-will assume a student takes a test out of 100, and their mark is the value we
-observe. We are then interested in trying to estimate the understanding of the
-student ($s_{\text{No knowledge}}, s_{\text{Fear}}, s_{\text{Competence}},
-s_{\text{Mastery}}$).
+The crux of the idea behind HMMs is not to try figure out exactly how
+uncertainties are introduced, but rather realise that they are inevitable. For
+our example, we will assume a student takes a test out of 100, and their mark
+is the value we observe. We are then interested in trying to estimate which
+state the student is in: $s_{\text{No knowledge}}, s_{\text{Fear}},
+s_{\text{Competence}}$ or $s_{\text{Mastery}}$.
 
-Markov models cannot help us here, but Hidden Markov models give us the tools
-to express the test mark as coming from a different probability distribution
-for each state the student is in. If we knew (for example) that the average
-mark achieved by students in the Mastery state was 65% and the average mark
-achieved by students in the Competence state was 30%, and we then observed a
-student with a mark of 70%, then we can be fairly certain they are in the
-Mastery state.
+HMMs give us the tools to express the test mark as coming from a probability
+distribution that depends on the state the student is in. Because of this
+dependence, we can infer the most likely hidden state based on the observed
+test mark.
+
+For example, if we knew that the average mark achieved by students in the
+Mastery state was 65% and the average mark achieved by students in the
+Competence state was 30%, and we then observed a student with a mark of 70%,
+then we can be fairly certain they are in the Mastery state. This certainty
+will be made rigorous in the coming subsections.
 
 We will express this mathematically by defining an HMM as a Markov model for
-which there are a series of observed outputs $\bm{x} = \{x_1, x_2, \ldots,
-x_T\}$. Each output $x_i$ is drawn from an output alphabet
+which:
 
-\begin{equation}
-    V = \{v_1, v_2, \ldots, v_{|V|}\}
-\end{equation}
+- There are a series of observed outputs $\bm{x} = \{x_1, x_2, \ldots, x_T\}$.
+- Each output $x_t \forall\, t \in \{1, 2, \ldots, T\}$ is a member of an output
+  alphabet $V = \{v_1, v_2, \ldots, v_{|V|}\}$ such that $x_t \in V, t \in \{1,
+  2, \ldots, T\}$.
+- There is a set of hidden states that the model takes on $\bm{z} = \{z_1, z_2,
+  \ldots, z_T\}$ which we have no way of observing.
+- Each of these hidden states which the model occupies is drawn from a state
+  alphabet $S = \{s_1, s_2, \ldots, s_{|S|}\}$ such that $z_t \in S, t \in \{1,
+  2, \ldots, T\}$.
 
-such that $x_t \in V, t \in \{1, 2, \ldots, T\}$.
-
-As for Markov models, we will define a series of hidden states that the model
-takes on $\bm{z} = \{z_1, z_2, \ldots, z_T\}$ which we have no way of observing
-but which will provide a useful construct for reasoning about this model. Each
-of these states which the model occupies is drawn from a state alphabet $S =
-\{s_1, s_2, \ldots, s_{|S|}\}$ such that $z_t \in S, t \in \{1, 2, \ldots,
-T\}$. We will again use $\bm{A}$ as the transition matrix defining the
-probability of transitioning from one hidden state to another.
-
-In addition to the above, we will allow the output observations $\bm{x}$ to be
-a function of our hidden state $\bm{z}$. For this, we make another assumption:
+We will again use $\bm{A}$ as the transition matrix defining the probability of
+transitioning from one hidden state to another. We will allow the output
+observations $\bm{x}$ to be a function of our hidden state $\bm{z}$. For this,
+we make another assumption:
 
 - _Output independance assumption_: The probability of outputting a value $x_t$
   at time $t$ is dependant only on the hidden state of the model $z_t$ at time
   $t$:
 
-<!-- prettier-ignore-start -->
 \begin{equation}
     \pr(x_t = v_k | z_t = s_j) = \pr(x_t = v_k | x_1, \ldots, x_T, z_1, \ldots, z_t)
 \end{equation}
-<!-- prettier-ignore-end -->
 
-We will use a new matrix to represent the emission probabilities, where an
-element $B_{jk}$ represents the probability of some hidden state $s_j$ emitting
-some output observation $v_k$:
+We will use a matrix $\bm{B}$ to represent the emission probabilities, where
+the element $B_{jk}$ represents the probability of $v_k$ being emitted given
+that the model is in state $s_j$.
 
-<!-- prettier-ignore-start -->
 \begin{equation}
     B_{jk} := \pr(x_t = v_k | z_t = s_j).
 \end{equation}
-<!-- prettier-ignore-end -->
-
-$B_{jk}$ is therefore the probability of $v_k$ being emitted given that the
-model is in state $s_j$.
 
 ### What's the probability of observing a certain sequence?
 
-One natural question to ask, given an HMM, is what is the probability that a
-certain sequence of observations was emitted by that HMM. If we assume there
-exists some series of hidden states $\bm{z}$ and that at each time step $t$ we
-select an output $x_t$ which is a function of the state $z_t$: $x_t = f(z_t)$
-where $f$ is unknown.
-
-If we want to know the probability of a sequence of observations $x_1, x_2,
-\ldots, x_T$ then we will need to sum the likelihood of the data given every
-possible series of states $\bm{z}$:
+We wish to calculate $\pr(\bm{x} | \bm{A} \cap \bm{B})$, the probability that
+a certain sequence of observations $\bm{x}$ was emitted by an HMM with matrices
+$\bm{A}$ and $\bm{B}$. To do this, we need to sum the likelihoods of the
+observed data $\bm{x}$ given every possible series of states $\bm{z}$:
 
 <!-- prettier-ignore-start -->
 \begin{align}
     \pr(\bm{x} &| \bm{A} \cap \bm{B}) \\
-        &= \sum_{\forall\bm{z}} \pr (\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) && \text{(Condition over $\bm{z}$)} \\
+        &= \sum_{\forall\bm{z}} \pr (\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) && \text{(Condition over all $\bm{z}$)} \\
         &= \sum_{\forall\bm{z}} \pr (\bm{x} | \bm{z} \cap \bm{A} \cap \bm{B}) \pr (\bm{z} | \bm{A} \cap \bm{B}) &&\text{(Chain rule)} \\
         &= \sum_{\forall\bm{z}}
             \left( \prod_{t=1}^T \pr (x_t | z_t \cap \bm{B}) \right)
             \left( \prod_{t=1}^T \pr (z_t | z_{t-1} \cap \bm{A}) \right) \\
         &= \sum_{\forall\bm{z}}
             \left( \prod_{t=1}^T B_{z_t, x_t} \right)
-            \left( \prod_{t=1}^T A_{z_{t-1}, z_t} \right) &&\text{(Defn. of $\bm{A}$ and $\bm{B}$)}\\
+            \left( \prod_{t=1}^T A_{z_{t-1}, z_t} \right) &&\text{(Defn. of $\bm{A}$ and $\bm{B}$)} \label{eqn:hmm-simple}
 \end{align}
 <!-- prettier-ignore-end -->
 
-Where:
+Equation \eqref{eqn:hmm-simple} is conceptually simple but intractable to
+calculate, as it requires a sum over every possible sequence of states. This
+implies that $z_t$ can take on any one of the $|S|$ states for each of the
+$|T|$ timesteps, requiring $O(|S|^T)$ operations.
 
-- $\bm{A}$ is the state transition matrix
-- $\bm{B}$ is the emission probability matrix
+There exists a dynamic programming means of computing the probability, called
+the _Forward Procedure_ \citep{rabinerTutorialHiddenMarkov1989}. We define an
+intermediate quantity $\alpha_i(t)$ to represent the probability that 1) we
+observed all $x_i$ up until time $t$ and 2) that the HMM is in state $s_i$ at
+time $t$:
 
-This provides us with a simple expression of the probability we want
-$\pr(\bm{x} | \bm{A} \cap \bm{B})$, but this simple expression is intractable to
-calculate. It requires a sum over every possible sequence of states, which
-means that $z_t$ can take on any one of the $|S|$ states for each timestep $t$.
-This means that the calculation will require $O(|S|^T)$ operations.
-
-Luckily, there exists a dynamic programming means of computing the probability,
-called the _Forward Procedure_ \citep{rabinerTutorialHiddenMarkov1989}. First
-we define an intermediate quantity $\alpha_i(t)$ to represent the probability
-firstly of all the observations $x_i$ up until time $t$ and secondly that the
-HMM is in some specific state $s_i$ at time $t$:
-
-<!-- prettier-ignore-start -->
 \begin{equation*}
-    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap \bm{B})
+    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap \bm{B}).
 \end{equation*}
-<!-- prettier-ignore-end -->
 
-If we have this quantity, we could express the probability of a certain
-sequence of observations $\bm{x}$ much more succinctly as:
+If we knew the value of $\alpha_i(t)$, we could express the probability of a
+certain sequence of observations $\bm{x}$ much more succinctly as:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     \pr(\bm{x} | \bm{A} \cap \bm{B})
     &= \pr(x_1 \cap x_2 \cap \ldots \cap x_T | \bm{A} \cap \bm{B}) \\
     &= \sum_{i=1}^{|S|} \pr(x_1 \cap x_2 \cap \ldots \cap x_T \cap z_T = s_i | \bm{A} \cap \bm{B}) \\
-    &= \sum_{i=1}^{|S|} \alpha_i(T) \\
+    &= \sum_{i=1}^{|S|} \alpha_i(T)
 \end{align}
-<!-- prettier-ignore-end -->
 
 The _Forward Procedure_ presents an efficient means by which $\alpha_i(t)$ can
 be calculated, requiring only $O(|S|)$ operations at each timestep, resulting
 in a complexity of $O(|S| \cdot T)$ instead of $O(|S|^T)$. This procedure is
 recursive and is given in Algorithm \ref{alg:alphai}.
 
-<!-- prettier-ignore-start -->
 \begin{algorithm}
 \caption{Computing $\alpha_i(t)$ efficiently with the forward procedure}
 \label{alg:alphai}
@@ -1125,38 +1091,39 @@ recursive and is given in Algorithm \ref{alg:alphai}.
     \State \textbf{Recursive Case:} $\alpha_i(t) = B_{i,x_t} \sum_{j=1}^{|S|} \alpha_j(t - 1) A_{j,i}$
 \end{algorithmic}
 \end{algorithm}
-<!-- prettier-ignore-end -->
 
-The backwards procedure can be used to efficiently calculate the probability of
-a sequence $x_{t+1}, \ldots, x_T$ given the initial state and a HMM:
-$\beta_i(t)$. This procedure is very similar to the forward procedure and is
-given in Algorithm \ref{alg:betai}.
+The _Backwards Procedure_ can be used to efficiently calculate the probability
+of 1) being in a state $s_i$ at time $t$ and 2) the sequence $x_{t+1}, \ldots,
+x_T$ given parameters of an HMM $\bm{A}$ and $\bm{B}$, which is defined as:
 
-<!-- prettier-ignore-start -->
+\begin{equation}
+    \beta_i(t) := \pr(x_T \cap x_{T-1} \cap \ldots \cap x_{t+1} \cap z_t = s_i | \bm{A} \cap \bm{B}).
+\end{equation}
+
+This procedure is very similar to the forward procedure and is given in
+Algorithm \ref{alg:betai}.
+
 \begin{algorithm}
 \caption{Computing $\beta_i(t)$ efficiently with the backward procedure}
 \label{alg:betai}
 \begin{algorithmic}[1]
     \State \textbf{Base case:} $\beta_i(T) = 1$
-    \State \textbf{Recursive Case:} $\beta_i(t) = \sum^{|S|}_{j=1} \beta_j(t+1) A_{i,j} B_{j,x_{t+1}}$
+    \State \textbf{Recursive Case:} $\beta_i(t) = \sum^{|S|}_{j=1} \beta_j(t+1) A_{i j} B_{j x_{t+1}}$
 \end{algorithmic}
 \end{algorithm}
-<!-- prettier-ignore-end -->
 
 ### The Viterbi algorithm: What's the most likely series of states for some output?
 
-If we observed a series of outputs from a HMM $x_1, x_2, \ldots, x_T\,\forall
-x_i \in V$, then what is the sequence of hidden states $z_1, z_2, \ldots, z_T
-\forall\,z_i \in S$, which has the highest likelihood? Specifically:
+If we observed a series of outputs $\bm{x}$ from an HMM with matrices  $\bm{A}$
+and $\bm{B}$, what is the sequence of hidden states $\bm{z}$, which would
+maximise the likelihood of those outputs? Specifically, we'd like to find:
 
-<!-- prettier-ignore-start -->
 \begin{align}
-    \argmax_{\bm{z}} \pr(\bm{z} | \bm{x} \cap \bm{A} \cap \bm{B})
+    \argmax_{\bm{z}} &\,\pr(\bm{z} | \bm{x} \cap \bm{A} \cap \bm{B}) \\
     &= \argmax_{\bm{z}} \frac{ \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) }{ \sum_{\forall\bm{z}} \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) } &&\text{(Bayes' Theorem)} \\
     &= \argmax_{\bm{z}} \pr(\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B})  &&
-    \text{(Denominator $\indep \bm{z}$)}\\
+    \text{(Denominator $\indep \bm{z}$)}
 \end{align}
-<!-- prettier-ignore-end -->
 
 Here we might again try the naïve approach and evaluate every possible $\bm{z}$
 to check which one achieves a maximum. This approach requires $O(|S|^T)$
@@ -1167,24 +1134,21 @@ similar to the forward procedure, except that it tracks the maximum probability
 of generating the observations seen so far and records the corresponding state
 sequence. See the procedure in Algorithm \ref{alg:viterbi}.
 
-<!-- prettier-ignore-start -->
 \begin{algorithm}
   \caption{Viterbi Algorithm}
   \label{alg:viterbi}
   \begin{algorithmic}[1]
-    \State \textbf{Input:} Hidden states $S=\{s_0, s_1, \ldots\}$,
-    observations, Transition probabilities $A_{ij}$ from state $i$ to state
-    $j$, Emission probabilities $B_{ij}$ that state $i$ will emit an
-    observation $j$.
+    \State \textbf{Input:} observations $\bm{x}$, states $S$, transition
+    probability matrix $\bm{A}$, emission probability matrix $\bm{B}$.
     \State \textbf{Output:} Most likely sequence of hidden states
     \State \textit{Initialize} the Viterbi table and path table
-    \State \textit{Let} $viterbi$ be a 2D array of size $|S| \times num\_observations$
-    \State \textit{Let} $path$ be a 2D array of size $|S| \times num\_observations$
+    \State \textit{Let} $viterbi$ be a 2D array of size $|S| \times n$
+    \State \textit{Let} $path$ be a 2D array of size $|S| \times n$
     \For{$i$ in $1..|S|$}
-        \State $viterbi[i][0] \gets A_{s_0 s_i} \times B_{s_i \textit{observations[0]}}$
+        \State $viterbi[i][0] \gets A_{s_0 s_i} \times B_{s_i x_0}$
         \State $path[i][0] \gets i$
     \EndFor
-    \For{$i$ in $1..$\textit{len(observations)}}
+    \For{$i$ in $1..n$}
         \For{$j$ in $1..|S|$}
             \State $p_{\text{max}} \gets 0$
             \State $s_{\text{best}} \gets 0$
@@ -1196,98 +1160,102 @@ sequence. See the procedure in Algorithm \ref{alg:viterbi}.
                 \EndIf
             \EndFor
             \State $viterbi[j][i] \gets p_{\text{max}} \times B_{s_i
-            \textit{observations[i]}}$
+            x_i}$
             \State $path[j][i] \gets s_{\text{best}}$
         \EndFor
     \EndFor
-    \State \textit{Find} final\_state with maximum probability in the last column of the Viterbi table
-    \State \textit{Backtrack} from final\_state to construct the most likely sequence
-    \Return "Most likely sequence: ", sequence
+    \State Find final\_state with maximum probability in the last column of \textit{viterbi}
+    \State Backtrack from final\_state to construct the most likely sequence
+    \State \textbf{Return:} the most likely sequence
   \end{algorithmic}
 \end{algorithm}
-<!-- prettier-ignore-end -->
 
 ### Most likely parameters for an HMM
 
-Another question we might ask of our HMM is, given a set of observations, what
-values do the transition probabilities $\bm{A}$ and the emission probabilities
-$\bm{B}$ have to take to maximise the likelihood of those observations?
+Another question we might ask of our HMM is, given a set of observations
+$\bm{x}$, what values do the transition probability matrix $\bm{A}$ and the
+emission probability matrix $\bm{B}$ have to take to maximise the likelihood of
+those observations? This question is answered by the Baum-Welch algorithm
+\citep{baumStatisticalInferenceProbabilistic1966}, which is a special case of
+the Expectation-Maximisation (EM) algorithm. The Baum-Welch algorithm consists
+of three steps which are repeated until either successive repetitions do not
+lead to significant changes in the parameters or the computational budget has
+been reached. The Baum-Welch algorithm does not guarantee convergence on a
+global maximum, and the performance of the converged parameters depends on the
+random initialisation of those parameters.
 
-This goal is equivalent to "fitting" or training a neural network so that the
-weights and biases minimise the loss function, however the procedure followed
-is quite different.
+First, the The forward procedure is used to calculate $\alpha_i(t)$, the
+probability of being in state $i$ at time $t$. Then the backward procedure is
+used to calculate $\beta_i(t)$, the probability of the rest of the sequence
+$z_{t+1}, \ldots, z_T$ given that the HMM is in state $i$ at time $t$. The
+calculated values for $\alpha_i(t)$ and $\beta_i(t)$ to update the HMM
+parameters $\bm{A}$ and $\bm{B}$.
 
-The Baum-Welch algorithm \citep{baumStatisticalInferenceProbabilistic1966} is a
-special case of the Expectation-Maximisation (EM) algorithm applied to finding
-the unknown parameters of an HMM. It consists of three steps which are repeated
-until a desired level of convergence is reached such that successive iterations
-do not lead to significant changes in the parameters. Note that this algorithm
-does not converge to a global maximum, and the performance of the converged
-parameters depends on the random initialisation of those parameters.
+To perform this update, we define some temporary variables:
 
-Recall the following variables:
+- $\gamma_i(t) := \pr(z_t = s_i | \bm{x} \cap \bm{A} \cap \bm{B})$ is the probability of
+  being in state $s_i$ at time $t$ given the observed sequence $\bm{x}$ and a
+  HMM with parameters $\bm{A}$ and $\bm{B}$.
+- $\xi_{ij}(t) := \pr(z_t = s_i \cap z_{t+1} = s_j | \bm{x} \cap \bm{A}\cap\bm{B})$ is the
+  probability of being in state $i$ at time $t$ and state $j$ at time $t+1$
+  given the observed sequence $\bm{x}$ and a HMM with parameters $\bm{A}$ and
+  $\bm{B}$.
 
-- $A_{i,j}$ is the transition probability matrix, giving the probability of
-  being transitioning from state $i$ to state $j$.
-- $B_{j,k}$ is the emission probability matrix, giving the probability of
-  emitting some output observation $k$ given that we are in state $j$.
-- $x_t$ is the hidden state of the model at time $t$
-- $S$ is the set of possible states our model can be in.
-- $|S|$ is the total number of possible states.
-- $\bm{z}$ is the sequence of states which is known to have occurred.
+Bayes' theorem can be used to calculate $\gamma_i(t)$ based on $\alpha_i(t)$
+and $\beta_i(t)$:
 
-The **forward procedure** recursively calculates the probability of being in state $i$ at time $t$, $\alpha_i(t)$, and was presented in Algorithm \ref{alg:alphai}.
-
-The **backward procedure** recursively calculates the probability of the rest
-of the sequence $z_{t+1}, \ldots, z_T$ given that the HMM is in state $i$ at
-time $t$, $\beta_i(t)$, and was presented in Algorithm \ref{alg:betai}.
-
-The **update step** uses the calculated values for $\alpha_i$ and $\beta_i$ to
-update the HMM parameters $\bm{A}$ and $\bm{B}$.
-
-We will need to calculate some temporary variables:
-
-- $\gamma_i(t)$ is the probability of being in state $i$ at time $t$ given the
-  observed sequence $\bm{z}$ and the HMM $(\bm{A}, \bm{B})$
-
-- $\xi_{ij}(t)$ is the probability of being in state $i$ and $j$ at times $t$
-  and $t+1$ given the observed sequence $\bm{z}$ and the HMM defined by $\bm{A}, \bm{B}$
-
-According to Bayes' theorem:
-
-<!-- prettier-ignore-start -->
-\begin{align}
-    \gamma_i(t) &= \pr(x_t = i | \bm{z}, \bm{A}, \bm{B}) \\
-    &= \frac{ \pr(x_t = i, \bm{z} | \bm{A}, \bm{B})}{ \pr (\bm{z} | \bm{A}, \bm{B})} \\
-    &= \frac{\alpha_i(t)\beta_i(t)}{ \sum^N_{j=1} \alpha_i(t)\beta_i(t)} \\
+\begin{align} \label{eqn:gamma_it}
+    \gamma_i(t) :=& \pr(z_t = s_i | \bm{z} \cap \bm{A} \cap \bm{B}) \\
+                =& \frac{\pr(\bm{x} \cap z_t = s_i  | \bm{A} \cap  \bm{B})}{ \pr (\bm{z} | \bm{A} \cap \bm{B})} \\
+                =& \frac{
+                    \pr(x_1 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap  \bm{B})
+                    \pr(x_{t+1} \cap \ldots \cap x_T \cap z_t = s_i | \bm{A} \cap \bm{B})
+                }{ \pr (\bm{z} | \bm{A} \cap \bm{B})} \\
+                =& \frac{\alpha_i(t)\beta_i(t)}{ \sum^{|S|}_{j=1} \alpha_j(t)\beta_j(t)}.
 \end{align}
-<!-- prettier-ignore-end -->
 
-And
+Similarly, Bayes' theorem can be used to calculate $\xi_{ij}(t)$ based on
+$\alpha_i(t)$ and $\beta_i(t)$:
 
-<!-- prettier-ignore-start -->
 \begin{align}
-    \xi_{ij}(t) &= \pr(x_t = i, x_{t+1} = j | \bm{z}, \bm{A},\bm{B}) \\
-    &= \frac{\pr(x_t = i, x_{t+1} = j, \bm{z} | \bm{A}, \bm{B})}{\pr(\bm{z} | \bm{A}, \bm{B})} \\
-    &= \frac{
-        \alpha_i(t) A_{ij} \beta_j(t+1) B_{j,z_{t+1}}
+    \xi_{ij}(t) :=& \pr(x_t = s_i \cap x_{t+1} = s_j | \bm{z} \cap \bm{A}\cap\bm{B}) \\
+    =& \frac{\pr(x_t = s_i \cap x_{t+1} = s_j \cap \bm{z} | \bm{A} \cap \bm{B})}{\pr(\bm{z} | \bm{A} \cap \bm{B})} \\
+    =& \frac{
+        \alpha_i(t) A_{i j} \cdot \beta_j(t+1) B_{j\,z_{t+1}}
     }{
-        \sum_{k=1}^{|S|}
-            \sum_{l=1}^{|S|}
-                \alpha_k(t) A_{k,l} \beta_l(t+1) B_{l,y_{t+1}}
-    } \\
+        \sum_{k=1}^{|S|} \sum_{l=1}^{|S|} \alpha_k(t) A_{k l} \cdot \beta_l(t+1) B_{l\,z_{t+1}}
+    }.
 \end{align}
-<!-- prettier-ignore-end -->
 
-We can now update the parameters of the HMM:
+With these temporary values, we can update the parameters of the HMM:
 
-- $A_{0i}^* = \gamma_i(1)$
-- $A_{ij}^* = \frac{ \sum^{T-1}_{t=1}\xi_{ij}(t) }{ \sum^{T-1}_{t=1}\gamma_i(t) }$ (The expected number of transitions from $i$ to $j$)
-- $B_{j,k}^* = \frac{ \sum^T_{t=1} [y_t = k] \gamma_j(t)}{ \sum^T_{t=1}
-  \gamma_j(t) }$
+- We recalculate the probability of transitioning from the initial state to a state
+  $s_i$ using the probability of being in that state at time step 1, $\gamma_i(1)$:
 
-The above steps can now be repeated until either a convergence within some
-threshold is reached or some set number of iterations have been performed.
+\begin{equation}
+    A_{0i} \gets \gamma_i(1)
+\end{equation}
+
+- We recalculate all other state transitions based on the expected transitions
+  from $i$ to $j$:
+
+\begin{equation}
+    A_{ij} \gets \frac{\sum^{T-1}_{t=1}\xi_{ij}(t)}{\sum^{T-1}_{t=1}\gamma_i(t)}
+\end{equation}
+
+- We recalculate the emission probabilities based on the proportion of times we
+  were in state $s_j$ and observed an emission of $v_k$ compared to the
+  total number of times we were in state $s_j$:
+
+\begin{equation}
+    B_{j k} \gets \frac{\sum^T_{t=1} [z_t = v_k] \gamma_j(t)}{\sum^T_{t=1} \gamma_j(t)}
+\end{equation}
+
+
+The above steps, starting from the recalculation of $\gamma_i(t)$ in Equation
+\eqref{eqn:gamma_it}, can now be repeated until either a convergence within
+some threshold is reached, or some set number of iterations have been
+performed.
 
 # Support Vector Machines \label{sec:02-support-vector-machines}
 
@@ -1309,6 +1277,8 @@ SVCs use one-vs-rest classification
 NOTE: I didn't scale the data... It's recommended to scale the data
 
 Different class weights were attempted
+
+Need to give some historical background for SVMs
 -->
 
 Support Vector Machines (SVMs) are a form of supervised learning that can be
