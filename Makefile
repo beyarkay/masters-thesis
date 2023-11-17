@@ -3,7 +3,6 @@ pandoc:
 	pandoc src/00_abstract.md          -o tex/00_abstract.tex
 	pandoc src/00_acknowledgements.md  -o tex/00_acknowledgements.tex
 	pandoc src/00_dedication.md        -o tex/00_dedication.tex
-	pandoc src/00_preface.md           -o tex/00_preface.tex
 	pandoc src/01_introduction.md      -o tex/01_introduction.tex
 	pandoc src/02_background.md        -o tex/02_background.tex
 	pandoc src/03_lit_review.md        -o tex/03_lit_review.tex
