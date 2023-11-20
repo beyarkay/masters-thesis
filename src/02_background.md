@@ -1229,8 +1229,8 @@ $\alpha_i(t)$ and $\beta_i(t)$:
 
 With these temporary values, we can update the parameters of the HMM:
 
-- We recalculate the probability of transitioning from the initial state to a state
-  $s_i$ using the probability of being in that state at time step 1, $\gamma_i(1)$:
+- We recalculate the probability of transitioning from the initial state to a
+  state $s_i$ using the probability of being in that state at time step 1:
 
 \begin{equation}
     A_{0i} \gets \gamma_i(1)
@@ -1243,9 +1243,9 @@ With these temporary values, we can update the parameters of the HMM:
     A_{ij} \gets \frac{\sum^{T-1}_{t=1}\xi_{ij}(t)}{\sum^{T-1}_{t=1}\gamma_i(t)}
 \end{equation}
 
-- We recalculate the emission probabilities based on the proportion of times we
-  were in state $s_j$ and observed an emission of $v_k$ compared to the
-  total number of times we were in state $s_j$:
+- We recalculate the emission probabilities $B_{j k}$ based on the proportion
+  of times we were in state $s_j$ and observed an emission of $v_k$ compared to
+  the total number of times we were in state $s_j$:
 
 \begin{equation}
     B_{j k} \gets \frac{\sum^T_{t=1} [z_t = v_k] \gamma_j(t)}{\sum^T_{t=1} \gamma_j(t)}
@@ -1259,71 +1259,114 @@ performed.
 
 # Support Vector Machines \label{sec:02-support-vector-machines}
 
-<!--
-Support Vector Machines
-
-High `C` can increase training times: Fan, Rong-En, et al., “LIBLINEAR: A
-library for large linear classification.”, Journal of machine learning research
-9.Aug (2008): 1871-1874.
-
-LibLinear used for implementation
-
-SKlearn details: https://scikit-learn.org/stable/modules/svm.html
-
-SVMs struggle with large numbers of observations
-
-SVCs use one-vs-rest classification
-
-NOTE: I didn't scale the data... It's recommended to scale the data
-
-Different class weights were attempted
-
-Need to give some historical background for SVMs
--->
-
 Support Vector Machines (SVMs) are a form of supervised learning that can be
 used for classification or regression. As _Ergo_ is a classification problem,
 only SVM classifiers will be discussed here. SVMs work well in high dimensions
 and perform classifications using a small subset of the training observations,
-making them relatively fast and memory efficient. While SVMs do not natively
-support multi-class classification, it will be implemented via one-vs-rest
-classification which will be discussed in Section
-\ref{sec:04-binary-and-multi-class-classifiers}. The remainder of this section
-will describe SVMs as used for binary classification tasks.
+making them relatively fast and memory efficient.
 
-SVMs learn to distinguish two classes in a dataset by finding a hyperplane that
-completely separates the two classes. Intuitively, an SVM attempts to find a
-hyperplane which splits the dataset, such that 1) the hyperplane maximises the
-distance to the nearest observation regardless of the class of that observation
-and 2) all observations from the same class are on the same side of the
-hyperplane. Many classification tasks are not linearly separable, and thus a
-certain amount of "slack" is often permitted in the mathematical formulation of
-an SVM which permits some observations to be on the wrong side of the
-hyperplane. These observations incur some penalty, the magnitude of which is
-controlled by a hyperparameter. In some cases it is advantageous to use a
-kernel function to transform the data into a new space and the hyperplane is
-found in this new space.
+The theoretical foundations of using linear separation for classification and
+finding the optimal separating hyperplane comes from work by
+\cite{vapnik1964note} in the Soviet Union. They developed this theory while
+working on pattern recognition and structural risk minimisation. Vapnik
+continued to work on the theory of SVMs during the 1970s and 1980s while at the
+Institute of Control Sciences in Moscow, but the Cold War prevented his work
+from becoming widely known to the European and American scientific communities.
+SVMs were later extended to handle non-linear decision boundaries with the
+"kernel trick" \citep{boserTrainingAlgorithmOptimal1992} which enabled the
+algorithm to implicitly operate in higher dimensional feature spaces.
+\cite{cortesSupportvectorNetworks1995} introduced SVMs as they are commonly
+used today with a "soft margin" that improves the generalisation capabilities
+of the SVM.
 
-Given a dataset with input vectors (features) $x_i$ and corresponding labels
-$y_i$, where $y_i$ is either -1 or 1, the task of an SVM is to find a
-hyperplane to split the two classes. This hyperplane is defined by $\bm{w} x +
-b = 0$, where $\bm{w}$ is named the weight vector, $x$ is the input vector, and
-$b$ is named the bias.
+Intuitively, an SVM performs binary classification by attempting to find a
+hyperplane that splits the dataset in two, such that 1) the hyperplane
+maximises the distance to the nearest observation regardless of the class of
+that observation and 2) all observations from the same class are on the same
+side of the hyperplane. Many classification tasks are not linearly separable,
+and thus a certain amount of "slack" is often permitted in the mathematical
+formulation of an SVM which permits some observations to be on the wrong side
+of the hyperplane. This is called the "soft margin" formulation for SVMs. These
+misclassified observations incur a penalty, the magnitude of which is
+controlled by a regularisation hyperparameter often just termed $C$. In some
+cases it is advantageous to use a kernel function to transform the data into a
+new space and the hyperplane is found in this new space.
 
-Given an observation $x_i$, the sign of $\bm{w} x_i + b$ will indicate which
-class it belongs to, according to the SVM classifier.
+This exposition will center its attention on Support Vector Machines (SVMs)
+employed for soft-margin linear-kernel binary-classification, consistent with
+the configuration employed by \emph{Ergo}. The interested reader is directed to
+\cite[Chap. 7]{bishopPatternRecognitionMachine2007} for an explanation
+regarding the other formulations of SVMs.
 
-The _margin_ of a SVM is defined as the distance between the hyperplane and the
-nearest data point(s). In maximising the margin, an SVM is better able to
-generalise to unseen data because it creates a better separation between the
-classes. This results in a greater probability that an unseen data point will
-be further from the hyperplane.
+Given a set of input vectors $\bm{x} = \{x_1, x_2, \ldots x_n\}, \bm{x} \in
+\mathbb{R}^{p \times n}$ and corresponding labels $\bm{y} = \{y_1, y_2, \ldots
+y_n\}, \bm{y} \in \{-1, 1\}^n$, the task of an SVM is to find a hyperplane
+$\bm{w} x_i + b = 0$ to split the two classes, where $\bm{w}$ is the weight
+vector and $b$ is a bias scalar. Given an observation $x_i$, the predicted
+class $\hat{y}_i$ is given by:
 
-To calculate the magnitude of the margin, recognise first that the margin is
-equal to the distance between two hyperplanes $\bm{w} x - b = -1$, named the
-negative hyperplane, and $\bm{w} x - b = +1$, named the negative hyperplane.
+\begin{equation}
+    \hat{y}_i = \begin{cases}
+        -1 & \text{if}\quad \bm{w} x_i + b < 0 \\
+        +1 & \text{if}\quad \bm{w} x_i + b \ge 0 \\
+    \end{cases}
+\end{equation}
 
-If we define $x_0$ as a point in the negative hyperplane such that
+The _margin_ of a SVM is defined as the smallest distance between the
+hyperplane and the nearest data point(s). In maximising the margin, an SVM is
+better able to generalise to unseen data because it creates a better separation
+between the classes. This results in a greater probability that an unseen data
+point will be further from the hyperplane. Figure \ref{fig:svm-tikz} shows an
+example SVM with the margin and separating hyperplane indicated.
+
+\tikzset{
+    leftNode/.style={circle,minimum width=.5ex, fill=none,draw},
+    rightNode/.style={circle,minimum width=.5ex, fill=black,thick,draw},
+    rightNodeInLine/.style={solid,circle,minimum width=.7ex, fill=black,thick,draw=white},
+    leftNodeInLine/.style={solid,circle,minimum width=.7ex, fill=none,thick,draw},
+}
+\begin{figure}[!ht]
+    \centering
+    \label{fig:svm-tikz}
+    \begin{tikzpicture}[
+        scale=2.5,
+        important line/.style={thick}, dashed line/.style={dashed, thin},
+        every node/.style={color=black},
+    ]
+        \draw[dashed line, yshift=.4cm, xshift=-.4cm]
+            (.5,.5) coordinate (sls) -- (3,3) coordinate (sle)
+            node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (2,2){}
+            node[leftNodeInLine] (name) at (2,2){}
+            node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.5,1.5){}
+            node[leftNodeInLine] (name) at (1.5,1.5){}
+            node [above right] {$w\cdot x + b > 1$};
+        \draw[important line]
+            (0.5, 0.5) coordinate (lines) -- (3,3) coordinate (linee)
+            node [above right] {$w\cdot x + b = 0$};
+        \draw[dashed line, yshift=-.4cm, xshift=.4cm]
+            (.5,.5) coordinate (ils) -- (3,3) coordinate (ile)
+            node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.8,1.8){}
+            node[rightNodeInLine] (name) at (1.8,1.8){}
+            node [above right] {$w\cdot x + b < -1$};
+        \draw[very thick,->] (1.8,1.8) -- (1.8+0.4,1.8-0.4)
+            node[above, pos=0.5, rotate=-45] {margin};
+        \foreach \Point in {(.9,2.2), (1.6,2.7), (1.3,2.9), (1.5,3.4), (1,2.7)}{
+            \draw \Point node[leftNode]{};
+        }
+        \foreach \Point in {(2.8,1.6), (2.1,.5), (3.4,.2), (1.9,0.8), (2.6,1.1)}{
+            \draw \Point node[rightNode]{};
+        }
+    \end{tikzpicture}
+    \caption{An example SVM with the separating hyperplane as a solid line, the two classes
+    as filled and empty circles, and the support vectors indicated by the double circles.}
+\end{figure}
+
+
+The margin is equal to half the distance between the hyperplanes $\bm{w}x-b=-1$
+and $\bm{w}x-b=+1$. For clarity, $\bm{w}x-b=-1$ will be named the negative
+hyperplane and $\bm{w}x-b=+1$ the positive hyperplane.
+
+If we define $x_0$ as a point on the negative hyperplane such that
 $\bm{w}x_0-b=-1$, then finding the distance between the parallel hyperplanes is
 the same as finding the distance between $x_0$ and the positive hyperplane. We
 will name this distance $d$. The unit normal vector of the positive hyperplane
@@ -1332,22 +1375,18 @@ is
 \begin{equation}
     \frac{w}{\|w\|}
 \end{equation}
-
 and the point in the positive hyperplane closest to the point $x_0$ can be
 calculated as
-
 \begin{equation}
     x_0 + d \frac{w}{\|w\|}
 \end{equation}
-
-since $d$ is the distance between the hyperplanes
-and $\frac{w}{\|w\|}$ is the direction from the negative hyperplane to the
-positive hyperplane.
+since $d$ is the distance between the hyperplanes and $\frac{w}{\|w\|}$ is the
+direction from the negative hyperplane to the positive hyperplane.
 
 We then known that this point in the positive hyperplane satisfies the equation
 
 \begin{equation}
-    \bm{w} (x_0 + d \frac{w}{\|w\|}) - b = 1
+    \bm{w} (x_0 + d \frac{w}{\|w\|}) - b = 1.
 \end{equation}
 
 Expanding and simplifying this equation allows us to calculate the value of $d$
@@ -1356,37 +1395,37 @@ in terms of $\bm{w}$:
 <!-- prettier-ignore-start -->
 \begin{align}
      \bm{w} (x_0 + d \frac{\bm{w}}{\|\bm{w}\|}) - b  &= 1 \\
-     \bm{w} x_0 - b + d\frac{\bm{ww}}{\|\bm{w}\|}  &= 1 \\
-     -1 + d\frac{\|\bm{w}\|^2}{\|\bm{w}\|} &= 1 \\
-     -1 + d\|\bm{w}\| - b  &= 1 \\
-     -1 &= 1 - d\|\bm{w}\| \\
-     d  &= \frac{2}{\|\bm{w}\|}
+                    d\frac{\|\bm{w}\|^2}{\|\bm{w}\|} &= 1 - (\bm{w} x_0 - b)\\
+                                         d\|\bm{w}\| &= 2 \\
+                                                  d  &= \frac{2}{\|\bm{w}\|}
 \end{align}
 <!-- prettier-ignore-end -->
 
-Fitting an SVM is therefore a process of finding $\bm{w}$ and $b$ which
-maximise the magnitude of the margin $\frac{2}{\|\bm{w}\|}$, while ensuring
-that all observations are correctly classified. This can be expressed as an
-optimisation problem like:
+Fitting an SVM is therefore a process of finding values for $\bm{w}$ and $b$
+which maximise the magnitude of the margin $\frac{2}{\|\bm{w}\|}$, while
+ensuring that all observations are correctly classified. This can be expressed
+as an optimisation problem like:
 
 \begin{equation}
     \min_{\bm{w}, b} ||\bm{w}||^2
 \end{equation}
 subject to the constraints
 \begin{equation}
-    y_i \cdot (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
+    y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
 \end{equation}
 
-However, it often is impossible to perfectly separate the two classes, and it
-is desirable to allow for some misclassifications in the search of a separating
-hyperplane which will generalise better. For these situations, a "soft" margin
-is introduced that incorporates some "slack" variables. This formulation will
-permit some misclassification.
+Achieving a perfect separation between two real-world classes is frequently
+unattainable. In such instances, it becomes advantageous to allow a certain
+amount of misclassification in the pursuit of a hyperplane that will better
+generalise to unseen data. To address this, a "soft margin" is introduced which
+permits a certain level of misclassification.
+
+For each observation $x_i$, a slack variable $\xi_i$ is defined as follows:
 
 For each observation $x_i$, a slack variable $\xi_i$ is defined. $\xi_i$ is
 zero if $x_i$ is correctly classified, greater than 1 if it is misclassified,
 and between 0 and 1 if it is correctly classified but is within the SVM's
-margin:
+margin. This can be succinctly expressed as:
 
 \begin{equation}
     \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b)) \quad \forall i \in {1, \ldots, n}.
@@ -1413,32 +1452,21 @@ function is as follows:
 
 Cumulative Sum (CuSUM) is a sequential method used for change detection
 developed by \cite{pageCONTINUOUSINSPECTIONSCHEMES1954}. Given a time series
-from an initial distribution, it can alert when the time series deviates from
-the initial distribution by some threshold amount.
-
-The method works by keeping track of a cumulative sum and alerting if that
-cumulative sum passes above some threshold value. The threshold value is
-configurable, where lower thresholds result in faster alerts but more frequent
-false positives. In order to detect both an increase and a decrease in the time
+$\bm{x} = x_1, x_2, \ldots$ from an initial distribution, CuSUM can alert when
+the parameters defining the underlying distribution deviate by some threshold
+amount. Lower thresholds result in faster alerts but more frequent false
+positives. In order to detect both an increase and a decrease in the time
 series, two CuSum algorithms must be used, one to detect an increase and one to
-detect a decrease.
+detect a decrease. The procedure for a two-sided CuSUM is given in Algorithm
+\ref{alg:cusum}.
 
-CuSum starts with a process $x_0, x_1, \ldots$ and a weight $\omega$ used to
-tune the sensitivity of the algorithm. The cumulative sum is then initialised
-to zero $S_0 = 0$ and each subsequent cumulative sum is calculated as:
-
-\begin{equation}
-    S_{n+1} = \max(0, S_n + x_{n+1} - \omega)
-\end{equation}
-
-This cumulative sum is monitored, and if it exceeds some pre-selected threshold
-value then a change is said to have been found. The procedure for performing
-CuSUM on a stream of data is presented in Algorithm \ref{alg:cusum}. Each CuSUM
-algorithm requires a reference value against which any deviations will be
-compared. This reference value is set to be the first 10 values in the given
-time series. The CuSUM algorithm will alert if the time series becomes either
-too high or too low. Each CuSUM algorithm only has one parameter, the threshold
-value, which defines how much deviation is permitted before an alert is raised.
+Each CuSUM algorithm requires a reference value against which any deviations
+will be compared. This reference value is set to be the first 10 values in the
+given time series. The CuSUM algorithm will alert if the time series becomes
+either too high or too low. Each CuSUM algorithm only has one parameter, the
+threshold value, which defines how much deviation is permitted before an alert
+is raised. The procedure for performing CuSUM on a stream of data is presented
+in Algorithm \ref{alg:cusum}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -1447,11 +1475,11 @@ value, which defines how much deviation is permitted before an alert is raised.
     \begin{algorithmic}
         \Require Data stream: $x_1, x_2, \ldots, x_n$
         \Require Threshold: $t$
-        \State $U_0 = 0$, $L_0 = 0$ \Comment{Upper and lower cumulative sums}
-        \State $r = \frac{1}{10}\sum_{i=1}^{10} x_i$ \Comment{Reference value}
+        \State $U_0 = 0$, $L_0 = 0$
+        \State $r = \frac{1}{10}\sum_{i=1}^{10} x_i$
         \For{$i = 1$ to $n$}
-            \State $d_i = x_i - r$ \Comment{Calculate the incremental change}
-            \If{$d_i > 0$} \Comment{Update the cumulative sums:}
+            \State $d_i = x_i - r$
+            \If{$d_i > 0$}
                 \State $U_i = U_{i-1} + d_i$
                 \State $L_i = L_{i-1}$
             \Else
@@ -1474,32 +1502,51 @@ so will be described in detail in Section \ref{model-specifics-cusum}.
 
 # Evaluation Metrics \label{sec:02-evaluation-metrics}
 
-Given a set of classes $C = {c_1, c_2, \ldots, c_{|C|}}$ and a number of
-observations $n$, multi-class classifiers can be evaluated against one another
-when comparing the ground truth labels $\bm{t}: t_i \in C \,\forall\, i \in {1,
-\ldots, n}$ against the labels predicted by that classifier $\bm{p}: p_i \in C
-\,\forall\, i \in {1, \ldots, n}$. The following subsections will describe
-different means of comparing multi-class classifiers.
+There are several means of comparing multi-class classifiers, these are
+discussed in the following subsection. The task is to compare the performance
+of several classifiers at classifying $n$ observations into a set of classes $C
+= \{c_1, c_2, \ldots\}$. The predictions of a classifier will be notated
+as $\bm{p}: p_i \in C \,\forall\, i \in {1, \ldots, n}$ and the corresponding
+ground truth as $\bm{t}: t_i \in C \,\forall\, i \in {1, \ldots, n}$
+
+The following subsections will describe different means of comparing
+multi-class classifiers.
+
+## Accuracy
+
+The accuracy of a classifier is defined as the number of correct predictions
+divided by the total number of predictions:
+
+\begin{equation}
+    \text{Accuracy} = \frac{1}{n}\sum_{j=1}^{n} [t_j = p_j].
+\end{equation}
+
+It is commonly used for evaluating classifiers, but has some limitations for
+the multi-class case. It is sensitive to class imbalances and will be biased
+towards the majority class. If 99% of the data belongs to a positive class
+while 1% of the data belongs to the negative class, then a naïve classifier can
+achieve 99% accuracy by always predicting positive. As the _Ergo_ dataset has a
+large class imbalance, accuracy will not be used as a metric for comparing
+models.
 
 ## Confusion Matrices
 
 Confusion matrices collate a models performance by grouping each combination of
 predicted and ground truth label. For a $|C|$-class classification problem, a
 confusion matrix is a $|C| \times |C|$ matrix of values, where the
-element in the $i$-th row and the $j$-th column of the confusion matrix is the
+the $i$-th row and the $j$-th column is the
 number of times a classifier predicted an observation that belongs to class $i$
-as belonging to class $j$. That is, that the ground truth label is $i$ and the
-predicted label is $j$. The element-wise definition of a confusion matrix is
+as belonging to class $j$. The element-wise definition of a confusion matrix is
 
 \begin{equation}
-    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [t_k = j \land p_k = i].
+    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [(t_k = j ) \cap (p_k = i)].
 \end{equation}
 
 An example confusion matrix is given in the top-left plot of Figure
 \ref{fig:04_example_conf_mat}. Note that elements in the confusion matrix which
-are zero are left uncoloured and are not annotated with a 0. For confusion
+are zero are left uncoloured and are not annotated with a 0: for confusion
 matrices with few classes and few observations this will not matter
-significantly. However, for confusion matrices with many classes and many
+significantly, however for confusion matrices with many classes and many
 observations it will prove informative to be able to distinguish one
 misprediction from zero mispredictions.
 
@@ -1513,23 +1560,18 @@ misprediction from zero mispredictions.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-In practice, confusion matrices are often normalised before visualisation as
-this aids in the interpretation of the model's performance. The unnormalised
-confusion matrix is shown in the top-left plot of
-Figure \ref{fig:04_example_conf_mat}. Confusion matrices can also be column- or
-row-normalised (shown in the top-right and bottom-left plots respectively).
-Column normalisation divides each element by the sum of its column, such that
-each column sums to one. Row normalisation is similar, and ensures each row
-sums to one.
-
-Row-normalization and column-normalization ensure that each element in the
-matrix represents the proportion of ground truth or predicted labels concerning
-the total number of ground truth or predicted labels for the associated class,
-respectively.
-
+In practice, confusion matrices are often normalised. This aids in the
+interpretation of the model's performance. The unnormalised confusion matrix is
+shown in the top-left plot of Figure \ref{fig:04_example_conf_mat}. Column
+normalisation divides each element by the sum of its column, such that each
+column sums to one (top-right plot). Row normalisation is similar, and ensures
+that each row sums to one (bottom left plot). Row-normalization and
+column-normalization ensure that each element in the matrix represents the
+proportion of ground truth or predicted labels concerning the total number of
+ground truth or predicted labels for the associated class, respectively.
 Confusion matrices can also be total-normalised (as seen in the bottom-right
 plot) in which case every element is divided by the sum over the entire
-confusion matrix. This allows the elements to be interpreted as a fraction of
+confusion matrix. This allows each element to be interpreted as a fraction of
 the total number of observations.
 
 Unless otherwise specified, all confusion matrices presented in this thesis are
@@ -1537,21 +1579,15 @@ column-normalised.
 
 It is also useful to compare the confusion matrices for all instances of a
 model across two or more values of a discrete hyperparameter. For example,
-comparing the confusion matrices for FFNNs with one, two, and three layers. In
-these cases, the weighted confusion matrix shall be shown. The weighted
-confusion matrix of a subset of models is calculated by taking the unnormalised
-confusion matrix for a model, multiplying each value in that confusion matrix
-by the model's $F_1$-score, and then adding all confusion matrices together
-element-wise. The resulting sum of weighted confusion matrices is then divided
-by the sum of all $F_1$-scores and finally column-normalised. This procedure is
-given in Algorithm \ref{alg:04_weighted_cm}.
-
-<!-- TODO:
-Need a reference for how I'm using weighted confusion matrices to compare the
-different models. Not sure why I need this, it seems pretty damn basic
-
-> Can you cite this approach? Or give a footnote to a website....
--->
+comparing the confusion matrices for Feed-forward Neural Networks (FFNNs) with
+one, two, and three layers. In these cases, the weighted confusion matrix shall
+be shown. The weighted confusion matrix is calculated by taking the
+unnormalised confusion matrix for a model, multiplying each value in that
+confusion matrix by the model's $F_1$-score, and then adding all confusion
+matrices together element-wise. The resulting sum of weighted confusion
+matrices is then divided by the sum of all $F_1$-scores and then finally the
+confusion matrix is column-normalised. This procedure is given in Algorithm
+\ref{alg:04_weighted_cm}.
 
 <!-- prettier-ignore-start -->
 \begin{algorithm}
@@ -1575,75 +1611,66 @@ different models. Not sure why I need this, it seems pretty damn basic
 \end{algorithm}
 <!-- prettier-ignore-end -->
 
-## Accuracy
-
-The accuracy of a classifier is defined as the number of correct predictions
-over the total number of predictions. This metric does not take into account
-the distribution of predictions and does not work well when there is a class
-imbalance. If 99% of the data belongs to a class YES while 1% of the data
-belongs to the class NO, then a naïve classifier can achieve 99% accuracy by
-always predicting YES. As the _Ergo_ dataset has a large class imbalance,
-accuracy will not be used as a metric for comparing models.
-
 ## Precision, Recall, and $F_1$-score
 
 Confusion matrices aid in the interpretation of large numbers of predictions,
-but do not have a total ordering. To this end, we will define first the
-per-class precision, recall, and $F_1$-score. These metrics depend on
-four summary statistics:
+but do not have a total ordering and so cannot be used to rank different models
+based. To this end, we will define first the per-class precision, recall, and
+$F_1$-score. These metrics depend on four summary statistics which are defined
+for each class: $\text{TP}_i$, $\text{TN}_i$, $\text{FP}_i$, $\text{FN}_i$,
 
-- $\text{TP}_i$, the number of true positives for class $c_i$: This is the
-  number of labels for which both the ground truth and the predicted class are
-  $c_i$:
-
-\begin{equation}
-    \text{TP}_i = \sum_{j=1}^n [t_j = p_j = c_i]
-\end{equation}
-
-- $\text{TN}_i$, the number of true negatives for class $c_i$: This is the
-  number of labels for which both the ground truth and the predicted class are
-  _not_ $c_i$:
+$\text{TP}_i$ is the number of true positives for class $i$, and is defined
+as the number of labels for which both the ground truth and the predicted class
+are $i$:
 
 \begin{equation}
-    \text{TN}_i = \sum_{j=1}^n [t_j \neq c_i \land p_j \neq c_i]
+    \text{TP}_i = \sum_{j=1}^n [t_j = p_j = i].
 \end{equation}
 
-- $\text{FP}_i$, the number of False positives for class $c_i$: This is the
-  number of labels for which the predicted class is $c_i$ but the true label
-  is _not_ $c_i$:
+$\text{TN}_i$ is the number of true negatives for class $i$ and is defined as
+the number of labels for which both the ground truth and the predicted class
+are _not_ $i$:
 
 \begin{equation}
-    \text{FP}_i = \sum_{j=1}^n [p_j = c_i \land t_j \neq c_i]
+    \text{TN}_i = \sum_{j=1}^n [t_j \neq i \land p_j \neq i].
 \end{equation}
 
-- $\text{FN}_i$, the number of False negatives for class $c_i$: This is the
-  number of labels for which the predicted label is not $c_i$ but the true
-  label is $c_i$:
+$\text{FP}_i$ is the number of false positives for class $i$ and is defined
+as the number of labels for which the predicted class is $i$ but the true
+label is _not_ $i$:
 
 \begin{equation}
-    \text{FN}_i = \sum_{j=1}^n [p_j \neq c_i \land t_j = c_i]
+    \text{FP}_i = \sum_{j=1}^n [p_j = i \land t_j \neq i].
 \end{equation}
 
-The precision for some class $c_i$ can be intuitively understood as a metric that
-penalises classifiers which too frequently predict class $c_i$. It is defined as
+$\text{FN}_i$ is the number of false negatives for class $i$ and is defined
+as the number of labels for which the predicted label is not $i$ but the true
+label is $i$:
+
+\begin{equation}
+    \text{FN}_i = \sum_{j=1}^n [p_j \neq i \land t_j = i].
+\end{equation}
+
+The precision for some class $i$ can be intuitively understood as a metric that
+penalises classifiers which too frequently predict class $i$. It is defined as
 
 \begin{equation}
     \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
 \end{equation}
 
-Likewise, the recall for some class $c_i$ can be understood as a metric that
-penalises classifiers which too infrequently predict class $c_i$. It is defined
-as
+Likewise, the recall for some class $i$ can be understood as a metric that
+penalises classifiers which do not predict class $i$ frequently enough. It is
+defined as
 
 \begin{equation}
     \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}.
 \end{equation}
 
-The $F_1$-score for some class $c_i$ ($F_{1,i}$) is defined as the harmonic
+The $F_1$-score for some class $i$ ($F_{1 i}$) is defined as the harmonic
 mean of the precision and recall of that class:
 
 \begin{equation}
-    F_{1,i} = 2 \cdot \frac{
+    F_{1 i} = 2 \cdot \frac{
             \text{Precision}_i \cdot \text{Recall}_i
         }{
             \text{Precision}_i + \text{Recall}_I
@@ -1652,8 +1679,9 @@ mean of the precision and recall of that class:
 
 The fact that the harmonic mean is used to calculate the $F_1$-score ensures
 that both a high precision and high recall are required to obtain a high
-$F_1$-score. This is made clear when plotting the $F_1$-scores for various
-precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
+$F_1$-score. This property can clearly be seen in Figure
+\ref{fig:04_precision_recall_f1} where contours join precision and recall
+values that have the same $F_1$-score.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
@@ -1666,39 +1694,48 @@ precision and recall values, as in Figure \ref{fig:04_precision_recall_f1}.
 \end{figure}
 <!-- prettier-ignore-end -->
 
-To aid comparison, the same data used to construct the confusion matrices in
-Figure \ref{fig:04_example_conf_mat} will be used to plot the per-class
-precision, recall, and $F_1$-score. They will be visualised as a heatmap with
-one column per class and one row for each of precision, recall, and
-$F_1$-score. This plot is shown in Figure \ref{fig:04_prec_rec_f1_example}.
+Occasionally it will be useful to visualise the precision, recall, and
+$F_1$-score of a model. In these cases, a heatmap with one column per class and
+one row for each of precision, recall, and $F_1$-score will be used. This plot
+is shown in Figure \ref{fig:04_prec_rec_f1_example}, where the data is the same
+as was used to construct the confusion matrices in Figure
+\ref{fig:04_example_conf_mat}.
 
 <!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/04_prec_rec_f1_example}
-    \caption[Precision, recall, $F_1$ heatmap]{Precision, recall, and $F_1$ score for the confusion matrix in
-    Figure \ref{fig:04_example_conf_mat}.}
+    \caption[Example precision, recall, $F_1$ heatmap]{Precision, recall, and $F_1$
+    score for the confusion matrix in Figure \ref{fig:04_example_conf_mat}.}
     \label{fig:04_prec_rec_f1_example}
 \end{figure}
 <!-- prettier-ignore-end -->
 
-It is apparent that the classes with perfect precision (classes 0, 1, and 3)
-have columns in the confusion matrix which are zero except for the element on
-the principle diagonal. Likewise, classes with perfect recall (class 2) have
-rows in the confusion matrix which are zero except for the element on the
-principle diagonal. Precision can therefore be gleaned from a confusion matrix
-by observing the columns of the appropriate confusion matrix, and
-\textbf{r}ecall by observing the \textbf{r}ows.
+From Figure \ref{fig:04_prec_rec_f1_example} it is apparent that the classes
+with perfect precision (classes 0, 1, and 3) have columns in the confusion
+matrix which are zero except for the element on the principle diagonal.
+Likewise, the class with perfect recall (class 2) has a row in the confusion
+matrix which is zero except for the element on the principle diagonal.
+Precision can therefore be gleaned from a confusion matrix by observing the
+columns of the appropriate confusion matrix, and \textbf{r}ecall by observing
+the \textbf{r}ows.
 
 ## Weighted and Unweighted Averages
 
 While precision, recall, and $F_1$-score provide a much more concise
 representation of a classifier's performance than a confusion matrix, they
-still do not provide a single number through which all classifiers might be
-given a total ordering. To this end, we will calculate the unweighted
-arithmetic mean of the per-class precision, recall, and
-$F_1$-scores\footnote{The unweighted average is sometimes referred to as the
-macro average, and the weighted average as the micro average.}.
+still do not provide a single number which can be used to give classifiers a
+total ordering. To this end, we will calculate the unweighted arithmetic mean
+of the per-class precision, recall, and $F_1$-scores\footnote{The unweighted
+average is sometimes referred to as the macro average, and the weighted average
+as the micro average.}:
+
+\begin{align}
+    \text{Unweighted Precision} &= \frac{1}{|C|}\sum_{i=1}^{|C|} \text{Precision}_i \\
+    \text{Unweighted Recall} &= \frac{1}{|C|}\sum_{i=1}^{|C|} \text{Recall}_i \\
+    \text{Unweighted } F_{1} &= \frac{1}{|C|}\sum_{i=1}^{|C|} F_{1 i}
+\end{align}
+
 
 The unweighted mean is desirable for the task at hand as the _Ergo_ dataset is
 highly imbalanced, with one class being assigned to 97% of the observations. If
@@ -1714,105 +1751,4 @@ It is important to note that one cannot calculate the unweighted $F_1$-score
 using the unweighted precision and recall due to the non-linear relationship
 between the $F_1$-score and precision and recall. This has the unfortunate
 implication that a plot showing the unweighted precision and unweighted recall
-of a model does _not_ allow the viewer to infer its unweighted $F_1$-score. The
-$F_1$-score must be shown in a separate plot alongside the precision-recall
-plot.
-
-<!-- NOTE: Removed from the final thesis
-Autocorrect
-
-Autocorrect is a tool used when the nature of the interface means that small
-user errors are common. This is ideal for _Ergo_, as new users may not be
-familiar with the input method and autocorrect can make their experience much
-better. Autocorrect will generally change words as they are typed, replacing
-a misspelt word with its nearest match. The definition of "near" depends on
-the implementation, but it is generally defined to minimise the number of
-changes required to transform one word into another.
-
-One of the simplest methods for autocorrect was popularised by Peter Norvig in
-his spelling corrector [@norvig_how_2007]. This method takes an input source
-text (a \emph{corpus}) and calculates prior probabilities for each word in that
-source. These priors can then be used to create a model of the target language,
-such that given some word $w$ that was not in the corpus, the program can
-calculate which of the words similar to $w$ are most likely to be what the
-author intended to type.
-
-"Similarity" is a key word here, and exactly how one defines it can have a
-great impact on the performance of the program. A complex model might make
-assumptions about the layout of the keyboard or attempt to achieve better
-priors for certain words based on the context. For example, both `planed` and
-`planned` are valid English words, however given the sentence `We planed to
-meet after dinner`, the word `planed` does not make sense in the context, and
-should be replaced by `planned`.
-
-Norvig defines similarity in an intentionally naïve but computationally
-efficient manner, by considering all words that are one "edit" away from a
-source word, where an edit can be any deletion, replacement, or insertion of a
-single character, or the swapping of two adjacent characters.
-
-When evaluating a word for possible mistakes, it then only considers all other
-words in the corpus which are two "edits" away from the source word and
-assesses their prior. If an edited word has a higher prior probability than the
-source word, then it will replace the source word.
-
-This error correction method was implemented in _Ergo_ so that the user is able
-to type without correcting every mistake.
-
-This procedure is given in Algorithm \ref{alg:autocorrect}.
-
-\begin{algorithm}
-\caption{Norvig Spelling Correction}
-\label{alg:autocorrect}
-\begin{algorithmic}[1]
-\State $\text{wordsAndCounts} \gets \textsc{GetWordCounts}(\textsc{ReadFile}(\text{`all\_words.txt'}))$
-
-    \State
-    \Function{FilterUnknown}{words} \Comment{Filter out unknown words}
-        \State \Return $\{w \mid w \in \text{words} \text{ and } w \in \text{wordsAndCounts}\}$
-    \EndFunction
-
-    \State
-    \Function{SingleEdits}{word}
-        \State $\text{letters} \gets \text{`abcdefghijklmnopqrstuvwxyz'}$
-        \State $\text{splits} \gets [(word[:i], word[i:]) \mid i \text{ in 0..}(word.length + 1)]$
-        \State $\text{deletions} \gets [L + d[1:] \mid L, R \text{ in } \text{splits} \text{ if } R]$
-        \State $\text{transpositions} \gets [L + R[1] + R[0] + R[2:] \mid L, R \text{ in } \text{splits} \text{ if } \text{length}(R) > 1]$
-        \State $\text{replacements} \gets [L + c + R[1:] \mid L, R \text{ in } \text{splits} \text{ if } R \text{ for } c \text{ in } \text{letters}]$
-        \State $\text{insertions} \gets [L + c + R \mid L, R \text{ in } \text{splits} \text{ for } c \text{ in } \text{letters}]$
-        \State \Return $\text{unique}(\text{deletions} , \text{transpositions} , \text{replacements} , \text{insertions})$
-    \EndFunction
-
-    \State
-    \Function{DoubleEdits}{word}
-        \State \Return $[secondEdit \mid$ \\
-        \quad \quad $firstEdit \text{ in } \textsc{SingleEdits}(word)$ \\
-        \quad \quad $\text{and } secondEdit \text{ in } \textsc{SingleEdits}(firstEdit)]$
-    \EndFunction
-
-    \State
-    \Function{GetCandidateCorrections}{word}
-        \State \Return \textsc{unique}( \\
-            \qquad \textsc{FilterUnknown}([word]), \\
-            \qquad \textsc{FilterUnknown}(\textsc{SingleEdits}(word)), \\
-            \qquad \textsc{FilterUnknown}(\textsc{DoubleEdits}(word)), \\
-            \qquad \textsc{[word]})
-    \EndFunction
-
-    \State
-    \Function{ProbabilityOfWord}{word}
-        \State $totalWords \gets \sum(\text{wordsAndCounts.counts}())$
-        \State \Return $\frac{\text{wordsAndCounts[word]}}{totalWords}$
-    \EndFunction
-
-    \State
-    \Function{GetCorrectedWord}{word}
-        \State \Return $\textsc{Max}($ \\
-        \quad \quad $\textsc{GetCandidateCorrections}(word),$ \\
-        \quad \quad $\textsc{Key}=ProbabilityOfWord)$
-    \EndFunction
-
-    \end{algorithmic}
-
-\end{algorithm}
-
-NOTE: Removed from the final thesis -->
+of a model does _not_ allow the viewer to infer its unweighted $F_1$-score.
