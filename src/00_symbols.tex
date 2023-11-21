@@ -31,10 +31,11 @@
     \item[IP] Interphalangeal
     \item[KB] kilobytes
     \item[LOW] A ``low'' voltage, where the exact voltage value is context dependant
-    \item[Mbps] Megabits per second
+    \item[LiDAR] Light Detection and Ranging
     \item[MCP] Metacarpophalangeal
     \item[MIT] Massachusetts Institute of Technology
     \item[ML] Machine Learning
+    \item[Mbps] Megabits per second
     \item[PCA] Principal Component Analysis
     \item[PDA] Personal Digital Assistant
     \item[PIP] Proximal Interphalangeal
@@ -42,13 +43,14 @@
     \item[RAM] Random Access Memory
     \item[RGB] Red Green Blue
     \item[RNN] Recurrent Neural Network
-    \item[sEMG] Surface Electromyography
     \item[SGD] Stochastic Gradient Descent
     \item[SIG] Signal, most commonly seen on a microcontroller
     \item[SOM] Self-Organising Feature Map
     \item[SRAM] Static Random Access Memory
     \item[SVM] Support Vector Machine
+    \item[STIVE] Stereo Interactive Virtual Environment
     \item[TN] True Negative
+    \item[sEMG] Surface Electromyography
     \item[TP] True Positive
     \item[TUB] Technische Universität Berlin
     \item[USB] Universal Serial Bus, a standard interface that was developed to
@@ -58,5 +60,82 @@
     \item[VPL] Visual Programming Language
     \item[Vim] Vi Improved, a popular text editor known in part for modal
         editing and many keyboard shortcuts.
+
+\NomGroup{Gesture recognition technology}%-----------------------------------------------
+    \item[Accelerometers] These are small microchips which can measure acceleration. Most commonly this is linear acceleration is three axes, but can also include rotational acceleration.
+    \item[Capacitance Sensors] These sensors use the changing capacitance of the human body to measure its movement by placing sensors around the user's wrist and then measuring the changing capacitance as the user moves their fingers.
+    \item[Channel State Information] Commercially available WiFi routers send large amounts of diagnostics information in order to improve transmission efficiency in a wide variety of environments. This channel state information is very sensitive to small changes in the surrounding environment, such as a human moving around or breathing, and modern machine learning techniques enable this movement to be inferred from the CSI data, given enough labelled training information.
+    \item[Electromyography] A general-purpose term for any device capable of measuring the electrical impulses in a user's muscles. Most often this is Surface Electromyography, and is accomplished using non-invasive electrodes placed on the user's bare skin.
+    \item[Fibre Optic] Only observed in use in \cite{wiseEvaluationFiberOptic1990}, the author measured the attenuation of the light through fibre optic cables placed over the user's knuckles as an indication of the bend of the user's fingers.
+    \item[Flexion sensors, flex sensors] These are flexible plastic strips either 5cm or 10cm long that can measure how much they are bent. They are often placed over the knuckles of a user to measure the bend of that knuckle.
+    \item[Hall Effect Sensors] These sensors measure the Hall voltage across a conductor or semiconductor material exposed to a magnetic field. They are often used for precise measurement of rotation around an axis.
+    \item[Inertial Measurement Unit] A more advanced type of accelerometer that is often capable of measuring linear and rotational acceleration as well as the earth's magnetic field.
+    \item[LiDAR] A remote sensing technology that employs laser beams to measure distances and obtain precise three-dimensional representations of a space.
+    \item[Mechanomyography] Only observed in \cite{maHandGestureRecognition2017}, this tracks muscle activation through surface muscle vibration.
+    \item[Optical Tubes] This refers to sensors which use a flexible plastic tube with a light-sensitive diode at one end and a light at the other end. The amount by which the tube is bent can be approximated by how much light is able to reach the diode.
+    \item[Potentiometers] These sensors use a variable resistance resistor to measure the rotation of an axle. They are frequently used in consumer hardware for knobs and turnable dials.
+    \item[Pressure sensor] This sensor has a slightly misleading name, and measures the force applied onto a surface (as opposed to measuring the pressure of a gas)
+    \item[Triboelectric Textile] Only observed in use in \cite{wenMachineLearningGlove2020}, the authors constructed a special textile which can harvest energy as it is bent or stretched and can measure how it is being bent or stretched.
+    \item[WiFi] See Channel State Information
+
+\NomGroup{Hardware Used}%-----------------------------------------------
+    \item[5DT Dataglove] An accelerometer-based motion-capture glove from Fifth dimension technologies.
+    \item[Animac] A full-body motion capture system developed by the Computer
+        Image Corporation of Denver, Colorado.
+    \item[Apple iPod Touch 4th Generation] A touchscreen media player that contained a built-in accelerometer.
+    \item[Arduino] A popular and commercially available line of
+        microcontrollers which enable the user to control hardware sensors
+        using a variant of the C programming language.
+    \item[Contactglove] A glove designed to measure nine points of contact
+        between the fingers and the thumb of the left hand, used by
+        \cite{felsGloveTalkIIaNeuralnetworkInterface1998}.
+    \item[CyberGlove] A hand measurement glove built by Virtual Technologies
+        using 18 flexion sensors placed over the user's knuckles so as to
+        measure the posture of the hand.
+    \item[CyberGlove II] The second iteration of the CyberGlove, built by
+        Immersion Incorporated (who acquired Virtual Technologies in September
+        2000).
+    \item[Delsys Myomonitor IV] This device measures surface electromyography
+        signals and records them to a storage device. It was used by
+        \cite{zhangHandGestureRecognition2009}.
+    \item[Dexterous Handmaster] A complex potentiometer-based data glove built
+        by \cite{jacobsenUTAHDextrousHand1984}.
+    \item[ESP] A series of popular low-cost low-power microcontrollers built by
+        Espressif Systems. They come with a variety of built-in sensors such as
+        WiFi, Bluetooth, and an accelerometer.
+    \item[Microsoft Band2] A commercially available smart wristband capable of
+        acceleration and gyroscopic measurements.
+    \item[Microsoft Kinect] A commercially available game controller that
+        measure uses visible-spectrum cameras paired with infrared detectors
+        and projectors to perform gesture detection
+    \item[Mobile Devices] Some gesture recognition research simply uses the
+        data captured from accelerometers embedded in commercially available
+        mobile devices such as smartphones and personal digital assistants.
+    \item[Myo Armband] A gesture recognition device by Thalmic Labs that uses
+        EMG sensors to infer gestures being performed.
+    \item[Nintendo Powerglove] A commercially available video game controller
+        that used several flex sensors placed over the user's knuckles to
+        measure finger flexion.
+    \item[Nintendo Wiimote] A commercially available video game controller that
+        the user held in their hand and contained a three axis linear
+        accelerometer which could be used for data collection.
+    \item[Oculus Rift] A Virtual Reality (VR) headset used by
+        \cite{zhaoRealtimeHeadGesture2017} for detection of head movements.
+    \item[Polhemus] A tracker commonly mounted onto various data gloves which
+        allowed the location of the glove in 3D space to be triangulated.
+    \item[SoapBox] Developed by \cite{mantyjarviEnablingFastEffortless2004} as
+        a wireless handheld sensor box for practical examination of gesture
+        based interaction.
+    \item[Sayre Glove] One of the first gesture recognition
+        devices \citep{thomasa.defantiUSNEAR60341631977}, this glove used
+        optical tubes to detect finger flexion.
+    \item[Smartwatch] This refers to gesture recognition systems that use the
+        sensors available in a consumer wrist-mounted smartwatch.
+    \item[Stive] The Stereo Interactive Virtual Environment, a research
+        computer vision system with stereo cameras and the ability to track the
+        user's hands. Used in \cite{wilsonParametricHiddenMarkov1999}.
+    \item[TUB Sensorglove] A capacitive-sensor-based gloves which capture what
+        the user is grasping. Used in \cite{hofmannVelocityProfileBased1998}.
+    \item[VPL Dataglove]  An accelerometer-based motion-capture glove from VPL Incorporated (Visual Programming Language).
 \end{Nomencl}
 
