@@ -34,8 +34,11 @@ Section \ref{sec:02-cumulative-sum} discusses CuSum which is a simple
 statistical technique used for online change detection in the distribution of a
 time series. It will be used as a baseline against which other models can be
 compared.
-Finally, Section \ref{sec:02-evaluation-metrics} discusses the evaluation metrics by
-which multi-class classification algorithms can be compared.
+
+Section \ref{sec:02-evaluation-metrics} discusses the evaluation metrics by
+which multi-class classification algorithms can be compared. Section
+\ref{sec:04-binary-and-multi-class-classifiers} discusses the procedure for
+converting binary classifiers into multi-class classifiers.
 
 # Artificial Intelligence and Machine Learning \label{sec:02-artificial-intelligence-and-machine-learning}
 
@@ -331,11 +334,13 @@ operation iteratively will cause the cost function to decrease to a local
 minimum. There is no guarantee that gradient descent will find a global
 minimum.
 
-Let the weight from the $k$th neuron in the $(l-1)$th layer to the $j$th neuron
-in the $l$th layer be referred to as $w_{jk}^l$ and similarly let the bias on
-the $j$th neuron in the $l$th layer be $b_j^l$. Let $a_j^l$ be the output of
-the $j$th neuron in the $l$th layer, and let $L$ be the last layer of the
-network, such that $a^L$ is the output of the network.
+Let the weight from the $k$\textsuperscript{th} neuron in the
+$(l-1)$\textsuperscript{th} layer to the $j$\textsuperscript{th} neuron in the
+$l$\textsuperscript{th} layer be referred to as $w_{jk}^l$ and similarly let
+the bias on the $j$\textsuperscript{th} neuron in the $l$\textsuperscript{th}
+layer be $b_j^l$. Let $a_j^l$ be the output of the $j$\textsuperscript{th}
+neuron in the $l$\textsuperscript{th} layer, and let $L$ be the last layer of
+the network, such that $a^L$ is the output of the network.
 
 To control the amount by which we nudge the weights and biases, we define the
 _learning rate_ to be a scalar hyperparameter $\eta$. When we slightly change
@@ -1533,8 +1538,8 @@ models.
 
 Confusion matrices collate a models performance by grouping each combination of
 predicted and ground truth label. For a $|C|$-class classification problem, a
-confusion matrix is a $|C| \times |C|$ matrix of values, where the
-the $i$-th row and the $j$-th column is the
+confusion matrix is a $|C| \times |C|$ matrix of values, where the the
+$i$\textsuperscript{th} row and the $j$\textsuperscript{th} column is the
 number of times a classifier predicted an observation that belongs to class $i$
 as belonging to class $j$. The element-wise definition of a confusion matrix is
 
@@ -1752,3 +1757,26 @@ using the unweighted precision and recall due to the non-linear relationship
 between the $F_1$-score and precision and recall. This has the unfortunate
 implication that a plot showing the unweighted precision and unweighted recall
 of a model does _not_ allow the viewer to infer its unweighted $F_1$-score.
+
+# Binary and Multi-class Classifiers \label{sec:02-binary-and-multi-class-classifiers}
+
+Some classification algorithms have support for multi-class classification
+built-in to the classification procedure. Examples would be Feed Forward Neural
+Networks or Decision trees. The training and classification procedure for these
+algorithms does not depend on whether the task is binary or multi-class
+classification.
+
+Other classification algorithms only support binary classification and cannot
+natively perform multi-class classification. Examples would be Hidden Markov
+Models or Support Vector Machines. Binary classification algorithms can be
+converted into $n$-class ($n>2$) classification algorithms by creating an
+ensemble of $n$ binary classifiers. In this setup, the $i$\textsuperscript{th}
+binary classifier would be trained to predict if a given observation belongs
+either to class $i$ or to some class other than class $i$.
+
+To predict the class of an observation, each of these $n$ classifiers will make
+a prediction for that same observation. A well trained ensemble will have only
+one binary classifier predicting YES and all other classifiers predicting NO
+for a given observation. This procedure for using an ensemble of binary
+classifiers as a multi-class classifier is called one-vs-rest classification.
+
