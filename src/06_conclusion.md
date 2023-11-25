@@ -183,9 +183,9 @@ problem.
 ## Classification speed
 
 \begin{framed}
-    As _Ergo_ is to be a real-time keyboard replacement, the speed with which
-    different classification algorithms can make accurate class predictions is
-    recorded and evaluated.
+    As \emph{Ergo} is to be a real-time keyboard replacement, the speed with
+    which different classification algorithms can make accurate class
+    predictions is recorded and evaluated.
 \end{framed}
 
 As _Ergo_ records data at a rate of 40Hz, the time to make a single

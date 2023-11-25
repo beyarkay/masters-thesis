@@ -697,14 +697,19 @@ hyperparameters for the FFNNs.
 
 ## Hierarchical Feed-forward Neural Networks \label{sec:04-model-specifics-hffnn}
 
-Hierarchical Feed-forward Neural Networks (HFFNNs) combine the output of two
-FFNNs. One FFNN (called the majority classifier) is a binary classifier that
-detects whether or not a gesture exists in the observation. The other FFNN
-(called the minority classifier) is only invoked if there is a gesture present
-in an observation, as detected by the majority FFNN. The minority classifier
-detects _which_ gesture is present in an observation. Algorithm
-\ref{alg:hffnn_prediction} shows the procedure for making a prediction using
-the majority and minority classifiers.
+Hierarchical models, where one model is used to filter out the non-gesture
+class and another is used to distinguish the different gesture classes, have
+shown promising results in the
+literature\footnote{\citealt{zhangVisionbasedSignLanguage2004,
+wangTrafficPoliceGesture2008, kopukluRealtimeHandGesture2019}} and so are
+evaluated here in the form of Hierarchical Feed-forward Neural Networks
+(HFFNNs). HFFNNs combine the output of two FFNNs: one FFNN (called the majority
+classifier) is a binary classifier that detects whether or not a gesture exists
+in the observation, and the other FFNN (called the minority classifier) is only
+invoked if there is a gesture present in an observation, as detected by the
+majority FFNN. The minority classifier detects _which_ gesture is present in an
+observation. Algorithm \ref{alg:hffnn_prediction} shows the procedure for
+making a prediction using the majority and minority classifiers.
 
 \begin{algorithm}
     \caption{Prediction Algorithm For HFFNNs}
