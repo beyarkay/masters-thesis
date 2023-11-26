@@ -12,9 +12,8 @@ TODO: Include a plot about the number of classes
 --->
 
 \epigraph{
-    Always remember, however, that there’s usually a simpler and better way to
-    do something than the first way that pops into your head.
-}{\textit{Donald Knuth}}
+    Nothing should be taken for granted, even if everybody believes it.
+}{\textit{Yuval Noah Harari}}
 
 This chapter reviews the literature concerning hand gesture recognition and is
 divided into four sections. Section \ref{sec:03-overview} provides an overview

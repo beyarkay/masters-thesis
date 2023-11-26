@@ -1,8 +1,7 @@
-<!-- prettier-ignore-start -->
 \epigraph{
-    Nothing should be taken for granted, even if everybody believes it.
-}{\textit{ Yuval Noah Harari }}
-<!-- prettier-ignore-end -->
+    Always remember, however, that there’s usually a simpler and better way to
+    do something than the first way that pops into your head.
+}{\textit{Donald Knuth}}
 
 This chapter describes the mathematics behind the classification algorithms
 used by \emph{Ergo}, as well as providing some background to the problem at
