@@ -173,7 +173,6 @@ The structure of the thesis is as follows:
   and providing recommendations for future work.
 - The Appendix has several sections, none of which are required for the thesis
   but which are presented for the interested reader: Appendix
-  \ref{app:additional-analysis} contains some additional analysis, Appendix
   \ref{app:additional-figures} contains additional figures, Appendix
   \ref{app:additional-tables} contains additional tables, and Appendix
   \ref{app:the-human-hand} contains anatomical details about the human hand.

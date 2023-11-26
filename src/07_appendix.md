@@ -1,12 +1,11 @@
-\chapter{Additional Analysis}\label{app:additional-analysis}
-
-# Performance vs dropout rate and L2 coefficient \label{sec:appendix_51_ffnn_regularisation}
+<!--
+    \chapter{Additional Analysis}\label{app:additional-analysis}
+  #Performance vs dropout rate and L2 coefficient \label{sec:appendix_51_ffnn_regularisation}
 
 Figure \ref{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers} shows the dropout rate
 against the $F_1$-score for the 1-, 2-, and 3-layer FFNNs, with the colour of
 each point indicating the L2 coefficient.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}}
@@ -17,7 +16,6 @@ each point indicating the L2 coefficient.
     each point such that they do not overlap.}
     \label{fig:05_51ffnn,x=dropout,y=f1,h=l2,c=nlayers}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 The dropout rate has little to no effect on the 1-layer FFNNs, while the 2- and
 3-layer FFNNs generally benefit from a low dropout rate. For the 2- and 3-layer
@@ -32,7 +30,6 @@ Figure \ref{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers} shows the
 dropout rate against the number of nodes in the last layer for the 1-, 2-, and
 3-layer FFNNs, with the colour of each point indicating the $F_1$-score.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics{src/imgs/graphs/05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}}
@@ -44,7 +41,6 @@ dropout rate against the number of nodes in the last layer for the 1-, 2-, and
     noise is applied to each point such that they do not overlap.}
     \label{fig:05_51fffnn,x=dropout,y=npl-1,h=npl1,c=nlayers}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 Since increasing the dropout rate has the effect of suppressing the output of a
 random subset of nodes in each layer, one might expect that FFNNs with a high
@@ -61,6 +57,7 @@ The 2- and 3-layer FFNNs both show behaviour whereby a FFNN performs well if it
 has a low dropout rate and a high number of nodes in its final layer. This
 behaviour is less distinct for the 3-layer FFNNs, which is to be expected as
 the extra layer introduces more complexity into its performance characteristics.
+-->
 
 
 <!--
@@ -73,7 +70,6 @@ the extra layer introduces more complexity into its performance characteristics.
 
 \chapter{Additional Figures}\label{app:additional-figures}
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes5_yval_macro_avg_f1_score_hueNone}
@@ -81,9 +77,7 @@ the extra layer introduces more complexity into its performance characteristics.
     5-class FFNNs plotted against the various hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes5}
 \end{figure}
-<!-- prettier-ignore-end -->
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes50_yval_macro_avg_f1_score_hueNone}
@@ -91,9 +85,7 @@ the extra layer introduces more complexity into its performance characteristics.
     all 50-class FFNNs plotted against the various hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes50}
 \end{figure}
-<!-- prettier-ignore-end -->
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes51_yval_macro_avg_f1_score_hueNone}
@@ -101,43 +93,14 @@ the extra layer introduces more complexity into its performance characteristics.
     all 51-class FFNNs plotted against the various hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes51}
 \end{figure}
-<!-- prettier-ignore-end -->
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}}
     \caption[FFNN 51-class all hyperparameter pairplot]{Pairplot of all hyperparameters for 51-class FFNNs.}
     \label{fig:appendix_hpar_analysis_ffnn_pairplot}
 \end{figure}
-<!-- prettier-ignore-end -->
 
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_pred_plot_0000_to_9420_full_text}}
-    \caption[Best model full phrase predictions and probabilities]{Predictions
-    and raw sensor values for the full phrase "the quick brown fox jumped over
-    the lazy dog".}
-    \label{fig:appendix_pred_plot_0000_to_9420_full_text}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
-\begin{figure}[!ht]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_all_f1_scores}}
-    \caption[All models and $F_1$-scores]{All models and their $F_1$-scores. Each point
-    is a model, and points sharing the same x-value had identical sets of
-    hyperparameters. The black horizontal bars show the mean $F_1$-score of
-    each set of models with identical hyperparameters. Sets of hyperparameters
-    are ordered based on the lower bound of the 90\% confidence interval for
-    the $F_1$-score.}
-    \label{fig:05_all_f1_scores}
-\end{figure}
-<!-- prettier-ignore-end -->
-
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{src/imgs/ergo_schematic}}
@@ -145,7 +108,6 @@ the extra layer introduces more complexity into its performance characteristics.
     of Ergo.}
     \label{fig:appendix_circuit_diagram}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 <!--
 
@@ -239,11 +201,9 @@ The hand can also be rotated at the wrist about three axes:
 - _Radial Deviation_ and _Ulnar Deviation_: Moving the hand and wrist toward or
   away from the thumb side.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/03_movements.png}
     \caption{Movements of the hand.}
     \label{fig:03_movements}
 \end{figure}
-<!-- prettier-ignore-end -->
