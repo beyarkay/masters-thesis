@@ -27,10 +27,10 @@ functionality of a computer keyboard. The first attempts at automated hand
 gesture recognition were in 1969 by the
 \citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Later
 attempts used hand-mounted sensors to measure movement
-\footnote{\citep{garyj.grimesUSPatentDigital1981,
+\footnote{\citealt{garyj.grimesUSPatentDigital1981,
 kohonenSelforganizedFormationTopologically1982, jacobsenUTAHDextrousHand1984,
 jacobsenDesignUtahDextrous1986, fisherTelepresenceMasterGlove1987,
-zimmermanHandGestureInterface1987 thomasa.defantiUSNEAR60341631977}}. Due to
+zimmermanHandGestureInterface1987, thomasa.defantiUSNEAR60341631977}}. Due to
 improvements in video capture technology and computer vision algorithms, many
 recent attempts used labelled videos of people performing different gestures
 for gesture
@@ -148,18 +148,18 @@ This study aims to address the following questions:
 # Contributions \label{sec:01-contributions}
 
 The dataset used in this thesis containing acceleration measurements from
-\emph{Ergo} is freely available on [Zenodo](https://zenodo.org/). Both the raw
+\emph{Ergo} is freely available on Zenodo: https://zenodo.org/records/10209419. Both the raw
 sensor readings are available, as well as the preprocessed data. During the
 process of performing a literature review, a large number of papers were
 indexed by various metrics (discussed in Section \ref{sec:03-overview}). A
-dataset of these papers and metrics quantifying the papers is also available on
-[Zenodo](https://zenodo.org/).
+dataset of these papers and metrics quantifying the papers is also available in
+the same Zenodo dataset.
 
 The code used to train the classification algorithms, control the hardware, and
 to make predictions using the raw sensor data in real time is available on
-[GitHub](https://github.com/beyarkay/masters-code/). The source code for this
+GitHub: https://github.com/beyarkay/masters-code/. The source code for this
 thesis, as well as the code used to analyse the dataset of the literature, is
-also available on [GitHub](https://github.com/beyarkay/masters-thesis/).
+also available on GitHub: https://github.com/beyarkay/masters-thesis/.
 
 # Thesis Structure \label{sec:01-thesis-structure}
 

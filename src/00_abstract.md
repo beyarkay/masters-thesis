@@ -26,28 +26,21 @@ significantly.
 
 Hierdie tesis stel \emph{Ergo} bekend - ‘n pasgemaakte stel sensors wat ontwerp
 is om die algemene QWERTY-sleutelbord in terme van die aantal invoersleutels en
-die spoed van invoering heeltemal te vervang.
-
-\emph{Ergo} versamel versnellingsdata van elk van die gebruiker se 10
-vingerpunte teen ‘n tempo van 40 keer per sekonde en kan voorspel watter van
-die 50 verskillende bewegings teen dieselfde tempo uitgevoer word.
-
-Die gebruiker hoef nie die begin of einde van elke beweging noukeurig aan te
-dui nie aangesien \emph{Ergo} ‘n gebrek aan doelbewuste beweging kan opspoor en
-dienooreenkomstig kan reageer. Wanneer ‘n bekende beweging waargeneem word,
-word ‘n ooreenstemmende toetsaanslag uitgestuur, en kan die gebruiker op sy of
-haar rekenaar ``tik'' deur bewegings in volgorde uit te voer.
-
-Vyf verskillende klassifikasiemodelle word geëvalueer (Versteekte
-Markov-modelle, Ondersteuningsvektormasjiene, Kumulatiewe som en twee
-verskillende Neurale Netwerk-argitekture). Daar is bevind dat die Neurale
-Netwerke die klassifikasiemodel met die beste resultate is.
-
-Die verskil in moeilikheidsgraad tussen klassifikasietake wat waarnemings
-sonder doelbewuste beweging insluit of nie insluit nie, word ook geëvalueer.
-
-Daar is gevind dat die bykomende vereiste om doelbewuste bewegings van ander
-handbewegings te kan onderskei, die moeilikheidsgraad van die taak aansienlik
-verhoog.
+die spoed van invoering heeltemal te vervang. \emph{Ergo} versamel
+versnellingsdata van elk van die gebruiker se 10 vingerpunte teen ‘n tempo van
+40 keer per sekonde en kan voorspel watter van die 50 verskillende bewegings
+teen dieselfde tempo uitgevoer word. Die gebruiker hoef nie die begin of einde
+van elke beweging noukeurig aan te dui nie aangesien \emph{Ergo} ‘n gebrek aan
+doelbewuste beweging kan opspoor en dienooreenkomstig kan reageer. Wanneer ‘n
+bekende beweging waargeneem word, word ‘n ooreenstemmende toetsaanslag
+uitgestuur, en kan die gebruiker op sy of haar rekenaar ``tik'' deur bewegings
+in volgorde uit te voer. Vyf verskillende klassifikasiemodelle word geëvalueer
+(Versteekte Markov-modelle, Ondersteuningsvektormasjiene, Kumulatiewe som en
+twee verskillende Neurale Netwerk-argitekture). Daar is bevind dat die Neurale
+Netwerke die klassifikasiemodel met die beste resultate is. Die verskil in
+moeilikheidsgraad tussen klassifikasietake wat waarnemings sonder doelbewuste
+beweging insluit of nie insluit nie, word ook geëvalueer. Daar is gevind dat
+die bykomende vereiste om doelbewuste bewegings van ander handbewegings te kan
+onderskei, die moeilikheidsgraad van die taak aansienlik verhoog.
 
 \end{abstract}

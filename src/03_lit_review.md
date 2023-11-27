@@ -28,9 +28,9 @@ Figures are used throughout this chapter to summarise salient findings but, for
 the sake of brevity, not every paper represented in the figures in this chapter
 is cited. The reader is directed to the Zenodo dataset containing the author's
 database of approximately 750 papers, theses, and websites which were used to
-construct these plots. The code required to reproduce the figures is available
-[on GitHub](https://github.com/beyarkay/masters-thesis). <!-- TODO: add links
-to these -->
+construct these plots: https://zenodo.org/records/10209419. The code required
+to reproduce the figures is available on GitHub:
+https://github.com/beyarkay/masters-thesis.
 
 # Overview \label{sec:03-overview}
 
@@ -73,9 +73,21 @@ collection, such as acceleration sensors or visible-light cameras. A full
 description of the various technologies is available in the List of Symbols on
 page \pageref{chap:symbols}.
 
-<!-- TODO: Add graphs about the number of classes -->
 **Number of classes** The number of classes classified by the system. This is
-often 26, one class for each letter _a_ through _z_.
+often 26, one class for each letter _a_ through _z_. Figure
+\ref{fig:03_date_vs_nclasses} shows the number of classes predicted by
+different research papers over time.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{src/imgs/graphs/03_date_vs_nclasses}
+    \caption[The Number of Classes over Time]{The number of classes predicted
+    by different research papers over time. Note the $\log_{10}$ scale. The
+    three predicting around 5000 different gestures are by
+    \cite{wangchunliRealTimeLargeVocabulary2002}, and are discussed later in
+    this chapter.}
+    \label{fig:03_date_vs_nclasses}
+\end{figure}
 
 **Model(s) used** The type of model used to classify the data. When a paper
 used a derivation of a commonly used model, then this is recorded.
@@ -349,7 +361,7 @@ systems.
     \cite{hofmannVelocityProfileBased1998}, and the Microsoft Band2 by
     \cite{liHandGestureRecognition2018}. The 5DT DataGlove refers to the
     glove developed by Fifth Dimension Technologies
-    \citep{fifthdimensiontechnologies5DTHardware}.}
+    \citep{fifthdimensiontechnologies5DTHardware1990}.}
     \label{fig:03_hardware_for_gloves}
 \end{figure}
 
@@ -591,7 +603,7 @@ cheokReviewHandGesture2019, oudahHandGestureRecognition2020}} (which cited
 between 100 and 270 papers) and WiFi-based systems\footnote{\citealt{
 maSurveyWiFiBased2016, maWiFiSensingChannel2020,
 hussainReviewCategorizationTechniques2020, wangCSIbasedHumanSensing2021}}
-(which cited between 100 and 150 papers)
+(which cited between 100 and 150 papers).
 
 **How vision-based systems work** Vision-based systems collect videos using the
 visible light spectrum (and sometimes also depth information using LiDAR). The
@@ -619,7 +631,7 @@ yamatoRecognizingHumanAction1992}}.
 
 **How WiFi-based systems work** The technology enabling gesture recognition
 with WiFi was implemented in the IEEE 802.11n standard, released in 2009
-\citep{IEEEStandardInformation2009a}. This standard introduced Channel State
+\citep{ieeeIEEEStandardInformation2009}. This standard introduced Channel State
 Information (CSI) which provided significantly more diagnostics information
 about the noise in an environment than was previously available. The intended
 use case of CSI is to allow transmitters in a WiFi network to change how they

@@ -44,8 +44,8 @@ converting binary classifiers into multi-class classifiers.
 Artificial Intelligence (AI) refers to the development of non-human systems
 that can perform tasks typically requiring human intelligence. These non-human
 systems often refer to computer systems, although
-\cite{bostromEthicalIssuesAdvanced} notes that this is not necessarily
-required. \cite{johnmccarthyProposalDartmouthSummer} founded the field in 1956
+\cite{bostromEthicalIssuesAdvanced2003} notes that this is not necessarily
+required. \cite{johnmccarthyProposalDartmouthSummer1955} founded the field in 1955
 and went through periods of optimism in the capabilities of AI, as well as
 subsequent periods of scepticism which are often referred to as the "AI
 winters".
@@ -370,7 +370,7 @@ Gradient descent can be made more efficient via Stochastic Gradient Descent
 which batches the data into subsets and only changes the weights and biases
 based on the average gradient over the observations in each batch. Other
 optimisation algorithms have also been suggested and are commonly used: AdaGrad
-\citep{duchiOnlineLearningStochastic} is performant on sparse gradients,
+\citep{duchiOnlineLearningStochastic2011} is performant on sparse gradients,
 RMSProp \citep{geoffreyhintonCourseraNeuralNetworks2012} works well in
 non-stationary settings, and Adam \citep{kingmaAdamMethodStochastic2014}
 provides good performance with little tuning.
