@@ -16,13 +16,13 @@ netoHighLevelProgramming2010, mehdiSignLanguageRecognition2002,
 jong-sungkimDynamicGestureRecognition1996,
 felsGloveTalkIIaNeuralnetworkInterface1998}}.
 Section \ref{sec:02-hidden-markov-models} discusses Hidden Markov Models
-(HMMs), which have historically been used for problems similar to those which
+(HMMs), which historically have been used for problems similar to those which
 _Ergo_ seeks to solve\footnote{\citealt{galkaInertialMotionSensing2016,
 bevilacquaContinuousRealtimeGesture2010, xuzhangFrameworkHandGesture2011,
 wuGestureRecognition3D2009, zhangHandGestureRecognition2009,
 schlomerGestureRecognitionWii2008, mantyjarviEnablingFastEffortless2004,
 wengaoChineseSignLanguage2004, rung-hueiliangRealtimeContinuousGesture1998,
-liangSignLanguageRecognition1996}}, and thus they will be used to provide a
+liangSignLanguageRecognition1996}}. These are used to provide a
 comparison between candidate models and the prior work.
 Section \ref{sec:02-support-vector-machines} discusses Support Vector Machines
 which have been used with success for gesture recognition in prior
@@ -36,7 +36,7 @@ compared.
 
 Section \ref{sec:02-evaluation-metrics} discusses the evaluation metrics by
 which multi-class classification algorithms can be compared. Section
-\ref{sec:04-binary-and-multi-class-classifiers} discusses the procedure for
+\ref{sec:02-binary-and-multi-class-classifiers} discusses the procedure for
 converting binary classifiers into multi-class classifiers.
 
 # Artificial Intelligence and Machine Learning \label{sec:02-artificial-intelligence-and-machine-learning}
@@ -50,10 +50,10 @@ and went through periods of optimism in the capabilities of AI, as well as
 subsequent periods of scepticism which are often referred to as the "AI
 winters".
 
-Machine learning is a subfield of AI, and the term was coined by Arthur Samuel
+The term "Machine learning" was coined by Arthur Samuel
 in his 1959 paper studying the popular board game of checkers
 \citep{samuelStudiesMachineLearning1959}. The development of deep learning with
-AlexNet in \citealp{krizhevskyImageNetClassificationDeep2012} renewed interest
+AlexNet, described in \citealp{krizhevskyImageNetClassificationDeep2012} renewed interest
 in the field. Machine learning has solved many problems once thought
 impossible, beating humans at games such as Chess\citep{campbellDeepBlue2002},
 Go \citep{silverMasteringGameGo2016}, StarCraft
@@ -63,14 +63,15 @@ solved or made substantial progress in tasks such as protein folding
 \citep{jumperHighlyAccurateProtein2021} and natural language processing
 \citep{openaiGPT4TechnicalReport2023}.
 
-A machine learning task can have varying levels of information about what the
+A machine learning task can require varying levels of information about what the
 "correct" answer is, or how much supervision the machine learning algorithm
-gets as it learns the data. _Supervised_ machine learning is where the model is
-provided with ideal output for a set of inputs and is required to learn the
-pattern connecting the inputs to the output. _Unsupervised_ machine learning is
-where the model is not provided with any desired output, but is required to
-learn the structure in the data. Hybrid approaches ("semi-supervised") are also
-possible, which combine elements of supervised and unsupervised learning.
+gets as it learns from the data. _Supervised_ machine learning is where the
+machine learning model is provided with ideal output for a set of inputs and is
+required to learn the pattern connecting the inputs to the output.
+_Unsupervised_ machine learning is where the model is not provided with any
+desired output, but is required to learn the structure of the data. Hybrid
+approaches ("semi-supervised") are also possible, which combine elements of
+supervised and unsupervised learning.
 
 Many supervised machine learning tasks can be divided into either a regression
 or a classification problem. A regression problem requires the estimation of a
@@ -81,14 +82,14 @@ output value $y$, where $y$ is an element of some finite set $A$.
 
 # Artificial Neural Networks \label{sec:02-artificial-neural-networks}
 
-Artificial Neural Networks (ANNs) are a form of machine learning that started
-with the development of the perceptron by
-\cite{whitePrinciplesNeurodynamicsPerceptrons1963}, which itself was inspired
-by work done by \cite{warrens.mccullochLogicalCalculusIdeas1944}.
+Artificial Neural Networks (ANNs) are a form of machine learning built up of
+modular components called perceptrons. The development of the perceptron by
+\cite{whitePrinciplesNeurodynamicsPerceptrons1963} was inspired by
+\cite{warrens.mccullochLogicalCalculusIdeas1944}.
 
 The algorithm for efficiently estimating the parameters of an ANN (named
 backpropogation) was derived from the method of reverse mode automatic
-differentiation for networks of differentiable functions, which was introduced
+differentiation for networks of differentiable functions. This was introduced
 by \cite{linnainmaaAlgoritminKumulatiivinenPyoristysvirhe1970}\footnote{This
 was later published in English as
 \citealt{linnainmaaTaylorExpansionAccumulated1976}}.
@@ -234,7 +235,6 @@ layer $i$ is redirected as an input to every neuron in layer $i+1$ (see Figure
 simply output the data being modelled, with one neuron for each dimension of
 the input data.
 
-<!-- prettier-ignore-start -->
 \begin{figure}
     \centering
     \begin{tikzpicture}
@@ -293,11 +293,10 @@ the input data.
             node[right]{$y_{\i}$};
         }
     \end{tikzpicture}
-    \caption{A neural network with three input neurons, five hidden neurons,
-    and two output neurons}
+    \caption[Example Neural Network Figure]{A neural network with three input
+    neurons, five hidden neurons, and two output neurons}
     \label{fig:02_nn}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 The last layer is called the output layer, and a different activation function
 is applied to this layer, depending on the problem being solved. The
@@ -457,7 +456,7 @@ C}{\partial a_j^L}$ is simply $a^L_j - y_j$:
 \end{align}
 
 $\sigma'(z_j^L)$ is also efficiently calculated, as the activation function
-does not change and so it's derivative does not change. For the sigmoid
+does not change and so its derivative does not change. For the sigmoid
 activation function, the derivative is $\sigma(x) (1 - \sigma(x))$:
 
 \begin{align}
@@ -883,27 +882,23 @@ a Markov model as:
 Where $[z_{t-1} = s_i \cap z_t = s_j]$ is Iverson notation
 \citep{knuthTwoNotesNotation1992}, defined as:
 
-<!-- prettier-ignore-start -->
 \begin{equation*}
     [\text{condition}] = \begin{cases}
         1 & \text{if condition is true}\\
         0 & \text{if condition is false}\\
     \end{cases}
 \end{equation*}
-<!-- prettier-ignore-end -->
 
 When solving this optimisation problem, we need to enforce that $\bm{A}$ is still a
 valid transition matrix (which requires that all elements are non-negative and
 the rows all sum to 1). This can be done with the method of Lagrange
 multipliers. We will define the problem to be:
 
-<!-- prettier-ignore-start -->
 \begin{align}
      \max_{\bm{A}} l(\bm{A}|\bm{z}) \quad & \\
     \text{such that:}\quad & \sum_{j=1}^{|S|} A_{ij} = 1,\quad i \in \{1,2, \ldots |S|\}\\
     & A_{ij} \ge 0,\quad i,j \in \{1,2, \ldots |S|\}\\
 \end{align}
-<!-- prettier-ignore-end -->
 
 We will introduce the equality constraint into the Lagrangian, but we will
 prove that the optimal solution can only produce positive values for $A_{ij}$
@@ -920,7 +915,6 @@ The Lagrangian can therefore be constructed as:
 Taking the partial derivatives with respect to $A_{ij}$ and setting it equal to
 zero, we get:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     \frac{\partial \mathcal{L}(\bm{A}, \bm{\alpha})}{\partial A_{ij}}
         &=
@@ -984,11 +978,11 @@ assembly), but all of these are indirect measures of the student's
 understanding. Since these are indirect, they are very likely to have some
 amount of error associated with them.
 
-The crux of the idea behind HMMs is not to try figure out exactly how
-uncertainties are introduced, but rather realise that they are inevitable. For
-our example, we will assume a student takes a test out of 100, and their mark
-is the value we observe. We are then interested in trying to estimate which
-state the student is in: $s_{\text{No knowledge}}, s_{\text{Fear}},
+The crux of the idea behind HMMs is not to try to figure out exactly how
+uncertainties are introduced, but rather to realise that they are inevitable.
+For our example, we will assume a student takes a test out of 100, and their
+mark is the value we observe. We are then interested in trying to estimate
+which state the student is in: $s_{\text{No knowledge}}, s_{\text{Fear}},
 s_{\text{Competence}}$ or $s_{\text{Mastery}}$.
 
 HMMs give us the tools to express the test mark as coming from a probability
@@ -1036,14 +1030,13 @@ that the model is in state $s_j$.
     B_{jk} := \pr(x_t = v_k | z_t = s_j).
 \end{equation}
 
-### What's the probability of observing a certain sequence?
+### The probability of observing a certain sequence
 
 We wish to calculate $\pr(\bm{x} | \bm{A} \cap \bm{B})$, the probability that
 a certain sequence of observations $\bm{x}$ was emitted by an HMM with matrices
 $\bm{A}$ and $\bm{B}$. To do this, we need to sum the likelihoods of the
 observed data $\bm{x}$ given every possible series of states $\bm{z}$:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     \pr(\bm{x} &| \bm{A} \cap \bm{B}) \\
         &= \sum_{\forall\bm{z}} \pr (\bm{x} \cap \bm{z} | \bm{A} \cap \bm{B}) && \text{(Condition over all $\bm{z}$)} \\
@@ -1055,7 +1048,6 @@ observed data $\bm{x}$ given every possible series of states $\bm{z}$:
             \left( \prod_{t=1}^T B_{z_t, x_t} \right)
             \left( \prod_{t=1}^T A_{z_{t-1}, z_t} \right) &&\text{(Defn. of $\bm{A}$ and $\bm{B}$)} \label{eqn:hmm-simple}
 \end{align}
-<!-- prettier-ignore-end -->
 
 Equation \eqref{eqn:hmm-simple} is conceptually simple but intractable to
 calculate, as it requires a sum over every possible sequence of states. This
@@ -1116,7 +1108,7 @@ Algorithm \ref{alg:betai}.
 \end{algorithmic}
 \end{algorithm}
 
-### The Viterbi algorithm: What's the most likely series of states for some output?
+### Evaluating the most likely series of states for some output: The Viterbi algorithm
 
 If we observed a series of outputs $\bm{x}$ from an HMM with matrices  $\bm{A}$
 and $\bm{B}$, what is the sequence of hidden states $\bm{z}$, which would
@@ -1174,7 +1166,7 @@ sequence. See the procedure in Algorithm \ref{alg:viterbi}.
   \end{algorithmic}
 \end{algorithm}
 
-### Most likely parameters for an HMM
+### Most likely parameters for an HMM: The Baum-Welch algorithm
 
 Another question we might ask of our HMM is, given a set of observations
 $\bm{x}$, what values do the transition probability matrix $\bm{A}$ and the
@@ -1188,11 +1180,11 @@ been reached. The Baum-Welch algorithm does not guarantee convergence on a
 global maximum, and the performance of the converged parameters depends on the
 random initialisation of those parameters.
 
-First, the The forward procedure is used to calculate $\alpha_i(t)$, the
+First, the forward procedure is used to calculate $\alpha_i(t)$, the
 probability of being in state $i$ at time $t$. Then the backward procedure is
 used to calculate $\beta_i(t)$, the probability of the rest of the sequence
 $z_{t+1}, \ldots, z_T$ given that the HMM is in state $i$ at time $t$. The
-calculated values for $\alpha_i(t)$ and $\beta_i(t)$ to update the HMM
+calculated values for $\alpha_i(t)$ and $\beta_i(t)$ are used to update the HMM
 parameters $\bm{A}$ and $\bm{B}$.
 
 To perform this update, we define some temporary variables:
@@ -1287,12 +1279,12 @@ Intuitively, an SVM performs binary classification by attempting to find a
 hyperplane that splits the dataset in two, such that 1) the hyperplane
 maximises the distance to the nearest observation regardless of the class of
 that observation and 2) all observations from the same class are on the same
-side of the hyperplane. Many classification tasks are not linearly separable,
-and thus a certain amount of "slack" is often permitted in the mathematical
-formulation of an SVM which permits some observations to be on the wrong side
-of the hyperplane. This is called the "soft margin" formulation for SVMs. These
-misclassified observations incur a penalty, the magnitude of which is
-controlled by a regularisation hyperparameter often just termed $C$. In some
+side of the hyperplane. Many classification tasks are not linearly separable in
+this way, and thus a certain amount of "slack" is often permitted in the
+mathematical formulation of an SVM which permits some observations to be on the
+wrong side of the hyperplane. This is called the "soft margin" formulation for
+SVMs. These misclassified observations incur a penalty, the magnitude of which
+is controlled by a regularisation hyperparameter often just termed $C$. In some
 cases it is advantageous to use a kernel function to transform the data into a
 new space and the hyperplane is found in this new space.
 
@@ -1331,7 +1323,6 @@ example SVM with the margin and separating hyperplane indicated.
 }
 \begin{figure}[!ht]
     \centering
-    \label{fig:svm-tikz}
     \begin{tikzpicture}[
         scale=2.5,
         important line/.style={thick}, dashed line/.style={dashed, thin},
@@ -1343,15 +1334,15 @@ example SVM with the margin and separating hyperplane indicated.
             node[leftNodeInLine] (name) at (2,2){}
             node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.5,1.5){}
             node[leftNodeInLine] (name) at (1.5,1.5){}
-            node [above right] {$w\cdot x + b > 1$};
+            node [above right] {$\bm{w}\cdot x + b > 1$};
         \draw[important line]
             (0.5, 0.5) coordinate (lines) -- (3,3) coordinate (linee)
-            node [above right] {$w\cdot x + b = 0$};
+            node [above right] {$\bm{w}\cdot x + b = 0$};
         \draw[dashed line, yshift=-.4cm, xshift=.4cm]
             (.5,.5) coordinate (ils) -- (3,3) coordinate (ile)
             node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.8,1.8){}
             node[rightNodeInLine] (name) at (1.8,1.8){}
-            node [above right] {$w\cdot x + b < -1$};
+            node [above right] {$\bm{w}\cdot x + b < -1$};
         \draw[very thick,->] (1.8,1.8) -- (1.8+0.4,1.8-0.4)
             node[above, pos=0.5, rotate=-45] {margin};
         \foreach \Point in {(.9,2.2), (1.6,2.7), (1.3,2.9), (1.5,3.4), (1,2.7)}{
@@ -1361,8 +1352,10 @@ example SVM with the margin and separating hyperplane indicated.
             \draw \Point node[rightNode]{};
         }
     \end{tikzpicture}
-    \caption{An example SVM with the separating hyperplane as a solid line, the two classes
-    as filled and empty circles, and the support vectors indicated by the double circles.}
+    \caption[Example of an SVM Hyperplane]{An example SVM with the separating
+    hyperplane as a solid line, the two classes as filled and empty circles,
+    and the support vectors indicated by the double circles.}
+    \label{fig:svm-tikz}
 \end{figure}
 
 
@@ -1396,14 +1389,12 @@ We then known that this point in the positive hyperplane satisfies the equation
 Expanding and simplifying this equation allows us to calculate the value of $d$
 in terms of $\bm{w}$:
 
-<!-- prettier-ignore-start -->
 \begin{align}
      \bm{w} (x_0 + d \frac{\bm{w}}{\|\bm{w}\|}) - b  &= 1 \\
                     d\frac{\|\bm{w}\|^2}{\|\bm{w}\|} &= 1 - (\bm{w} x_0 - b)\\
                                          d\|\bm{w}\| &= 2 \\
                                                   d  &= \frac{2}{\|\bm{w}\|}
 \end{align}
-<!-- prettier-ignore-end -->
 
 Fitting an SVM is therefore a process of finding values for $\bm{w}$ and $b$
 which maximise the magnitude of the margin $\frac{2}{\|\bm{w}\|}$, while
@@ -1418,18 +1409,11 @@ subject to the constraints
     y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
 \end{equation}
 
-Achieving a perfect separation between two real-world classes is frequently
-unattainable. In such instances, it becomes advantageous to allow a certain
-amount of misclassification in the pursuit of a hyperplane that will better
-generalise to unseen data. To address this, a "soft margin" is introduced which
-permits a certain level of misclassification.
 
 For each observation $x_i$, a slack variable $\xi_i$ is defined as follows:
-
-For each observation $x_i$, a slack variable $\xi_i$ is defined. $\xi_i$ is
-zero if $x_i$ is correctly classified, greater than 1 if it is misclassified,
-and between 0 and 1 if it is correctly classified but is within the SVM's
-margin. This can be succinctly expressed as:
+$\xi_i$ is zero if $x_i$ is correctly classified, greater than 1 if it is
+misclassified, and between 0 and 1 if it is correctly classified but is within
+the SVM's margin. This can be succinctly expressed as:
 
 \begin{equation}
     \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b)) \quad \forall i \in {1, \ldots, n}.
@@ -1442,7 +1426,6 @@ misclassifications. Smaller values for $C$ encourage a wider margin (with more
 generalisation) but with more misclassifications. This soft-margin objective
 function is as follows:
 
-<!-- prettier-ignore-start -->
 \begin{align}
     \text{minimize }_{\bm{w}, b}
         & \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
@@ -1450,7 +1433,6 @@ function is as follows:
         &y_i \cdot (\mathbf{w}^T x_i + b) \ge 1 - \xi_i \\
     \text{ and } &\, \xi_i \ge 0, \forall i \in {1, \ldots, n}.
 \end{align}
-<!-- prettier-ignore-end -->
 
 # Cumulative Sum \label{sec:02-cumulative-sum}
 
@@ -1472,7 +1454,6 @@ threshold value, which defines how much deviation is permitted before an alert
 is raised. The procedure for performing CuSUM on a stream of data is presented
 in Algorithm \ref{alg:cusum}.
 
-<!-- prettier-ignore-start -->
 \begin{algorithm}
     \caption{CuSUM Algorithm}
     \label{alg:cusum}
@@ -1498,11 +1479,10 @@ in Algorithm \ref{alg:cusum}.
         \State \textbf{Alarm condition not met}
     \end{algorithmic}
 \end{algorithm}
-<!-- prettier-ignore-end -->
 
 The details of how this algorithm can be applied to a multi-class
-classification problem diverge significantly from "background" information, and
-so will be described in detail in Section \ref{model-specifics-cusum}.
+classification problem are described in detail in Section
+\ref{model-specifics-cusum}.
 
 # Evaluation Metrics \label{sec:02-evaluation-metrics}
 
@@ -1525,7 +1505,7 @@ divided by the total number of predictions:
     \text{Accuracy} = \frac{1}{n}\sum_{j=1}^{n} [t_j = p_j].
 \end{equation}
 
-It is commonly used for evaluating classifiers, but has some limitations for
+This is commonly used for evaluating classifiers, but has some limitations for
 the multi-class case. It is sensitive to class imbalances and will be biased
 towards the majority class. If 99% of the data belongs to a positive class
 while 1% of the data belongs to the negative class, then a naïve classifier can
@@ -1535,8 +1515,11 @@ models.
 
 ## Confusion Matrices
 
-Confusion matrices collate a models performance by grouping each combination of
-predicted and ground truth label. For a $|C|$-class classification problem, a
+Confusion matrices collate a model's performance by grouping each combination of
+predicted and ground truth\footnote{
+    The \emph{Ground truth} labels are the known correct labels for a given
+    dataset. This is what a classification algorithm will attempt to predict.
+} label. For a $|C|$-class classification problem, a
 confusion matrix is a $|C| \times |C|$ matrix of values, where the the
 $i$\textsuperscript{th} row and the $j$\textsuperscript{th} column is the
 number of times a classifier predicted an observation that belongs to class $i$
@@ -1554,32 +1537,31 @@ significantly, however for confusion matrices with many classes and many
 observations it will prove informative to be able to distinguish one
 misprediction from zero mispredictions.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/04_example_conf_mat}
-    \caption[Example confusion matrices]{Four example confusion matrices, each showing the same data but
+    \caption[Example Confusion Matrices]{Four example confusion matrices, each showing the same data but
     visualised under four different normalisation schemes.}
     \label{fig:04_example_conf_mat}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 In practice, confusion matrices are often normalised. This aids in the
-interpretation of the model's performance. The unnormalised confusion matrix is
-shown in the top-left plot of Figure \ref{fig:04_example_conf_mat}. Column
-normalisation divides each element by the sum of its column, such that each
-column sums to one (top-right plot). Row normalisation is similar, and ensures
-that each row sums to one (bottom left plot). Row-normalization and
-column-normalization ensure that each element in the matrix represents the
-proportion of ground truth or predicted labels concerning the total number of
-ground truth or predicted labels for the associated class, respectively.
-Confusion matrices can also be total-normalised (as seen in the bottom-right
-plot) in which case every element is divided by the sum over the entire
-confusion matrix. This allows each element to be interpreted as a fraction of
-the total number of observations.
+interpretation of the model's performance. The previously-discussed top-left
+plot of Figure \ref{fig:04_example_conf_mat}is an unnormalised confusion
+matrix. Column normalisation divides each element by the sum of its column,
+such that each column sums to one (top-right plot). Row normalisation is
+similar, and ensures that each row sums to one (bottom left plot).
+Row-normalization and column-normalization ensure that each element in the
+matrix represents the proportion of ground truth or predicted labels concerning
+the total number of ground truth or predicted labels for the associated class,
+respectively. Confusion matrices can also be total-normalised (as seen in the
+bottom-right plot) in which case every element is divided by the sum over the
+entire confusion matrix. This allows each element to be interpreted as a
+fraction of the total number of observations.
 
 Unless otherwise specified, all confusion matrices presented in this thesis are
-column-normalised.
+column-normalised, as this allows for easier interpretation of the distribution
+of a given model's predictions for each class.
 
 It is also useful to compare the confusion matrices for all instances of a
 model across two or more values of a discrete hyperparameter. For example,
@@ -1593,7 +1575,6 @@ matrices is then divided by the sum of all $F_1$-scores and then finally the
 confusion matrix is column-normalised. This procedure is given in Algorithm
 \ref{alg:04_weighted_cm}.
 
-<!-- prettier-ignore-start -->
 \begin{algorithm}
     \caption[Weighted confusion matrices]{Comparison of Weighted Confusion Matrices}
     \label{alg:04_weighted_cm}
@@ -1613,13 +1594,12 @@ confusion matrix is column-normalised. This procedure is given in Algorithm
         \State $C_{weighted} \gets$ \Call{ColumnNormalize}{$C_{weighted}$}
     \end{algorithmic}
 \end{algorithm}
-<!-- prettier-ignore-end -->
 
-## Precision, Recall, and $F_1$-score
+## Precision, Recall, and $F_1$-score \label{sec:02-prec-rec-f1}
 
 Confusion matrices aid in the interpretation of large numbers of predictions,
-but do not have a total ordering and so cannot be used to rank different models
-based. To this end, we will define first the per-class precision, recall, and
+but do not have a total ordering and so cannot be used to rank different
+models. To this end, we will define first the per-class precision, recall, and
 $F_1$-score. These metrics depend on four summary statistics which are defined
 for each class: $\text{TP}_i$, $\text{TN}_i$, $\text{FP}_i$, $\text{FN}_i$,
 
@@ -1687,33 +1667,29 @@ $F_1$-score. This property can clearly be seen in Figure
 \ref{fig:04_precision_recall_f1} where contours join precision and recall
 values that have the same $F_1$-score.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics{src/imgs/graphs/04_precision_recall_f1}
-    \caption[Precision and recall with $F_1$ as contours]{Precision and recall with the calculated $F_1$-score plotted as
-    contours. Both a high recall and a high precision are required for a high
-    $F_1$-score.}
+    \caption[Precision and Recall with $F_1$ as Contours]{Precision and recall
+    with the calculated $F_1$-score plotted as contours. Both a high recall and
+    a high precision are required for a high $F_1$-score.}
     \label{fig:04_precision_recall_f1}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 Occasionally it will be useful to visualise the precision, recall, and
 $F_1$-score of a model. In these cases, a heatmap with one column per class and
-one row for each of precision, recall, and $F_1$-score will be used. This plot
-is shown in Figure \ref{fig:04_prec_rec_f1_example}, where the data is the same
-as was used to construct the confusion matrices in Figure
+one row for each of precision, recall, and $F_1$-score will be used. A sample
+plot is shown in Figure \ref{fig:04_prec_rec_f1_example}, where the data is the
+same as was used to construct the confusion matrices in Figure
 \ref{fig:04_example_conf_mat}.
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/04_prec_rec_f1_example}
-    \caption[Example precision, recall, $F_1$ heatmap]{Precision, recall, and $F_1$
+    \caption[Example Precision, Recall, $F_1$ Heatmap]{Precision, recall, and $F_1$
     score for the confusion matrix in Figure \ref{fig:04_example_conf_mat}.}
     \label{fig:04_prec_rec_f1_example}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 From Figure \ref{fig:04_prec_rec_f1_example} it is apparent that the classes
 with perfect precision (classes 0, 1, and 3) have columns in the confusion
@@ -1721,8 +1697,8 @@ matrix which are zero except for the element on the principle diagonal.
 Likewise, the class with perfect recall (class 2) has a row in the confusion
 matrix which is zero except for the element on the principle diagonal.
 Precision can therefore be gleaned from a confusion matrix by observing the
-columns of the appropriate confusion matrix, and \textbf{r}ecall by observing
-the \textbf{r}ows.
+columns of the appropriate confusion matrix, and recall by observing
+the rows.
 
 ## Weighted and Unweighted Averages
 
@@ -1747,9 +1723,9 @@ the weighted mean was used instead, then a classifier would be able to achieve
 very high performance by ignoring the minority classes and only focusing on
 predicting the majority class correctly.
 
-For these reasons, the unqualified terms precision, recall, and
-$F_1$-score will be taken to mean the unweighted mean over the per-class
-precisions, recalls, and $F_1$-scores.
+For these reasons, the terms "precision", "recall", and "$F_1$-score" will
+always be the unweighted arithmetic mean over the per-class precisions,
+recalls, and $F_1$-scores respectively.
 
 It is important to note that one cannot calculate the unweighted $F_1$-score
 using the unweighted precision and recall due to the non-linear relationship
@@ -1759,19 +1735,19 @@ of a model does _not_ allow the viewer to infer its unweighted $F_1$-score.
 
 # Binary and Multi-class Classifiers \label{sec:02-binary-and-multi-class-classifiers}
 
-Some classification algorithms have support for multi-class classification
-built-in to the classification procedure. Examples would be Feed Forward Neural
-Networks or Decision trees. The training and classification procedure for these
-algorithms does not depend on whether the task is binary or multi-class
-classification.
+Some classification algorithms are able to perform multi-class classification
+without significant adjustment, such as Feed Forward Neural Networks or
+Decision trees. The training and classification procedures for these algorithms
+does not depend on whether the task is binary or multi-class classification.
 
 Other classification algorithms only support binary classification and cannot
-natively perform multi-class classification. Examples would be Hidden Markov
-Models or Support Vector Machines. Binary classification algorithms can be
-converted into $n$-class ($n>2$) classification algorithms by creating an
-ensemble of $n$ binary classifiers. In this setup, the $i$\textsuperscript{th}
-binary classifier would be trained to predict if a given observation belongs
-either to class $i$ or to some class other than class $i$.
+perform multi-class classification without extensive adjustment to their
+training and classification procedures. Examples would be Hidden Markov Models
+or Support Vector Machines. Binary classification algorithms can be converted
+into $n$-class ($n>2$) classification algorithms by creating an ensemble of $n$
+binary classifiers. In this setup, the $i$\textsuperscript{th} binary
+classifier would be trained to predict if a given observation belongs either to
+class $i$ or to some class other than class $i$.
 
 To predict the class of an observation, each of these $n$ classifiers will make
 a prediction for that same observation. A well trained ensemble will have only

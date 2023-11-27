@@ -2,8 +2,8 @@
     The best way to predict the future is to invent it.
 }{\textit{Alan Key}}
 
-This chapter provides some final remarks on the thesis and an overview of what
-was found. Section \ref{sec:06-thesis-summary} provides a summary of what was
+This chapter provides an overview of what was found and some final remarks on
+the thesis. Section \ref{sec:06-thesis-summary} provides a summary of what was
 discussed in each chapter of the thesis. Section
 \ref{sec:06-assessment-of-the-research-questions} restates the research
 question and assesses the evidence found, such that the questions can be
@@ -32,9 +32,7 @@ Viterbi algorithm. Support Vector Machines were discussed in Section
 \ref{sec:02-support-vector-machines} and the relevant mathematics for finding
 the optimal splitting hyperplane was discussed. Cumulative Sum were discussed
 in Section \ref{sec:02-cumulative-sum} with reference to the original work by
-\cite{pageCONTINUOUSINSPECTIONSCHEMES1954} who introduced the algorithm as a
-means for detection of a change in the parameters of an underlying distribution
-of sequential data.
+\cite{pageCONTINUOUSINSPECTIONSCHEMES1954}.
 
 Chapter \ref{chap:literature-review} reviewed the gesture recognition
 literature since the first work by
@@ -45,7 +43,7 @@ hand gestures. The different applications of gesture recognition were also
 covered.
 
 Chapter \ref{chap:methodology} provided the details required to reproduce the
-experiments conducted in the aim of answering the research questions. These
+experiments conducted with the aim of answering the research questions. These
 details covered implementation of the different classification algorithms
 discussed in Chapter \ref{chap:background} as well as the construction of the
 sensor suite and data collection.
@@ -116,7 +114,7 @@ Support Vector Machines (SVMs, evaluated in Section \ref{sec:05-in-depth-svm})
 succeeded at classifying the 5- and 50-class datasets, and achieved good
 performance on the 51-class dataset. They were shown to have good performance
 on a wide variety of hyperparameter values. Even the worst-performing SVMs
-managed so somewhat learn the dataset. This indicates that they would be a good
+managed to somewhat learn the dataset. This indicates that they would be a good
 choice if extensive hyperparameter tuning is not a viable option, as any
 reasonable choice of hyperparameters work fairly well.
 
@@ -132,14 +130,12 @@ which was able to achieve the best performance, and many hyperparameter
 combinations resulted in the FFNNs simply failing to learn at all.
 
 Hierarchical Feed-forward Neural Networks (HFFNNs, described in evaluated in
-Section \ref{sec:04-model-specifics-hffnn}) have one internal model for
-detecting a gesture against background noise and another for classifying which
-gesture is present, given that the first model detected a gesture was present.
-They were only evaluated on the dataset containing the background non-gesture
-class, the 51-class dataset. On the 51-class dataset, they performed slightly
-worse than the FFNNs. With more than double the hyperparameters, it does not
-appear that having a separate model to predict the presence or absence of a
-gesture benefits the performance of a FFNN-based classifier.
+Section \ref{sec:04-model-specifics-hffnn}) were evaluated on the dataset
+containing the background non-gesture class, the 51-class dataset. On the
+51-class dataset, they performed slightly worse than the FFNNs. With more than
+double the hyperparameters, having a separate model to predict the presence or
+absence of a gesture did not benefit the performance of a FFNN-based
+classifier.
 
 ## Detecting gestures from background noise
 
@@ -155,16 +151,16 @@ presence or absence of the non-gesture class, and another to classify which
 gesture was present given that a gesture was indeed present. The best FFNNs
 performed better than the best HFFNNs, achieving a higher validation unweighted
 average $F_1$-score. Additionally, the FFNNs required less time to make a
-prediction than the HFFNNs. It can be concluded that having a separate model to
-detect whether or not a gesture is present does not provide significant benefit
-for FFNN-based classifiers.
+prediction than the HFFNNs. Since the FFNNs performed better than the HFFNNs,
+it can be concluded that one neural-network based algorithm is able to perform
+implicit segmentation.
 
-## Performance impact of background noise
+## Performance impact of background sensor noise
 
 \begin{framed}
     The requirement for an algorithm to perform implicit segmentation is likely
-    to have a detrimental effect on the classification algorithm's performance
-    on classifying the gestures. This impact is examined and discussed.
+    to have a detrimental effect on that algorithm's performance. This impact
+    is examined and discussed.
 \end{framed}
 
 This research question can be answered by comparing the performance all models
@@ -176,7 +172,7 @@ achieve near-perfect performance after hyperparameter tuning. However, on the
 regardless of hyperparameter tuning. While some models still managed to achieve
 relatively good performance, no model achieved the same performance on the
 50-class dataset as was achieved on the 51-class dataset. It can then be
-concluded that the addition the "background noise", introduced by the
+concluded that the addition of "background noise", introduced by the
 non-gesture class, substantially increases the difficulty of the classification
 problem.
 
@@ -209,9 +205,9 @@ recent advances, primarily due to the use of Convolutional Neural Networks and
 the ease with which common video datasets of humans performing gestures can be
 shared between researchers. WiFi-based systems (also discussed in Section
 \ref{sec:03-vision-and-wifi-based-gesture-recognition}) are relatively new, but
-show promise if some details can be worked out. Based on the number of
+show promise if the privacy problems can be resolved. Based on the number of
 contemporary literature surveys which claim to review gesture recognition and
-yet fail too mention WiFi-based gesture
+yet fail to mention WiFi-based gesture
 recognition\footnote{\citealt{chenSurveyHandGesture2013,
 raysarkarHandGestureRecognition2013, anwarHandGestureRecognition2019,
 chenSurveyHandPose2020}}, one might conclude that many researchers are simply
@@ -220,10 +216,11 @@ further study.
 
 Glove-based systems (discussed in Section
 \ref{glove-based-gesture-recognition}) show the most promise for an ideal user
-experience, as they do not have to worry about the environmental conditions or
-occlusion of the hands. A wireless glove-based system would additionally not
-require a user be tethered to their computer, resulting in significantly
-increased freedom of movement of the user.
+experience, as the researcher does not have to worry about the environmental
+conditions or the potential occlusion of the user's hands, both of which are
+common problems with vision-based systems. A wireless glove-based system would
+additionally not require a user be tethered to their computer, resulting in
+significantly increased freedom of movement of the user.
 
 Research into glove-based systems is significantly hampered by the fact that
 every researcher has to create their own sensor suite, due to the lack of
@@ -234,7 +231,12 @@ them. This reciprocal dependency will only be solved if a company with
 sufficient resources decides to create both a high quality sensor suite to
 capture data _and_ a high quality software suite to interpret that data. This
 is what happened with the Microsoft Kinect, and it resulted in an explosion of
-vision-based gesture recognition.
+vision-based gesture recognition research\footnote{\citealt{
+chenSurveyHandGesture2013,
+jiehuangSignLanguageRecognition2015,
+ghotkarDynamicHandGesture2016,
+zhaoMultifeatureGestureRecognition2016,
+caiRGBDDatasetsUsing2017}}.
 
 The fidelity of different gestures defined in the gesture recognition
 literature vary significantly, as does the difficulty in classifying those
@@ -267,30 +269,32 @@ gesture is being performed. Datasets without a background class are toy
 datasets, and performance on them is not representative of real-world
 performance.
 
-This thesis has shown that real-time gesture recognition is a viable option for
-keyboard emulation. A machine learning model has been trained on a sufficiently
-large vocabulary of gesture classes to enable one gesture for every key on a
-standard English QWERTY keyboard. These gesture classes can be distinguished
-from the regular non-gesture movement of the hand reliably enough that
-keystrokes are not sent when the user does not intend them to be sent.
+Despite the practical and technical hurdles, this thesis has shown that
+real-time gesture recognition is a viable option for keyboard emulation. A
+machine learning model has been trained on a sufficiently large vocabulary of
+gesture classes to enable one gesture for every key on a standard English
+QWERTY keyboard. These gesture classes can be distinguished from the regular
+non-gesture movement of the hand reliably enough that keystrokes are not sent
+when the user does not intend them to be sent.
 
 # Future Work \label{sec:06-future-work}
 
 There are several avenues of further research which are promising. Several
 emerging technologies have not yet (in the author's opinion) been fully
-explored with regards to their potential for gesture recognition. WiFi-based
-systems (see Section \ref{sec:03-vision-and-wifi-based-gesture-recognition} and
-\citealt{maWiFiSensingChannel2020}) have been explored with regards to
-security, but could result in very good results when applied to gesture
-detection. This is particularly interesting when one considers that the user
-need not interact with any device explicitly. It could appear to "just work".
-However, the privacy implications of this are very concerning\footnote{
-\citealt{aliKeystrokeRecognitionUsing2015, aliRecognizingKeystrokesUsing2017,
-liWhenCSIMeets2016}} and also require more thought about how to provide a good
-experience to the user while indicating to the user that their movements are
-being watched and recorded. Very few people are aware of the capabilities of
-WiFi-based gesture detection, making this avenue rife for attack from a
-malicious agent.
+explored with regards to their potential for gesture recognition. The privacy
+and security concerns of WiFi-based systems (see Section
+\ref{sec:03-vision-and-wifi-based-gesture-recognition} and
+\citealt{maWiFiSensingChannel2020}) are significant, but if resolved the
+technology has many promising applications related to gesture detection. This
+is particularly interesting when one considers that the user in a WiFi-enabled
+gesture recognition environment need not interact with any device explicitly.
+It could appear to "just work". However, the privacy implications of this are
+very concerning\footnote{ \citealt{aliKeystrokeRecognitionUsing2015,
+aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016}} and also require more
+thought about how to provide a good experience to the user while indicating to
+the user that their movements are being watched and recorded. Very few people
+are aware of the capabilities of WiFi-based gesture detection, making this
+avenue rife for attack from a malicious agent.
 
 Surface Electromyography (EMG, discussed in Section
 \ref{sec:03-technologies-used}) is also very promising (see
@@ -308,10 +312,11 @@ Future development on the \emph{Ergo} sensor suite would focus on portability:
 The current system is tethered to the user's computer but it is technically
 feasible for the suite to be completely wireless and battery powered. This
 would enable \emph{Ergo} to provide an interface identical to that of a
-Bluetooth keyboard. Turning \emph{Ergo} on would cause it to broadcast it's
+Bluetooth keyboard. Turning \emph{Ergo} on would cause it to broadcast its
 availability as a Bluetooth keyboard to surrounding Bluetooth-enabled devices,
 and on connection the user would be able to interact with those devices using
 \emph{Ergo} exactly as though it were a keyboard. All machine learning
-inference would be required to run on the microcontroller, however the speed
+inference would be required to run on the microcontroller (as there would no
+longer be an external computer to perform the inference), however the speed
 with which the FFNN makes predictions makes it possible that an optimised
 neural network would be able to run on-device.

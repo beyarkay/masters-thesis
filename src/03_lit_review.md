@@ -21,16 +21,16 @@ of the field and defines some important comparison metrics. Gesture recognition
 can be divided into three categories, based on how hand movement is measured:
 Section \ref{glove-based-gesture-recognition} discusses the method utilised by
 \emph{Ergo} (using a sensor suite mounted in a glove) and Section
-\ref{sec:03-vision-and-wifi-based-gesture-recognition} discusses the other two
-(using computer vision and WiFi diagnostics respectively).
+\ref{sec:03-vision-and-wifi-based-gesture-recognition} discusses using computer
+vision and WiFi diagnostics.
 
-For the sake of brevity, not every paper represented in the figures in this
-chapter is necessarily cited. The reader is directed to the Zenodo dataset
-containing the author's database of approximately 750 papers, theses, and
-websites which were used to construct these plots. The code required to
-reproduce the figures is available [on
-GitHub](https://github.com/beyarkay/masters-thesis).
-<!-- TODO: add links to these -->
+Figures are used throughout this chapter to summarise salient findings but, for
+the sake of brevity, not every paper represented in the figures in this chapter
+is cited. The reader is directed to the Zenodo dataset containing the author's
+database of approximately 750 papers, theses, and websites which were used to
+construct these plots. The code required to reproduce the figures is available
+[on GitHub](https://github.com/beyarkay/masters-thesis). <!-- TODO: add links
+to these -->
 
 # Overview \label{sec:03-overview}
 
@@ -46,13 +46,16 @@ Over the years, many authors have published gesture recognition systems, each
 dealing with slightly different challenges or with slightly different goals.
 Different authors may sometimes describe a task similarly, only for further
 inspection to reveal hidden assumptions that make the tasks vary greatly in
-difficulty and scope. This review will define several metrics (such as the
-technology or algorithm used) to allow for a systematic comparison of different
-works in the field. Where authors have tested multiple technologies or
-algorithms in one paper, multiple metrics are recorded for that paper. The
-metrics are:
+difficulty and scope.
 
-**Glove/vision/wifi based systems** There are the three categories of gesture
+This review will define several metrics (such as the technology or algorithm
+used) to allow for a systematic comparison of different works in the field.
+Where authors have tested multiple technologies or algorithms in one paper,
+multiple metrics are recorded for that paper.
+
+The metrics used are:
+
+**Glove/Vision/WiFi-based systems** There are the three categories of gesture
 capture systems: glove-based, vision-based, and WiFi-based systems. Glove-based
 systems have a sensor suite physically connected to the person's hands or
 forearms. Vision-based systems use RGB cameras\footnote{
@@ -67,19 +70,19 @@ sensitive WiFi diagnostics information to infer the position of the human body.
 
 **Technology used** This refers to the underlying technology that enables data
 collection, such as acceleration sensors or visible-light cameras. A full
-description of the various technologies is available in the List of Symbols.
+description of the various technologies is available in the List of Symbols on
+page \pageref{chap:symbols}.
 
 <!-- TODO: Add graphs about the number of classes -->
 **Number of classes** The number of classes classified by the system. This is
 often 26, one class for each letter _a_ through _z_.
 
 **Model(s) used** The type of model used to classify the data. When a paper
-used a derivation of a commonly used model, then the commonly used model is
-recorded.
+used a derivation of a commonly used model, then this is recorded.
 
 **Hardware used** This is the pre-built hardware used to collect the data. A
 full description of the various hardware used is available in the List of
-Symbols.
+Symbols on page \pageref{chap:symbols}.
 
 **Gesture fidelity** This refers to the level of precision required to perform
 a given gesture. Gesture fidelity is divided into gestures requiring only
@@ -88,11 +91,13 @@ hand-level precision (such as rotation at the wrists) or finger-level precision
 (such as typing or most sign-language gestures).
 
 **Explicit or implicit segmentation** Explicit segmentation is where the
-continuous time series of data has been segmented such that the start and end
+continuous time series of gesture data has been segmented such that the start and end
 of each gesture is provided to the model. This might be done by inserting
 markers into the continuous time series and providing those markers to the
 model, or it might be done by only training the model on the portions of the
-time series which contain gestures. Implicit segmentation does not provide any
+time series which contain gestures.
+
+Implicit segmentation does not provide any
 markers to the model, and requires that the model first detect which
 segments of time have gestures and then recognise which gestures are in those
 segments.
@@ -100,14 +105,14 @@ segments.
 # Glove-based Gesture Recognition
 
 Glove-based gesture recognition is any gesture recognition system which gathers
-hand information using a device physically attached to the user's hands or
-upper arms.  Subsection \ref{sec:03-technologies-used} will discuss the
-technologies used in building glove-based systems. Subsection
-\ref{literature-surveys} will provide an overview of the larger literature
-surveys. Subsection \ref{sec:03-hardware-products} will discuss the hardware
-products used for glove-based systems. Subsection
-\ref{algorithms-used-for-gesture-recognition} reviews the algorithms used for
-glove-based gesture recognition.
+hand information using a device physically attached to the user's hands (or in
+rare cases, attached to their forearms).  Subsection
+\ref{sec:03-technologies-used} will discuss the technologies used in building
+glove-based systems. Subsection \ref{sec:03-surveys-of-the-literature} will provide an
+overview of the larger reviews of the literature. Subsection
+\ref{sec:03-hardware-products} will discuss the hardware products used for
+glove-based systems. Subsection \ref{algorithms-used-for-gesture-recognition}
+reviews the algorithms used for glove-based gesture recognition.
 
 ## Technologies Used \label{sec:03-technologies-used}
 
@@ -118,7 +123,7 @@ used one of the existing systems
 
 Different technologies have been used over the decades to instrument the
 movement of a user's hands. Descriptions of the different technologies are
-available in the List of Symbols.
+available in the List of Symbols on page \pageref{chap:symbols}.
 
 Early glove-based systems often used hand crafted sensors (presumably due to a
 lack of cheap electronic sensors at the time) such as optical tubes which
@@ -131,7 +136,7 @@ authors\footnote{\citealt{
     jacobsenDesignUtahDextrous1986,
     marcusSensingHumanHand1988}}.
 
-**Flex sensors** measure the bend of a short plastic strip were first placed
+**Flex sensors** whichmeasure the bend of a short plastic strip were first placed
 across joints and used successfully in the late 1980s and early
 1990s\footnote{\citealt{
     zimmermanHandGestureInterface1987,
@@ -141,8 +146,10 @@ across joints and used successfully in the late 1980s and early
 They are unable to accurately measure very acute angles (such as those between
 fingers) but are intuitive to use and the resulting measurements are easy to
 interpret. Flex sensors have seen adoption in commercially available
-glove-based systems, and have been used in many papers
-due to their interpretability and relatively low cost\footnote{\citealt{
+glove-based systems\footnote{\citealt{
+    abramsgentileentertainmentPowerGlove1989,
+    immersioncorporationCyberGlove2001}}, and have been used in many papers due
+to their interpretability and relatively low cost\footnote{\citealt{
     feinerVisualizingDimensionalVirtual1990,
     felsBuildingAdaptiveInterfaces1990,
     wiseEvaluationFiberOptic1990,
@@ -166,15 +173,19 @@ due to their interpretability and relatively low cost\footnote{\citealt{
     wenMachineLearningGlove2020,
     yuanHandGestureRecognition2020}}.
 
-**Accelerometers** are sensors that measure acceleration with little noise, and
-often come in very small microcontroller packages. Many mobile devices (such as
+**Accelerometers** are sensors that measure acceleration, and
+often come in very small\footnote{
+    The \textbf{ADXL335} by Analog Devices (described in detail in Section
+    \ref{sec:04-construction-of-ergo}) is just 4 mm wide by 4 mm long by 1.45
+    mm tall.
+} microcontroller packages. Many mobile devices (such as
 phones, game controllers, and smart watches) contain one or more
 accelerometers. Accelerometers were first used by
 \cite{fukumotoBodyCoupledFingerRing1997} who mounted them in rings worn at the
 base of the user's fingertips. These accelerometers were used to detect when
 the user tapped their fingers against a flat surface, and mapped this to
-certain keystrokes. Acceleration sensors became popular and have been used in
-many papers\footnote{\citealt{
+certain keystrokes. Accelerometers became popular and have been used in
+many commercial and research applications\footnote{\citealt{
     kratzWiizards3DGesture2007,
     wuGestureRecognition3D2009,
     fukumotoBodyCoupledFingerRing1997,
@@ -253,7 +264,8 @@ recognition, there are a few papers\footnote{\citealt{
     leeSmartWearableHand2018,
     liHandGestureRecognition2018}}
 which combine the two in a technique often called "sensor-fusion" to gain
-better recognition results than either sensor in isolation.
+better recognition results than either acceleration or EMG sensors in
+isolation.
 
 **Capacitance sensors** measure the changing electrical capacitance of the body
 as muscles are contracted and relaxed, and has been used to recognise hand
@@ -285,7 +297,7 @@ applications and so this likely contributed to the large number of citations.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_tech_for_gloves}
-    \caption[Technologies used for glove-based systems]{Different technologies
+    \caption[Technologies Used for Glove-based Systems]{Different technologies
     used for glove-based systems. EMG refers to
     electromyography. IMU stands for Inertial Measurement Unit, a device
     typically capable of measuring rotational acceleration, linear
@@ -293,9 +305,9 @@ applications and so this likely contributed to the large number of citations.
     \label{fig:03_tech_for_gloves}
 \end{figure}
 
-## Literature Surveys
+## Surveys of the Literature\label{sec:03-surveys-of-the-literature}
 
-The inaugural investigation into glove-based input was undertaken by
+The inaugural review of research into glove-based input was undertaken by
 \cite{sturmanSurveyGlovebasedInput1994} (following Sturman's dissertation on
 whole-hand input \citep{sturmanWholehandInput1992}). Sturman and Zeltzer's
 survey comprehensively examined the (predominantly glove-based) systems at that
@@ -316,23 +328,21 @@ Following 2008, there have been several smaller reviews of the literature
 raysarkarHandGestureRecognition2013, anwarHandGestureRecognition2019,
 rashidWearableTechnologiesHand2019, chenSurveyHandPose2020,
 kudrinkoWearableSensorBasedSign2021}}
-however these reviews are often lacking the depth of prior work.
+however these reviews lack the depth of prior work.
 
 ## Hardware Products \label{sec:03-hardware-products}
 
-Commercially available hand-measurement gloves have historically been a strong
-predictor of research into glove-based systems. Without affordable
-off-the-shelf hand measurement gloves, the amount of research is limited by the
-number of researchers who have expertise in both electronics and computer
-science. This subsection explores hardware products which have been used for
-glove-based gesture recognition. Figure \ref{fig:03_hardware_for_gloves} shows
-the different kinds of hardware used over time for glove-based gesture
-recognition systems.
+Affordable, off-the-shelf hand-measurement gloves allow researchers without
+expertise in electronics to explore the field of gesture recognition. This
+subsection explores hardware products which have been used for glove-based
+gesture recognition. Figure \ref{fig:03_hardware_for_gloves} shows the
+different kinds of hardware used over time for glove-based gesture recognition
+systems.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_hardware_for_gloves}
-    \caption[Hardware used for glove-based gesture recognition]{Different
+    \caption[Hardware Used for Glove-based Gesture Recognition]{Different
     hardware used for glove-based systems. The Contactglove was used by
     \cite{felsGloveTalkIIaNeuralnetworkInterface1998}, the Technische
     Universität Berlin (TUB) Sensorglove by
@@ -356,7 +366,7 @@ capture.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/imgs/03_experimental_television_center_computer_1969}
-    \caption[The 1969 Animac system]{The Animac system
+    \caption[The 1969 Animac System]{The Animac system
     \citep{experimentaltelevisioncenterComputerImageCorporation1969} by the
     Computer Image Corporation of Denver, Colorado.}
     \label{fig:03_experimental_television_center_computer_1969}
@@ -446,23 +456,21 @@ Many different algorithms and statistical models have been used for gesture
 recognition, although generally machine learning methods (and deep learning in
 particular) have been used more and more successfully in recent years. Figure
 \ref{fig:03_models_glove_based} shows the models used over time for glove-based
-gesture recognition. All acronyms are defined in the List of Symbols.
+gesture recognition. All acronyms are defined in the List of Symbols on page \pageref{chap:symbols}.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_glove_based}
-    \caption[Models used for glove-based gesture recognition]{Classification
-    models used for glove-based gesture recognition. 13 models were only used
+    \caption[Models Used for Glove-based Gesture Recognition]{Classification
+    models used for glove-based gesture recognition. Thirteen models were only used
     once and have been excluded from this plot. All acronyms are defined in the
-    List of Symbols.The highly-cited Decision tree paper is
+    List of Symbols on page \pageref{chap:symbols}. The highly-cited Decision tree paper is
     \cite{karantonisImplementationRealTimeHuman2006}, which used a
     waist-mounted tri-axis linear accelerometer to classify activities such as
     walking, sitting, standing, falling, and resting.}
     \label{fig:03_models_glove_based}
 \end{figure}
 
-Early on in the field, researchers extracted a custom-designed feature vector
-from their data and trained a model on that feature vector. Following this,
 Hidden Markov Models (HMMs) have been favoured due to their explicit encoding
 of time-dependant data, and have been used by many papers for glove-based
 gesture recognition\footnote{\citealt{
@@ -663,7 +671,7 @@ zhaoRealtimeHeadGesture2017}}.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_no_gloves}
-    \caption[Models used for vision- and WiFi-based gesture recognition]{Models
+    \caption[Models Used for Vision-based and WiFi-based Gesture Recognition]{Models
     used for recognising gestures in vision- and WiFi-based
     systems over time. PCA stands for Principal Component Analysis.}
     \label{fig:03_models_no_gloves}

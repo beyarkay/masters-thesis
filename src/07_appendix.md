@@ -89,7 +89,7 @@ the extra layer introduces more complexity into its performance characteristics.
 \begin{figure}[!ht]
     \centering
     \includegraphics{src/imgs/graphs/05_hpar_analysis_ffnn_classes51_yval_macro_avg_f1_score_hueNone}
-    \caption[FFNN 51-class $F_1$ vs all hyperparameters]{The $F_1$-score for
+    \caption[FFNN 51-class $F_1$ vs All Hyperparameters]{The $F_1$-score for
     all 51-class FFNNs plotted against the various hyperparameters.}
     \label{fig:appendix_ffnn_hpar_analyis_classes51}
 \end{figure}
@@ -97,7 +97,7 @@ the extra layer introduces more complexity into its performance characteristics.
 \begin{figure}[!ht]
     \centering
     \makebox[\textwidth][c]{\includegraphics[width=1.4\textwidth]{src/imgs/graphs/05_hpar_analysis_ffnn_pairplot}}
-    \caption[FFNN 51-class all hyperparameter pairplot]{Pairplot of all hyperparameters for 51-class FFNNs.}
+    \caption[FFNN 51-class All Hyperparameter Pairplot]{Pairplot of all hyperparameters for 51-class FFNNs.}
     \label{fig:appendix_hpar_analysis_ffnn_pairplot}
 \end{figure}
 
@@ -141,13 +141,6 @@ across the wrist).
 
 The carpals connect to the bones of the arm: the _radius_ (which is closest to
 the thumb) and the _ulnar_ (which is closest to the little finger)
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.6\textwidth]{src/imgs/03_bones.png}
-\caption{Medical diagram of the bones of the hand.}
-\label{fig:}
-\end{figure}
 
 The joints between bones are, logically, named according the bones they
 connect:
@@ -200,10 +193,3 @@ The hand can also be rotated at the wrist about three axes:
   toward or away from the inner side of the forearm.
 - _Radial Deviation_ and _Ulnar Deviation_: Moving the hand and wrist toward or
   away from the thumb side.
-
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{src/imgs/03_movements.png}
-    \caption{Movements of the hand.}
-    \label{fig:03_movements}
-\end{figure}

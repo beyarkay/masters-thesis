@@ -2,7 +2,7 @@
 Note: What you bring to the table is _fidelity_. There has been oodles of work
 trying to classify big obvious gestures, but nothing that comes close to
 replacing the keyboard. Nobody wants to wave their hands around just to type
-the letter "a", but Ergo lets you do a simple motion and it's done.
+the letter "a", but Ergo lets you do a simple motion and it is done.
 
 Contributions:
 
@@ -14,35 +14,44 @@ Contributions:
 - Segmentation is done automatically, which is often not considered
 --->
 
+
 \epigraph{
     In the beginning there was nothing, which exploded.
 }{\textit{ Terry Pratchett }}
 
 # Overview \label{sec:01-overview}
 
-This thesis explores gesture recognition using an acceleration-based
+This thesis explores hand gesture recognition using an acceleration-based
 fingertip-mounted sensor suite, with the goal of completely replicating the
-functionality of a computer keyboard. The first attempts at automated gesture
-recognition were in 1969 by the \citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Initial
-attempts used hand-mounted sensors to measure
-movement. With the improvements in video capture technology and computer vision algorithms, many
-attempts use labelled videos of people performing different
-gestures to perform gesture recognition\footnote{\citealt{alazraiDatasetWiFibasedHumantohuman2020,
+functionality of a computer keyboard. The first attempts at automated hand
+gesture recognition were in 1969 by the
+\citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Later
+attempts used hand-mounted sensors to measure movement
+\footnote{\citep{garyj.grimesUSPatentDigital1981,
+kohonenSelforganizedFormationTopologically1982, jacobsenUTAHDextrousHand1984,
+jacobsenDesignUtahDextrous1986, fisherTelepresenceMasterGlove1987,
+zimmermanHandGestureInterface1987 thomasa.defantiUSNEAR60341631977}}. Due to
+improvements in video capture technology and computer vision algorithms, many
+recent attempts used labelled videos of people performing different gestures
+for gesture
+recognition\footnote{\citealt{alazraiDatasetWiFibasedHumantohuman2020,
 atzoriNinaproDatabaseResource2015, guyonChaLearnGestureChallenge2012,
 materzynskaJesterDatasetLargeScale2019, zhangEgoGestureNewDataset2018}}. Recent
 changes in commercially available Wi-Fi routers
-\citep{halperinToolReleaseGathering2011} also enable the detection of
+\citep{halperinToolReleaseGathering2011} have also enabled the detection of
 hand gestures by analysing diagnostic data from these routers
-\citep{puWholehomeGestureRecognition2013}.
+\citep{puWholehomeGestureRecognition2013}. This is largely made possible by the
+sensitivity of the diagnostics information to movements of the human body.
 
 Gesture detection systems can be divided based on whether the user is required
-to explicitly mark the start and end of their gestures (explicit segmentation)
-or whether the user is allowed to make gestures at arbitrary points in time
-(implicit segmentation). Implicit segmentation dramatically improves the
-experience for the user and may be considered a requirement for a commercial
-product. Explicit segmentation significantly reduces the complexity of
-classifying gestures. This thesis will present an adequate solution to implicit
-segmentation.
+to explicitly mark the start and end of their gestures (defined as "explicit
+segmentation") or whether the user is allowed to make gestures at arbitrary
+points in time (defined as "implicit segmentation"). Allowing the user to make
+gestures at arbitrary points in time dramatically improves the experience for
+the user and may be considered a requirement for a commercial product. Explicit
+segmentation significantly reduces the complexity of classifying gestures. This
+thesis will present an adequate solution to the more challenging problem of
+implicit segmentation.
 
 Gesture detection systems can also be divided by the number of gesture classes
 that can be recognised. Media playback (such as pausing, playing, and skipping
@@ -52,11 +61,10 @@ present a solution capable of recognising 50 gesture classes, allowing the
 input of the full English alphabet, the numbers 0 through 9, various
 punctuation characters, and two meta-characters (shift and control).
 
-This thesis uses a bespoke sensor suite named \emph{Ergo}, has been constructed
-for the purpose of real-time high-fidelity gesture recognition (see Figure
+This thesis uses a bespoke sensor suite named \emph{Ergo}, constructed for the
+purpose of real-time high-fidelity gesture recognition (see Figure
 \ref{fig:01_glove}).
 
-<!-- prettier-ignore-start -->
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{src/imgs/glove}
@@ -66,13 +74,13 @@ for the purpose of real-time high-fidelity gesture recognition (see Figure
     measurements at a rate of 40 times per second.}
     \label{fig:01_glove}
 \end{figure}
-<!-- prettier-ignore-end -->
 
 One acceleration sensor is mounted onto each of the user's ten fingertips. Each
-acceleration sensor is capable of recording a 3-dimensional acceleration vector
-every 0.025 seconds. This is equivalent to 1200 measurements per second.
+acceleration sensor is capable of recording a three-dimensional acceleration vector
+every $\frac{1}{40} = 0.025$ seconds. This is equivalent to 1200 measurements
+per second.
 
-While wearing \emph{Ergo} 50 different gestures are performed and the resulting
+While wearing \emph{Ergo}, 50 different gestures are performed and the resulting
 measurements are saved. This data is used to train several multi-class
 classification algorithms to 1) distinguish intentional gestures from regular
 hand movements, and 2) to predict which one of the 50 learnt gestures is being
@@ -81,7 +89,7 @@ class, while all other gestures are represented by first 50 classes.
 
 To evaluate the difficulty of implicit segmentation when compared to explicit
 segmentation, all classification algorithms are evaluated on three different
-datasets. The first has only five classes made up entirely of intentional
+datasets. The first dataset has only five classes made up entirely of intentional
 gestures. The second dataset is also made up entirely of intentional gestures,
 but contains all 50 gestures for which data was captured. These two datasets
 are representative of explicit segmentation. The third dataset contains all 50
@@ -100,28 +108,26 @@ the rest of the thesis and the layout of the chapters.
 
 The problem statement is as follows:
 
-<!-- prettier-ignore-start -->
 \begin{framed}
     Ascertain the feasibility of a commercially-viable gesture recognition
     device that is capable of implicit segmentation, and evaluate its ability
     to replace a full QWERTY keyboard as an input device.
 \end{framed}
-<!-- prettier-ignore-end -->
 
-A study to resolve the above problem statement is considered, evaluating
-multiple classification algorithms on datasets with 5, 50, and 51 classes based
-on data collected from a custom made sensor suite. An analysis of the
-performance and inference speed is performed, with a focus on how completely
-\emph{Ergo} could replace a user's computer keyboard in day-to-day use.
+The study evaluates multiple classification algorithms on three datasets with
+5, 50, and 51 classes based on data collected from a custom made sensor suite.
+An analysis of the performance and inference speed is performed, with a focus
+on how completely \emph{Ergo} could replace a user's computer keyboard in
+day-to-day use.
 
 # Research Questions\label{sec:01-research-questions}
 
-This study aims to address the following points:
+This study aims to address the following questions:
 
 1. **Hardware construction and data capture**: The viability of off-the-shelf
    hardware components for high-frequency data capture is assessed. A custom
    sensor suite is designed and built to capture the movement of a user's
-   fingertips with enough fidelity that many different gestures can be
+   fingertips with enough accuracy that many different gestures can be
    distinguished.
 2. **Performance of different classification algorithms**: Five classification
    algorithms are assessed on the same dataset, each over a wide variety of
@@ -131,10 +137,10 @@ This study aims to address the following points:
    and of the different hyperparameter combinations is compared.
 3. **Detecting gestures from background noise**: An assessment is made of the
    capability of any one algorithm to perform implicit segmentation.
-4. **Performance impact of background noise**: The requirement for an algorithm
-   to perform implicit segmentation is likely to have a detrimental effect on
-   the classification algorithm's performance on classifying the gestures. This
-   impact is examined and discussed.
+4. **Performance impact of background sensor noise**: The requirement for an
+   algorithm to perform implicit segmentation is likely to have a detrimental
+   effect on that algorithm's performance. This impact is examined and
+   discussed.
 5. **Classification speed**: As _Ergo_ is to be a real-time keyboard
    replacement, the speed with which different classification algorithms can
    make accurate class predictions is recorded and evaluated.
@@ -144,9 +150,9 @@ This study aims to address the following points:
 The dataset used in this thesis containing acceleration measurements from
 \emph{Ergo} is freely available on [Zenodo](https://zenodo.org/). Both the raw
 sensor readings are available, as well as the preprocessed data. During the
-process of performing a literature review, a large number of papers in were
+process of performing a literature review, a large number of papers were
 indexed by various metrics (discussed in Section \ref{sec:03-overview}). A
-dataset of these papers and the metrics is also available on
+dataset of these papers and metrics quantifying the papers is also available on
 [Zenodo](https://zenodo.org/).
 
 The code used to train the classification algorithms, control the hardware, and
