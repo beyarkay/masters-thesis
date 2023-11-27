@@ -44,5 +44,8 @@ release: pandoc clean
 	$(MAKE) clean
 	echo "file://$$(pwd)/Boyd Kane MSc Thesis.pdf"
 
+watch-release:
+	exa src/0*.md src/cite.bib src/imgs/* main.tex | entr -s 'make release'
+
 watch:
 	exa src/0*.md src/cite.bib src/imgs/* main.tex | entr -s 'make dev'
