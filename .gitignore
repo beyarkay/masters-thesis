@@ -19,3 +19,5 @@ checkpoints/
 # Intermediary tex files that are useful for debugging but are generally
 # ethereal
 tex/*.tex
+
+*.png
