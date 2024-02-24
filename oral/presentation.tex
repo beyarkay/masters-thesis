@@ -188,62 +188,131 @@
 \section{Methodology}
 \begin{frame}
     \frametitle{Methodology}
-    \begin{columns}[T] % T aligns the tops of the columns
-    \begin{column}{0.5\textwidth}
-        \begin{itemize}
-            \item \emph{Ergo} is built with two Arduino Nano 33 BLEs, two
-                CD74HC4067 multiplexers, and ten ADXL335 accelerometers.
-        \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-        % Your image here
-        \includegraphics[width=\textwidth]{ergo_schematic.pdf}
-    \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}
-    \begin{itemize}
-        \item Gestures are converted to keystrokes using a simple mapping
-    \end{itemize}
+    \framesubtitle{Circuit Diagram of \emph{Ergo}}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.9\textwidth]{mapping_idxs.png}
-        \includegraphics[width=0.9\textwidth]{mapping_qwerty.png}
+        \includegraphics[height=0.8\textheight]{ergo_schematic.pdf}
     \end{figure}
 \end{frame}
 
+
+\begin{frame}
+    \frametitle{Methodology}
+    \framesubtitle{Gestures to Keystrokes}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{gesture_to_keystrokes.pdf}
+        \includegraphics[width=\textwidth]{qwerty_keyboard.png}
+        \caption{QWERTY keyboard image from Wikimedia Commons, licensed CC BY-SA 3.0}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Methodology}
+    \framesubtitle{Gesture Indices}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{gesture_to_keystrokes.pdf}
+        \includegraphics[width=\textwidth]{gesture_to_indices.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Methodology}
+    \framesubtitle{Class 50 - Background Noise}
+
+    TODO: this figure should be labelled with the true class labels for each
+    time step
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{05_sensors_over_time_3230_30}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Methodology}
+    \framesubtitle{Data windowing}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{windowing_tikz.pdf}
+    \end{figure}
+\end{frame}
 
 \section{Results}
 \begin{frame}
     \frametitle{Results}
-    \begin{itemize}
-        \item HMMs \& CuSUM failed to learn the data
-        \item SVM performed well
-        \item FFNNs and HFFNNs performed well, but with many failure states
-    \end{itemize}
-    % Your image here
-    \includegraphics[width=\textwidth]{05_precision_recall_51_classes.pdf}
-\end{frame}
-
-\begin{frame}
-    On the unseen test set, the best performing model (an FFNN) performs well.
-    % Your image here
-    \includegraphics[width=\textwidth]{05_tst_set_conf_mat.pdf}
-\end{frame}
-
-\begin{frame}
-    \texttt{the quick brown fox jumped over the lazy dog}
+    \framesubtitle{Cumulative Sum}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{05_pred_plot_0000_to_9420_full_text.pdf}
+        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_cusum.pdf}
     \end{figure}
 \end{frame}
 
 \begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Hidden Markov Models}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{05_pred_plot_0900_to_1800_quick.pdf}
+        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_hmm.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Support Vector Machines}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_svm.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Feed-forward Neural Networks}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_ffnn.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Hierarchical Feed-forward Neural Networks}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_hffnn.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Comparison Between The Models}
+    \includegraphics[width=\textwidth]{05_precision_recall_51_classes.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Real-world typing}
+    \centering
+    \texttt{the quick brown fox jumped over the lazy dog}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{05_pred_plot_0000_to_9420_full_text.pdf}
+    \end{figure}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{05_pred_plot_0900_to_1800_quick.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Inference Speed}
+    add some plot showing the inference speed
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{todo}
     \end{figure}
 \end{frame}
 

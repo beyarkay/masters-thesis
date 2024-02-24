@@ -65,27 +65,8 @@ not recall)
 
 # Literature Review
 
-Give a slide on Sturman, initial surveys, how the field started, etc
-
 Always go back to the research questions. The lit review should justify why you
 made the choices you did.
-
-Get graphs of implicit/explicit over time
-
-Get graphs of fidelity over time
-
-Look at number of classes over time
-
-Look at the different models and technology over time, use this to motivate
-_Ergo_'s choices
-
-Include data on:
-
-- tech used
-- Number of classes
-- Model(s) used
-- Gesture fidelity
-- Explicit or implicit segmentation
 
 Explain the swarm plot and how to read it
 
@@ -93,13 +74,53 @@ Don't skimp on the literature review. The lit review explains why you did what
 you did (wrt tech, hardware, etc). Explain this explicitly, "I used HMMs
 because they're popular"
 
-Don't bother describing the datasets
+## Seminal work
+
+Give a slide on Sturman, initial surveys, how the field started, etc
+
+## Tech used
+
+## Number of classes
+
+## Model(s) used
+
+## Gesture fidelity
+
+## Explicit or implicit segmentation
 
 # Methodology
 
-10x accelerometers -> multiplexer (&why) -> Nano -> computer
+## Circuit diagram
 
-Do include the circuit diagram for this bit, with a good heading
+10x accelerometers -> multiplexer (&why) -> Nano -> computer
+TODO: explain why the multiplexer
+
+## Gestures to Keystrokes
+
+- 50 gestures required for full keyboard input
+  - numerals, punctuation, letters, white space, control characters)
+- Use ten fingers and five orientations
+
+## Gesture indices
+
+- Each gesture is given an index, between 0 and 49 (inclusive)
+- Gestures are labelled semantically, so that the tens digit corresponds to the
+  orientation of the hands and the units digit corresponds to the finger being
+  flexed.
+- For example: gesture 6 is the spacebar, and is right hand index finger at
+  0deg rotation. gesture 34 is left hand thumb at 135deg orientation and would
+  type a `t`.
+
+## Class 50 - Background Noise
+
+- Explain what class 50 is
+- Explain that it's important and will come up later
+- Explain that most time steps are labelled as gesture 50, the minority are
+  split between the other 50 classes.
+
+## Data Windowing
+
+TODO
 
 Emphasis that we want 50 gestures for full keyboard input (numerals,
 punctuation, letters, white space, control characters). We have 10 fingers, so
@@ -120,7 +141,27 @@ before explaining how each model is trained.
 Just say that hyperparameter optimisation was done via random search, don't go into the
 details.
 
+## Hyperparameter optimisation
+
+Done via random search
+
+## HFFNN
+
+also need to describe these
+
 # Results
+
+Maybe add a quick refresher about what a good confusion matrix looks like
+
+## CuSUM
+
+## HMMs
+
+## SVMs
+
+## FFNNs
+
+## HFFNNs
 
 For each of the models:
 
