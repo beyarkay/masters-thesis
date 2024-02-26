@@ -1,0 +1,25 @@
+\documentclass[tikz, border=2mm]{standalone}
+\usepackage{tikz-cd}
+\usepackage{amsmath}
+\usepackage{bm}
+
+\begin{document}
+\begin{tikzcd}[nodes in empty cells]
+    \text{Hidden state $\bm{z}$:}
+    &   z_0 \ar[r, "\bm{A}"] \ar[dd, "\bm{B}"']
+    &   z_1 \ar[r, "\bm{A}"] \ar[dd, "\bm{B}"']
+    &   z_2 \ar[r, "\bm{A}"] \ar[dd, "\bm{B}"']
+        &   \dots  \ar[r, "\bm{A}"]
+        &   z_{T-1} \ar[dd, "\bm{B}"']       \\
+    &   \arrow[rrrr, dashed, -,
+           start anchor={[shift={(-3ex,2ex)}]north west},
+           end anchor  ={[shift={( 3ex,2ex)}]north east}]
+    &   &   &   &   &                               \\
+    \text{Observations $\bm{x}$:}
+    &   x_0
+    &   x_1
+    &   x_2
+    &   \dotsm
+    &   x_{T-1}
+\end{tikzcd}
+\end{document}

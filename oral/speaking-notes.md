@@ -34,13 +34,46 @@ Notes from chatting with Trienko:
 
 ### Evaluate hardware performance
 
+- Ergo is made with off-the-shelf components
+- Unclear whether they are suitable for high-frequency data capture
+- Unclear whether they are accurate enough to distinguish different gestures
+
 ### Compare algorithm performance
+
+- Five classification algorithms are compared
+  - These will be introduced shortly
+- Each algorithm has numerous parameters that control their behaviour
+  - Different values for these hyperparameters are also tested
 
 ### Extract gestures from background noise
 
-### Assess impact of noise on performance
+- Ergo makes continuous predictions about what gesture is currently being
+  performed
+- There are 50 different gesture classes that Ergo can classify, as well as 1
+  class that represents the "background noise" that occurs in between gestures
+- Since a gesture takes a fraction of a second to perform, the majority of
+  predictions will be that "there's no gesture here"
+- The ability of the algorithms to distinguish gestures from background noise
+  will be evaluated
+
+### Assess impact of background noise on performance
+
+- The presence of non-gesture observations will likely impact the performance
+  of any algorithm
+- To evaluate this performance impact, all algorithms will be tested on the
+  full dataset (with gesture and non-gesture observations) as well as a partial
+  dataset with all the non-gesture observations removed.
+  - If the performance on the full dataset is much better than on the partial
+    dataset, then we can conclude that the non-gesture observations have a
+    large impact on the performance of the algorithm
 
 ### Assess classification speed
+
+- Given that the purpose of Ergo is as a full keyboard replacement, the
+  classification speed of all algorithms is also important
+- Any viable algorithm should be able to make a classification faster than the
+  hardware can measure a new observation in order for the algorithm to be
+  viable for real-time use.
 
 # Background
 
@@ -55,13 +88,82 @@ not recall)
 
 ### FFNNs
 
+- Neural Networks classify input data by taking in multiple inputs passing
+  those inputs through layers of nodes.
+  - Each node collects several inputs, performs some simple arithmetic, and
+    passes the result to the next sequence of nodes.
+- Neural networks can learn the training data by iteratively updating the
+  parameters used in the nodes as they perform the simple arithmetic.
+
 ### SVMs
+
+- Support Vector Machines classify input data by finding a boundary (solid
+  line) that maximally separates the two classes of data (hollow and filled
+  circles).
+- This can be expanded to multi-class classification by training multiple SVMs,
+  each of which learns to separate one class from all other classes.
 
 ### HMMs
 
+- Hidden Markov Models learn to model data from a specific class or
+  distribution.
+- They do not explicitly perform classification, but we can use them for
+  classification by training one HMM per class and seeing which HMM best fits
+  some unknown observation.
+- HMMs contain some hidden state which updates each time step according to some
+  learnt distribution.
+- Each state has some probability of emitting an observed value.
+- As the HMM changes its state, it emits values based on the state that it is
+  in. In this way it naturally mimics a time series dataset.
+- We train one HMM for each class in the dataset. To classify an unseen
+  observation, we poll every HMM and choose the class corresponding to the HMM
+  with the greatest log-likelihood that the given observation came from that
+  HMM.
+
 ### CuSUM
 
+- Cumulative Sum (or CuSUM) is traditionally used for online outlier detection.
+- It works by keeping track of a sum of all previously seen values.
+  - When a new value arrives, it is subtracted from some threshold value. If
+    the result is positive, it is added to the cumulative sum.
+  - The cumulative sum is monitored, and if it exceeds a maximum allowed
+    value then an alarm is raised and the sequence is said to be out of
+    distribution.
+- It can be used to identify when a gesture starts for a single sensor, and by
+  combining multiple CuSUM algorithms a classifier that detects which gesture
+  is being performed can be constructed.
+
 ## Evaluation Metrics
+
+### Confusion Matrices
+
+- When evaluating a multi-class classifier, there are many ways for it to make
+  a mistake. A confusion matrix is a useful summary of how a classifier
+  performed on different classes.
+- Each row represents the true class of an observation, and each column
+  represents the class of an observation as predicted by the classifier in
+  question.
+- The value (and colour) of each cell indicates how frequently the classifier
+  predicted an observation belonged to one class when the observation actually
+  belonged to some other class.
+  - Here we can see that this example classifier correctly predicted that the
+    two observations belonging to class 0 did indeed belong to class 0,
+    indicated by the two in the top-left corner.
+  - By the column of 1s, we can see that the classifier really likes class 2,
+    and is over-eager in predicting that every observation belongs to class
+    two.
+- The Ergo dataset has classes with different numbers of observations.
+  - This tends to make confusion matrices difficult to interpret.
+- All confusion matrices in this thesis are column-normalised, so that the
+  values in each column sum to one. The cell in column 2 and row 1 can then be
+  interpreted as the proportion of observations predicted as belonging to class
+  2 that actually belong to class 1.
+- Similarly, the cells along the diagonal of the normalised matrix is the
+  proportion of correctly classified observation.
+
+### Precision, Recall, $F_1$-score
+
+- Row normalised, read of the recall
 
 # Literature Review
 

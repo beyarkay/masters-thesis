@@ -19,7 +19,6 @@
 \usepackage{booktabs}
 \cmidrulewidth=\heavyrulewidth
 
-\graphicspath{{imgs/}}
 
 %---- Title page -------------------------------------------------------
 \title[\emph{Ergo}]{\emph{Ergo}}
@@ -32,7 +31,7 @@
 \subject{Master's in Computer Science}
 \date{February 2024}
 
-\def\titlefig{{\includegraphics[height=5.5cm, angle=270]{glove}}}
+\def\titlefig{{\includegraphics[height=5.5cm, angle=270]{imgs/glove}}}
 
 \begin{document}
 \begin{frame}
@@ -44,7 +43,7 @@
     \frametitle{A video demonstration}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.9\textwidth]{video_thumbnail.png}
+        \includegraphics[width=0.9\textwidth]{imgs/video_thumbnail.png}
     \end{figure}
     \emph{Ergo} in a nutshell:
     \begin{enumerate}
@@ -109,44 +108,57 @@
 \end{frame}
 
 \section{Background}
+
 \begin{frame}
     \frametitle{Background}
-    \framesubtitle{Models and Algorithms}
-    \begin{columns}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-            \includegraphics[height=0.2\textheight, width=\linewidth, keepaspectratio]{todo}
-                \caption{Feed-Forward Neural Networks (FFNNs)}
-            \end{figure}
-        \end{column}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-            \includegraphics[height=0.2\textheight, width=\linewidth, keepaspectratio]{todo}
-                \caption{Support Vector Machines (SVMs)}
-            \end{figure}
-        \end{column}
-    \end{columns}
-    \begin{columns}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-            \includegraphics[height=0.2\textheight, width=\linewidth, keepaspectratio]{todo}
-                \caption{Hidden Markov Models (HMMs)}
-            \end{figure}
-        \end{column}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-            \includegraphics[height=0.2\textheight, width=\linewidth, keepaspectratio]{todo}
-                \caption{Cumulative Sum (CuSUM)}
-            \end{figure}
-        \end{column}
-    \end{columns}
+    \framesubtitle{Feed-Forward Neural Networks (FFNNs)}
+    \begin{figure}
+        \includegraphics{imgs/neural_network.pdf}
+        \caption{}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
     \frametitle{Background}
-    \framesubtitle{$F_1$-score, confusion matrices, and evaluation metrics}
-    todo
+    \framesubtitle{Support Vector Machines (SVMs)}
+    \begin{figure}
+        \includegraphics{imgs/support_vector_machines.pdf}
+    \end{figure}
 \end{frame}
+
+\begin{frame}
+    \frametitle{Background}
+    \framesubtitle{Hidden Markov Models (HMMs)}
+    \begin{figure}
+        \includegraphics[width=\textwidth]{imgs/hidden_markov_model.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Background}
+    \framesubtitle{Cumulative Sum (CuSUM)}
+    \begin{figure}
+        \includegraphics[width=\textwidth]{imgs/cusum.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Background}
+    \framesubtitle{Confusion Matrices}
+    \begin{figure}
+        \includegraphics[width=\textwidth]{imgs/conf_mats.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Background}
+    \framesubtitle{Precision, Recall, $F_1$-score}
+    \begin{figure}
+        \includegraphics[width=0.75\textwidth]{imgs/conf_mat_prec_recall.pdf}
+    \end{figure}
+\end{frame}
+
 
 \section{Literature Review}
 \begin{frame}
@@ -191,7 +203,7 @@
     \framesubtitle{Circuit Diagram of \emph{Ergo}}
     \begin{figure}[h]
         \centering
-        \includegraphics[height=0.8\textheight]{ergo_schematic.pdf}
+        \includegraphics[height=0.8\textheight]{imgs/ergo_schematic.pdf}
     \end{figure}
 \end{frame}
 
@@ -201,8 +213,8 @@
     \framesubtitle{Gestures to Keystrokes}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{gesture_to_keystrokes.pdf}
-        \includegraphics[width=\textwidth]{qwerty_keyboard.png}
+        \includegraphics[width=\textwidth]{imgs/gesture_to_keystrokes.pdf}
+        \includegraphics[width=\textwidth]{imgs/qwerty_keyboard.png}
         \caption{QWERTY keyboard image from Wikimedia Commons, licensed CC BY-SA 3.0}
     \end{figure}
 \end{frame}
@@ -212,8 +224,8 @@
     \framesubtitle{Gesture Indices}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{gesture_to_keystrokes.pdf}
-        \includegraphics[width=\textwidth]{gesture_to_indices.pdf}
+        \includegraphics[width=\textwidth]{imgs/gesture_to_keystrokes.pdf}
+        \includegraphics[width=\textwidth]{imgs/gesture_to_indices.pdf}
     \end{figure}
 \end{frame}
 
@@ -225,7 +237,7 @@
     time step
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{05_sensors_over_time_3230_30}
+        \includegraphics[width=\textwidth]{imgs/05_sensors_over_time_3230_30}
     \end{figure}
 \end{frame}
 
@@ -234,7 +246,7 @@
     \framesubtitle{Data windowing}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{windowing_tikz.pdf}
+        \includegraphics[width=\textwidth]{imgs/windowing_tikz.pdf}
     \end{figure}
 \end{frame}
 
@@ -244,7 +256,7 @@
     \framesubtitle{Cumulative Sum}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_cusum.pdf}
+        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_cusum.pdf}
     \end{figure}
 \end{frame}
 
@@ -253,7 +265,7 @@
     \framesubtitle{Hidden Markov Models}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_hmm.pdf}
+        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_hmm.pdf}
     \end{figure}
 \end{frame}
 
@@ -262,7 +274,7 @@
     \framesubtitle{Support Vector Machines}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_svm.pdf}
+        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_svm.pdf}
     \end{figure}
 \end{frame}
 
@@ -271,7 +283,7 @@
     \framesubtitle{Feed-forward Neural Networks}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_ffnn.pdf}
+        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_ffnn.pdf}
     \end{figure}
 \end{frame}
 
@@ -281,14 +293,14 @@
     \framesubtitle{Hierarchical Feed-forward Neural Networks}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{05_mean_conf_mat_hffnn.pdf}
+        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_hffnn.pdf}
     \end{figure}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results}
     \framesubtitle{Comparison Between The Models}
-    \includegraphics[width=\textwidth]{05_precision_recall_51_classes.pdf}
+    \includegraphics[width=\textwidth]{imgs/05_precision_recall_51_classes.pdf}
 \end{frame}
 
 \begin{frame}
@@ -298,11 +310,11 @@
     \texttt{the quick brown fox jumped over the lazy dog}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{05_pred_plot_0000_to_9420_full_text.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_pred_plot_0000_to_9420_full_text.pdf}
     \end{figure}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{05_pred_plot_0900_to_1800_quick.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_pred_plot_0900_to_1800_quick.pdf}
     \end{figure}
 \end{frame}
 
@@ -312,7 +324,7 @@
     add some plot showing the inference speed
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{todo}
+        \includegraphics[width=\textwidth]{imgs/todo}
     \end{figure}
 \end{frame}
 
