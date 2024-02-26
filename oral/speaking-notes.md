@@ -163,7 +163,7 @@ not recall)
 
 ### Precision, Recall, $F_1$-score
 
-- Row normalised, read of the recall
+- Row normalised, read off the recall
 
 # Literature Review
 
