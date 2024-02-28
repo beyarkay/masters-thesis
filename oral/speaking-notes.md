@@ -190,6 +190,8 @@ because they're popular"
 
 - Gesture classification has also been done with WiFi and with Vision, we won't
   be talking about that here.
+- Describe the dataset of the literature, it being public, and how many papers
+  were surveyed
 
 ## Seminal work
 
@@ -201,13 +203,81 @@ because they're popular"
 
 ## Tech used
 
+- This is a swarmplot
+  - Each point represents one research paper
+  - The y-axis shows the technology used in that research paper
+  - The x-axis shows the publication year of that paper
+  - The colour of each point shows the number of citations
+  - If there are multiple papers published in the same year that use the same
+    technology, they are clustered (or "swarmed") together along the same
+    horizontal line.
+- This plot shows the hardware used for various glove-based systems over time.
+- Flex sensors used to be popular, but accelerometers are now so cheap and
+  accurate that they are a very popular choice.
+  - This is why I used accelerometers for Ergo
+
 ## Number of classes
 
-## Model(s) used
+- This plot shows the number of gesture classes recognised by various research
+  papers. Note that a log-scale is used due to the large range of classes.
+- The three papers with around 5000 classes is Wang Chunli, Gao Wen, Ma Jiyong
+  (Chinese Sign Language) but it was not in real time and presented a very
+  complicated composite model architecture
+- The majority of experiments are able to classify fewer than 30 gestures, not
+  allowing for full human-language communication.
+- Ergo can recognise 50 different gestures, allowing for full English keyboard
+  input including letters, numerals, punctuation, and control characters
+
+## Algorithms used
+
+- NN and FFNN based approaches are common
+- HMM based approaches are also common
+- Support Vector Machines are different from the neural-network based
+  approaches but still commonly used.
+- With HMMs, SVMs, and NNs a wide variety of different modelling algorithms are
+  used.
+- CuSUM is used as a baseline algorithm so that the performance of any other
+  algorithm can be reasonably be compared
+- The outliers are XXX
 
 ## Gesture fidelity
 
+- Not all gestures are created equal. It is much easier to recognise a
+  "gesture" that just requires the user to wave their arms than to recognise a
+  subtle finger movement.
+  - This will be referred to as the gesture's _fidelity_.
+  - Gestures requiring arm-level fidelity could be performed with a full-hand
+    plaster cast (such as waving or drawing letters in the air).
+  - Gestures requiring hand-level fidelity could be performed with a heavy
+    woollen mitten (such as making a fist or swiping back and forth).
+  - Gestures requiring hand-level fidelity require full finger motion, such
+    as most sign language signs
+- Most research papers do not explicitly acknowledge the fidelity of their
+  gestures, so comparisons are difficult to make.
+- While finger-level fidelity poses more technical challenges, it also permits
+  a greater number of unique gestures to be performed.
+- The gestures that Ergo can recognise are finger-level, such that more
+  gestures can be recognised.
+
 ## Explicit or implicit segmentation
+
+- Another unspoken differentiator is gesture segmentation, or the end-point
+  problem
+- For a user-friendly product, a user should be able to perform gestures
+  without having to manually indicate the start or end of the gesture.
+- That is, the algorithm should implicitly segment the continuous stream of
+  data into gesture and non-gesture portions.
+- However, performing implicit segmentation often increases the difficulty of
+  the problem,
+  - by adding an additional class to be recognised and
+  - by often introducing a large imbalance in the class proportions
+- Explicit segmentation requires the user to mark the start and end of each
+  gesture.
+  - Often this is not explicitly stated in the paper, and the researcher simply
+    records a continuous stream of data that later gets manually segmented
+    before training a classification algorithm
+- To improve the user experience, Ergo will not require the user to manually
+  mark the start and end of each gesture.
 
 # Methodology
 
