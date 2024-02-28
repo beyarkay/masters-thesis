@@ -263,11 +263,9 @@
     \frametitle{Methodology}
     \framesubtitle{Class 50 - Background Noise}
 
-    TODO: this figure should be labelled with the true class labels for each
-    time step
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{imgs/05_sensors_over_time_3230_30}
+        \includegraphics[width=0.8\textwidth]{imgs/04_sensors_over_time.pdf}
     \end{figure}
 \end{frame}
 
@@ -280,13 +278,18 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Methodology}
+    \centering{Hierarchical Feed-Forward Neural Networks}
+\end{frame}
+
 \section{Results}
 \begin{frame}
     \frametitle{Results}
     \framesubtitle{Cumulative Sum}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_cusum.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_mean_conf_mat_cusum.pdf}
     \end{figure}
 \end{frame}
 
@@ -295,7 +298,7 @@
     \framesubtitle{Hidden Markov Models}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_hmm.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_mean_conf_mat_hmm.pdf}
     \end{figure}
 \end{frame}
 
@@ -304,7 +307,7 @@
     \framesubtitle{Support Vector Machines}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_svm.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_mean_conf_mat_svm.pdf}
     \end{figure}
 \end{frame}
 
@@ -313,7 +316,7 @@
     \framesubtitle{Feed-forward Neural Networks}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_ffnn.pdf}
+        \includegraphics[width=0.8\textwidth]{imgs/05_mean_conf_mat_ffnn.pdf}
     \end{figure}
 \end{frame}
 
@@ -323,7 +326,7 @@
     \framesubtitle{Hierarchical Feed-forward Neural Networks}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.7\textwidth]{imgs/05_mean_conf_mat_hffnn.pdf}
+        \includegraphics[width=0.9\textwidth]{imgs/05_mean_conf_mat_hffnn.pdf}
     \end{figure}
 \end{frame}
 
@@ -340,21 +343,27 @@
     \texttt{the quick brown fox jumped over the lazy dog}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{imgs/05_pred_plot_0000_to_9420_full_text.pdf}
+        \includegraphics[width=\textwidth]{imgs/05_pred_plot_0000_to_9420_full_text.pdf}
     \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results}
+    \framesubtitle{Real-world typing}
+    \centering
+    \texttt{quick }
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{imgs/05_pred_plot_0900_to_1800_quick.pdf}
+        \includegraphics[width=\textwidth]{imgs/05_pred_plot_0900_to_1800_quick.pdf}
     \end{figure}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results}
     \framesubtitle{Inference Speed}
-    add some plot showing the inference speed
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{imgs/todo}
+        \includegraphics[width=\textwidth]{imgs/inference_time_per_obs_per_model.pdf}
     \end{figure}
 \end{frame}
 

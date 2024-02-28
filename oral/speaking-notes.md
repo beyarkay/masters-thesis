@@ -6,6 +6,7 @@ Speaking notes
 
 - MS teams set up?
 - external examiner can hear & see the screen and can speak?
+- Don't forget a laser pointer!
 
 Notes from chatting with Trienko:
 
@@ -283,18 +284,40 @@ because they're popular"
 
 ## Circuit diagram
 
-10x accelerometers -> multiplexer (&why) -> Nano -> computer
-TODO: explain why the multiplexer
+- Ergo consists of two nearly identical modules, one for each hand
+- Each hand has 5x accelerometers mounted on the user's fingertips
+- The measurements from these accelerometers are passed to an Arduino Nano
+  Microcontroller.
+  - But the Arduino Nano does not have enough analogue input ports to read
+    all fifteen signal lines, so the measurements from the accelerometers
+    need to be passed through a multiplexer
+- The measurements from the left hand's Arduino is sent to the right hand
+- The data from both hands is combined in the right hand's Arduino, and this
+  data is then sent to the computer where it is read and stored to disc or used
+  in live gesture processing.
 
 ## Gestures to Keystrokes
 
+- For now we will assume the classification algorithm is a black box that can
+  do its job perfectly.
+- Once we know what gesture was performed, our job is not done, we still need
+  to convert gestures into keystrokes
 - 50 gestures required for full keyboard input
-  - numerals, punctuation, letters, white space, control characters)
 - Use ten fingers and five orientations
+- 0deg through 180deg, and ten fingers
+- Exactly which gesture is matched with which keystroke is designed such that
+  a QWERTY keyboard user can easily pick up.
+- The columns of the top table shows the finger used in the gesture
+- The rows show the orientation of the hands
+- The cells show what keystroke is emitted
+- Note how it is nearly identical to the QWERTY keyboard
+- This allows a new user to use their knowledge of the QWERTY keyboard when
+  learning how to use Ergo
 
 ## Gesture indices
 
-- Each gesture is given an index, between 0 and 49 (inclusive)
+- To decouple the gestures from the keystrokes, each gesture is given an index,
+  between 0 and 49 (inclusive)
 - Gestures are labelled semantically, so that the tens digit corresponds to the
   orientation of the hands and the units digit corresponds to the finger being
   flexed.
@@ -304,77 +327,168 @@ TODO: explain why the multiplexer
 
 ## Class 50 - Background Noise
 
-- Explain what class 50 is
-- Explain that it's important and will come up later
-- Explain that most time steps are labelled as gesture 50, the minority are
-  split between the other 50 classes.
+- As mentioned in the literature review, Ergo does not require the user to
+  explicitly indicate when a gesture starts and ends, it is figured out
+  automatically.
+- This means that we actually need one extra class, class 50, to represent the
+  background noise present between gestures.
+- Here's an example slice of some data from Ergo
+- The top plot shows one line per sensor, with time on the x axis and the
+  raw sensor readings on the y axis
+- The bottom plot is a heat map, with the colour of each cell showing the
+  sensor reading and the y-axis indicating the sensor
+- Both plots show the same data
+- The plots show the data as two gestures were being performed (indicated by
+  the black lines), gestures 4 and then 0.
+- Even though a gesture takes a period of time to perform, only the start of
+  a gesture is labelled. All other time steps are labelled as gesture 50, here
+  indicated by a period `.`
+- 97% of the dataset is labelled as belonging to gesture 50
 
 ## Data Windowing
 
-TODO
-
-Emphasis that we want 50 gestures for full keyboard input (numerals,
-punctuation, letters, white space, control characters). We have 10 fingers, so
-lets do the Cartesian product with 5 orientations.
-
-Spend lots of time describing how the gestures work, that you came up with them
-yourself, and that they are designed to be easy for the lay-person to learn.
-Clearly explain how the mapping is similar to the qwerty keyboard
-
-Elaborate on how the classifier makes 40 predictions per second, and that the
-gesture label is positioned at the start of the gesture. Add a nice graphic for
-this (maybe 4.1 paired with gesture labels?). Explain that all other gestures are labelled as gesture 50. Emphasis that
-this will be important later on as the models will struggle with gesture 50.
-
-Add in Figure 4.2 that explains how the full dataset gets windowed. do this
-before explaining how each model is trained.
-
-Just say that hyperparameter optimisation was done via random search, don't go into the
-details.
-
-## Hyperparameter optimisation
-
-Done via random search
+- The continuous stream of data is partitioned into windows.
+- Each window is 20 consecutive time steps in length
+- Note that each $t$ in this diagram represents a vector of 30 measurements
 
 ## HFFNN
 
-also need to describe these
+- One additional model architecture is introduced
+- A Hierarchical model, where
+  - one neural net is used to detect whether or not a gesture is present,
+  - and then another neural net is used to detect which gesture is present,
+    given that the first NN things a gesture is indeed present
 
 # Results
 
-Maybe add a quick refresher about what a good confusion matrix looks like
-
 ## CuSUM
+
+- All models were tested over multiple hyperparameter combinations.
+- Models were tested on 3 different datasets:
+  - 5-classes: to test that the model is working
+  - 50-classes: excludes the background class, equivalent to explicit
+    segmentation, easier task
+  - 51-classes: Includes all classes, even the background class 50. The
+    "real" dataset, indicative of real-world performance.
+- In order to visualise the performance of multiple models, the confusion
+  matrices for all models were calculated, weighted by the $F_1$-score of that
+  model, and then summed together.
+
+  - The resulting confusion matrices can be seen as a weighted average of all
+    confusion matrices.
+
+- From the top left confusion matrix you can see that the CuSUM model somewhat
+  accurately classifies the 5-class dataset, however it fails to accurately
+  classify the 50 and 51-class datasets.
+- With 50 classes, it confuses the orientation of the two hands together,
+  leading to the chequerboard pattern.
+- with 51 classes, it also confuses the orientations of the hands, but also
+  frequently classifies a background observation as a non-background
+  observation.
 
 ## HMMs
 
+- HMMs also perform somewhat accurately with five classes and with 50 classes,
+  but performed very poorly with 51-classes
+- This was largely a computational problem.
+  - The 51-class dataset is approximately 40 times larger than the 50-class
+    dataset due to the addition of class 50.
+  - The model training procedure for HMMs does not scale well as the number
+    of observations increases, and the computational limits of the training
+    hardware were reached before the 51 HMMs could be trained on the full
+    dataset.
+
 ## SVMs
+
+- SVMs performed very well on the 5, 50, and 51-class datasets
+- The red diagonal lines are the SVM getting the finger correct but incorrectly
+  predicting the orientation of the gesture
+- The SVMs also often predict that a class-50 observation belongs to a gesture
+  class.
 
 ## FFNNs
 
+- The NNs perform well on all datasets
+- Their performance was the most varied, there were many hyperparameters which
+  could affect the performance of the NNs
+- Many FFNNs performed poorly, but some performed very well.
+
 ## HFFNNs
 
-For each of the models:
+- The HFFNNs were not evaluated on the 5- and 50- class datasets as they
+  require a background class, which is only present in the 51-class dataset.
+- The HFFNNs performed well
 
-- CuSUM: incl figure 5.1, show that it works for 5 classes but not the others
-  (explain the confusion matrix again). Explain why CuSUM fails
-- Other models?...
+## Comparison between the models
 
-Need to show some plot that shows the models work in real time. Include
-stripplot for validation inference time and a line at 0.025s, showing that most
-models succeed in this metric.
+- Each dot shows a single model.
+- The left plot shows the $F_1$ score of all models
+- The right plot shows the precision and recall of all models
+- Naturally, the colours are consistent, so the blue dots represent the FFNN on
+  both plots.
+- The best FFNNs outperformed all other models.
+- The best HFFNNs outperformed all models except the FFNNs
+  - The addition of another NN to aid in background detection did not help
+- The SVMs performed well, with low variance.
+- The HMMs and CuSUM models failed to learn the data, as previously mentioned.
+- The best performing model (a FFNN) has an $F_1$-score of 0.75.
 
-Skip over the test set, just say the F1 score and that it shows nothing new
+## Real-world typing (1)
 
-Go to the real-world dataset and explain how it works in practice. Explain that
-it's good, and that there's a post-processing step that ensures that if a
-letter is predicted sequentially, only the first prediction is made.
+- To make this more intuitive, here's an example of what typing with the best
+  model looks like
+- This data shows the phrase "the quick brown dog jumped over the lazy dog"
+  being typed using Ergo.
+- But we'll focus in on a small snippet, the word "quick "
+
+## Real-world typing (2)
+
+- The bottom line plot shows the raw sensor readings over time
+- The top plot shows the keystroke probabilities as predicted by the best
+  performing model over time
+- Each of the vertical lines is actually a single instant where the model
+  predicted an actual gesture as being typed.
+- The green boxes indicate a correct prediction for a certain keystroke, along
+  with the model's predicted probability of that keystroke.
+- The red boxes indicate incorrect or low-confidence predictions.
+  - We can see that the model gets every keystroke correct, but occasionally
+    gets the exact timing of the keystroke incorrect, leading to
+    low-probability
+
+## Inference Speed
+
+For real-time predictions, each observation must be predicted in less than
+1/40th of a second (the amount of time the hardware requires to take a
+measurement.
+
+Only some of the HMMs fail this metric, all other classifiers easily pass. The
+failed HMMs had different hyperparameters to those which passed.
 
 # Conclusion
-
-Answer the research questions one by one, with reference to the parts of the
-talk that answered them
 
 One of the contributions of this work is the largest labelled
 accelerometer-based dataset publicly available. Hopefully will lead to more
 developments and better insight
+
+- Evaluate hardware performance
+  - The hardware is able to take measurements at 40 times per second, more
+    than fast enough for human gesture measurement.
+- Compare algorithm performance
+  - The FFNNs performed the best overall
+  - HFFNNs performed well, but required significantly more resources to train
+  - CuSUM was unable to learn the data
+  - HMMs were too computationally expensive and had to be dismissed
+  - SVMs performed well, but not the best
+- Extract gestures from background noise
+  - By comparing the HFFNNs (which had a dedicated model for extracting
+    gestures) and the FFNNs (which had to learn to extract gestures) we can
+    see that using a separate NN model to extract gestures does not improve
+    performance
+- Assess impact of noise on performance
+  - All models showed a substantial decrease in performance when the
+    background noise (gesture 50) was added.
+  - This indicates that requiring a model to implicitly recognise gestures
+    from background noise is a difficult task
+- Assess classification speed
+  - Only some of the HMM models were too slow to meet the real-time benchmark.
+    The fastest models were the FFNNs.
