@@ -161,9 +161,21 @@ not recall)
 - Similarly, the cells along the diagonal of the normalised matrix is the
   proportion of correctly classified observation.
 
-### Precision, Recall, $F_1$-score
+### Precision, Recall
 
-- Row normalised, read off the recall
+- Precision looks at all the predictions for a certain class, and tells you
+  what proportion were classified correctly
+
+- Recall looks at all the observations belonging to a certain class, and tells
+  you what proportion were classified correctly
+
+- Rows are the recall, columns are the precision
+
+### $F_1$-score
+
+- A way of describing both precision and recall
+- One metric to evaluate a multi-class classifier
+- A model has to good at both precision and recall to have a high $F_1$-score
 
 # Literature Review
 
@@ -176,9 +188,16 @@ Don't skimp on the literature review. The lit review explains why you did what
 you did (wrt tech, hardware, etc). Explain this explicitly, "I used HMMs
 because they're popular"
 
+- Gesture classification has also been done with WiFi and with Vision, we won't
+  be talking about that here.
+
 ## Seminal work
 
-Give a slide on Sturman, initial surveys, how the field started, etc
+- Seminal review paper by Sturman and Zeltzer in 1994 following Sturman's 1992
+  dissertation.
+  - They focussed on the available hardware systems at the time.
+- Another survey was done by LaViola in 1999 who focussed more on the models
+  and techniques for glove and vision-based classification
 
 ## Tech used
 
