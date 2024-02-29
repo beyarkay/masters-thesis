@@ -144,7 +144,7 @@ corresponding weight $w_1, w_2, \ldots, w_n$ and the results are summed
 together:
 
 \begin{equation}
-    \text{output} = \sum_{i=1}^n x_i w_i.
+    \text{output} = \sum_{i=1}^n x_i w_i
 \end{equation}
 
 Rosenblatt originally required that the inputs and output be either one or
@@ -356,7 +356,7 @@ gradient:
     w_{jk}^l \gets w_{jk}^l - \eta \frac{\partial C}{\partial w_{jk}^l},
 \end{equation}
 \begin{equation}
-    b_j^l \gets b_j^l - \eta \frac{\partial C}{\partial b_j^l}.
+    b_j^l \gets b_j^l - \eta \frac{\partial C}{\partial b_j^l}
 \end{equation}
 
 Note that '$\gets$' is being used to indicate an update to the weight $w_{jk}^l$
@@ -386,14 +386,14 @@ the repeated application of a function on the outputs of the previous layer's
 neuron, like so:
 
 \begin{equation}
-    a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right).
+    a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right)
 \end{equation}
 
 By defining a matrix of weights $\bm{W}^l$, a vector of biases $\bm{b}^l$, and a vector
 of activations $\bm{a}^l$, we can rewrite the above equation in matrix notation as
 
 \begin{equation}
-    \bm{a}^{l} = \sigma\left( \bm{W}^{l} \bm{a}^{l-1} + \bm{b}^l \right).
+    \bm{a}^{l} = \sigma\left( \bm{W}^{l} \bm{a}^{l-1} + \bm{b}^l \right)
 \end{equation}
 
 We will also define an intermediate quantity, named the pre-activation, as
@@ -403,7 +403,7 @@ Using the chain rule, the partial derivative of the cost function with respect
 to an arbitrary weight $w_{jk}^l$ is expanded to include $z_j^l$:
 
 \begin{equation}
-    \frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial w_{jk}^l}.
+    \frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l} \frac{\partial z_j^l}{\partial w_{jk}^l}
 \end{equation}
 
 This can then be rewritten in terms of the activation of the previous layer
@@ -415,7 +415,7 @@ $a_k^{l-1}$:
         \frac{\partial \left(
                 w_{jk}^l a_{j}^{l-1} + b_j^l
         \right)}{\partial w_{jk}^l}
-    = \frac{\partial C}{\partial z_j^l} a_k^{l-1}.
+    = \frac{\partial C}{\partial z_j^l} a_k^{l-1}
 \end{equation}
 
 The partial derivative of the cost function with respect to an arbitrary bias
@@ -440,7 +440,7 @@ of the last layer and the derivative of the activation function:
     \frac{\partial a_j^L}{\partial z^L_j}
     = \frac{\partial C}{\partial a_j^L}
     \frac{\partial \left( \sigma(z_j^L) \right)}{\partial z^L_j}
-    = \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L).
+    = \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)
 \end{align}
 
 Note that both $\frac{\partial C}{\partial a_j^L}$ and $\sigma'(z_j^L)$ are
@@ -452,7 +452,7 @@ C}{\partial a_j^L}$ is simply $a^L_j - y_j$:
 
 \begin{align}
     \frac{\partial C}{\partial a_j^L} &= \frac{\partial }{\partial a_j^L}
-    \left[ \frac{1}{2} \sum_j ||y_j - a_j^L||^2 \right] = a^L_j - y_j.
+    \left[ \frac{1}{2} \sum_j ||y_j - a_j^L||^2 \right] = a^L_j - y_j
 \end{align}
 
 $\sigma'(z_j^L)$ is also efficiently calculated, as the activation function
@@ -464,7 +464,7 @@ activation function, the derivative is $\sigma(x) (1 - \sigma(x))$:
     &= \frac{e^{-x}}{\left(1 + e^{-x}\right)^2} \\
     &= \sigma(x) \cdot \frac{(1 + e^{-x}) - 1}{1 + e^{-x}}  \\
     &= \sigma(x) \cdot \left( \frac{1 + e^{-x}}{1 + e^{-x}} - \frac{1}{1 + e^{-x}} \right) \\
-    &= \sigma(x) (1 - \sigma(x)).
+    &= \sigma(x) (1 - \sigma(x))
 \end{align}
 
 Since $\sigma'$ is easily calculated and $z_j^L$ does not need to be
@@ -488,7 +488,7 @@ result:
         &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} \left[
         0 + \ldots + w_{ij}^{l+1} \sigma'(z_j^l) + \ldots + 0
         \right] \\
-        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} w_{ij}^{l+1} \sigma'(z_j^l).
+        &= \sum_i \frac{\partial C}{\partial z_i^{l+1}} w_{ij}^{l+1} \sigma'(z_j^l)
 \end{align}
 
 Note that the partial derivative of the sum over $k$ ($\frac{\partial}{\partial
@@ -506,7 +506,7 @@ Backpropogation then proceeds as follows:
 2. Calculate $\frac{\partial C}{\partial z_j^L}$:
 
 \begin{equation}
-    \frac{\partial C}{\partial z_j^L} = \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L).
+    \frac{\partial C}{\partial z_j^L} = \frac{\partial C}{\partial a_j^L} \sigma'(z_j^L)
 \end{equation}
 
 3. Move backwards through the layers, use the value of $\frac{\partial
@@ -555,7 +555,7 @@ of the neuron in the previous layer, as given by Equation \eqref{eqn:dC/dw=dC/dz
 
 \begin{equation}
     \frac{\partial C}{\partial w_{jk}^l} = \frac{\partial C}{\partial z_j^l}
-    a_k^{l-1}.
+    a_k^{l-1}
 \end{equation}
 
 This means that if a neuron's activation $a_k^{l-1}$ is close to zero, then the
@@ -731,7 +731,7 @@ process assumption allow us to encode the transitions between states as a
 _state transition matrix_:
 
 \begin{equation}
-    \bm{A} \in \mathbb{R}^{(|S| + 1) \times (|S| + 1)}.
+    \bm{A} \in \mathbb{R}^{(|S| + 1) \times (|S| + 1)}
 \end{equation}
 
 Where:
@@ -803,7 +803,7 @@ $X$, which means that $\pr(Y|X) = \pr(Y)$. This gives us the definition of
 independence of two events from the chain rule of probability:
 
 \begin{equation}
-    X \indep Y \iff \pr(X \cap Y) = \pr (X) \cdot \pr(Y).
+    X \indep Y \iff \pr(X \cap Y) = \pr (X) \cdot \pr(Y)
 \end{equation}
 
 From this, we write a statement for the probability of the occurrence of every
@@ -828,7 +828,7 @@ initial state $s_0$ takes on the initial observation $z_0$ with probability 1:
 \intertext{Expressing the probabilities using the transition matrix $\bm{A}$,
 recalling that $A_{ij}$ is the probability of a transition from state $i$ to
 state $j$}
-    &= \prod_{t=1}^{T} A_{z_{t-1} z_t}.
+    &= \prod_{t=1}^{T} A_{z_{t-1} z_t}
 \end{align}
 This indicates that the probability of a sequence of states $\pr (z_t \cap
 z_{t-1} \cap \ldots \cap z_1 | \bm{A})$ is simply the product of the
@@ -855,7 +855,7 @@ the likelihood function $\mathbb{L}(\bm{A}|\bm{z})$  as the probability of obser
 $\bm{z}$ given the parameters $\bm{A}$:
 
 \begin{equation}
-    \mathbb{L}(\bm{A}|\bm{z}) := \pr(\bm{z}|\bm{A}).
+    \mathbb{L}(\bm{A}|\bm{z}) := \pr(\bm{z}|\bm{A})
 \end{equation}
 
 We would like to estimate the parameters $\bm{A}$ which maximise the likelihood
@@ -864,7 +864,7 @@ of a given sequence of observations $\bm{z}$.
 Practically, it is often more convenient to work with the log-likelihood:
 
 \begin{equation}
-    l(\bm{A}|\bm{z}) := \log \mathbb{L}(\bm{A}|\bm{z}).
+    l(\bm{A}|\bm{z}) := \log \mathbb{L}(\bm{A}|\bm{z})
 \end{equation}
 
 A value which maximises the log-likelihood will also maximise the likelihood,
@@ -940,7 +940,7 @@ which implies that
     0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
     1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
     \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-             &= \sum_{t=1}^T [z_{t-1} = s_i].
+             &= \sum_{t=1}^T [z_{t-1} = s_i]
 \end{align}
 
 When we substitute the expression for $\alpha_i$ into Equation \eqref{eqn:Aij}
@@ -1027,7 +1027,7 @@ the element $B_{jk}$ represents the probability of $v_k$ being emitted given
 that the model is in state $s_j$.
 
 \begin{equation}
-    B_{jk} := \pr(x_t = v_k | z_t = s_j).
+    B_{jk} := \pr(x_t = v_k | z_t = s_j)
 \end{equation}
 
 ### The probability of observing a certain sequence
@@ -1061,7 +1061,7 @@ observed all $x_i$ up until time $t$ and 2) that the HMM is in state $s_i$ at
 time $t$:
 
 \begin{equation*}
-    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap \bm{B}).
+    \alpha_i(t) := \pr(x_1 \cap x_2 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap \bm{B})
 \end{equation*}
 
 If we knew the value of $\alpha_i(t)$, we could express the probability of a
@@ -1093,7 +1093,7 @@ of 1) being in a state $s_i$ at time $t$ and 2) the sequence $x_{t+1}, \ldots,
 x_T$ given parameters of an HMM $\bm{A}$ and $\bm{B}$, which is defined as:
 
 \begin{equation}
-    \beta_i(t) := \pr(x_T \cap x_{T-1} \cap \ldots \cap x_{t+1} \cap z_t = s_i | \bm{A} \cap \bm{B}).
+    \beta_i(t) := \pr(x_T \cap x_{T-1} \cap \ldots \cap x_{t+1} \cap z_t = s_i | \bm{A} \cap \bm{B})
 \end{equation}
 
 This procedure is very similar to the forward procedure and is given in
@@ -1207,7 +1207,7 @@ and $\beta_i(t)$:
                     \pr(x_1 \cap \ldots \cap x_t \cap z_t = s_i | \bm{A} \cap  \bm{B})
                     \pr(x_{t+1} \cap \ldots \cap x_T \cap z_t = s_i | \bm{A} \cap \bm{B})
                 }{ \pr (\bm{z} | \bm{A} \cap \bm{B})} \\
-                =& \frac{\alpha_i(t)\beta_i(t)}{ \sum^{|S|}_{j=1} \alpha_j(t)\beta_j(t)}.
+                =& \frac{\alpha_i(t)\beta_i(t)}{ \sum^{|S|}_{j=1} \alpha_j(t)\beta_j(t)}
 \end{align}
 
 Similarly, Bayes' theorem can be used to calculate $\xi_{ij}(t)$ based on
@@ -1220,7 +1220,7 @@ $\alpha_i(t)$ and $\beta_i(t)$:
         \alpha_i(t) A_{i j} \cdot \beta_j(t+1) B_{j\,z_{t+1}}
     }{
         \sum_{k=1}^{|S|} \sum_{l=1}^{|S|} \alpha_k(t) A_{k l} \cdot \beta_l(t+1) B_{l\,z_{t+1}}
-    }.
+    }
 \end{align}
 
 With these temporary values, we can update the parameters of the HMM:
@@ -1383,7 +1383,7 @@ direction from the negative hyperplane to the positive hyperplane.
 We then known that this point in the positive hyperplane satisfies the equation
 
 \begin{equation}
-    \bm{w} (x_0 + d \frac{w}{\|w\|}) - b = 1.
+    \bm{w} (x_0 + d \frac{w}{\|w\|}) - b = 1
 \end{equation}
 
 Expanding and simplifying this equation allows us to calculate the value of $d$
@@ -1406,7 +1406,7 @@ as an optimisation problem like:
 \end{equation}
 subject to the constraints
 \begin{equation}
-    y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}.
+    y_i (\bm{w}^T x_i - b) \ge 1 \quad \forall i \in {1, \ldots, n}
 \end{equation}
 
 
@@ -1416,7 +1416,7 @@ misclassified, and between 0 and 1 if it is correctly classified but is within
 the SVM's margin. This can be succinctly expressed as:
 
 \begin{equation}
-    \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b)) \quad \forall i \in {1, \ldots, n}.
+    \xi_i = \max(0, 1 - y_i(\bm{w} x_i + b)) \quad \forall i \in {1, \ldots, n}
 \end{equation}
 
 The soft-margin objective function can then be defined with a regularisation
@@ -1431,7 +1431,7 @@ function is as follows:
         & \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i \\
     \text{subject to }
         &y_i \cdot (\mathbf{w}^T x_i + b) \ge 1 - \xi_i \\
-    \text{ and } &\, \xi_i \ge 0, \forall i \in {1, \ldots, n}.
+    \text{ and } &\, \xi_i \ge 0, \forall i \in {1, \ldots, n}
 \end{align}
 
 # Cumulative Sum \label{sec:02-cumulative-sum}
@@ -1502,7 +1502,7 @@ The accuracy of a classifier is defined as the number of correct predictions
 divided by the total number of predictions:
 
 \begin{equation}
-    \text{Accuracy} = \frac{1}{n}\sum_{j=1}^{n} [t_j = p_j].
+    \text{Accuracy} = \frac{1}{n}\sum_{j=1}^{n} [t_j = p_j]
 \end{equation}
 
 This is commonly used for evaluating classifiers, but has some limitations for
@@ -1526,7 +1526,7 @@ number of times a classifier predicted an observation that belongs to class $i$
 as belonging to class $j$. The element-wise definition of a confusion matrix is
 
 \begin{equation}
-    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [(t_k = j ) \cap (p_k = i)].
+    \text{Confusion Matrix}_{ij} = \sum_{k=1}^{n} [(t_k = j ) \cap (p_k = i)]
 \end{equation}
 
 An example confusion matrix is given in the top-left plot of Figure
@@ -1608,7 +1608,7 @@ as the number of labels for which both the ground truth and the predicted class
 are $i$:
 
 \begin{equation}
-    \text{TP}_i = \sum_{j=1}^n [t_j = p_j = i].
+    \text{TP}_i = \sum_{j=1}^n [t_j = p_j = i]
 \end{equation}
 
 $\text{TN}_i$ is the number of true negatives for class $i$ and is defined as
@@ -1616,7 +1616,7 @@ the number of labels for which both the ground truth and the predicted class
 are _not_ $i$:
 
 \begin{equation}
-    \text{TN}_i = \sum_{j=1}^n [t_j \neq i \land p_j \neq i].
+    \text{TN}_i = \sum_{j=1}^n [t_j \neq i \land p_j \neq i]
 \end{equation}
 
 $\text{FP}_i$ is the number of false positives for class $i$ and is defined
@@ -1624,7 +1624,7 @@ as the number of labels for which the predicted class is $i$ but the true
 label is _not_ $i$:
 
 \begin{equation}
-    \text{FP}_i = \sum_{j=1}^n [p_j = i \land t_j \neq i].
+    \text{FP}_i = \sum_{j=1}^n [p_j = i \land t_j \neq i]
 \end{equation}
 
 $\text{FN}_i$ is the number of false negatives for class $i$ and is defined
@@ -1632,14 +1632,14 @@ as the number of labels for which the predicted label is not $i$ but the true
 label is $i$:
 
 \begin{equation}
-    \text{FN}_i = \sum_{j=1}^n [p_j \neq i \land t_j = i].
+    \text{FN}_i = \sum_{j=1}^n [p_j \neq i \land t_j = i]
 \end{equation}
 
 The precision for some class $i$ can be intuitively understood as a metric that
 penalises classifiers which too frequently predict class $i$. It is defined as
 
 \begin{equation}
-    \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}.
+    \text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}
 \end{equation}
 
 Likewise, the recall for some class $i$ can be understood as a metric that
@@ -1647,7 +1647,7 @@ penalises classifiers which do not predict class $i$ frequently enough. It is
 defined as
 
 \begin{equation}
-    \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}.
+    \text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}
 \end{equation}
 
 The $F_1$-score for some class $i$ ($F_{1 i}$) is defined as the harmonic

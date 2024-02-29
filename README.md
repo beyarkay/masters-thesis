@@ -18,9 +18,6 @@ They have been summarised:
 > Many pages of text are overflowing into the right hand margin. `\mbox`
 > hyphenates overflowing words
 
-> Full stops were not added to stand-alone equations consistently. The examiner
-> doesn't want full stops at the end of equations.
-
 > Foot note in middle of the page on page 61 (issue with LaTeX floating
 > environments, figure 4.2)
 
