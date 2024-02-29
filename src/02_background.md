@@ -1657,7 +1657,7 @@ mean of the precision and recall of that class:
     F_{1 i} = 2 \cdot \frac{
             \text{Precision}_i \cdot \text{Recall}_i
         }{
-            \text{Precision}_i + \text{Recall}_I
+            \text{Precision}_i + \text{Recall}_i
         }
 \end{equation}
 

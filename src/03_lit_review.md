@@ -148,8 +148,8 @@ authors\footnote{\citealt{
     jacobsenDesignUtahDextrous1986,
     marcusSensingHumanHand1988}}.
 
-**Flex sensors** whichmeasure the bend of a short plastic strip were first placed
-across joints and used successfully in the late 1980s and early
+**Flex sensors** which measure the bend of a short plastic strip were first
+placed across joints and used successfully in the late 1980s and early
 1990s\footnote{\citealt{
     zimmermanHandGestureInterface1987,
     abramsgentileentertainmentPowerGlove1989,
