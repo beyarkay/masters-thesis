@@ -15,9 +15,6 @@ code for the project.
 On 13 February 2024, the following corrections and suggestions were improved.
 They have been summarised:
 
-> Many pages of text are overflowing into the right hand margin. `\mbox`
-> hyphenates overflowing words
-
 > Foot note in middle of the page on page 61 (issue with LaTeX floating
 > environments, figure 4.2) (NOTE: this seems to have fixed itself as other
 > changes were made to the PDF)
