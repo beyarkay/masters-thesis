@@ -120,12 +120,12 @@ segments.
 
 Glove-based gesture recognition is any gesture recognition system which gathers
 hand information using a device physically attached to the user's hands (or in
-rare cases, attached to their forearms).  Subsection
+rare cases, attached to their forearms).  Section
 \ref{sec:03-technologies-used} will discuss the technologies used in building
-glove-based systems. Subsection \ref{sec:03-surveys-of-the-literature} will provide an
-overview of the larger reviews of the literature. Subsection
+glove-based systems. Section \ref{sec:03-surveys-of-the-literature} will provide an
+overview of the larger reviews of the literature. Section
 \ref{sec:03-hardware-products} will discuss the hardware products used for
-glove-based systems. Subsection \ref{algorithms-used-for-gesture-recognition}
+glove-based systems. Section \ref{algorithms-used-for-gesture-recognition}
 reviews the algorithms used for glove-based gesture recognition.
 
 ## Technologies Used \label{sec:03-technologies-used}
@@ -348,7 +348,7 @@ however these reviews lack the depth of prior work.
 
 Affordable, off-the-shelf hand-measurement gloves allow researchers without
 expertise in electronics to explore the field of gesture recognition. This
-subsection explores hardware products which have been used for glove-based
+section explores hardware products which have been used for glove-based
 gesture recognition. Figure \ref{fig:03_hardware_for_gloves} shows the
 different kinds of hardware used over time for glove-based gesture recognition
 systems.
@@ -386,10 +386,10 @@ capture.
     \label{fig:03_experimental_television_center_computer_1969}
 \end{figure}
 
-The SayreGlove \citep{thomasa.defantiUSNEAR60341631977} is often cited as the
-first glove-based system. It used a combination of optical tubes which occluded
-light when bent and parallel conductive pads which touched and therefore
-conducted electricity when bent to sense the movement of the user's hand.
+The SayreGlove \citep{thomasa.defantiUSNEAR60341631977} used a combination of
+optical tubes which occluded light when bent and parallel conductive pads which
+touched and therefore conducted electricity when bent to sense the movement of
+the user's hand.
 
 Between the 1980s and the early 2000s there were three main commercially
 available products: the PowerGlove developed by
@@ -590,7 +590,7 @@ Neural Network was used to detect if there was a gesture in a particular
 observation, and then (conditional on a positive detection) a set of 5113 HMMs
 were used to recognise which gesture was in that observation. They applied a
 heavily modified version of the Viterbi algorithm (which they named the
-"lattice" Viterbi Algorithm) to efficiently evaluate the log-likelihood of the
+lattice Viterbi Algorithm) to efficiently evaluate the log-likelihood of the
 thousands of HMMs.
 
 # Vision- and WiFi-based Gesture Recognition \label{sec:03-vision-and-wifi-based-gesture-recognition}
@@ -687,7 +687,7 @@ zhaoRealtimeHeadGesture2017}.
     \includegraphics[width=\textwidth]{src/imgs/graphs/03_models_no_gloves}
     \caption[Models Used for Vision-based and WiFi-based Gesture Recognition]{Models
     used for recognising gestures in vision- and WiFi-based
-    systems over time. PCA stands for Principal Component Analysis.}
+    systems over time.}
     \label{fig:03_models_no_gloves}
 \end{figure}
 
