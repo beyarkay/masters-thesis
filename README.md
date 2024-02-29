@@ -19,9 +19,8 @@ They have been summarised:
 > hyphenates overflowing words
 
 > Foot note in middle of the page on page 61 (issue with LaTeX floating
-> environments, figure 4.2)
-
-> Some remnants of LaTeX code in document (page 106)
+> environments, figure 4.2) (NOTE: this seems to have fixed itself as other
+> changes were made to the PDF)
 
 > They _really_ didn't like the dim yellow used in the `Spectral` colour
 > palette, need to create a custom colour map to solve this. (or maybe I can

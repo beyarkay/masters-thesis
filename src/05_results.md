@@ -1100,7 +1100,7 @@ gestured as the model made predictions, all in real time:
 
 \begin{framed}
     \texttt{the quick brown fox jumped over the lazy dog}
-\end{framed
+\end{framed}
 
 The resulting dataset of the sensor data while typing this phrase has 9400
 observations. Figure \ref{fig:05_pred_plot_7400_to_8500_lazy} shows the
