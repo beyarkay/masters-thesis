@@ -15,8 +15,8 @@ code for the project.
 On 13 February 2024, the following corrections and suggestions were improved.
 They have been summarised:
 
-> Many pages of text are overflowing into the right hand margin. The `xurl`
-> package prevents URLs from overflowing and `\mbox` hyphenates overflowing words
+> Many pages of text are overflowing into the right hand margin. `\mbox`
+> hyphenates overflowing words
 
 > Full stops were not added to stand-alone equations consistently. The examiner
 > doesn't want full stops at the end of equations.

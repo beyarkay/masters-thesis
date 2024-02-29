@@ -28,9 +28,11 @@ Figures are used throughout this chapter to summarise salient findings but, for
 the sake of brevity, not every paper represented in the figures in this chapter
 is cited. The reader is directed to the Zenodo dataset containing the author's
 database of approximately 750 papers, theses, and websites which were used to
-construct these plots: https://zenodo.org/records/10209419. The code required
-to reproduce the figures is available on GitHub:
-https://github.com/beyarkay/masters-thesis.
+construct these plots: \url{https://zenodo.org/records/10209419}. The code
+required to reproduce the figures is available on GitHub:
+\url{https://github.com/beyarkay/masters-thesis}. A video demonstration is
+available on the video sharing website YouTube:
+\url{https://www.youtube.com/watch?v=vFsaH1TqNWo}
 
 # Overview \label{sec:03-overview}
 
