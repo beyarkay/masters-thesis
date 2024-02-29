@@ -55,23 +55,23 @@ in his 1959 paper studying the popular board game of checkers
 \citep{samuelStudiesMachineLearning1959}. The development of deep learning with
 AlexNet, described in \citealp{krizhevskyImageNetClassificationDeep2012} renewed interest
 in the field. Machine learning has solved many problems once thought
-impossible, beating humans at games such as Chess\citep{campbellDeepBlue2002},
+impossible, beating humans at games such as Chess \citep{campbellDeepBlue2002},
 Go \citep{silverMasteringGameGo2016}, StarCraft
-II\citep{vinyalsGrandmasterLevelStarCraft2019}, and Dota 2
+II \citep{vinyalsGrandmasterLevelStarCraft2019}, and Dota 2
 \citep{openaiDotaLargeScale2019}. Additionally, machine learning has
 solved or made substantial progress in tasks such as protein folding
 \citep{jumperHighlyAccurateProtein2021} and natural language processing
 \citep{openaiGPT4TechnicalReport2023}.
 
-A machine learning task can require varying levels of information about what the
-"correct" answer is, or how much supervision the machine learning algorithm
-gets as it learns from the data. _Supervised_ machine learning is where the
-machine learning model is provided with ideal output for a set of inputs and is
-required to learn the pattern connecting the inputs to the output.
-_Unsupervised_ machine learning is where the model is not provided with any
-desired output, but is required to learn the structure of the data. Hybrid
-approaches ("semi-supervised") are also possible, which combine elements of
-supervised and unsupervised learning.
+A machine learning task can require varying levels of information about what
+the "correct" answer is, or how much supervision the machine learning algorithm
+gets as it learns from the data \citep{nealPatternRecognitionMachine2007}.
+_Supervised_ machine learning is where the machine learning model is provided
+with ideal output for a set of inputs and is required to learn the pattern
+connecting the inputs to the output. _Unsupervised_ machine learning is where
+the model is not provided with any desired output, but is required to learn the
+structure of the data. Hybrid approaches ("semi-supervised") are also possible,
+which combine elements of supervised and unsupervised learning.
 
 Many supervised machine learning tasks can be divided into either a regression
 or a classification problem. A regression problem requires the estimation of a
@@ -106,12 +106,8 @@ the practical applications of using backpropagation to efficiently train ANNs.
 When asked about
 \citeauthor{rumelhartLearningRepresentationsBackpropagating1986}'s work, Werbos
 reported that he "[was] not accusing anyone of plagiarism"
-\citep[p\.251]{rodriguezHistoricalSociologyNeural1991} but nonetheless that he
+\citep[p\. 251]{rodriguezHistoricalSociologyNeural1991} but nonetheless that he
 did "believe that the idea did spread from me to the relevant places".
-Rumelhart firmly denied any knowledge of Werbos' work or that it had any
-influence on his 1986 paper, and that "As far as I know his work was entirely
-hidden, and nobody knew about
-it"\citep[p\.252]{rodriguezHistoricalSociologyNeural1991}.
 
 Regardless of the pedigree of backpropogation, its development brought ANNs
 from the realm of the theoretical to the land of the practical. Many different
@@ -121,23 +117,25 @@ introduced, such as the Long Short-Term Memory network for sequence learning
 convolutional neural network for image processing (introduced by
 \citealt{lecunGradientbasedLearningApplied1998}).
 
-This section on ANNs will first describe the perceptron in subsection
-\ref{perceptrons}. Then neural networks will be covered in subsection
+This section on ANNs will first describe the perceptron in section
+\ref{perceptrons}. Then neural networks will be covered in section
 \ref{neural-networks}. A mathematical description of how the weights and biases
-are tuned via gradient descent is given in subsection \ref{gradient-descent}.
+are tuned via gradient descent is given in section \ref{gradient-descent}.
 The method by which backpropogation allows for the efficient calculation of the
-gradients within a neural network is described in subsection
+gradients within a neural network is described in section
 \ref{backpropogation}, and some details about the loss function used for
 multi-class classification problems, cross entropy loss, are described in
-subsection \ref{categorical-cross-entropy-loss}. Section \ref{l2-normalisation}
+section \ref{categorical-cross-entropy-loss}. Section \ref{l2-normalisation}
 describes the L2 normalisation technique for regularisation of an ANN. Section
 \ref{dropout-regularisation} describes dropout regularisation.
 
 ## Perceptrons
 
-Artificial Neural Networks are made of perceptrons connected together. A
-perceptron accepts a finite-dimensional vector of real-valued inputs, applies
-some function, and produces a single real-valued output. To compute the output,
+Artificial Neural Networks are made of perceptrons connected together in such a
+fashion that the output of one layer of perceptrons is used as the input for
+the subsequent layer of perceptrons. A perceptron accepts a finite-dimensional
+vector of real-valued inputs, applies some function, and produces a single
+real-valued output. To compute the output,
 \cite{whitePrinciplesNeurodynamicsPerceptrons1963} proposed a weighting system
 whereby each of the input values $x_1, x_2, \ldots, x_n$ is multiplied by a
 corresponding weight $w_1, w_2, \ldots, w_n$ and the results are summed
@@ -159,8 +157,9 @@ weighted inputs passed some specified threshold value:
 \end{equation}
 
 Modern implementations of a perceptron have changed many aspects of
-Rosenblatt's initial description. The threshold is replaced with the
-combination of a scalar bias $b$ term and a comparison with zero:
+Rosenblatt's initial description \citep{nealPatternRecognitionMachine2007}. The
+threshold is replaced with the combination of a scalar bias $b$ term and a
+comparison with zero:
 
 \begin{equation}
     \text{output} = \begin{cases}
@@ -175,18 +174,25 @@ is used. The purpose of the activation function is to introduce a non-linearity
 such that the sequential combination of multiple perceptrons is not equivalent
 to one perceptron with a precisely chosen weights and bias (as would be the
 case if all perceptrons applied a linear transformation to their input). The
-activation function is applied to the result of the linear transformation like
-so:
+activation function $\sigma$ is applied to the result of the linear
+transformation $b + \sum_i w_i x_i$ like so:
 
 \begin{equation}
-    \text{output} = \sigma \left( \ b + \sum_i w_i x_i \right)
+    \text{output} = \sigma \left( b + \sum_i w_i x_i \right)
 \end{equation}
 
 Several different activation functions (each mapping to different
 domains) have been proposed such as \emph{tanh}
-\citep{rumelhartLearningRepresentationsBackpropagating1986} and ReLU
-\citep{nairRectifiedLinearUnits2010}. The first was the sigmoid activation
-function which is derived from the logistic function:
+\citep{rumelhartLearningRepresentationsBackpropagating1986}:
+\begin{equation}
+    \sigma_{\text{tanh}}(x) = \tanh(x)
+\end{equation}
+and ReLU \citep{nairRectifiedLinearUnits2010}:
+\begin{equation}
+    \sigma_{\text{ReLU}}(x) = \max(0, x)
+\end{equation}
+
+The first was the sigmoid activation function which is derived from the logistic function:
 
 <!-- NOTE graphic of the sigmoid function removed for space constraints
 \begin{figure}[!ht]
@@ -220,20 +226,20 @@ function which is derived from the logistic function:
 \end{equation}
 
 It is simple to calculate the derivative of the sigmoid activation function.
-This property will become useful when discussing backpropogation in subsection
+This property will become useful when discussing backpropogation in section
 \ref{backpropogation}.
 
 ## Artificial Neural Networks \label{neural-networks}
 
 When individual perceptrons are combined as the nodes of a directed acyclic
-graph, the graph is referred to as an Artificial Neural Network (ANN). In this
-ANN, the outputs of some perceptrons are redirected to become the inputs for
-other perceptrons. These perceptrons (or "neurons", as they are often called in
-this context) are arranged in layers, where every output from the neurons in
-layer $i$ is redirected as an input to every neuron in layer $i+1$ (see Figure
-\ref{fig:02_nn}). The first layer is called the input layer, and those neurons
-simply output the data being modelled, with one neuron for each dimension of
-the input data.
+graph (see Figure \ref{fig:02_nn}), the graph is referred to as an Artificial
+Neural Network (ANN). In this ANN, the outputs of some perceptrons are
+redirected to become the inputs for other perceptrons. These perceptrons (or
+"neurons", as they are often called in this context) are arranged in layers,
+where every output from the neurons in layer $i$ is redirected as an input to
+every neuron in layer $i+1$. The first layer is called the input layer, and
+those neurons simply output the data being modelled, with one neuron for each
+dimension of the input data.
 
 \begin{figure}
     \centering
@@ -315,7 +321,7 @@ To achieve this, a cost function is defined that gradient descent will
 minimise. One possible cost function is the mean squared error:
 
 \begin{equation}
-    C(\bm{W}, \bm{b}, \bm{x}) = \frac{1}{2n} \sum_{i=1}^n || \bm{y} - \hat{\bm{y}}(\bm{W}, \bm{b}, x_i) ||^2
+    C(\bm{W}, \bm{b}, \bm{x}) = \frac{1}{n} \sum_{i=1}^n || \bm{y} - \hat{\bm{y}}(\bm{W}, \bm{b}, x_i) ||^2
 \end{equation}
 
 The weights of the network are $\bm{W}$, the biases are $\bm{b}$, the input
@@ -344,9 +350,9 @@ To control the amount by which we nudge the weights and biases, we define the
 _learning rate_ to be a scalar hyperparameter $\eta$. When we slightly change
 the weights $\bm{W}$ and biases $\bm{b}$ we will do so by an amount
 proportional to $\eta$. Larger learning rates will often take fewer iterations
-to convert (when compared to smaller learning rates) however a learning rate
-that is too large will not converge at all. The optimal learning rate is
-problem dependant.
+to convert (when compared to smaller learning rates). A learning rate that is
+too large will not converge at all. The optimal learning rate is problem
+dependant.
 
 In order to decrease the cost function, we will take some step from our
 starting weight and bias $(w_{jk}^{l}, b_j^l)$ in the direction of the negative
@@ -363,16 +369,16 @@ Note that '$\gets$' is being used to indicate an update to the weight $w_{jk}^l$
 or bias $b_j^l$. These equations define the change which would decrease the
 cost function, but they rely on knowing the gradient of the cost function with
 respect to any weight $w_{jk}^l$ or bias $b_j^l$. The calculation of this
-gradient is done by backpropogation, the subject of the next subsection.
+gradient is done by backpropogation, the subject of the next section.
 
 Gradient descent can be made more efficient via Stochastic Gradient Descent
 (SGD, introduced by \citealt{rosenblattPerceptronProbabilisticModel1958}),
-which batches the data into subsets and only changes the weights and biases
-based on the average gradient over the observations in each batch. Other
-optimisation algorithms have also been suggested and are commonly used: AdaGrad
-\citep{duchiOnlineLearningStochastic2011} is performant on sparse gradients,
-RMSProp \citep{geoffreyhintonCourseraNeuralNetworks2012} works well in
-non-stationary settings, and Adam \citep{kingmaAdamMethodStochastic2014}
+which stochastically batches the data into subsets and only changes the weights
+and biases based on the average gradient over the observations in each batch.
+Other optimisation algorithms have also been suggested and are commonly used:
+AdaGrad \citep{duchiOnlineLearningStochastic2011} is performant on sparse
+gradients, RMSProp \citep{geoffreyhintonCourseraNeuralNetworks2012} works well
+in non-stationary settings, and Adam \citep{kingmaAdamMethodStochastic2014}
 provides good performance with little tuning.
 
 ## Backpropogation
@@ -575,19 +581,20 @@ first identified by \cite{hochreiterGradientFlowRecurrent2001}.
 
 There have been several proposed solutions to the vanishing gradient problem.
 \cite{nairRectifiedLinearUnits2010} proposes a different activation function
-(named ReLU) for this purpose. Different means of initialising the ANN's
-weights and biases have also been proposed, such as random initialisation
-\citep{glorotUnderstandingDifficultyTraining2010}, Xavier/Glorot initialisation
-\citep{glorotUnderstandingDifficultyTraining2010}, and He initialisation
-\citep{heDelvingDeepRectifiers2015}. Re-centering and re-scaling each layer's
-inputs through a process called batch normalization
+(named ReLU) for this purpose. One other alternative is the swish activation
+function which has been shown to work well with models with many layers
+\citep{ramachandranSearchingActivationFunctions2017}. Different means of
+initialising the ANN's weights and biases have also been proposed, such as
+random initialisation \citep{glorotUnderstandingDifficultyTraining2010},
+Xavier/Glorot initialisation \citep{glorotUnderstandingDifficultyTraining2010},
+and He initialisation \citep{heDelvingDeepRectifiers2015}. Re-centering and
+re-scaling each layer's inputs through a process called batch normalization
 \citep{ioffeBatchNormalizationAccelerating2015} has also been proposed.
 
 ## Categorical Cross-Entropy Loss
 
-For multi-class classification problems such as _Ergo_, categorical
-cross-entropy is commonly used as the loss function
-\citep{nealPatternRecognitionMachine2007}:
+For multi-class classification problems, categorical cross-entropy is commonly
+used as the loss function \citep{nealPatternRecognitionMachine2007}:
 
 \begin{equation}
     H(\bm{p}, \bm{q}) = - \sum_{i\in\mathcal{C}} p_i \log q_i
@@ -676,8 +683,8 @@ the hidden state of the model. HMMs are particularly useful for modelling
 systems where the underlying states are not directly observable but can be
 inferred from observable outcomes.
 
-First Markov Models will be discussed in subsection \ref{markov-models} to provide
-a foundation, and then HMMs will be discussed in subsection
+First Markov Models will be discussed in section \ref{markov-models} to provide
+a foundation, and then HMMs will be discussed in section
 \ref{sec:02-hidden-markov-models}.
 
 ## Markov Models
@@ -687,9 +694,9 @@ Let us simplify further, and require that
 
 1. Time occurs in discrete timesteps $t \in \{1, 2, 3, \ldots\}$, and one
    "event" happens at each time step.
-2. Events are notated as $z_1, z_2, z_3, \ldots$.
+2. Events are notated as $z_1, z_2, z_3, \ldots$
 3. Each event is an element from a set of possible states $S = \{s_1, s_2,
-   \ldots, s_{|S|}\}$ such that $z_t \in S\,\forall t = 1, 2, 3, \ldots$.
+   \ldots, s_{|S|}\}$ such that $z_t \in S\,\forall t = 1, 2, 3, \ldots$
 
 We then have a sequence of events $[z_1, z_2, \ldots]$ where each $z_t \in S$
 describes the event that occurred at timestep $t$. We will describe the
@@ -743,8 +750,8 @@ The rows of $\bm{A}$ represent the state we transition _from_ and the columns
 of $\bm{A}$ represent the state we transition _to_. For example, the scalar
 value $A_{ij}$ contains the probability of transitioning from state $i$ to
 state $j$ at any time step (due to the stationary process assumption). The
-matrix has $(|S| + 1)$ and $(|S| + 1)$ rows such that the initial state $s_0$
-can be encoded, in addition to the other states $S$ of the Markov Model.
+matrix has $(|S| + 1)$ columns and $(|S| + 1)$ rows such that the initial state
+$s_0$ can be encoded, in addition to the other states $S$ of the Markov Model.
 
 A completely hypothetical transition matrix describing an undergraduate's
 understanding of x86 Assembly\footnote{x86 Assembly is a low-level programming
@@ -841,10 +848,8 @@ competent, and finally achieving mastery:
 \begin{align}
     &\pr(s_0 \to s_{\text{No knowledge}} \to s_{\text{Fear}} \to s_{\text{Competence}} \to s_{\text{Mastery}}) \\
     &= 0.99 \times 0.15 \times 0.2 \times 0.05\\
-    &= 0.001485. \\
+    &= 0.001485
 \end{align}
-
-This result should approximately align with intuition.
 
 ### From state sequence to transition matrix
 
@@ -879,7 +884,7 @@ a Markov model as:
     &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \log  \left( A_{ij} \right)\\
 \end{align}
 
-Where $[z_{t-1} = s_i \cap z_t = s_j]$ is Iverson notation
+Where $[(z_{t-1} = s_i) \cap (z_t = s_j)]$ is Iverson notation
 \citep{knuthTwoNotesNotation1992}, defined as:
 
 \begin{equation*}
@@ -918,14 +923,14 @@ zero, we get:
 \begin{align}
     \frac{\partial \mathcal{L}(\bm{A}, \bm{\alpha})}{\partial A_{ij}}
         &=
-        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \log A_{ij} \right)
+        \frac{\partial}{\partial A_{ij}} \left( \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \log A_{ij} \right)
         + \frac{\partial}{\partial A_{ij}} \alpha_i \left( \sum_{j=1}^{|S|} 1 - A_{ij} \right) \\
-      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] - \alpha_i
+      0 &= \frac{1}{A_{ij}} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] - \alpha_i
 \end{align}
 which implies
 \begin{align}
-     \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]. \label{eqn:Aij}
+     \alpha_i  &= \frac{1}{A_{ij}} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
+     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)]. \label{eqn:Aij}
 \end{align}
 
 Substituting back in and setting the partial derivative with respect to
@@ -937,9 +942,9 @@ $\bm{\alpha}$ equal to zero:
 \end{align}
 which implies that
 \begin{align}
-    0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-    1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-    \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
+    0 &= 1 - \sum_{j=1}^{|S|} \frac{1}{\alpha_i} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
+    1 &= \frac{1}{\alpha_i} \sum_{j=1}^{|S|}  \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
+    \alpha_i &= \sum_{j=1}^{|S|} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
              &= \sum_{t=1}^T [z_{t-1} = s_i]
 \end{align}
 
@@ -948,9 +953,9 @@ When we substitute the expression for $\alpha_i$ into Equation \eqref{eqn:Aij}
 $A_{ij}$ which we will term $\hat{A}_{ij}$:
 
 \begin{align}
-     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-    \hat{A}_{ij}  &= \frac{1}{\sum_{t=1}^T [z_{t-1} = s_i]} \sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j] \\
-    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [z_{t-1} = s_i \cap z_t = s_j]}{\sum_{t=1}^T [z_{t-1} = s_i]}. \label{eqn:ahatij}
+     A_{ij}  &= \frac{1}{\alpha_i} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
+    \hat{A}_{ij}  &= \frac{1}{\sum_{t=1}^T [z_{t-1} = s_i]} \sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)] \\
+    \hat{A}_{ij}  &= \frac{\sum_{t=1}^T [(z_{t-1} = s_i) \cap (z_t = s_j)]}{\sum_{t=1}^T [z_{t-1} = s_i]}. \label{eqn:ahatij}
 \end{align}
 
 Equation \eqref{eqn:ahatij} encodes the intuitive explanation that the maximum
@@ -994,7 +999,7 @@ For example, if we knew that the average mark achieved by students in the
 Mastery state was 65% and the average mark achieved by students in the
 Competence state was 30%, and we then observed a student with a mark of 70%,
 then we can be fairly certain they are in the Mastery state. This certainty
-will be made rigorous in the coming subsections.
+will be made rigorous in the coming sections.
 
 We will express this mathematically by defining an HMM as a Markov model for
 which:
@@ -1291,15 +1296,16 @@ new space and the hyperplane is found in this new space.
 This exposition will center its attention on Support Vector Machines (SVMs)
 employed for soft-margin linear-kernel binary-classification, consistent with
 the configuration employed by \emph{Ergo}. The interested reader is directed to
-\cite[Chap. 7]{bishopPatternRecognitionMachine2007} for an explanation
+\cite[Chapter 7]{bishopPatternRecognitionMachine2007} for an explanation
 regarding the other formulations of SVMs.
 
 Given a set of input vectors $\bm{x} = \{x_1, x_2, \ldots x_n\}, \bm{x} \in
-\mathbb{R}^{p \times n}$ and corresponding labels $\bm{y} = \{y_1, y_2, \ldots
-y_n\}, \bm{y} \in \{-1, 1\}^n$, the task of an SVM is to find a hyperplane
-$\bm{w} x_i + b = 0$ to split the two classes, where $\bm{w}$ is the weight
-vector and $b$ is a bias scalar. Given an observation $x_i$, the predicted
-class $\hat{y}_i$ is given by:
+\mathbb{R}^{p \times n}$ (where $p$ is the dimension of each $x_i$) and
+corresponding labels $\bm{y} = \{y_1, y_2, \ldots y_n\}, \bm{y} \in \{-1,
+1\}^n$, the task of an SVM is to find a hyperplane $\bm{w} x_i + b = 0$ to
+split the two classes, where $\bm{w}$ is the weight vector and $b$ is a bias
+scalar. Given an observation $x_i$, the predicted class $\hat{y}_i$ is given
+by:
 
 \begin{equation}
     \hat{y}_i = \begin{cases}
@@ -1487,13 +1493,13 @@ classification problem are described in detail in Section
 # Evaluation Metrics \label{sec:02-evaluation-metrics}
 
 There are several means of comparing multi-class classifiers, these are
-discussed in the following subsection. The task is to compare the performance
+discussed in the following section. The task is to compare the performance
 of several classifiers at classifying $n$ observations into a set of classes $C
 = \{c_1, c_2, \ldots\}$. The predictions of a classifier will be notated
 as $\bm{p}: p_i \in C \,\forall\, i \in {1, \ldots, n}$ and the corresponding
 ground truth as $\bm{t}: t_i \in C \,\forall\, i \in {1, \ldots, n}$
 
-The following subsections will describe different means of comparing
+The following sections will describe different means of comparing
 multi-class classifiers.
 
 ## Accuracy
@@ -1517,7 +1523,7 @@ models.
 
 Confusion matrices collate a model's performance by grouping each combination of
 predicted and ground truth\footnote{
-    The \emph{Ground truth} labels are the known correct labels for a given
+    The ground truth labels are the known correct labels for a given
     dataset. This is what a classification algorithm will attempt to predict.
 } label. For a $|C|$-class classification problem, a
 confusion matrix is a $|C| \times |C|$ matrix of values, where the the
@@ -1706,9 +1712,7 @@ While precision, recall, and $F_1$-score provide a much more concise
 representation of a classifier's performance than a confusion matrix, they
 still do not provide a single number which can be used to give classifiers a
 total ordering. To this end, we will calculate the unweighted arithmetic mean
-of the per-class precision, recall, and $F_1$-scores\footnote{The unweighted
-average is sometimes referred to as the macro average, and the weighted average
-as the micro average.}:
+of the per-class precision, recall, and $F_1$-scores:
 
 \begin{align}
     \text{Unweighted Precision} &= \frac{1}{|C|}\sum_{i=1}^{|C|} \text{Precision}_i \\
