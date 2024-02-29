@@ -152,8 +152,8 @@ gesture was present given that a gesture was indeed present. The best FFNNs
 performed better than the best HFFNNs, achieving a higher validation unweighted
 average $F_1$-score. Additionally, the FFNNs required less time to make a
 prediction than the HFFNNs. Since the FFNNs performed better than the HFFNNs,
-it can be concluded that one neural-network based algorithm is able to perform
-implicit segmentation.
+it can be concluded that a hierarchical set-up with two neural networks is not
+required, and that one neural network can perform implicit segmentation.
 
 ## Performance impact of background sensor noise
 
@@ -192,8 +192,8 @@ required 0.025 seconds. Of the HMMs, the covariance type hyperparameter had a
 large impact on the amount of time required to perform a classification, with
 the spherical and diagonal covariance types requiring around 0.005 seconds but
 the tied and full covariance types requiring around 0.075 seconds. It can be
-concluded that the SVMs, FFNNs, HFFNNs, CuSUM, and some of the HMMs are viable
-for real-time predictions.
+concluded that the SVMs, FFNNs, HFFNNs, CuSUM are viable for real-time
+predictions.
 
 # General Remarks and Recommendations \label{sec:06-general-remarks-and-recommendations}
 
@@ -289,8 +289,8 @@ technology has many promising applications related to gesture detection. This
 is particularly interesting when one considers that the user in a WiFi-enabled
 gesture recognition environment need not interact with any device explicitly.
 It could appear to "just work". However, the privacy implications of this are
-very concerning\footnote{ \citealt{aliKeystrokeRecognitionUsing2015,
-aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016}} and also require more
+very concerning \citep{aliKeystrokeRecognitionUsing2015,
+aliRecognizingKeystrokesUsing2017, liWhenCSIMeets2016} and also require more
 thought about how to provide a good experience to the user while indicating to
 the user that their movements are being watched and recorded. Very few people
 are aware of the capabilities of WiFi-based gesture detection, making this
