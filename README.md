@@ -29,15 +29,6 @@ They have been summarised:
 > y-axes (for the confusion matrices, and "many graphs") have zero at the top,
 > where the convention is to have zero at the bottom.
 
-- The above point, for the confusion matrices, isn't actually consistent
-  because confusion matrices are usually oriented so that a perfect model's
-  confusion matrix would look like the Identity, with a negatively-sloped
-  diagonal. But I do see the confusion, and will relabel the confusion matrices
-  to be "gesture 0", "gesture 1", ...
-
 > "Axes annotations on some graphs are very crowded. Try using a smaller font"
 
-> Citations were not consistent, some were placed in footnotes and some were
-> placed inline with the text.
-
-> Some other changes provided
+- Probably referring to fig 5.29

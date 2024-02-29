@@ -237,8 +237,8 @@ visible in Table \ref{tab:04_shift_keystrokes}.
 The \texttt{control} character also allows for some other keystrokes to be
 made, such as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
 (\texttt{ctrl+h}), or escape (\texttt{ctrl+[}). These key combinations are the
-same as in the text editor Vim\footnote{See https://vim.org. For more details,
-see Vim's built-in help by typing \texttt{:help ins-special-keys}.}.
+same as in the text editor Vim\footnote{See \url{https://vim.org}. For more
+details, see Vim's built-in help by typing \texttt{:help ins-special-keys}.}.
 
 Because the classification model makes 40 predictions per second, it is
 entirely possible (likely, even) that the sensor measurements from time step
@@ -407,8 +407,8 @@ those performant hyperparameters.
 Finding computationally efficient means for hyperparameter optimisation is a
 field of active research. Broadly speaking, there are three kinds of
 hyperparameter optimisation: grid search, random search, and various means of
-more intelligent search\footnote{\citealt{bergstraAlgorithmsHyperParameterOptimization2011,
-jamiesonNonstochasticBestArm2015, shahriariTakingHumanOut2016}}.
+more intelligent search \citep{bergstraAlgorithmsHyperParameterOptimization2011,
+jamiesonNonstochasticBestArm2015, shahriariTakingHumanOut2016}.
 
 **Grid search** is the simplest to implement, but requires that the total
 number of hyperparameter combinations be finite. Grid search iterates over
@@ -710,8 +710,8 @@ hyperparameters for the FFNNs.
 Hierarchical models, where one model is used to filter out the non-gesture
 class and another is used to distinguish the different gesture classes, have
 shown promising results in the
-literature\footnote{\citealt{zhangVisionbasedSignLanguage2004,
-wangTrafficPoliceGesture2008, kopukluRealtimeHandGesture2019}} and so are
+literature \citep{zhangVisionbasedSignLanguage2004,
+wangTrafficPoliceGesture2008, kopukluRealtimeHandGesture2019} and so are
 evaluated here in the form of Hierarchical Feed-forward Neural Networks
 (HFFNNs). HFFNNs combine the output of two FFNNs: one FFNN (called the majority
 classifier) is a binary classifier that detects whether or not a gesture exists

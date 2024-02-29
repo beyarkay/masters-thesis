@@ -11,24 +11,24 @@ brief history of artificial intelligence, machine learning, and the
 nomenclature therein.
 Section \ref{sec:02-artificial-neural-networks} discusses Artificial Neural
 Networks (ANNs) which have shown a lot of promise in a wide range of
-classification problems\footnote{\citealt{zhangRealTimeSurfaceEMG2019,
+classification problems \citep{zhangRealTimeSurfaceEMG2019,
 netoHighLevelProgramming2010, mehdiSignLanguageRecognition2002,
 jong-sungkimDynamicGestureRecognition1996,
-felsGloveTalkIIaNeuralnetworkInterface1998}}.
+felsGloveTalkIIaNeuralnetworkInterface1998}.
 Section \ref{sec:02-hidden-markov-models} discusses Hidden Markov Models
 (HMMs), which historically have been used for problems similar to those which
-_Ergo_ seeks to solve\footnote{\citealt{galkaInertialMotionSensing2016,
+_Ergo_ seeks to solve \citep{galkaInertialMotionSensing2016,
 bevilacquaContinuousRealtimeGesture2010, xuzhangFrameworkHandGesture2011,
 wuGestureRecognition3D2009, zhangHandGestureRecognition2009,
 schlomerGestureRecognitionWii2008, mantyjarviEnablingFastEffortless2004,
 wengaoChineseSignLanguage2004, rung-hueiliangRealtimeContinuousGesture1998,
-liangSignLanguageRecognition1996}}. These are used to provide a
+liangSignLanguageRecognition1996}. These are used to provide a
 comparison between candidate models and the prior work.
 Section \ref{sec:02-support-vector-machines} discusses Support Vector Machines
 which have been used with success for gesture recognition in prior
-work\footnote{\citealt{leeSmartWearableHand2018,
+work \citep{leeSmartWearableHand2018,
 wuWearableSystemRecognizing2016, wuGestureRecognition3D2009,
-kimBichannelSensorFusion2008}}.
+kimBichannelSensorFusion2008}.
 Section \ref{sec:02-cumulative-sum} discusses CuSum which is a simple
 statistical technique used for online change detection in the distribution of a
 time series. It will be used as a baseline against which other models can be

@@ -208,9 +208,9 @@ shared between researchers. WiFi-based systems (also discussed in Section
 show promise if the privacy problems can be resolved. Based on the number of
 contemporary literature surveys which claim to review gesture recognition and
 yet fail to mention WiFi-based gesture
-recognition\footnote{\citealt{chenSurveyHandGesture2013,
+recognition \citep{chenSurveyHandGesture2013,
 raysarkarHandGestureRecognition2013, anwarHandGestureRecognition2019,
-chenSurveyHandPose2020}}, one might conclude that many researchers are simply
+chenSurveyHandPose2020}, one might conclude that many researchers are simply
 unfamiliar with the technology and thus have not considered it as an avenue for
 further study.
 
@@ -231,12 +231,12 @@ them. This reciprocal dependency will only be solved if a company with
 sufficient resources decides to create both a high quality sensor suite to
 capture data _and_ a high quality software suite to interpret that data. This
 is what happened with the Microsoft Kinect, and it resulted in an explosion of
-vision-based gesture recognition research\footnote{\citealt{
+vision-based gesture recognition research \citep{
 chenSurveyHandGesture2013,
 jiehuangSignLanguageRecognition2015,
 ghotkarDynamicHandGesture2016,
 zhaoMultifeatureGestureRecognition2016,
-caiRGBDDatasetsUsing2017}}.
+caiRGBDDatasetsUsing2017}.
 
 The fidelity of different gestures defined in the gesture recognition
 literature vary significantly, as does the difficulty in classifying those
@@ -250,11 +250,11 @@ emulation of keyboard input. Much previous work has focussed on low-fidelity
 <!-- TODO: add reference to Literature review here --> gesture recognition
 where the time taken to perform each gesture makes those gestures unsuitable
 for everyday computer
-interaction\footnote{\citealt{schlomerGestureRecognitionWii2008,
+interaction \citep{schlomerGestureRecognitionWii2008,
 bevilacquaContinuousRealtimeGesture2010, netoHighLevelProgramming2010,
 aklAccelerometerbasedGestureRecognition2010,
 aklNovelAccelerometerBasedGesture2011, patilHandwritingRecognitionFree2016,
-riveraRecognitionHumanHand2017}}.
+riveraRecognitionHumanHand2017}.
 
 Much of the literature focusses on the traditional machine learning task of
 classifying each class, but there is an additional class which often is

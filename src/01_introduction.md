@@ -27,16 +27,16 @@ functionality of a computer keyboard. The first attempts at automated hand
 gesture recognition were in 1969 by the
 \citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Later
 attempts used hand-mounted sensors to measure movement
-\footnote{\citealt{garyj.grimesUSPatentDigital1981,
+ \citep{garyj.grimesUSPatentDigital1981,
 kohonenSelforganizedFormationTopologically1982, jacobsenUTAHDextrousHand1984,
 jacobsenDesignUtahDextrous1986, fisherTelepresenceMasterGlove1987,
-zimmermanHandGestureInterface1987, thomasa.defantiUSNEAR60341631977}}. Due to
+zimmermanHandGestureInterface1987, thomasa.defantiUSNEAR60341631977}. Due to
 improvements in video capture technology and computer vision algorithms, many
 recent attempts used labelled videos of people performing different gestures
 for gesture
-recognition\footnote{\citealt{alazraiDatasetWiFibasedHumantohuman2020,
+recognition \citep{alazraiDatasetWiFibasedHumantohuman2020,
 atzoriNinaproDatabaseResource2015, guyonChaLearnGestureChallenge2012,
-materzynskaJesterDatasetLargeScale2019, zhangEgoGestureNewDataset2018}}. Recent
+materzynskaJesterDatasetLargeScale2019, zhangEgoGestureNewDataset2018}. Recent
 changes in commercially available Wi-Fi routers
 \citep{halperinToolReleaseGathering2011} have also enabled the detection of
 hand gestures by analysing diagnostic data from these routers
