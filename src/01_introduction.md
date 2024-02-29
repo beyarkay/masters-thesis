@@ -25,7 +25,7 @@ This thesis explores hand gesture recognition using an acceleration-based
 fingertip-mounted sensor suite, with the goal of completely replicating the
 functionality of a computer keyboard. The first attempts at automated hand
 gesture recognition were in 1969 by the
-\citeauthor{experimentaltelevisioncenterComputerImageCorporation1969}. Later
+\cite{experimentaltelevisioncenterComputerImageCorporation1969}. Later
 attempts used hand-mounted sensors to measure movement
  \citep{garyj.grimesUSPatentDigital1981,
 kohonenSelforganizedFormationTopologically1982, jacobsenUTAHDextrousHand1984,
@@ -85,7 +85,7 @@ measurements are saved. This data is used to train several multi-class
 classification algorithms to 1) distinguish intentional gestures from regular
 hand movements, and 2) to predict which one of the 50 learnt gestures is being
 performed. Regular hand movements are represented by the 51\textsuperscript{st}
-class, while all other gestures are represented by first 50 classes.
+class, while all other gestures are represented by the first 50 classes.
 
 To evaluate the difficulty of implicit segmentation when compared to explicit
 segmentation, all classification algorithms are evaluated on three different
@@ -131,16 +131,16 @@ This study aims to address the following questions:
    distinguished.
 2. **Performance of different classification algorithms**: Five classification
    algorithms are assessed on the same dataset, each over a wide variety of
-   hyperparameter combinations\footnote{\emph{hyperparameter} is defined as a
-   parameter of an algorithm that is chosen by the researcher, as opposed to
-   being chosen by the algorithm itself.}. The performance of each algorithm
-   and of the different hyperparameter combinations is compared.
+   hyperparameter\footnote{\emph{hyperparameter} is defined as a parameter of
+   an algorithm that is chosen by the researcher, as opposed to being chosen by
+   the algorithm itself.} combinations. The performance of each algorithm and
+   of the different hyperparameter combinations is compared.
 3. **Detecting gestures from background noise**: An assessment is made of the
    capability of any one algorithm to perform implicit segmentation.
 4. **Performance impact of background sensor noise**: The requirement for an
    algorithm to perform implicit segmentation is likely to have a detrimental
-   effect on that algorithm's performance. This impact is examined and
-   discussed.
+   effect on that algorithm's performance due to the additional class that must
+   be accounted for. This impact is examined and discussed.
 5. **Classification speed**: As _Ergo_ is to be a real-time keyboard
    replacement, the speed with which different classification algorithms can
    make accurate class predictions is recorded and evaluated.
@@ -165,11 +165,12 @@ is also available on GitHub: \url{https://github.com/beyarkay/masters-thesis/}.
 
 The structure of the thesis is as follows:
 
-- Chapter \ref{chap:introduction} has introduced the goals of the thesis.
+- Chapter \ref{chap:introduction} introduces the goals of the thesis.
 - Chapter \ref{chap:background} provides background information related to the
   concepts discussed in this thesis.
 - Chapter \ref{chap:literature-review} reviews the gesture-detection literature
-  over the past 50 years.
+  over the past 50 years (since the
+  \cite{experimentaltelevisioncenterComputerImageCorporation1969}).
 - Chapter \ref{chap:methodology} describes how the data was collected, how the
   classification algorithms were trained, and how the performance of the
   classification algorithms was evaluated.
@@ -177,8 +178,7 @@ The structure of the thesis is as follows:
   performance of each classification algorithms.
 - Chapter \ref{chap:conclusion} concludes the thesis, summarising the findings
   and providing recommendations for future work.
-- The Appendix has several sections, none of which are required for the thesis
-  but which are presented for the interested reader: Appendix
+- The Appendix has several sections for the interested reader: Appendix
   \ref{app:additional-figures} contains additional figures, Appendix
   \ref{app:additional-tables} contains additional tables, and Appendix
   \ref{app:the-human-hand} contains anatomical details about the human hand.
