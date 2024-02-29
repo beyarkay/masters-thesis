@@ -262,7 +262,7 @@ gesture for the letter "o" twice.
 # Data Collection and Cleaning \label{sec:04-data-collection-and-cleaning}
 
 To collect the dataset, \emph{Ergo} was worn while performing each of the
-gestures described in subsection \ref{sec:04-gestures-and-class-labels}. The
+gestures described in section \ref{sec:04-gestures-and-class-labels}. The
 sensor measurements were recorded in real time and stored to disc along with a
 timestamp. The order in which gestures are performed is decided by the same
 program which stores the data. This order is indicated to the user through an
@@ -367,10 +367,10 @@ being used where there is not enough data to create a full window.
 
 There are about 40 times more non-gesture observations than gesture class
 observations due to the imbalance between the number of gesture classes
-(classes $0\ldots 49$) and the non-gesture class (class $50$). When describing
-the training, validation, and testing datasets, both the number of observations
-(including the non-gesture class) and the number of gesture observations
-(excluding the non-gesture class) will be reported.
+(classes $0, \ldots, 49$) and the non-gesture class (class $50$). When
+describing the training, validation, and testing datasets, both the number of
+observations (including the non-gesture class) and the number of gesture
+observations (excluding the non-gesture class) will be reported.
 
 Of the full dataset with 241 762 observations, 25% (60 294 observations, 1 442
 gesture class observations) is randomly split off and saved as the testing
@@ -459,7 +459,8 @@ methods all sacrifice human interpretability, as regions which are suspected of
 poor performance are quickly omitted from the search space and regions
 suspected of good performance are more frequently evaluated. For this reason,
 hyperparameter optimisation though intelligent search was not explored in this
-thesis.
+thesis. Random search was used to search the hyperparameter space for all model
+types.
 
 # Model Design and Implementation \label{sec:04-model-design-and-implementation}
 
@@ -486,12 +487,12 @@ give the math for why HMMs don't work with >100k observations
 Hidden Markov Models (introduced in Section \ref{sec:02-hidden-markov-models})
 are able to model the progression of time via sequential states and their
 transition probability matrices. For this reason, each HMM classifier attempts
-to model an observation as a sequence of 22 states: one start state, one state
-for each of the 20 timesteps, and one end state. Each state emits a
-30-dimensional Gaussian distribution, one dimension for each of the 30 sensors.
-The mean vector $\bm{\mu}$ and the covariance matrix $\bm{\Sigma}$ of the
-30-dimensional Gaussian distributions are estimated using the Baum-Welch
-expectation maximisation algorithm.
+to model an observation as a sequence of one start state, one state for each of
+the 20 timesteps, and one end state. Each state emits a 30-dimensional Gaussian
+distribution, one dimension for each of the 30 sensors. The mean vector
+$\bm{\mu}$ and the covariance matrix $\bm{\Sigma}$ of the 30-dimensional
+Gaussian distributions are estimated using the Baum-Welch expectation
+maximisation algorithm.
 
 HMMs do not support multi-class classification so one-vs-rest classification is
 used, resulting in one HMM for each class. To reduce the number of parameters
@@ -529,14 +530,15 @@ be class 5.
 
 Significant problems were encountered while training the HMMs due to the large
 number of observations of class 50. Training times for the class 50 HMM either
-exceeded 6 hours (at which point they were stopped) or were killed by the
-operating system due to excessive memory usage. These problems are caused by
-the parameter estimation procedure for HMMs which requires the construction and
-multiplication of matrices whose size is dependant on the number of
-observations (around 140 000) as well as the number of dimensions of each
-Gaussian (30). For this reason, all HMMs were only trained on a subset of 1000
-randomly selected observations of class 50. During calculation of the
-validation performance, all HMMs were evaluated on all validation observations.
+exceeded 6 hours (at which point they were stopped due to the computational
+budget being exceeded) or were killed by the operating system due to excessive
+memory usage. These problems are caused by the parameter estimation procedure
+for HMMs which requires the construction and multiplication of matrices whose
+size is dependant on the number of observations (around 140 000) as well as the
+number of dimensions of each Gaussian (30). For this reason, all HMMs were only
+trained on a subset of 1000 randomly selected observations of class 50. During
+calculation of the validation performance, all HMMs were evaluated on all
+validation observations.
 
 Each HMM was trained for 20 iterations of the Baum-Welch parameter estimation
 algorithm, and all four covariance types were evaluated: Spherical, Diagonal,
@@ -606,10 +608,12 @@ performing inference is given in Algorithm \ref{alg:04-cusum-inference}.
 \end{algorithm}
 
 In order to classify a given observation as belonging to one of 51 classes, a
-one-vs-rest approach will be used. Fifty-one different CuSUM classifiers will be
-trained, where the $i$\textsuperscript{th} CuSUM classifier predicts whether or
-not a given observation belongs to class $i$. Seven different values for the
-threshold parameter shall be used: $\{5, 10, 20, 40, 60, 80, 100\}$
+one-vs-rest approach will be used. Fifty-one different CuSUM classifiers will
+be trained, where the $i$\textsuperscript{th} CuSUM classifier predicts whether
+or not a given observation belongs to class $i$. Seven different values for the
+threshold parameter shall be used: $\{5, 10, 20, 40, 60, 80, 100\}$.
+Preliminary testing showed this range of values to likely contain the optimal
+threshold parameter.
 
 ## Feed-Forward Neural Networks \label{model-specifics-ffnn}
 
