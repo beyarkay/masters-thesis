@@ -15,12 +15,6 @@ code for the project.
 On 13 February 2024, the following corrections and suggestions were improved.
 They have been summarised:
 
-> The inclusion of user studies and consideration of ensemble [screenshot cut off]
-
-> It is not always clear the individual graphs have been interpreted correctly.
-> For example, interpretation of Figure 5.21 is not entirely correct, although
-> the end results (showing FFNNs performed the best) are still valid
-
 > Many pages of text are overflowing into the right hand margin. The `xurl`
 > package prevents URLs from overflowing and `\mbox` hyphenates overflowing words
 

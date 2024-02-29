@@ -666,10 +666,20 @@ point indicating the validation $F_1$-score of that FFNN.
     \label{fig:05_51ffnn_x=lr,y=npl1,h=f1}
 \end{figure}
 
-One can see a "U" shape of high-$F_1$-scoring FFNNs, with a base around
-(#nodes=$10^{0.75}$, learning rate=$10^{-3.5}$). This indicates that the range
-of learning rates which result in good performance shrinks as the number of
-nodes decreases.
+Looking only at the yellow- and green-coloured points (representing the FFNNs
+which had a relatively high $F_1$-score), one can see a "U" shape with a base
+around (#nodes=$10^{0.75}$, learning rate=$10^{-3.5}$). For the FFNNs with
+around $10^{2.5}$ nodes in their first layer, learning rates in the wide range
+between $10^{-5.25}$ and $10^{-2.5}$ often resulted in good performance (this
+is the top of the "U" shape).
+
+For the FFNNs with around $10^{1}$ nodes in their first layer, only learning
+rates in the relatively narrow range between $10^{-4}$ and $10^{-3}$
+resulted in good performance (this is the bottom of the "U" shape).
+
+This indicates that the range of high-performance learning rates is dependant
+on the number of nodes in the first layer of the FFNN, and that the more nodes
+in the first layer, the wider the range of high-performance learning rates is.
 
 <!---                    precision-recall hue=nlayers                      --->
 
