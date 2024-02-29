@@ -240,15 +240,24 @@ made, such as carriage return (\texttt{ctrl+j} or \texttt{ctrl+m}), backspace
 same as in the text editor Vim\footnote{See https://vim.org. For more details,
 see Vim's built-in help by typing \texttt{:help ins-special-keys}.}.
 
-If sequential predictions are made of the same class, then a
-keystroke will only be emitted the first time that class is predicted. This
-will improve the perceived performance of the model, so that one gesture cannot
-result in multiple keystrokes if the model predicts that gesture for sequential
-timesteps. If a word has duplicate letters (such as the \texttt{o}'s in
-\texttt{book}) then those duplicated letters must be performed the same number
-of times as they are duplicated. Gesturing the word \texttt{book} is done by
-gesturing the letters \texttt{b}, \texttt{o}, \texttt{o}, \texttt{k}, with no
-special case for the double \texttt{o}.
+Because the classification model makes 40 predictions per second, it is
+entirely possible (likely, even) that the sensor measurements from time step
+$t$ to time step $t+1$ will be very similar. This is because they are measuring
+the user's hand only 0.025 seconds apart. Because both time steps could be
+similar, both time steps might be similar to any gesture $g$. In this case, a
+classification model might predict gesture $g$ at _both_ time step $t$ and
+time step $t+1$. This would result in the keystroke corresponding to gesture
+$g$ being emitted twice, even though the user only performed the gesture once.
+
+To prevent this, all gesture predictions are processed before they are
+converted into keystrokes. If some gesture $g$ is predicted at time step $t$,
+but gesture $g$ was already predicted at time step $t-1$, then the keystroke
+associated with gesture $g$ will not be emitted.
+
+This does not prevent the user from intentionally typing double letters (such
+as the "oo" in the word "book"), as a human cannot perform a complete gesture
+in 0.025 seconds. To type the letters "oo", the user can simply perform the
+gesture for the letter "o" twice.
 
 # Data Collection and Cleaning \label{sec:04-data-collection-and-cleaning}
 

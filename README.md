@@ -15,10 +15,6 @@ code for the project.
 On 13 February 2024, the following corrections and suggestions were improved.
 They have been summarised:
 
-> The discussion just before section 4.3 regarding sequential predictions of
-> the same class and duplicate adjacent letters could benefit from further
-> elaboration to enhance clarity.
-
 > The inclusion of user studies and consideration of ensemble [screenshot cut off]
 
 > It is not always clear the individual graphs have been interpreted correctly.
