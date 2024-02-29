@@ -76,16 +76,17 @@ Notes from chatting with Trienko:
   hardware can measure a new observation in order for the algorithm to be
   viable for real-time use.
 
+# Open Code & Open Data
+
+- 432 items in the literature review dataset
+- Annotated with 113 data points describing each of the papers, 26 of which are
+  specific to gesture recognition and manually curated
+
 # Background
 
+(will go through these very quickly)
+
 ## Models and Algorithms
-
-Show one picture for each model, and give one short explainer for each model,
-giving seminal reference.
-
-Give a slide describing $F_1$ score, macro average, weighted confusion
-matrices, why I chose to column norm, and how this relates to precision (and
-not recall)
 
 ### FFNNs
 
@@ -122,6 +123,8 @@ not recall)
   HMM.
 
 ### CuSUM
+
+- Page, 1954
 
 - Cumulative Sum (or CuSUM) is traditionally used for online outlier detection.
 - It works by keeping track of a sum of all previously seen values.
@@ -174,6 +177,7 @@ not recall)
 
 ### $F_1$-score
 
+- Harmonic mean
 - A way of describing both precision and recall
 - One metric to evaluate a multi-class classifier
 - A model has to good at both precision and recall to have a high $F_1$-score
